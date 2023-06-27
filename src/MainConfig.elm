@@ -25,7 +25,7 @@ import Lib.Scene.Base exposing (SceneInitData(..))
 -}
 initScene : String
 initScene =
-    "Home"
+    "Level"
 
 
 {-| Initial scene settings
