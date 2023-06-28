@@ -17,4 +17,4 @@ steps:
   - chmod +x ./*
 - name: run
   commands:
-  - ./run.sh
+  - ./run.sh --no-elf
