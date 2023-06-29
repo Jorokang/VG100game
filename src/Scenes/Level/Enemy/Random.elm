@@ -2,6 +2,7 @@ module Scenes.Level.Enemy.Random exposing (..)
 
 import Random
 
+{-| control the random seed in Enemy Layer-}
 randomEnemy : Random.Seed -> (Int, Random.Seed)
 randomEnemy seed =
     let

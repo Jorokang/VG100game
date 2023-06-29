@@ -20,8 +20,8 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
 import Time exposing (posixToMillis)
 import Canvas exposing (text)
-import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum)
-import Scenes.Level.Enemy.Render exposing (renderEnemyBody)
+import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum, renderEnemyBody)
+import Scenes.Level.Enemy.Random exposing (randomEnemy)
 
 
 
@@ -30,25 +30,32 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    initEnemy1  
+    initEnemy1
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
+{-| updateModel -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
         Tick newTime ->
             (   { model | time = Time.posixToMillis newTime }
+                |> updateRandNum
             ,   []
             ,   env
             )
         _ ->
             ( model, [], env )
+
+{-| update the random number in model -}
+updateRandNum : Model -> Model
+updateRandNum model =
+    let
+        ( randNum, seed ) =
+            randomEnemy model.seed
+    in
+    { model |   randNum = randNum
+            ,   seed = seed
+    }
 
 
 {-| updateModelRec

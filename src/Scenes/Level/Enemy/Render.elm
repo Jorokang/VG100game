@@ -3,7 +3,6 @@ module Scenes.Level.Enemy.Render exposing (..)
 import Canvas exposing (Renderable, empty, Point, group, shapes, circle, rect, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell)
 import Scenes.Level.SceneInit exposing (LevelInit)
@@ -11,6 +10,7 @@ import Scenes.Level.Frame.Functions exposing (coorChange, point2Int, upperCell, 
 import Scenes.Level.Frame.Functions exposing (lengthChange)
 import List
 
+{-| render the whole enemy body(explicitly the body field in model) -}
 renderEnemyBody : EnvC -> Model -> Renderable
 renderEnemyBody env model =
     let
@@ -21,6 +21,7 @@ renderEnemyBody env model =
     []
     rend
 
+{-| render a single enemy block -}
 renderEnemyBlock : EnvC -> Model -> Cell EnemyBlock -> Renderable
 renderEnemyBlock env model x =
     let
@@ -32,7 +33,9 @@ renderEnemyBlock env model x =
             tmp_enemyblock.color
     in
     renderEnemyBlockCentral env x 
-    
+
+{-| Render the central part of an enemy block,
+    which is a circle exists as long as there is a block. -}
 renderEnemyBlockCentral : EnvC -> Cell EnemyBlock -> Renderable
 renderEnemyBlockCentral env x =
     let
@@ -43,6 +46,7 @@ renderEnemyBlockCentral env x =
     in
     shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env (cellLength/2.5)) ]
 
+{-| generic function of rendering number(Int) for testing -}
 renderNum : EnvC -> Int -> Renderable
 renderNum env num =
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] ( 50, 50 ) ("remained bricks:" ++ String.fromInt num)
