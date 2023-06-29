@@ -12,10 +12,17 @@ module Scenes.Level.Enemy.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable, empty, Point, group)
+import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..))
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
+import Time exposing (posixToMillis)
+import Canvas exposing (text)
+import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum)
+import Scenes.Level.Enemy.Render exposing (renderEnemyBody)
+
 
 
 {-| initModel
@@ -23,7 +30,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initEnemy1  
 
 
 {-| updateModel
@@ -34,7 +41,14 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        Tick newTime ->
+            (   { model | time = Time.posixToMillis newTime }
+            ,   []
+            ,   env
+            )
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
@@ -57,5 +71,15 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [
+                renderNum env model.randNum
+            ,   renderEnemyBody env model
+            ]
+    in
+    group
+    []
+    rend
+
