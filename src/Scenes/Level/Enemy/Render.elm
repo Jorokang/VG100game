@@ -48,46 +48,86 @@ renderEnemyBlockCentral env model x =
     in
     Canvas.group
     []
-    [   shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env (cellLength/2.5)) ]
-    ,   renderUpperTentacle env model x
+    [   shapes [ fill color ] [ circle (coorChange env (offsetPoint 0 (cellLength/2, cellLength/2) pos)) (lengthChange env (cellLength/2.5)) ]
+    ,   renderSingleTentacle env model x 1
     ]
 
-renderUpperTentacle : EnvC -> Model -> Cell EnemyBlock -> Renderable
-renderUpperTentacle env model x =
+renderSingleTentacle : EnvC -> Model -> Cell EnemyBlock -> Int -> Renderable
+renderSingleTentacle env model x id =
     let
         color =
             x.val.color
         pos = 
             x.pos
-        id = 1
         sinPair =
             curUniqueSin model.time pos id
-        sinPair2 =
-            List.map (offsetPoint (offsetPoint (0.0, 50.0) pos)) sinPair
+        (rotate, offset) =
+            (0, (4*cellLength, 1.5*cellLength))
+        rend =
+            List.map (renderTentaclePixels env model color (rotate, offset) ) sinPair
     in
-    Canvas.group [] (List.map (renderCircleMap1 env color 2.6) sinPair2)
+    Canvas.group
+    []
+    rend
+
+renderTentaclePixels : EnvC -> Model -> Color -> (Int, Point) -> Point -> Renderable
+renderTentaclePixels env model color (rotate, offset) pos =
+    let
+        x =
+            Tuple.first pos
+        y =
+            Tuple.second pos
+        flag0 =
+            modBy (model.randNum + round y) 16
+        delta = 3.0
+        flag1 = modBy flag0 2
+        flag2 = modBy (flag0//2) 2
+        flag3 = modBy (flag0//4) 2
+        flag4 = modBy (flag0//8) 2
+        l1 = (modBy (model.randNum + ((round y)//2) ) 2) + 1
+        l2 = (modBy (model.randNum + ((round y)//3) ) 2) + 1
+        l3 = (modBy (model.randNum + ((round y)//4) ) 2) + 1
+        l4 = (modBy (model.randNum + ((round y)//5) ) 2) + 1
+    in
+    Canvas.group []
+    [   renderTentaclePixel env color (x, y+delta) l1 (rotate, offset) flag1
+    ,   renderTentaclePixel env color (x, y+2*delta) l2 (rotate, offset) flag2
+    ,   renderTentaclePixel env color (x, y-delta) l3 (rotate, offset) flag3
+    ,   renderTentaclePixel env color (x, y-2*delta) l4 (rotate, offset) flag4
+    ]
+    
+renderTentaclePixel : EnvC -> Color -> Point -> Int -> (Int, Point) -> Int -> Renderable
+renderTentaclePixel env color pos l (rotate, offset) flag =
+    if (flag==1) then
+        shapes [ fill color ] [ rect (coorChange env (offsetPoint rotate offset pos)) (lengthChange env (toFloat l)) (lengthChange env (toFloat l)) ]
+    else
+        Canvas.group [] []
+
+{-| applying offset & rotation to List Point for map function
+    rotate  direction (clock-wise degrees)
+    0       0
+    1       90
+    2       180
+    3       270
+-}
+offsetPoint : Int -> Point -> Point -> Point
+offsetPoint rotate offset pos =
+    let
+        (x, y) = pos
+        (nx, ny) =    case  rotate of
+                        0 ->    (x, y)
+                        1 ->    (y, -x)
+                        2 ->    (-x, -y)
+                        3 ->    (-y, x)
+                        _ ->    (x, y)
+    in
+    (nx + Tuple.first offset, ny + Tuple.second offset)
 
 
 {-| rendering circle for map function -}
 renderCircleMap1 : EnvC -> Color -> Float -> Point -> Renderable
 renderCircleMap1 env color radius pos =
     shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env radius) ]
-
-{-| adding offset to List Point for map function -}
-offsetPoint : Point -> Point -> Point
-offsetPoint pos offset =
-    (Tuple.first pos + Tuple.first offset, Tuple.second pos + Tuple.second offset)
-
-{-
-renderRightTentacle : EnvC -> Cell EnemyBlock -> Renderable
-renderLowerTentacle : EnvC -> Cell EnemyBlock -> Renderable
-renderLeftTentacle : EnvC -> Cell EnemyBlock -> Renderable
-
-renderUpperConnection : EnvC -> Cell EnemyBlock -> Renderable
-renderRightConnection : EnvC -> Cell EnemyBlock -> Renderable
-renderLowerConnection : EnvC -> Cell EnemyBlock -> Renderable
-renderLeftConnection : EnvC -> Cell EnemyBlock -> Renderable
--}
 
 {-| generic function of rendering number(Int) for testing -}
 renderNum : EnvC -> Int -> Renderable

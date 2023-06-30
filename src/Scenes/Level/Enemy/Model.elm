@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..))
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
-import Time exposing (posixToMillis)
+import Time exposing (posixToMillis, utc)
 import Canvas exposing (text)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum, renderEnemyBody)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
@@ -38,7 +38,8 @@ updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
         Tick newTime ->
-            (   { model | time = Time.posixToMillis newTime }
+            (   --{ model | time = Time.posixToMillis newTime }
+                { model | time = Time.posixToMillis newTime }
                 |> updateRandNum
             ,   []
             ,   env
@@ -56,7 +57,6 @@ updateRandNum model =
     { model |   randNum = randNum
             ,   seed = seed
     }
-
 
 {-| updateModelRec
 Default update function
@@ -82,7 +82,7 @@ viewModel env model =
     let
         rend =
             [
-                renderNum env model.randNum
+                renderNum env model.time
             ,   renderEnemyBody env model
             ]
     in
