@@ -82,8 +82,7 @@ viewModel env model =
     let
         rend =
             [
-                renderNum env model.time
-            ,   renderEnemyBody env model
+                renderEnemyBody env model
             ]
     in
     group

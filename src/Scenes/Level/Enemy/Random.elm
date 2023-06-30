@@ -19,7 +19,7 @@ randomEnemy seed =
 {- The following five functions are coefficients for curUniqueSin -}
 partialCoefficient : Float
 partialCoefficient = 
-    0.45
+    0.75
 
 period1 : Int
 period1 =
@@ -35,7 +35,7 @@ period3 =
 
 xNum : Int
 xNum =
-    8
+    12
 
 {-| Get a function which change continuously for main branch of a tentacle -}
 {-
@@ -55,10 +55,10 @@ curUniqueSin time pos id =
     let
         b = partialCoefficient * cellLength
         q = Tuple.first pos + Tuple.second pos + toFloat (id*100 + time)
-        c1 = sin (degrees (toFloat ((round q)//period1) ))
-        c2 = sin (degrees (toFloat ((round q)//period2) ))
-        c3 = sin (degrees (toFloat ((round q)//period3) ))
-        a = 5+5*c1
+        c1 = sin (2*degrees (toFloat ((round q)//period1) ))
+        c2 = sin (2*degrees (toFloat ((round q)//period2) ))
+        c3 = sin (2*degrees (toFloat ((round q)//period3) ))
+        a = 10+10*c1
         d = 2/3*2*pi/b*c2
         k = (1/3 + 2/3*c3) * 2*pi/b
         x = List.map (listModifyNum (b/ (toFloat xNum))) (List.range 1 xNum)
