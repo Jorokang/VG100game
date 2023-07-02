@@ -35,7 +35,11 @@ renderEnemyBlock env model x =
         color =
             tmp_enemyblock.color
     in
-    renderEnemyBlockCentral env model x 
+    Canvas.group
+    []
+    [   renderEnemyBlockCentral env model x 
+    ,   renderSingleTentacle env model x 1
+    ]
 
 {-| Render the central part of an enemy block,
     which is a circle exists as long as there is a block. -}
@@ -49,8 +53,7 @@ renderEnemyBlockCentral env model x =
     in
     Canvas.group
     []
-    [   shapes [ fill color ] [ circle (coorChange env (offsetPoint 0 (cellLength/2, cellLength/2) pos)) (lengthChange env (cellLength/2.5)) ]
-    ,   renderSingleTentacle env model x 1
+    [   shapes [ fill color ] [ rect (coorChange env pos) (lengthChange env (cellLength)) (lengthChange env (cellLength)) ]
     ]
 
 renderSingleTentacle : EnvC -> Model -> Cell EnemyBlock -> Int -> Renderable
@@ -63,7 +66,7 @@ renderSingleTentacle env model x id =
         sinPair =
             curUniqueSin model.time pos id
         (rotate, offset) =
-            (0, (3.6*cellLength, 1.5*cellLength))
+            (0, (3.6*cellLength, (1.0+toFloat(id)/10)*cellLength))
         rend =
             List.map (renderTentaclePixels env model color (rotate, offset) ) sinPair
     in
