@@ -71,27 +71,23 @@ erodeNearestCell model =
 allGrids : GridLoc -> List GridLoc
 allGrids map_size =
     let
-        cl =
-            round cellLength
         (sx,sy) =
             map_size
         lx = 
-            List.range 1 sx
-        ly = 
-            List.range 1 sy
+            List.range 0 ((sx+1)*(sy+1))
 
     in
-    List.map2 map2d lx ly
+    List.map (map2d (sy+1)) lx
 
 {-| transfer 2 Int into Point -}
 map2d : Int -> Int -> GridLoc
-map2d x y =
-    ( x, y )
+map2d max_line cur =
+    ( (modBy max_line cur), cur//max_line )
 
 {-| generate the complementary set of enemy body in grids -}
 complementGrids : Model -> List GridLoc
 complementGrids model =
-    List.filter (\x -> (List.any (checkCellLoc x) model.body)) (allGrids model.map_size)
+    Tuple.second (List.partition (\x -> (List.any (checkCellLoc x) model.body)) (allGrids model.map_size))
 
 {-| comparison function based on the distance with core -}
 comparisonPointDistance : GridLoc -> GridLoc -> GridLoc -> Order
