@@ -13,6 +13,7 @@ import Tuple
 import Color exposing (Color)
 import Scenes.Level.Frame.Functions exposing (int2Point)
 import Scenes.Level.Enemy.Common exposing (GridLoc)
+import Scenes.Level.Enemy.Update exposing (checkCellLoc)
 
 {-| render the whole enemy body(explicitly the body field in model) -}
 renderEnemyBody : EnvC -> Model -> Renderable
@@ -34,13 +35,33 @@ renderEnemyBlock env model x =
         tmp_enemyblock =
             x.val
         tentacle_render =
-            Canvas.group [] (List.map (renderSingleTentacle env model x) [1,6])
+            Canvas.group [] (List.map (renderSingleTentacle env model x) (tentacleDir model loc))
     in
     Canvas.group
     []
     [   renderEnemyBlockCentral env model x 
     ,   tentacle_render
-    ] 
+    ]
+
+{-| generate a list representing the available tentacles direction (0 to 11) -}
+tentacleDir : Model -> GridLoc -> List Int
+tentacleDir model loc =
+    let
+        (x, y) = loc
+        right = case (List.any (checkCellLoc (x+1, y)) model.body) of
+                    True -> []
+                    False -> [0,1,2]
+        up =    case (List.any (checkCellLoc (x, y-1)) model.body) of
+                    True -> []
+                    False -> [3,4,5]
+        left =  case (List.any (checkCellLoc (x-1, y)) model.body) of
+                    True -> []
+                    False -> [6,7,8]
+        down =  case (List.any (checkCellLoc (x, y+1)) model.body) of
+                    True -> []
+                    False -> [9,10,11]
+    in
+    List.concat [right, up, left, down]
 
 {-| Render the central part of an enemy block,
     which is a circle exists as long as there is a block. -}
@@ -57,6 +78,22 @@ renderEnemyBlockCentral env model x =
     [   shapes [ fill color ] [ rect (coorChange env (grid2real loc)) (lengthChange env (cellLength)) (lengthChange env (cellLength)) ]
     ]
 
+{-| 
+rendering a single tentacle
+tentacle id |   direction
+0           |   right 1
+1           |   right 2
+2           |   right 3
+3           |   up 1
+4           |   up 2
+5           |   up 3
+6           |   left 1
+7           |   left 2
+8           |   left 3
+9           |   down 1
+10          |   down 2
+11          |   down 3
+ -}
 renderSingleTentacle : EnvC -> Model -> Cell EnemyBlock -> Int -> Renderable
 renderSingleTentacle env model x id =
     let
@@ -66,14 +103,26 @@ renderSingleTentacle env model x id =
             x.loc
         sinPair =
             curUniqueSin model.time x.loc id
-        (rotate, offset) =
-            (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10) )*cellLength))
+        (rotate, offset) =  case id of
+                                0 -> (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10)*3 + 0.2 )*cellLength))
+                                1 -> (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10)*3 + 0.2 )*cellLength))
+                                2 -> (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10)*3 + 0.2 )*cellLength))
+                                3 -> (1, ( ( (toFloat locx) + (toFloat(id-3)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.2)*cellLength))
+                                4 -> (1, ( ( (toFloat locx) + (toFloat(id-3)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.2)*cellLength))
+                                5 -> (1, ( ( (toFloat locx) + (toFloat(id-3)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.2)*cellLength))
+                                6 -> (2, ( (toFloat locx + 0.3)*cellLength, ( (toFloat locy) + (toFloat(id-6)/10)*3 + 0.2 )*cellLength))
+                                7 -> (2, ( (toFloat locx + 0.3)*cellLength, ( (toFloat locy) + (toFloat(id-6)/10)*3 + 0.2 )*cellLength))
+                                8 -> (2, ( (toFloat locx + 0.3)*cellLength, ( (toFloat locy) + (toFloat(id-6)/10)*3 + 0.2 )*cellLength))
+                                9 -> (3, ( ( (toFloat locx) + (toFloat(id-9)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.8)*cellLength))
+                                10 -> (3, ( ( (toFloat locx) + (toFloat(id-9)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.8)*cellLength))
+                                11 -> (3, ( ( (toFloat locx) + (toFloat(id-9)/10)*3 + 0.2 )*cellLength, (toFloat locy + 0.8)*cellLength))
+                                _ -> (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10)*3 )*cellLength))
         rend =
             List.map (renderTentaclePixels env model color (rotate, offset) ) sinPair
     in
     Canvas.group
     []
-    rend
+    rend    
 
 isOdd : Int -> Int
 isOdd x =
@@ -90,7 +139,7 @@ isOdd x =
         "7" -> 7
         "9" -> 9
         _ -> 0
-    
+
 
 renderTentaclePixels : EnvC -> Model -> Color -> (Int, Point) -> Point -> Renderable
 renderTentaclePixels env model color (rotate, offset) pos =
@@ -124,7 +173,7 @@ renderTentaclePixels env model color (rotate, offset) pos =
     ,   renderTentaclePixel env color (x, y+2*delta) l2 (rotate, addPoint offset offset2) flag2
     ,   renderTentaclePixel env color (x, y-delta) l3 (rotate, addPoint offset offset3) flag3
     ,   renderTentaclePixel env color (x, y-2*delta) l4 (rotate, addPoint offset offset4) flag4
-    ,   renderNum env flag1
+    ,   renderNum env rotate
     ]
     
     
@@ -145,20 +194,21 @@ renderTentaclePixel env color pos l (rotate, offset) flag =
 offsetPoint : Int -> Point -> Point -> Point
 offsetPoint rotate offset pos =
     let
-        (x, y) = pos
-        (nx, ny) =    case  rotate of
+        (px, py) =  offset
+        (x, y) =    pos
+        (nx, ny) =  case  rotate of
                         0 ->    (x, y)
                         1 ->    (y, -x)
                         2 ->    (-x, -y)
                         3 ->    (-y, x)
                         _ ->    (x, y)
     in
-    (nx + Tuple.first offset, ny + Tuple.second offset)
+    (nx + px, ny + py)
 
 {-| generic function of rendering number(Int) for testing -}
 renderNum : EnvC -> Int -> Renderable
 renderNum env num =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 50, 50 )) ("remained bricks:" ++ String.fromInt num)
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 50, 50 )) ("rotate:" ++ String.fromInt num)
 
 {-| generic function of rendering circle -}
 renderCircle : EnvC -> Point -> Int -> Color -> Renderable
