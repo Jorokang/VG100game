@@ -32,14 +32,14 @@ renderEnemyBlock env model x =
             x.pos
         tmp_enemyblock =
             x.val
-        color =
-            tmp_enemyblock.color
+        tentacle_render =
+            Canvas.group [] (List.map (renderSingleTentacle env model x) [1,6])
     in
     Canvas.group
     []
     [   renderEnemyBlockCentral env model x 
-    ,   renderSingleTentacle env model x 1
-    ]
+    ,   tentacle_render
+    ] 
 
 {-| Render the central part of an enemy block,
     which is a circle exists as long as there is a block. -}
@@ -61,12 +61,12 @@ renderSingleTentacle env model x id =
     let
         color =
             x.val.color
-        pos = 
+        (posx,posy) = 
             x.pos
         sinPair =
-            curUniqueSin model.time pos id
+            curUniqueSin model.time x.pos id
         (rotate, offset) =
-            (0, (3.6*cellLength, (1.0+toFloat(id)/10)*cellLength))
+            (0, (posx+0.7*cellLength, posy+(toFloat(id)/10)*cellLength))
         rend =
             List.map (renderTentaclePixels env model color (rotate, offset) ) sinPair
     in
