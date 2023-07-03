@@ -50,11 +50,11 @@ in which
         p1,2,3 are determined coefficients for A,d,k,
         q = (pos + id + t).
 -}
-curUniqueSin : Int -> Point -> Int -> List Point
-curUniqueSin time pos id =
+curUniqueSin : Int -> (Int, Int) -> Int -> List Point
+curUniqueSin time loc id =
     let
         b = partialCoefficient * cellLength
-        q = Tuple.first pos + Tuple.second pos + toFloat (id*100 + time)
+        q = toFloat (Tuple.first loc) + toFloat (Tuple.second loc) + toFloat (id*100 + time)
         c1 = sin (2*degrees (toFloat ((round q)//period1) ))
         c2 = sin (2*degrees (toFloat ((round q)//period2) ))
         c3 = sin (2*degrees (toFloat ((round q)//period3) ))

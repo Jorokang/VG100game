@@ -1,4 +1,4 @@
-module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell, EnemyCore)
+module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell, EnemyCore, GridLoc, grid2real)
 
 {-| Common module
 
@@ -10,7 +10,7 @@ import Canvas exposing (Point)
 import Color exposing (Color)
 import Lib.Env.Env as Env
 import Scenes.Level.LayerBase exposing (CommonData)
-import Scenes.Level.Frame.Functions exposing (coorChange, point2Int, cellLength)
+import Scenes.Level.Frame.Functions exposing (coorChange, point2Int, int2Point, cellLength)
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Time exposing (Posix, now)
@@ -25,11 +25,13 @@ type EnemyState
     |   Stopped
     |   Dead
 
+type alias GridLoc =
+    ( Int, Int )
 
 type alias Cell a =
     {
         val : a
-    ,   pos : Point
+    ,   loc : GridLoc
     }
 
 type alias Grid a =
@@ -52,7 +54,7 @@ type alias Model =
         state : EnemyState
     ,   body : Grid EnemyBlock
     ,   core : Cell EnemyCore
-    ,   map_size : Point
+    ,   map_size : GridLoc
     ,   seed : Random.Seed
     ,   randNum : Int
     ,   time : Int
@@ -68,7 +70,7 @@ nullEnemyCore =
         val = { color = Color.red
             ,   hp = 1
             }
-    ,   pos = ( 3*cellLength, 1*cellLength )
+    ,   loc = ( 3, 1 )
     }
 
 nullModel : Model
@@ -97,15 +99,19 @@ initEnemy1 =
         state = Alive
     ,   body = [    {   val = { color = Color.black
                             ,   hp = 1}
-                    ,   pos = ( 3*cellLength, 1*cellLength )
+                    ,   loc = ( 3, 1 )
                         }
                 ]
     ,   core = nullEnemyCore
-    ,   map_size = ( 4*cellLength, 3*cellLength )
+    ,   map_size = ( 4, 3 )
     ,   seed = seed
     ,   randNum = number
     ,   time = 0
     }
+
+grid2real : (Int,Int) -> Point
+grid2real (x,y) =
+    ( (toFloat x)*cellLength , (toFloat y)*cellLength ) 
 
 {-| Convenient type alias for the environment
 -}

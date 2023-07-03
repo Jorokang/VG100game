@@ -4,7 +4,7 @@ import Canvas exposing (Renderable, empty, Point, group, shapes, circle, rect, t
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell, grid2real)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
@@ -12,6 +12,7 @@ import List
 import Tuple
 import Color exposing (Color)
 import Scenes.Level.Frame.Functions exposing (int2Point)
+import Scenes.Level.Enemy.Common exposing (GridLoc)
 
 {-| render the whole enemy body(explicitly the body field in model) -}
 renderEnemyBody : EnvC -> Model -> Renderable
@@ -28,8 +29,8 @@ renderEnemyBody env model =
 renderEnemyBlock : EnvC -> Model -> Cell EnemyBlock -> Renderable
 renderEnemyBlock env model x =
     let
-        pos =
-            x.pos
+        loc =
+            x.loc
         tmp_enemyblock =
             x.val
         tentacle_render =
@@ -48,12 +49,12 @@ renderEnemyBlockCentral env model x =
     let
         color =
             x.val.color
-        pos = 
-            x.pos
+        loc = 
+            x.loc
     in
     Canvas.group
     []
-    [   shapes [ fill color ] [ rect (coorChange env pos) (lengthChange env (cellLength)) (lengthChange env (cellLength)) ]
+    [   shapes [ fill color ] [ rect (coorChange env (grid2real loc)) (lengthChange env (cellLength)) (lengthChange env (cellLength)) ]
     ]
 
 renderSingleTentacle : EnvC -> Model -> Cell EnemyBlock -> Int -> Renderable
@@ -61,12 +62,12 @@ renderSingleTentacle env model x id =
     let
         color =
             x.val.color
-        (posx,posy) = 
-            x.pos
+        (locx, locy) = 
+            x.loc
         sinPair =
-            curUniqueSin model.time x.pos id
+            curUniqueSin model.time x.loc id
         (rotate, offset) =
-            (0, (posx+0.7*cellLength, posy+(toFloat(id)/10)*cellLength))
+            (0, ( (toFloat locx + 0.7)*cellLength, ( (toFloat locy) + (toFloat(id)/10) )*cellLength))
         rend =
             List.map (renderTentaclePixels env model color (rotate, offset) ) sinPair
     in
@@ -126,6 +127,7 @@ renderTentaclePixels env model color (rotate, offset) pos =
     ,   renderNum env flag1
     ]
     
+    
 renderTentaclePixel : EnvC -> Color -> Point -> Int -> (Int, Point) -> Int -> Renderable
 renderTentaclePixel env color pos l (rotate, offset) flag =
     --if (flag==1) then
@@ -152,12 +154,6 @@ offsetPoint rotate offset pos =
                         _ ->    (x, y)
     in
     (nx + Tuple.first offset, ny + Tuple.second offset)
-
-
-{-| rendering circle for map function -}
-renderCircleMap1 : EnvC -> Color -> Float -> Point -> Renderable
-renderCircleMap1 env color radius pos =
-    shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env radius) ]
 
 {-| generic function of rendering number(Int) for testing -}
 renderNum : EnvC -> Int -> Renderable

@@ -63,3 +63,8 @@ cellLength =
 pointDistance : Point -> Point -> Float
 pointDistance x y =
     sqrt ( (Tuple.first x - Tuple.first y)^2 + (Tuple.second x - Tuple.second y)^2 )
+
+{-| GridLoc distance (Int version of point distance) -}
+gridlocDistance : (Int, Int) -> (Int, Int) -> Float
+gridlocDistance (x1, y1) (x2, y2) =
+    sqrt ( (toFloat (x1 - x2))^2 + (toFloat (y1 - y2))^2 )
