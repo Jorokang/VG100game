@@ -2,6 +2,7 @@ module Scenes.Level.Enemy.Render exposing (..)
 
 import Canvas exposing (Renderable, empty, Point, group, shapes, circle, rect, text)
 import Canvas.Settings exposing (fill)
+import Canvas.Settings.Advanced exposing (transform, rotate, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell, grid2real)
@@ -14,6 +15,8 @@ import Color exposing (Color)
 import Scenes.Level.Frame.Functions exposing (int2Point)
 import Scenes.Level.Enemy.Common exposing (GridLoc)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
+import Scenes.Level.Enemy.Common exposing (EnemyCore)
+import Canvas.Settings.Advanced exposing (rotate)
 
 {-| render the whole enemy body(explicitly the body field in model) -}
 renderEnemyBody : EnvC -> Model -> Renderable
@@ -214,3 +217,21 @@ renderNum env num =
 renderCircle : EnvC -> Point -> Int -> Color -> Renderable
 renderCircle env pos radius color =
     shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env (toFloat radius)) ]
+
+renderEnemyCore : EnvC -> Model -> Renderable
+renderEnemyCore _ model =
+    let
+        ( locx, locy ) =
+            int2Point model.core.loc
+        ( x, y ) =
+            ( (locx+0.5)*cellLength, (locy+0.16)*cellLength )
+    in
+    shapes
+        [   transform   
+                [   translate x y
+                ,   rotate ( degrees 45 )
+                ,   translate -x -y
+                ]
+        ,   fill Color.red
+        ]
+        [ rect ( x, y ) (cellLength/2) (cellLength/2) ]

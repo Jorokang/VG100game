@@ -46,9 +46,9 @@ erodeRandomCell model =
         locy = round ((toFloat (model.randNum // 10)) / 100.0 * (toFloat sy))
         loc = (locx, locy)
     in
-    if (List.any ( checkCellLoc loc ) model.body) then
-        erodeRandomCell model
-    else
+    --if (List.any ( checkCellLoc loc ) model.body) then
+        --erodeRandomCell model
+    --else
         erodeCell model loc
 
 {-| erode the nearest cell to the core that is not contained -}

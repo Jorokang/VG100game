@@ -20,7 +20,7 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
 import Time exposing (posixToMillis, utc)
 import Canvas exposing (text)
-import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum, renderEnemyBody)
+import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell)
 
@@ -46,7 +46,13 @@ updateModel env model =
             ,   env
             )
         KeyDown x ->
-            ( erodeNearestCell model , [], env )
+            case x of
+                38 ->   --arrowup->random
+                    ( erodeRandomCell model , [], env )
+                40 ->   --arrowdown->nearest
+                    ( erodeNearestCell model , [], env )
+                _ ->    --do nothing
+                    ( model, [], env )
         _ ->
             ( model, [], env )
 
@@ -86,6 +92,7 @@ viewModel env model =
         rend =
             [
                 renderEnemyBody env model
+            ,   renderEnemyCore env model
             ]
     in
     group
