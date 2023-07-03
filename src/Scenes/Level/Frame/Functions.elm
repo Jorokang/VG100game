@@ -53,6 +53,13 @@ lowerCell : Point -> Point
 lowerCell x =
     ( first x, second x + cellLength)
 
+--define the global length of a cell in the map
 cellLength : Float
 cellLength =
     100
+
+
+{-| point distance -}
+pointDistance : Point -> Point -> Float
+pointDistance x y =
+    sqrt ( (Tuple.first x - Tuple.first y)^2 + (Tuple.second x - Tuple.second y)^2 )

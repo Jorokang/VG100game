@@ -22,7 +22,7 @@ import Time exposing (posixToMillis, utc)
 import Canvas exposing (text)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBlock, renderNum, renderEnemyBody)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Enemy.Update exposing (randomErodeCell)
+import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell)
 
 
 
@@ -46,7 +46,7 @@ updateModel env model =
             ,   env
             )
         KeyDown x ->
-            ( randomErodeCell model , [], env )
+            ( erodeNearestCell model , [], env )
         _ ->
             ( model, [], env )
 

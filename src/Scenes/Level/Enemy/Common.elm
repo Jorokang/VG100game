@@ -1,4 +1,4 @@
-module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell)
+module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell, EnemyCore)
 
 {-| Common module
 
