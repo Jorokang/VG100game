@@ -49,6 +49,13 @@ type alias EnemyBlock =
     ,   hp : Int
     }
 
+type alias EnemyEye =
+    {
+        pos : Point
+    ,   v : Point
+    ,   target : Point
+    }
+
 type alias Model =
     {
         state : EnemyState
@@ -59,6 +66,7 @@ type alias Model =
     ,   randNum : Int
     ,   time : Int
     ,   target : GridLoc
+    ,   eye : EnemyEye
     }
 
 
@@ -73,6 +81,18 @@ nullEnemyCore =
             }
     ,   loc = ( 3, 1 )
     }
+
+nullEnemyEye : EnemyEye
+nullEnemyEye =
+    {
+        pos = ( 350, 150 )
+    ,   v = ( 0, 0 )
+    ,   target = ( 350, 150 )
+    }
+
+maxEyeV : Float
+maxEyeV =
+    5
 
 nullModel : Model
 nullModel =
@@ -89,6 +109,7 @@ nullModel =
     ,   randNum = number
     ,   time = 0
     ,   target = ( -1, -1 )
+    ,   eye = nullEnemyEye
     }
 
 initEnemy1 : Model
@@ -110,6 +131,7 @@ initEnemy1 =
     ,   randNum = number
     ,   time = 0
     ,   target = ( -1, -1 )
+    ,   eye = nullEnemyEye
     }
 
 grid2real : (Int,Int) -> Point
