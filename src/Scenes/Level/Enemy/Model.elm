@@ -20,9 +20,9 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
 import Time exposing (posixToMillis, utc)
 import Canvas exposing (text)
-import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody)
+import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody, renderEnemyEye)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell, targetNearestCell, targetRandomCell, erodeTarget)
+import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell, targetNearestCell, targetRandomCell, erodeTarget, moveEnemyEye)
 
 
 
@@ -42,6 +42,7 @@ updateModel env model =
             (   --{ model | time = Time.posixToMillis newTime }
                 { model | time = Time.posixToMillis newTime }
                 |> updateRandNum
+                |> moveEnemyEye
             ,   []
             ,   env
             )
@@ -104,6 +105,7 @@ viewModel env model =
             [
                 renderEnemyBody env model
             ,   renderEnemyCore env model
+            ,   renderEnemyEye env model
             ]
     in
     group

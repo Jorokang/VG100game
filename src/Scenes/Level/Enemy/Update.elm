@@ -1,10 +1,10 @@
 module Scenes.Level.Enemy.Update exposing (..)
 
 import Canvas exposing (Point)
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), Cell, EnemyBlock, EnemyCore)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), Cell, EnemyBlock, EnemyCore, grid2real, maxEyeV)
 import Base exposing (GlobalData, Msg(..))
 import Scenes.Level.Enemy.Common exposing (EnemyBlock)
-import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance)
+import Scenes.Level.Frame.Functions exposing (negPoint, pointDistance, scalePoint, coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance)
 import List
 import Tuple
 import Scenes.Level.Frame.Functions exposing (int2Point)
@@ -24,6 +24,27 @@ erodeCell model new_loc =
 erodeTarget : Model -> Model
 erodeTarget model =
     erodeCell model model.target
+
+{-| Set Enemy Target -}
+setTarget : Model -> GridLoc -> Model
+setTarget model loc =
+    let
+        eye_target =
+            addPoint (grid2real loc) ( 50, 50 )
+        eye_vec =
+            addPoint eye_target (negPoint model.eye.pos)
+        norm =
+            pointDistance ( 0, 0 ) eye_vec
+        v =
+            scalePoint eye_vec ( maxEyeV / norm )
+        new_eye =   {   pos = model.eye.pos
+                    ,   v = v
+                    ,   target = eye_target
+                    }
+    in
+    { model |   target = loc
+            ,   eye = new_eye
+            }
 
 generateBody : GridLoc -> Cell EnemyBlock
 generateBody loc =
@@ -64,8 +85,9 @@ targetRandomCell model =
         sy = Tuple.second model.map_size
         locx = round ((toFloat model.randNum) / 1000.0 * (toFloat sx))
         locy = round ((toFloat (model.randNum // 10)) / 100.0 * (toFloat sy))
+        loc = ( locx, locy )
     in
-    { model | target = ( locx, locy ) }
+    setTarget model loc
 
 {-| erode the nearest cell to the core that is not contained -}
 erodeNearestCell : Model -> Model
@@ -97,7 +119,7 @@ targetNearestCell model =
                     Nothing ->
                         (-1, -1)
     in
-    { model | target = loc }
+    setTarget model loc
 
 {-| generate the List Point of all grids -}
 allGrids : GridLoc -> List GridLoc
@@ -131,3 +153,27 @@ comparisonPointDistance origin x y =
             gridlocDistance origin y
     in
     compare dis_x dis_y
+
+{-| move the enemy's eye (according to its own data) -}
+moveEnemyEye : Model -> Model
+moveEnemyEye model =
+    let
+        eye =
+            model.eye
+        dis =
+            pointDistance eye.pos eye.target
+    in
+    if ( model.eye.v == ( 0, 0 ) ) then
+        model
+    else if ( dis < maxEyeV ) then
+        { model | eye = {   pos = model.eye.target
+                        ,   v = ( 0, 0 )
+                        ,   target = model.eye.target
+                        }
+        }
+    else
+        { model | eye = {   pos = addPoint model.eye.pos model.eye.v
+                        ,   v = model.eye.v
+                        ,   target = model.eye.target
+                        }
+        }

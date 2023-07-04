@@ -1,4 +1,4 @@
-module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell, EnemyCore, GridLoc, grid2real)
+module Scenes.Level.Enemy.Common exposing (Model, nullModel, EnvC, EnemyState(..), initEnemy1, EnemyBlock, Cell, EnemyCore, GridLoc, grid2real, maxEyeV)
 
 {-| Common module
 

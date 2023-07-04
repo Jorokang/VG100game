@@ -24,6 +24,16 @@ addPoint : Point -> Point -> Point
 addPoint a b =
     ( first a + first b , second a + second b )
 
+--mutiply the Point by a float k
+scalePoint : Point -> Float -> Point
+scalePoint ( x, y ) k =
+    ( x*k, y*k )
+
+--the opposite of given Point
+negPoint : Point -> Point 
+negPoint ( x, y ) =
+    ( -x, -y )
+
 --global coordinates control function
 coorChange : EnvC -> Point -> Point
 coorChange _ pos =
@@ -57,7 +67,6 @@ lowerCell x =
 cellLength : Float
 cellLength =
     100
-
 
 {-| point distance -}
 pointDistance : Point -> Point -> Float
