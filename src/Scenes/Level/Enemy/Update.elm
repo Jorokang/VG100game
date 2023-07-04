@@ -4,7 +4,7 @@ import Canvas exposing (Point)
 import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), Cell, EnemyBlock, EnemyCore, grid2real, maxEyeV)
 import Base exposing (GlobalData, Msg(..))
 import Scenes.Level.Enemy.Common exposing (EnemyBlock)
-import Scenes.Level.Frame.Functions exposing (negPoint, pointDistance, scalePoint, coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance)
+import Scenes.Level.Frame.Functions exposing (negPoint, pointDistance, scalePoint, coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance, allGrids)
 import List
 import Tuple
 import Scenes.Level.Frame.Functions exposing (int2Point)
@@ -130,23 +130,6 @@ targetNearestCell model =
                         (-1, -1)
     in
     setTarget model loc
-
-{-| generate the List Point of all grids -}
-allGrids : GridLoc -> List GridLoc
-allGrids map_size =
-    let
-        (sx,sy) =
-            map_size
-        lx = 
-            List.range 0 ((sx+1)*(sy+1))
-
-    in
-    List.map (map2d (sy+1)) lx
-
-{-| transfer 2 Int into Point -}
-map2d : Int -> Int -> GridLoc
-map2d max_line cur =
-    ( (modBy max_line cur), cur//max_line )
 
 {-| generate the complementary set of enemy body in grids -}
 complementGrids : Model -> List GridLoc

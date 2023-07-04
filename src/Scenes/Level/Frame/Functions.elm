@@ -90,3 +90,20 @@ pointDistance x y =
 gridlocDistance : (Int, Int) -> (Int, Int) -> Float
 gridlocDistance (x1, y1) (x2, y2) =
     sqrt ( (toFloat (x1 - x2))^2 + (toFloat (y1 - y2))^2 )
+
+{-| generate the List Point of all grids -}
+allGrids : (Int, Int) -> List (Int, Int)
+allGrids map_size =
+    let
+        (sx,sy) =
+            map_size
+        lx = 
+            List.range 0 ((sx+1)*(sy+1))
+
+    in
+    List.map (map2d (sy+1)) lx
+
+{-| transfer 2 Int into Point -}
+map2d : Int -> Int -> (Int, Int)
+map2d max_line cur =
+    ( (modBy max_line cur), cur//max_line )
