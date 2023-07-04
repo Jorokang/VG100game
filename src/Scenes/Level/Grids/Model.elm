@@ -13,9 +13,12 @@ module Scenes.Level.Grids.Model exposing
 -}
 
 import Canvas exposing (Renderable, empty)
+import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Grids.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Grids.Common exposing (EnvC, Model, nullModel, initGrids1, PlotEffect(..))
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Grids.Render exposing (renderGrids)
+import Scenes.Level.Grids.Update exposing (modifyPlotEffect)
 
 
 {-| initModel
@@ -23,7 +26,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initGrids1
 
 
 {-| updateModel
@@ -34,7 +37,28 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        KeyDown x ->    --modify the effect of (0,0) for testing
+            case x of
+                40 ->   --arrow down -> empty
+                    (   modifyPlotEffect model (0,0) Empty
+                    ,   []
+                    ,   env
+                    )
+                37 ->   --arrow left -> angry
+                    (   modifyPlotEffect model (0,0) Angry
+                    ,   []
+                    ,   env
+                    )
+                39 ->   --arrow right -> lazy
+                    (   modifyPlotEffect model (0,0) Lazy
+                    ,   []
+                    ,   env
+                    )
+                _ ->
+                    ( model, [], env )
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
@@ -48,14 +72,14 @@ updateModelRec env _ model =
     ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [
+                renderGrids env model
+            ]
+    in
+    Canvas.group
+    []
+    rend
