@@ -20,6 +20,11 @@ erodeCell model new_loc =
     else
         { model | body = List.append model.body [generateBody new_loc] }
 
+{-| Erode the target cell -}
+erodeTarget : Model -> Model
+erodeTarget model =
+    erodeCell model model.target
+
 generateBody : GridLoc -> Cell EnemyBlock
 generateBody loc =
     {   val = { color = Color.black

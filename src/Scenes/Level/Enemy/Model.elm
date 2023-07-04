@@ -22,7 +22,7 @@ import Time exposing (posixToMillis, utc)
 import Canvas exposing (text)
 import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell)
+import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell, targetNearestCell, targetRandomCell, erodeTarget)
 
 
 
@@ -47,10 +47,21 @@ updateModel env model =
             )
         KeyDown x ->
             case x of
-                38 ->   --arrowup->random
-                    ( erodeRandomCell model , [], env )
-                40 ->   --arrowdown->nearest
-                    ( erodeNearestCell model , [], env )
+                32 ->   --space->erode target
+                    (   erodeTarget model
+                    ,   []
+                    ,   env
+                    )
+                38 ->   --arrowup->set random target
+                    (   targetRandomCell model
+                    ,   []
+                    ,   env
+                    )
+                40 ->   --arrowdown->set nearest target
+                    (   targetNearestCell model
+                    ,   []
+                    ,   env
+                    )
                 _ ->    --do nothing
                     ( model, [], env )
         _ ->
