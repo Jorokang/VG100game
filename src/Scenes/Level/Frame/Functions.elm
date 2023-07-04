@@ -98,10 +98,10 @@ allGrids map_size =
         (sx,sy) =
             map_size
         lx = 
-            List.range 0 ((sx+1)*(sy+1))
+            List.range 0 ((sx+1)*(sy+1)-1)
 
     in
-    List.map (map2d (sy+1)) lx
+    List.map (map2d (sx+1)) lx
 
 {-| transfer 2 Int into Point -}
 map2d : Int -> Int -> (Int, Int)
