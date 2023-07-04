@@ -15,7 +15,7 @@ import Scenes.Level.Enemy.Common exposing (GridLoc)
 {-| The enemy erodes one cell if this cell is not contained by it -}
 erodeCell : Model -> GridLoc -> Model
 erodeCell model new_loc =
-    if (List.any (checkCellLoc new_loc) model.body) then
+    if (List.any (checkCellLoc new_loc) model.body) || (Tuple.first new_loc < 0) || (Tuple.second new_loc < 0) then
         model
     else
         { model | body = List.append model.body [generateBody new_loc] }
@@ -49,7 +49,18 @@ erodeRandomCell model =
     --if (List.any ( checkCellLoc loc ) model.body) then
         --erodeRandomCell model
     --else
-        erodeCell model loc
+    erodeCell model loc
+
+{-| randomly set a cell as the target to erode -}
+targetRandomCell : Model -> Model
+targetRandomCell model =
+    let
+        sx = Tuple.first model.map_size
+        sy = Tuple.second model.map_size
+        locx = round ((toFloat model.randNum) / 1000.0 * (toFloat sx))
+        locy = round ((toFloat (model.randNum // 10)) / 100.0 * (toFloat sy))
+    in
+    { model | target = ( locx, locy ) }
 
 {-| erode the nearest cell to the core that is not contained -}
 erodeNearestCell : Model -> Model
@@ -66,6 +77,22 @@ erodeNearestCell model =
                         (0,0)
     in
     erodeCell model loc
+
+{-| set the nearest cell to the core as the target to erode -}
+targetNearestCell : Model -> Model
+targetNearestCell model =
+    let
+        l =
+            List.sortWith (comparisonPointDistance model.core.loc) (complementGrids model)  --can be optimized
+        maybe_head =
+            List.head l
+        loc =  case maybe_head of
+                    Just x ->
+                        x
+                    Nothing ->
+                        (-1, -1)
+    in
+    { model | target = loc }
 
 {-| generate the List Point of all grids -}
 allGrids : GridLoc -> List GridLoc

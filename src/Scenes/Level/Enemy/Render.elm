@@ -219,7 +219,7 @@ renderCircle env pos radius color =
     shapes [ fill color ] [ circle (coorChange env pos) (lengthChange env (toFloat radius)) ]
 
 renderEnemyCore : EnvC -> Model -> Renderable
-renderEnemyCore _ model =
+renderEnemyCore env model =
     let
         ( locx, locy ) =
             int2Point model.core.loc
@@ -234,4 +234,4 @@ renderEnemyCore _ model =
                 ]
         ,   fill Color.red
         ]
-        [ rect ( x, y ) (cellLength/2) (cellLength/2) ]
+        [ rect ( coorChange env ( x, y ) ) ( lengthChange env (cellLength/2) ) ( lengthChange env (cellLength/2) ) ]

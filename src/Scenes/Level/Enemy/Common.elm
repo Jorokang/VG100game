@@ -58,6 +58,7 @@ type alias Model =
     ,   seed : Random.Seed
     ,   randNum : Int
     ,   time : Int
+    ,   target : GridLoc
     }
 
 
@@ -87,6 +88,7 @@ nullModel =
     ,   seed = seed
     ,   randNum = number
     ,   time = 0
+    ,   target = ( -1, -1 )
     }
 
 initEnemy1 : Model
@@ -107,6 +109,7 @@ initEnemy1 =
     ,   seed = seed
     ,   randNum = number
     ,   time = 0
+    ,   target = ( -1, -1 )
     }
 
 grid2real : (Int,Int) -> Point
