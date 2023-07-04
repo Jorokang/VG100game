@@ -11,6 +11,7 @@ import Scenes.Level.Frame.Functions exposing (int2Point)
 import Color exposing (Color)
 import Html exposing (a)
 import Scenes.Level.Enemy.Common exposing (GridLoc)
+import Scenes.Level.Frame.Functions exposing (scalePointLength)
 
 {-| The enemy erodes one cell if this cell is not contained by it -}
 erodeCell : Model -> GridLoc -> Model
@@ -33,10 +34,8 @@ setTarget model loc =
             addPoint (grid2real loc) ( 50, 50 )
         eye_vec =
             addPoint eye_target (negPoint model.eye.pos)
-        norm =
-            pointDistance ( 0, 0 ) eye_vec
         v =
-            scalePoint eye_vec ( maxEyeV / norm )
+            scalePointLength eye_vec maxEyeV
         new_eye =   {   pos = model.eye.pos
                     ,   v = v
                     ,   target = eye_target

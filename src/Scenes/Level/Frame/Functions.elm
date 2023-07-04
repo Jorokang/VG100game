@@ -4,6 +4,7 @@ import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Level.LayerBase exposing (CommonData)
 import Tuple exposing (first, second)
+import Lib.Coordinate.Coordinates exposing (posToReal)
 
 
 type alias EnvC =
@@ -33,6 +34,18 @@ scalePoint ( x, y ) k =
 negPoint : Point -> Point 
 negPoint ( x, y ) =
     ( -x, -y )
+
+--set the length of the point to k in the same direction
+scalePointLength : Point -> Float -> Point
+scalePointLength pos k =
+    let
+        norm =
+            pointDistance ( 0, 0 ) pos
+    in
+    if (norm == 0) then
+        pos
+    else
+        scalePoint pos (k/norm)
 
 --global coordinates control function
 coorChange : EnvC -> Point -> Point

@@ -17,6 +17,7 @@ import Scenes.Level.Enemy.Common exposing (GridLoc)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
 import Scenes.Level.Enemy.Common exposing (EnemyCore)
 import Canvas.Settings.Advanced exposing (rotate)
+import Scenes.Level.Frame.Functions exposing (scalePointLength)
 
 {-| render the whole enemy body(explicitly the body field in model) -}
 renderEnemyBody : EnvC -> Model -> Renderable
@@ -242,9 +243,14 @@ renderEnemyEye : EnvC -> Model -> Renderable
 renderEnemyEye env model =
     let
         eye = model.eye
+        pupil_offset =
+            scalePointLength eye.v 8
+        pupil_pos =
+            addPoint eye.pos pupil_offset
     in
-    shapes
-        [
-            fill Color.red
-        ]
-        [ circle ( coorChange env eye.pos) ( lengthChange env 20 )]
+    Canvas.group
+    []
+    [
+        shapes [ fill Color.yellow ] [ circle ( coorChange env eye.pos) ( lengthChange env 20 )]
+    ,   shapes [ fill Color.red ] [ circle ( coorChange env pupil_pos) ( lengthChange env 15 ) ]
+    ]

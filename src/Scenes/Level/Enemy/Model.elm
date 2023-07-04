@@ -15,14 +15,12 @@ module Scenes.Level.Enemy.Model exposing
 import Canvas exposing (Renderable, empty, Point, group)
 import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..))
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, initEnemy1, EnemyState(..))
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Frame.Functions exposing (coorChange, point2Int)
-import Time exposing (posixToMillis, utc)
-import Canvas exposing (text)
 import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody, renderEnemyEye)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Enemy.Update exposing (erodeRandomCell, erodeNearestCell, targetNearestCell, targetRandomCell, erodeTarget, moveEnemyEye)
+import Scenes.Level.Enemy.Update exposing (targetNearestCell, targetRandomCell, erodeTarget, moveEnemyEye)
+import Time exposing (posixToMillis)
 
 
 
