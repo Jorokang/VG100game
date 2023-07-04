@@ -12,10 +12,16 @@ module Scenes.Level.Enemy.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable, empty, Point, group)
+import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, initEnemy1, EnemyState(..))
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody, renderEnemyEye)
+import Scenes.Level.Enemy.Random exposing (randomEnemy)
+import Scenes.Level.Enemy.Update exposing (targetNearestCell, targetRandomCell, erodeTarget, moveEnemyEye)
+import Time exposing (posixToMillis)
+
 
 
 {-| initModel
@@ -23,19 +29,53 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initEnemy1
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
+{-| updateModel -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        Tick newTime ->
+            (   --{ model | time = Time.posixToMillis newTime }
+                { model | time = Time.posixToMillis newTime }
+                |> updateRandNum
+                |> moveEnemyEye
+            ,   []
+            ,   env
+            )
+        KeyDown x ->
+            case x of
+                32 ->   --space->erode target
+                    (   erodeTarget model
+                    ,   []
+                    ,   env
+                    )
+                38 ->   --arrowup->set random target
+                    (   targetRandomCell model
+                    ,   []
+                    ,   env
+                    )
+                40 ->   --arrowdown->set nearest target
+                    (   targetNearestCell model
+                    ,   []
+                    ,   env
+                    )
+                _ ->    --do nothing
+                    ( model, [], env )
+        _ ->
+            ( model, [], env )
 
+{-| update the random number in model -}
+updateRandNum : Model -> Model
+updateRandNum model =
+    let
+        ( randNum, seed ) =
+            randomEnemy model.seed
+    in
+    { model |   randNum = randNum
+            ,   seed = seed
+    }
 
 {-| updateModelRec
 Default update function
@@ -57,5 +97,16 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [
+                renderEnemyBody env model
+            ,   renderEnemyCore env model
+            ,   renderEnemyEye env model
+            ]
+    in
+    group
+    []
+    rend
+
