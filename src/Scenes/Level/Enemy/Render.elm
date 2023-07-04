@@ -5,9 +5,9 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (transform, rotate, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell, grid2real)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), EnemyBlock, Cell)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint)
+import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, grid2real)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import List
 import Tuple

@@ -107,3 +107,8 @@ allGrids map_size =
 map2d : Int -> Int -> (Int, Int)
 map2d max_line cur =
     ( (modBy max_line cur), cur//max_line )
+
+{-| transfer GridLoc into real position -}
+grid2real : (Int,Int) -> Point
+grid2real (x,y) =
+    ( (toFloat x)*cellLength , (toFloat y)*cellLength ) 

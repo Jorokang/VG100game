@@ -1,10 +1,10 @@
 module Scenes.Level.Enemy.Update exposing (..)
 
 import Canvas exposing (Point)
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), Cell, EnemyBlock, EnemyCore, grid2real, maxEyeV)
+import Scenes.Level.Enemy.Common exposing (EnvC, Model, nullModel, initEnemy1, EnemyState(..), Cell, EnemyBlock, EnemyCore, maxEyeV)
 import Base exposing (GlobalData, Msg(..))
 import Scenes.Level.Enemy.Common exposing (EnemyBlock)
-import Scenes.Level.Frame.Functions exposing (negPoint, pointDistance, scalePoint, coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance, allGrids)
+import Scenes.Level.Frame.Functions exposing (negPoint, pointDistance, scalePoint, coorChange, lengthChange, point2Int, upperCell, leftCell, rightCell, lowerCell, cellLength, addPoint, gridlocDistance, allGrids, grid2real)
 import List
 import Tuple
 import Scenes.Level.Frame.Functions exposing (int2Point)
