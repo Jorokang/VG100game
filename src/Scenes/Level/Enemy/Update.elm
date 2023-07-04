@@ -19,7 +19,14 @@ erodeCell model new_loc =
     if (List.any (checkCellLoc new_loc) model.body) || (Tuple.first new_loc < 0) || (Tuple.second new_loc < 0) then
         model
     else
-        { model | body = List.append model.body [generateBody new_loc] }
+        { model |   body = List.append model.body [generateBody new_loc]
+                ,   eye =   {   pos = model.eye.pos
+                            ,   v = model.eye.v
+                            ,   target = model.eye.target
+                            ,   target_eroded = ( new_loc == model.eye.target_loc )
+                            ,   target_loc = model.eye.target_loc
+                            }
+                }
 
 {-| Erode the target cell -}
 erodeTarget : Model -> Model
@@ -36,9 +43,13 @@ setTarget model loc =
             addPoint eye_target (negPoint model.eye.pos)
         v =
             scalePointLength eye_vec maxEyeV
+        targeted_eroded =
+            List.any (checkCellLoc loc) model.body
         new_eye =   {   pos = model.eye.pos
                     ,   v = v
                     ,   target = eye_target
+                    ,   target_eroded = targeted_eroded
+                    ,   target_loc = loc
                     }
     in
     { model |   target = loc
@@ -67,8 +78,8 @@ erodeRandomCell model =
     let
         sx = Tuple.first model.map_size
         sy = Tuple.second model.map_size
-        locx = round ((toFloat model.randNum) / 1000.0 * (toFloat sx))
-        locy = round ((toFloat (model.randNum // 10)) / 100.0 * (toFloat sy))
+        locx = round ( (toFloat model.randNum) / 1000.0 * (toFloat sx) )
+        locy = round ( (toFloat (model.randNum // 10)) / 100.0 * (toFloat sy) )
         loc = (locx, locy)
     in
     --if (List.any ( checkCellLoc loc ) model.body) then
@@ -82,8 +93,8 @@ targetRandomCell model =
     let
         sx = Tuple.first model.map_size
         sy = Tuple.second model.map_size
-        locx = round ((toFloat model.randNum) / 1000.0 * (toFloat sx))
-        locy = round ((toFloat (model.randNum // 10)) / 100.0 * (toFloat sy))
+        locx = round ( (toFloat model.randNum) / 1000.0 * (toFloat sx) )
+        locy = round ( (toFloat (model.randNum // 10)) / 100.0 * (toFloat sy) )
         loc = ( locx, locy )
     in
     setTarget model loc
@@ -162,17 +173,21 @@ moveEnemyEye model =
         dis =
             pointDistance eye.pos eye.target
     in
-    if ( model.eye.v == ( 0, 0 ) ) then
+    if ( eye.v == ( 0, 0 ) || eye.target_eroded == False ) then
         model
     else if ( dis < maxEyeV ) then
-        { model | eye = {   pos = model.eye.target
+        { model | eye = {   pos = eye.target
                         ,   v = ( 0, 0 )
-                        ,   target = model.eye.target
+                        ,   target = eye.target
+                        ,   target_eroded = True
+                        ,   target_loc = eye.target_loc
                         }
         }
     else
-        { model | eye = {   pos = addPoint model.eye.pos model.eye.v
-                        ,   v = model.eye.v
-                        ,   target = model.eye.target
+        { model | eye = {   pos = addPoint eye.pos eye.v
+                        ,   v = eye.v
+                        ,   target = eye.target
+                        ,   target_eroded = True
+                        ,   target_loc = eye.target_loc
                         }
         }
