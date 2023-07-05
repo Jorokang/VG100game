@@ -15,6 +15,7 @@ module Scenes.Level.Avatar.Model exposing
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Avatar.Function exposing (..)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
