@@ -12,16 +12,15 @@ module Scenes.Hall.MainLayer.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Base exposing (Msg(..))
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
-import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Hall.MainLayer.Render exposing (renderStr)
-import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor)
+import Canvas exposing (Renderable, empty)
 import Color
-import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, addPoint, point2Int)
-import Scenes.Hall.MainLayer.Update exposing (mouseClickedState, btn_1_clicked)
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
+import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr)
+import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
+import Scenes.Hall.SceneInit exposing (HallInit)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, point2Int)
 
 
 {-| initModel
@@ -43,12 +42,15 @@ updateModel env model =
     case env.msg of
         KeyDown x ->
             ( model, [], env )
+
         MouseDown x ( a, b ) ->
             case mouseClickedState env model ( a, b ) of
                 1 ->
                     btn_1_clicked env model
+
                 _ ->
                     ( model, [], env )
+
         _ ->
             ( model, [], env )
 
@@ -75,10 +77,11 @@ If you have other elements than components, add them after viewComponent.
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
-        rend =  [   renderStr env "HALL"
-                ,   renderButtonPureColor env model.btn_1 Color.gray
-                ]
+        rend =
+            [ renderStr env "HALL"
+            , renderButtonPureColor env model.btn_1 Color.gray
+            ]
     in
     Canvas.group
-    []
-    rend
+        []
+        rend
