@@ -7,6 +7,7 @@ module Scenes.Level.Frame.Common exposing (Model, nullModel, EnvC)
 -}
 
 import Lib.Env.Env as Env
+import Scenes.Level.Frame.CardSystem exposing (CardData, nullCardData)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -14,14 +15,16 @@ import Scenes.Level.LayerBase exposing (CommonData)
 Add your own data here.
 -}
 type alias Model =
-    {}
+    { cardData : CardData
+    }
 
 
 {-| nullModel
 -}
 nullModel : Model
 nullModel =
-    {}
+    { cardData = nullCardData
+    }
 
 
 {-| Convenient type alias for the environment

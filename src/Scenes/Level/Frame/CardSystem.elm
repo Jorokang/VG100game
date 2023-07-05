@@ -1,7 +1,8 @@
-module Scenes.Level.Card.CardSystem exposing (..)
+module Scenes.Level.Frame.CardSystem exposing (..)
 
-import Random exposing (Generator, Seed)
-import Scenes.Level.Card.CardUnique exposing (cardToEffect)
+import Random exposing (Generator, Seed, initialSeed)
+import Scenes.Level.Frame.CardUnique exposing (cardToEffect)
+import Scenes.Level.Frame.Common exposing (Model)
 import Tuple exposing (first)
 
 
@@ -12,11 +13,20 @@ type alias Card =
     }
 
 
-type alias Model =
+type alias CardData =
     { hand : List Card
     , discard : List Card
     , deck : List Card
     , seed : Seed
+    }
+
+
+nullCardData : CardData
+nullCardData =
+    { hand = []
+    , discard = []
+    , deck = []
+    , seed = initialSeed 42
     }
 
 
@@ -47,7 +57,7 @@ shufflePile pile seed =
         ( element :: nnpile, nnseed )
 
 
-shuffle : Model -> Model
+shuffle : CardData -> CardData
 shuffle model =
     let
         ( ndeck, nseed ) =
@@ -56,7 +66,7 @@ shuffle model =
     { model | deck = ndeck, seed = nseed, discard = [] }
 
 
-drawCard : Model -> Int -> Model
+drawCard : CardData -> Int -> CardData
 drawCard model amount =
     let
         nmodel =
@@ -87,7 +97,7 @@ sortPile pile =
     List.sortBy .id pile
 
 
-dropCard : Model -> Int -> Model
+dropCard : CardData -> Int -> CardData
 dropCard model pos =
     let
         ( dcard, nhand ) =
@@ -100,12 +110,12 @@ playCard : Model -> Int -> Model
 playCard model pos =
     let
         card =
-            first (takeCard model.hand pos)
+            first (takeCard model.cardData.hand pos)
 
-        nmodel =
-            dropCard model pos
+        ncards =
+            dropCard model.cardData pos
     in
-    cardToEffect nmodel card
+    cardToEffect { model | cardData = ncards } card
 
 
 takeCard : List Card -> Int -> ( Card, List Card )
