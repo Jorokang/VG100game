@@ -5,12 +5,6 @@ import Scenes.Level.Frame.Common exposing (Model)
 import Tuple exposing (first)
 
 
-
-{-
-   W.I.P.
--}
-
-
 playCard : Model -> Int -> Model
 playCard model pos =
     let
@@ -29,10 +23,24 @@ cardToEffect model card =
         1 ->
             card1 model
 
+        2 ->
+            card2 model
+
         _ ->
             model
 
 
+
+{-
+   W.I.P.
+-}
+
+
 card1 : Model -> Model
 card1 model =
+    model
+
+
+card2 : Model -> Model
+card2 model =
     model
