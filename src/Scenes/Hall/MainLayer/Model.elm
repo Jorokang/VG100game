@@ -14,8 +14,10 @@ module Scenes.Hall.MainLayer.Model exposing
 
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Base exposing (Msg(..))
 import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Hall.SceneInit exposing (HallInit)
+import Scenes.Hall.MainLayer.Render exposing (renderStr)
 
 
 {-| initModel
@@ -34,7 +36,11 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        KeyDown x ->
+            ( model, [( LayerParentScene, LayerStringMsg "Level" )],env )
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
@@ -57,5 +63,12 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env _ =
+    let
+        rend = [
+            renderStr env "HALL" ]
+
+    in
+    Canvas.group
+    []
+    rend

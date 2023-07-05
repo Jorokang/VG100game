@@ -20,6 +20,10 @@ import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneOutputMsg(..))
 import Scenes.Hall.Common exposing (Model)
 import Scenes.Hall.LayerBase exposing (CommonData)
+import Lib.Scene.Base exposing (SceneInitData(..))
+import Lib.Scene.Transitions.Base exposing (genTransition)
+import Lib.Scene.Transitions.Base exposing (nullTransition)
+import Lib.Scene.Transitions.Base exposing (SingleTrans)
 
 
 {-| handleLayerMsg
@@ -36,9 +40,22 @@ handleLayerMsg env lmsg model =
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
 
+        LayerStringMsg scene_name ->
+            let
+                sid =
+                    NullSceneInitData
+                trans = 
+                    Just ( genTransition 1 1 rawTransition rawTransition )
+            in
+            ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
+
         _ ->
             ( model, [], env )
 
+
+rawTransition : SingleTrans
+rawTransition _ _ _=
+    Canvas.empty
 
 {-| updateModel
 

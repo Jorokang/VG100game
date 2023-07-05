@@ -105,7 +105,8 @@ viewModel env model =
     let
         rend =  case model.status of
                     Dead ->
-                        []
+                        [
+                        ]
                     _ ->
                         [
                             renderEnemyBody env model

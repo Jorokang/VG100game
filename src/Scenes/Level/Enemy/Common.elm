@@ -123,7 +123,7 @@ initEnemy1 =
             randomEnemy (Random.initialSeed 0)
     in
     {
-        status = Dead
+        status = Alive
     ,   body = [    {   val = { color = Color.black
                             ,   hp = 1}
                     ,   loc = ( 3, 1 )
