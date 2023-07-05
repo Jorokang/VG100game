@@ -42,7 +42,7 @@ updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
         KeyDown x ->
-            ( model, [( LayerParentScene, LayerStringMsg "Level" )],env )
+            ( model, [], env )
         MouseDown x ( a, b ) ->
             case mouseClickedState env model ( a, b ) of
                 1 ->
