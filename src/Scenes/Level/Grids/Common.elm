@@ -13,7 +13,7 @@ import Scenes.Level.Frame.Functions exposing (allGrids)
 type GridsStatus
     =   Active
     |   Stopped
-    |   Closed
+    |   Inactive
 
 type PlotEffect         --represents the effect of the plot
     =   Empty

@@ -18,6 +18,8 @@ import Base exposing (Msg(..))
 import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Hall.MainLayer.Render exposing (renderStr)
+import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor)
+import Color
 
 
 {-| initModel
@@ -63,11 +65,11 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel env _ =
+viewModel env model =
     let
-        rend = [
-            renderStr env "HALL" ]
-
+        rend =  [   renderStr env "HALL"
+                ,   renderButtonPureColor env model.btn_1 Color.gray
+                ]
     in
     Canvas.group
     []
