@@ -18,7 +18,6 @@ import Scenes.Level.Frame.Common exposing (EnvC, Model, nullModel)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
-
 {-| initModel
 Add components here
 -}

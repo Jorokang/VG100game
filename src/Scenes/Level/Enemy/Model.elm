@@ -12,16 +12,15 @@ module Scenes.Level.Enemy.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty, Point, group)
 import Base exposing (GlobalData, Msg(..))
+import Canvas exposing (Point, Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnvC, Model, initEnemy1, EnemyState(..))
-import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Enemy.Render exposing (renderEnemyCore, renderNum, renderEnemyBody, renderEnemyEye)
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Enemy.Update exposing (targetNearestCell, targetRandomCell, erodeTarget, moveEnemyEye)
+import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
+import Scenes.Level.Enemy.Update exposing (erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
+import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
-
 
 
 {-| initModel
@@ -32,50 +31,64 @@ initModel _ _ =
     initEnemy1
 
 
-{-| updateModel -}
+{-| updateModel
+-}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
         Tick newTime ->
-            (   --{ model | time = Time.posixToMillis newTime }
-                { model | time = Time.posixToMillis newTime }
+            ( --{ model | time = Time.posixToMillis newTime }
+              { model | time = Time.posixToMillis newTime }
                 |> updateRandNum
                 |> moveEnemyEye
-            ,   []
-            ,   env
+            , []
+            , env
             )
+
         KeyDown x ->
             case x of
-                32 ->   --space->erode target
-                    (   erodeTarget model
-                    ,   []
-                    ,   env
+                32 ->
+                    --space->erode target
+                    ( erodeTarget model
+                    , []
+                    , env
                     )
-                38 ->   --arrowup->set random target
-                    (   targetRandomCell model
-                    ,   []
-                    ,   env
+
+                38 ->
+                    --arrowup->set random target
+                    ( targetRandomCell model
+                    , []
+                    , env
                     )
-                40 ->   --arrowdown->set nearest target
-                    (   targetNearestCell model
-                    ,   []
-                    ,   env
+
+                40 ->
+                    --arrowdown->set nearest target
+                    ( targetNearestCell model
+                    , []
+                    , env
                     )
-                _ ->    --do nothing
+
+                _ ->
+                    --do nothing
                     ( model, [], env )
+
         _ ->
             ( model, [], env )
 
-{-| update the random number in model -}
+
+{-| update the random number in model
+-}
 updateRandNum : Model -> Model
 updateRandNum model =
     let
         ( randNum, seed ) =
             randomEnemy model.seed
     in
-    { model |   randNum = randNum
-            ,   seed = seed
+    { model
+        | randNum = randNum
+        , seed = seed
     }
+
 
 {-| updateModelRec
 Default update function
@@ -100,13 +113,11 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [
-                renderEnemyBody env model
-            ,   renderEnemyCore env model
-            ,   renderEnemyEye env model
+            [ renderEnemyBody env model
+            , renderEnemyCore env model
+            , renderEnemyEye env model
             ]
     in
     group
-    []
-    rend
-
+        []
+        rend
