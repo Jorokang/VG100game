@@ -1,9 +1,6 @@
 module Scenes.Level.Frame.CardSystem exposing (..)
 
 import Random exposing (Generator, Seed, initialSeed)
-import Scenes.Level.Frame.CardUnique exposing (cardToEffect)
-import Scenes.Level.Frame.Common exposing (Model)
-import Tuple exposing (first)
 
 
 type alias Card =
@@ -104,18 +101,6 @@ dropCard model pos =
             takeCard model.deck pos
     in
     { model | discard = dcard :: model.discard, hand = nhand }
-
-
-playCard : Model -> Int -> Model
-playCard model pos =
-    let
-        card =
-            first (takeCard model.cardData.hand pos)
-
-        ncards =
-            dropCard model.cardData pos
-    in
-    cardToEffect { model | cardData = ncards } card
 
 
 takeCard : List Card -> Int -> ( Card, List Card )
