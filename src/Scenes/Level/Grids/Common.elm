@@ -1,4 +1,4 @@
-module Scenes.Level.Grids.Common exposing (Model, nullModel, EnvC, initGrids1, PlotEffect(..), Cell, Grid, GridLoc, Plot, genEmptyPlots )
+module Scenes.Level.Grids.Common exposing (Model, nullModel, EnvC, initGrids1, GridsStatus(..), PlotEffect(..), Cell, Grid, GridLoc, Plot, genEmptyPlots )
 
 {-| Common module
 
@@ -13,6 +13,7 @@ import Scenes.Level.Frame.Functions exposing (allGrids)
 type GridsStatus
     =   Active
     |   Stopped
+    |   Closed
 
 type PlotEffect         --represents the effect of the plot
     =   Empty
@@ -62,7 +63,7 @@ emptyPlot =
 initGrids1 : Model
 initGrids1 =
     {
-        status = Active
+        status = Closed
     ,   map_size = ( 3, 4 )
     ,   grids = genEmptyPlots ( 3, 4 )
     }

@@ -35,33 +35,37 @@ initModel _ _ =
 {-| updateModel -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    case env.msg of
-        Tick newTime ->
-            (   --{ model | time = Time.posixToMillis newTime }
-                { model | time = Time.posixToMillis newTime }
-                |> updateRandNum
-                |> moveEnemyEye
-            ,   []
-            ,   env
-            )
-        KeyDown x ->
-            case x of
-                32 ->   --space->erode target
-                    (   erodeTarget model
+    case model.status of 
+        Alive ->
+            case env.msg of
+                Tick newTime ->
+                    (   --{ model | time = Time.posixToMillis newTime }
+                        { model | time = Time.posixToMillis newTime }
+                        |> updateRandNum
+                        |> moveEnemyEye
                     ,   []
                     ,   env
                     )
-                38 ->   --arrowup->set random target
-                    (   targetRandomCell model
-                    ,   []
-                    ,   env
-                    )
-                40 ->   --arrowdown->set nearest target
-                    (   targetNearestCell model
-                    ,   []
-                    ,   env
-                    )
-                _ ->    --do nothing
+                KeyDown x ->
+                    case x of
+                        32 ->   --space->erode target
+                            (   erodeTarget model
+                            ,   []
+                            ,   env
+                            )
+                        38 ->   --arrowup->set random target
+                            (   targetRandomCell model
+                            ,   []
+                            ,   env
+                            )
+                        40 ->   --arrowdown->set nearest target
+                            (   targetNearestCell model
+                            ,   []
+                            ,   env
+                            )
+                        _ ->    --do nothing
+                            ( model, [], env )
+                _ ->
                     ( model, [], env )
         _ ->
             ( model, [], env )
@@ -99,12 +103,15 @@ If you have other elements than components, add them after viewComponent.
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
-        rend =
-            [
-                renderEnemyBody env model
-            ,   renderEnemyCore env model
-            ,   renderEnemyEye env model
-            ]
+        rend =  case model.status of
+                    Dead ->
+                        []
+                    _ ->
+                        [
+                            renderEnemyBody env model
+                        ,   renderEnemyCore env model
+                        ,   renderEnemyEye env model
+                        ]
     in
     group
     []

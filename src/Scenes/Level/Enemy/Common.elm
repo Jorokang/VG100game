@@ -60,7 +60,7 @@ type alias EnemyEye =
 
 type alias Model =
     {
-        state : EnemyState
+        status : EnemyState
     ,   body : Grid EnemyBlock
     ,   core : Cell EnemyCore
     ,   map_size : GridLoc
@@ -105,7 +105,7 @@ nullModel =
             randomEnemy (Random.initialSeed 0)
     in
     {
-        state = Stopped
+        status = Stopped
     ,   body = []
     ,   core = nullEnemyCore
     ,   map_size = ( 0, 0 )
@@ -123,7 +123,7 @@ initEnemy1 =
             randomEnemy (Random.initialSeed 0)
     in
     {
-        state = Alive
+        status = Dead
     ,   body = [    {   val = { color = Color.black
                             ,   hp = 1}
                     ,   loc = ( 3, 1 )
