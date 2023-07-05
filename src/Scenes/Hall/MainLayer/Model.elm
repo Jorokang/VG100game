@@ -20,6 +20,8 @@ import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Hall.MainLayer.Render exposing (renderStr)
 import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor)
 import Color
+import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, addPoint, point2Int)
+import Scenes.Hall.MainLayer.Update exposing (mouseClickedState, btn_1_clicked)
 
 
 {-| initModel
@@ -41,6 +43,12 @@ updateModel env model =
     case env.msg of
         KeyDown x ->
             ( model, [( LayerParentScene, LayerStringMsg "Level" )],env )
+        MouseDown x ( a, b ) ->
+            case mouseClickedState env model ( a, b ) of
+                1 ->
+                    btn_1_clicked env model
+                _ ->
+                    ( model, [], env )
         _ ->
             ( model, [], env )
 

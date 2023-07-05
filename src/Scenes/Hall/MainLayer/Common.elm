@@ -1,4 +1,4 @@
-module Scenes.Hall.MainLayer.Common exposing (ButtonStatus(..), Model, Button, nullModel, EnvC)
+module Scenes.Hall.MainLayer.Common exposing (ButtonStatus(..), HallStatus(..), Model, Button, nullModel, EnvC)
 
 {-| Common module
 
