@@ -1,4 +1,7 @@
-module Scenes.Level.Card.Common exposing (Model, nullModel, EnvC)
+module Scenes.Level.Card.Common exposing
+    ( Model, nullModel, EnvC
+    , Card
+    )
 
 {-| Common module
 
@@ -7,6 +10,7 @@ module Scenes.Level.Card.Common exposing (Model, nullModel, EnvC)
 -}
 
 import Lib.Env.Env as Env
+import Random exposing (Seed, initialSeed)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -19,10 +23,11 @@ Add your own data here.
 --card name and the cost
 
 
-type Card
-    = CardName1 Int
-    | N2 Int
-    | N3 Int
+type alias Card =
+    { name : String
+    , id : Int
+    , cost : Int
+    }
 
 
 
@@ -33,16 +38,16 @@ type alias Model =
     { hand : List Card
     , discard : List Card
     , deck : List Card
+    , seed : Seed
     }
 
 
-{-| nullModel
--}
 nullModel : Model
 nullModel =
-    { hand = [ CardName1 1 ]
+    { hand = []
     , discard = []
-    , deck = [ N2 2, N3 4 ]
+    , deck = []
+    , seed = initialSeed 42
     }
 
 

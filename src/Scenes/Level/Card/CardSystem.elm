@@ -1,30 +1,7 @@
-module Scenes.Level.Frame.CardSystem exposing (..)
+module Scenes.Level.Card.CardSystem exposing (..)
 
-import Random exposing (Generator, Seed, initialSeed)
-
-
-type alias Card =
-    { name : String
-    , id : Int
-    , cost : Int
-    }
-
-
-type alias CardData =
-    { hand : List Card
-    , discard : List Card
-    , deck : List Card
-    , seed : Seed
-    }
-
-
-nullCardData : CardData
-nullCardData =
-    { hand = []
-    , discard = []
-    , deck = []
-    , seed = initialSeed 42
-    }
+import Random exposing (Generator, Seed)
+import Scenes.Level.Card.Common exposing (Card, Model)
 
 
 giveErrorCard : Card
@@ -54,7 +31,7 @@ shufflePile pile seed =
         ( element :: nnpile, nnseed )
 
 
-shuffle : CardData -> CardData
+shuffle : Model -> Model
 shuffle model =
     let
         ( ndeck, nseed ) =
@@ -63,7 +40,7 @@ shuffle model =
     { model | deck = ndeck, seed = nseed, discard = [] }
 
 
-drawCard : CardData -> Int -> CardData
+drawCard : Model -> Int -> Model
 drawCard model amount =
     let
         nmodel =
@@ -94,7 +71,7 @@ sortPile pile =
     List.sortBy .id pile
 
 
-dropCard : CardData -> Int -> CardData
+dropCard : Model -> Int -> Model
 dropCard model pos =
     let
         ( dcard, nhand ) =
