@@ -1,12 +1,12 @@
 module Scenes.Level.Card.Render exposing (..)
 
-import Canvas exposing (Renderable, rect, shapes)
+import Canvas exposing (Renderable, rect, shapes, text)
 import Canvas.Settings exposing (fill)
+import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Scenes.Level.Card.CardSystem exposing (takeCard)
 import Scenes.Level.Card.Common exposing (Card, EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData, scalePoint)
-import Scenes.Level.Grids.Common exposing (Cell, Plot, PlotEffect(..))
 import Tuple exposing (first)
 
 
@@ -19,7 +19,11 @@ renderHandCards env model =
         index =
             1
     in
-    renderHelper env model index length
+    Canvas.group
+        []
+        [ renderHelper env model index length
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 780 ) nullCoorData) "Hand Cards"
+        ]
 
 
 renderHelper : EnvC -> Model -> Int -> Int -> Renderable
