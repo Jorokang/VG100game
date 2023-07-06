@@ -44,11 +44,21 @@ type alias Model =
 
 nullModel : Model
 nullModel =
-    { hand = []
+    { hand = [ giveCard1, giveCard2 ]
     , discard = []
-    , deck = []
+    , deck = [ giveCard1, giveCard2, giveCard1, giveCard2 ]
     , seed = initialSeed 42
     }
+
+
+giveCard1 : Card
+giveCard1 =
+    { name = "card1", id = 1, cost = 0 }
+
+
+giveCard2 : Card
+giveCard2 =
+    { name = "card2", id = 2, cost = 0 }
 
 
 {-| Convenient type alias for the environment
