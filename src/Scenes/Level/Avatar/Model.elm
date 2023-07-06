@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, Model, initAvatar1, nullModel)
 import Scenes.Level.Avatar.Render exposing (renderAvatar, renderMovingHint, renderStr)
-import Scenes.Level.Avatar.Update exposing (loc2Pos, setAvatarPos, updateModelActive, updateModelMoving, updateModelSelected)
+import Scenes.Level.Avatar.Update exposing (loc2Pos, setAvatarPos, setAvatarStill, updateModelActive, updateModelMoving, updateModelSelected)
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import String
@@ -64,8 +64,41 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerMsgEnemyTurn ->
+            ( { model | status = AvatarStopped }
+                |> setAvatarStill
+            , []
+            , env
+            )
+
+        LayerMsgPlayerTurn ->
+            ( { model | status = AvatarAcitve }
+            , []
+            , env
+            )
+
+        LayerIntMsg x ->
+            case x of
+                1 ->
+                    ( { model | status = AvatarAcitve }
+                    , []
+                    , env
+                    )
+
+                0 ->
+                    ( { model | status = AvatarStopped }
+                        |> setAvatarStill
+                    , []
+                    , env
+                    )
+
+                _ ->
+                    ( model, [], env )
+
+        _ ->
+            ( model, [], env )
 
 
 {-| viewModel
@@ -102,6 +135,11 @@ viewModel env model =
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             ]
     in
-    Canvas.group
-        []
-        rend
+    case model.status of
+        AvatarInactive ->
+            Canvas.empty
+
+        _ ->
+            Canvas.group
+                []
+                rend

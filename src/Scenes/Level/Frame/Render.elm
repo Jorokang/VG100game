@@ -26,3 +26,12 @@ renderFrameStatus env model =
                     "Inactive"
     in
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 500 ) nullCoorData) str
+
+
+renderStamina : EnvC -> Model -> Renderable
+renderStamina env model =
+    let
+        str =
+            String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
+    in
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 700, 500 ) nullCoorData) str

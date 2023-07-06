@@ -51,7 +51,7 @@ nullModel =
 
 initAvatar1 : Model
 initAvatar1 =
-    { status = AvatarAcitve
+    { status = AvatarInactive
     , target_loc = ( 0, 1 )
     , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
