@@ -12,14 +12,14 @@ module Scenes.Level.Grids.Model exposing
 
 -}
 
-import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Renderable, empty)
-import Html.Attributes exposing (action)
+import Base exposing (GlobalData, Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
+import Scenes.Level.Grids.Common exposing (EnvC, Model, nullModel, initGrids1, PlotEffect(..), GridsStatus(..))
+import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Grids.Render exposing (renderGrids)
 import Scenes.Level.Grids.Update exposing (modifyPlotEffect)
-import Scenes.Level.SceneInit exposing (LevelInit)
+import Html.Attributes exposing (action)
 
 
 {-| initModel
@@ -41,36 +41,27 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
-                KeyDown x ->
-                    --modify the effect of (0,0) for testing
+                KeyDown x ->    --modify the effect of (0,0) for testing
                     case x of
-                        40 ->
-                            --arrow down -> empty
-                            ( modifyPlotEffect model ( 0, 0 ) Empty
-                            , []
-                            , env
+                        40 ->   --arrow down -> empty
+                            (   modifyPlotEffect model (0,0) Empty
+                            ,   []
+                            ,   env
                             )
-
-                        37 ->
-                            --arrow left -> angry
-                            ( modifyPlotEffect model ( 0, 0 ) Angry
-                            , []
-                            , env
+                        37 ->   --arrow left -> angry
+                            (   modifyPlotEffect model (0,0) Angry
+                            ,   []
+                            ,   env
                             )
-
-                        39 ->
-                            --arrow right -> lazy
-                            ( modifyPlotEffect model ( 0, 0 ) Lazy
-                            , []
-                            , env
+                        39 ->   --arrow right -> lazy
+                            (   modifyPlotEffect model (0,0) Lazy
+                            ,   []
+                            ,   env
                             )
-
                         _ ->
                             ( model, [], env )
-
                 _ ->
                     ( model, [], env )
-
         _ ->
             ( model, [], env )
 
@@ -89,15 +80,14 @@ updateModelRec env _ model =
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
-        rend =
-            case model.status of
-                Inactive ->
-                    []
-
-                _ ->
-                    [ renderGrids env model
-                    ]
+        rend =  case model.status of
+                    Inactive ->
+                        []
+                    _ ->
+                        [
+                            renderGrids env model
+                        ]
     in
     Canvas.group
-        []
-        rend
+    []
+    rend

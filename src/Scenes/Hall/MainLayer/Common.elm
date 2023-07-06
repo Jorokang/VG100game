@@ -1,7 +1,4 @@
-module Scenes.Hall.MainLayer.Common exposing
-    ( Model, nullModel, EnvC
-    , Button, ButtonStatus(..), HallStatus(..)
-    )
+module Scenes.Hall.MainLayer.Common exposing (ButtonStatus(..), HallStatus(..), Model, Button, nullModel, EnvC)
 
 {-| Common module
 
@@ -9,55 +6,53 @@ module Scenes.Hall.MainLayer.Common exposing
 
 -}
 
-import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
-
+import Canvas exposing (Point)
 
 type HallStatus
-    = Active
-    | Stopped
-    | Inactive
-
+    =   Active
+    |   Stopped
+    |   Inactive
 
 type ButtonStatus
-    = ButtonActive
-    | ButtonPressed
-    | ButtonInactive
-
+    =   ButtonActive
+    |   ButtonPressed
+    |   ButtonInactive
 
 type alias Button =
-    { status : ButtonStatus
-    , pos : Point
-    , size : Point
-    , text : String
+    {
+        status : ButtonStatus
+    ,   pos : Point
+    ,   size : Point
+    ,   text : String
     }
-
 
 {-| Model
 Add your own data here.
 -}
 type alias Model =
-    { status : HallStatus
-    , btn_1 : Button
-    , time : Int
+    {
+        status : HallStatus
+    ,   btn_1 : Button
+    ,   time : Int
     }
-
 
 initButtonLevel : Button
 initButtonLevel =
-    { status = ButtonActive
-    , pos = ( 200, 200 )
-    , size = ( 100, 50 )
-    , text = "Level"
+    {
+        status = ButtonActive
+    ,   pos = ( 200, 200 )
+    ,   size = ( 100, 50 )
+    ,   text = "Level"
     }
-
 
 nullModel : Model
 nullModel =
-    { status = Active
-    , btn_1 = initButtonLevel
-    , time = 0
+    {
+        status = Active
+    ,   btn_1 = initButtonLevel
+    ,   time = 0
     }
 
 
