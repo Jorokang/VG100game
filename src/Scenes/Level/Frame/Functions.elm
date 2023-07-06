@@ -1,7 +1,7 @@
 module Scenes.Level.Frame.Functions exposing (..)
 
 import Canvas exposing (Point)
-import Lib.Coordinate.Coordinates exposing (posToReal)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Env.Env as Env
 import Scenes.Level.LayerBase exposing (CommonData)
 import Tuple exposing (first, second)
@@ -78,8 +78,8 @@ scalePointLength pos k =
 
 
 coorChange : EnvC -> Point -> Point
-coorChange _ pos =
-    pos
+coorChange env pos =
+    posToReal env.globalData pos
 
 
 
@@ -87,8 +87,8 @@ coorChange _ pos =
 
 
 lengthChange : EnvC -> Float -> Float
-lengthChange _ l =
-    l
+lengthChange env l =
+    lengthToReal env.globalData l
 
 
 
