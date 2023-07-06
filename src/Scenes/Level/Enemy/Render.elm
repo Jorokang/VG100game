@@ -284,7 +284,6 @@ renderTentaclePixels env model color ( rotate, offset ) pos =
         , renderTentaclePixel env color ( x, y + 2 * delta ) l2 ( rotate, addPoint offset offset2 ) flag2
         , renderTentaclePixel env color ( x, y - delta ) l3 ( rotate, addPoint offset offset3 ) flag3
         , renderTentaclePixel env color ( x, y - 2 * delta ) l4 ( rotate, addPoint offset offset4 ) flag4
-        , renderNum env rotate
         ]
 
 

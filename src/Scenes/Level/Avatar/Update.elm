@@ -95,6 +95,14 @@ setAvatarTarget model loc =
     }
 
 
+{-| set target to current pos
+-}
+setAvatarStill : Model -> Model
+setAvatarStill model =
+    { model | target_loc = model.cur_loc }
+        |> setAvatarPos
+
+
 maxAvatarV : Float
 maxAvatarV =
     5
@@ -156,29 +164,32 @@ updateModelSelected env model =
             let
                 ( locx, locy ) =
                     model.cur_loc
+
+                cost_msg =
+                    [ ( LayerName "Frame", LayerIntMsg 1 ) ]
             in
             case judgeMovingSelection env ( a, b ) model of
                 1 ->
                     ( setAvatarTarget model ( locx - 1, locy )
-                    , []
+                    , cost_msg
                     , env
                     )
 
                 2 ->
                     ( setAvatarTarget model ( locx, locy - 1 )
-                    , []
+                    , cost_msg
                     , env
                     )
 
                 3 ->
                     ( setAvatarTarget model ( locx + 1, locy )
-                    , []
+                    , cost_msg
                     , env
                     )
 
                 4 ->
                     ( setAvatarTarget model ( locx, locy + 1 )
-                    , []
+                    , cost_msg
                     , env
                     )
 

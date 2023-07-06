@@ -10,21 +10,21 @@ switchTurn env model =
     case model.status of
         FramePlayerTurn ->
             ( { model | status = FrameEnemyTurn }
-            , [ ( LayerName "Enemy", LayerMsgEnemyTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgEnemyTurn ), ( LayerName "Avatar", LayerMsgEnemyTurn ) ]
             , env
             )
 
         FrameEnemyTurn ->
             ( { model | status = FramePlayerTurn }
                 |> restorePlayerStamina
-            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ), ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
             , env
             )
 
         FrameStopped ->
             ( { model | status = FramePlayerTurn }
                 |> restorePlayerStamina
-            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ), ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
             , env
             )
 
@@ -44,3 +44,13 @@ restorePlayerStamina model =
             }
     in
     { model | player_data = pd }
+
+
+costPlayerStamina : Model -> Model
+costPlayerStamina model =
+    { model
+        | player_data =
+            { cur_stamina = model.player_data.cur_stamina - 1
+            , max_stamina = model.player_data.max_stamina
+            }
+    }

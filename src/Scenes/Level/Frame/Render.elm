@@ -14,10 +14,10 @@ renderFrameStatus env model =
         str =
             case model.status of
                 FramePlayerTurn ->
-                    "Player's turn"
+                    "Player's turn (Press Enter to switch turn)"
 
                 FrameEnemyTurn ->
-                    "Enemy's turn"
+                    "Enemy's turn (Press Enter to switch turn)"
 
                 FrameStopped ->
                     "Stopped"
@@ -25,4 +25,13 @@ renderFrameStatus env model =
                 FrameInactive ->
                     "Inactive"
     in
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 500 ) nullCoorData) str
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 300, 570 ) nullCoorData) str
+
+
+renderStamina : EnvC -> Model -> Renderable
+renderStamina env model =
+    let
+        str =
+            "Stamina: " ++ String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
+    in
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 10, 570 ) nullCoorData) str
