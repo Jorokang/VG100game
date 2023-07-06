@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -48,37 +48,39 @@ updateModel env model =
                     )
 
                 KeyDown x ->
-                    case x of
-                        32 ->
-                            --space->erode target
-                            ( erodeTarget model
-                            , []
-                            , env
-                            )
+                    {- case x of
+                       32 ->
+                           --space->erode target
+                           ( erodeTarget model
+                           , []
+                           , env
+                           )
 
-                        38 ->
-                            --arrowup->set random target
-                            ( targetRandomCell model
-                            , []
-                            , env
-                            )
+                       38 ->
+                           --arrowup->set random target
+                           ( targetRandomCell model
+                           , []
+                           , env
+                           )
 
-                        40 ->
-                            --arrowdown->set nearest target
-                            ( targetNearestCell model
-                            , []
-                            , env
-                            )
-
-                        _ ->
-                            --do nothing
-                            ( model, [], env )
+                       40 ->
+                           --arrowdown->set nearest target
+                           ( targetNearestCell model
+                           , []
+                           , env
+                           )
+                       _ ->
+                    -}
+                    --do nothing
+                    ( model, [], env )
 
                 MouseDown _ ( a, b ) ->
-                    ( clickFreeCell model ( a, b )
-                    , []
-                    , env
-                    )
+                    {- ( clickFreeCell model ( a, b )
+                       , []
+                       , env
+                       )
+                    -}
+                    ( model, [], env )
 
                 _ ->
                     ( model, [], env )
@@ -108,8 +110,30 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerMsgPlayerTurn ->
+            --set the target
+            ( targetNearestCell model
+            , []
+            , env
+            )
+
+        LayerMsgEnemyTurn ->
+            --erode the target
+            ( erodeTarget model
+            , []
+            , env
+            )
+
+        LayerMsgClearCell loc ->
+            ( freeCell model loc
+            , []
+            , env
+            )
+
+        _ ->
+            ( model, [], env )
 
 
 {-| viewModel
