@@ -1,4 +1,4 @@
-[Project 2]: [Purify ]
+[Project 2]: [Purification and contamination in the mind]
 
 # Readme
 This file contains relevant information about installation and startup.
