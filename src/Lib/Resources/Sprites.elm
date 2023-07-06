@@ -28,14 +28,12 @@ Examples:
 [
 ( "ball", getResourcePath "img/ball.png" ),
 ( "car", getResourcePath "img/car.jpg" )
+][
+( "ball", getResourcePath "img/ball.png" ),
+( "car", getResourcePath "img/car.jpg" )
 ]
 
 -}
 allTexture : List ( String, String )
 allTexture =
-    [ ( "avatar", getResourcePath "img/avatar.svg" )
-    , ( "enemy1", getResourcePath "img/enemy1.svg" )
-    , ( "enemy2", getResourcePath "img/enemy2.svg" )
-    , ( "enemy3", getResourcePath "img/enemy3.svg" )
-    , ( "card", getResourcePath "img/card.svg" )
-    ]
+    []

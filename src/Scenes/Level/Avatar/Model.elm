@@ -12,10 +12,11 @@ module Scenes.Level.Avatar.Model exposing
 
 -}
 
+import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel)
-import Scenes.Level.Avatar.Function exposing (..)
+import Scenes.Level.Avatar.Render exposing (renderAvatar)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -58,5 +59,11 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [ renderAvatar env model ]
+    in
+    Canvas.group
+        []
+        rend

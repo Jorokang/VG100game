@@ -1,4 +1,7 @@
-module Scenes.Level.Avatar.Common exposing (Model, nullModel, EnvC)
+module Scenes.Level.Avatar.Common exposing
+    ( Model, nullModel, EnvC
+    , AvatarStatus(..), GridLoc
+    )
 
 {-| Common module
 
@@ -14,14 +17,20 @@ import Scenes.Level.LayerBase exposing (CommonData)
 {-| Model
 Add your own data here.
 -}
+type AvatarStatus
+    = AvatarAcitve
+    | AvatarStopped
+    | AvatarInactive
 
 
-
---health and position of the avatar
+type alias GridLoc =
+    ( Int, Int )
 
 
 type alias Model =
-    { health : Int
+    { status : AvatarStatus
+    , target_loc : GridLoc
+    , cur_loc : GridLoc
     , pos : Point
     }
 
@@ -30,7 +39,18 @@ type alias Model =
 -}
 nullModel : Model
 nullModel =
-    { health = 30
+    { status = AvatarInactive
+    , target_loc = ( 0, 0 )
+    , cur_loc = ( 0, 0 )
+    , pos = ( 0, 0 )
+    }
+
+
+initAvatar1 : Model
+initAvatar1 =
+    { status = AvatarStopped
+    , target_loc = ( 0, 1 )
+    , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
     }
 
