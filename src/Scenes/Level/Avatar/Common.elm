@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), GridLoc, initAvatar1
+    , AvatarStatus(..), GridLoc, avatarRadius, initAvatar1
     )
 
 {-| Common module
@@ -11,6 +11,7 @@ module Scenes.Level.Avatar.Common exposing
 
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
+import Scenes.Level.Frame.Functions exposing (cellLength)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -18,9 +19,11 @@ import Scenes.Level.LayerBase exposing (CommonData)
 Add your own data here.
 -}
 type AvatarStatus
-    = AvatarAcitve
-    | AvatarStopped
-    | AvatarInactive
+    = AvatarAcitve --not selected in player's turn
+    | AvatarSelected --selected in player's turn
+    | AvatarMoving --moving in player's turn
+    | AvatarStopped --stopped
+    | AvatarInactive --inactive
 
 
 type alias GridLoc =
@@ -53,6 +56,11 @@ initAvatar1 =
     , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
     }
+
+
+avatarRadius : Float
+avatarRadius =
+    cellLength * 0.35
 
 
 {-| Convenient type alias for the environment

@@ -15,11 +15,12 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel, initAvatar1)
-import Scenes.Level.Avatar.Render exposing (renderAvatar)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, Model, initAvatar1, nullModel)
+import Scenes.Level.Avatar.Render exposing (renderAvatar, renderMovingHint, renderStr)
+import Scenes.Level.Avatar.Update exposing (loc2Pos, setAvatarPos, updateModelActive, updateModelMoving, updateModelSelected)
+import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..))
-import Scenes.Level.Avatar.Update exposing (setAvatarPos, moveAvatar)
+import String
 
 
 {-| initModel
@@ -38,16 +39,22 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
+    let
+        n_model =
+            setAvatarPos model
+    in
     case model.status of
         AvatarAcitve ->
-            ( model
-                |> setAvatarPos
-                |> moveAvatar
-            , []
-            , env
-            )
+            updateModelActive env n_model
+
+        AvatarSelected ->
+            updateModelSelected env n_model
+
+        AvatarMoving ->
+            updateModelMoving env n_model
+
         _ ->
-            ( model, [], env )
+            ( n_model, [], env )
 
 
 {-| updateModelRec
@@ -72,8 +79,28 @@ If you have other elements than components, add them after viewComponent.
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
+        str =
+            case model.status of
+                AvatarAcitve ->
+                    "Active"
+
+                AvatarInactive ->
+                    "Inactive"
+
+                AvatarMoving ->
+                    "Moving"
+
+                AvatarSelected ->
+                    "Selevted"
+
+                AvatarStopped ->
+                    "Stopped"
+
         rend =
-            [ renderAvatar env model ]
+            [ renderAvatar env model
+            , renderMovingHint env model
+            , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
+            ]
     in
     Canvas.group
         []
