@@ -15,6 +15,7 @@ module Scenes.Level.Card.Model exposing
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Card.Render exposing (renderCard, renderHandCards)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -57,5 +58,5 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    renderHandCards env model
