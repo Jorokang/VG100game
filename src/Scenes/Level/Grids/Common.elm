@@ -17,7 +17,7 @@ import Scenes.Level.LayerBase exposing (CommonData)
 type GridsStatus
     = Active
     | Stopped
-    | Closed
+    | Inactive
 
 
 type
@@ -78,7 +78,7 @@ emptyPlot =
 
 initGrids1 : Model
 initGrids1 =
-    { status = Closed
+    { status = Active
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
     }

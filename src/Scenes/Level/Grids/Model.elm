@@ -91,7 +91,7 @@ viewModel env model =
     let
         rend =
             case model.status of
-                Closed ->
+                Inactive ->
                     []
 
                 _ ->

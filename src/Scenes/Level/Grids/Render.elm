@@ -6,7 +6,7 @@ import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, Model, Plot, PlotEffect(..))
 
 
@@ -50,4 +50,4 @@ renderPlot env x =
     in
     shapes
         [ fill color ]
-        [ rect (coorChange env (addPoint pos ( offset, offset ))) (lengthChange env (cellLength - 2 * offset)) (lengthChange env (cellLength - 2 * offset)) ]
+        [ rect (coorChange env (addPoint pos ( offset, offset )) nullCoorData) (lengthChange env (cellLength - 2 * offset) nullCoorData) (lengthChange env (cellLength - 2 * offset) nullCoorData) ]
