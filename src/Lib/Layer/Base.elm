@@ -22,6 +22,7 @@ import Canvas exposing (Renderable)
 import Lib.Audio.Base exposing (AudioOption)
 import Lib.Env.Env exposing (EnvC)
 import Messenger.GeneralModel exposing (GeneralModel)
+import Scenes.Level.Enemy.Common exposing (GridLoc)
 
 
 {-| Layer
@@ -52,6 +53,7 @@ type LayerMsg
     | LayerChangeSceneMsg String
     | LayerMsgPlayerTurn --revealing that it's Player's turn in the level
     | LayerMsgEnemyTurn --revealing that it's Enemy's turn in the level
+    | LayerMsgClearCell GridLoc
     | NullLayerMsg
 
 

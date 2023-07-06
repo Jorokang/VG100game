@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -120,6 +120,12 @@ updateModelRec env lmsg model =
         LayerMsgEnemyTurn ->
             --erode the target
             ( erodeTarget model
+            , []
+            , env
+            )
+
+        LayerMsgClearCell loc ->
+            ( freeCell model loc
             , []
             , env
             )
