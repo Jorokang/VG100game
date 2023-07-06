@@ -1,4 +1,4 @@
-module Scenes.Level.Frame.Common exposing (Model, nullModel, EnvC)
+module Scenes.Level.Frame.Common exposing (Model, EnvC, FrameStatus(..), nullModel, initFrame1)
 
 {-| Common module
 
@@ -7,15 +7,29 @@ module Scenes.Level.Frame.Common exposing (Model, nullModel, EnvC)
 -}
 
 import Lib.Env.Env as Env
-import Scenes.Level.Frame.CardSystem exposing (CardData, nullCardData)
 import Scenes.Level.LayerBase exposing (CommonData)
 
+type FrameStatus
+    =   FramePlayerTurn
+    |   FrameEnemyTurn
+    |   FrameStopped
+    |   FrameInactive
 
 {-| Model
 Add your own data here.
 -}
+
+type alias PlayerData =
+    {
+        cur_stamina : Int
+    ,   max_stamina : Int
+    }
+
 type alias Model =
-    { cardData : CardData
+    {
+        status : FrameStatus
+    ,   time : Int
+    ,   player_data : PlayerData
     }
 
 
@@ -23,9 +37,23 @@ type alias Model =
 -}
 nullModel : Model
 nullModel =
-    { cardData = nullCardData
+    {
+        status = FrameInactive
+    ,   time = 0
+    ,   player_data =   {   cur_stamina = 0
+                        ,   max_stamina = 0
+                        }
     }
 
+initFrame1 : Model
+initFrame1 =
+    {
+        status = FramePlayerTurn
+    ,   time = 0
+    ,   player_data =   {   cur_stamina = 3
+                        ,   max_stamina = 3
+                        }
+    }
 
 {-| Convenient type alias for the environment
 -}

@@ -14,7 +14,7 @@ module Scenes.Level.Frame.Model exposing
 
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Frame.Common exposing (EnvC, Model, FrameStatus(..), nullModel, initFrame1)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
