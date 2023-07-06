@@ -3,7 +3,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 import Area exposing (inAcres)
 import Canvas exposing (Point)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData, pointDistance)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData, pointDistance, negPoint, scalePointLength)
 
 
 {-| get the center of the GridLoc
@@ -28,8 +28,8 @@ setAvatarPos model =
     { model | pos = new_pos }
 
 
-maxAvatarVel : Float
-maxAvatarVel =
+maxAvatarV : Float
+maxAvatarV =
     5
 
 
@@ -48,14 +48,14 @@ moveAvatar model =
             addPoint target_pos (negPoint model.pos)
 
         v =
-            scalePointLength vec maxEyeV
+            scalePointLength vec maxAvatarV
     in
     case model.status of
         AvatarAcitve ->
             if dis == 0 then
                 model
 
-            else if dis <= maxAvatarVel then
+            else if dis <= maxAvatarV then
                 { model
                     | pos = target_pos
                     , cur_loc = model.target_loc

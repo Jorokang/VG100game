@@ -15,9 +15,11 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel, initAvatar1)
 import Scenes.Level.Avatar.Render exposing (renderAvatar)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..))
+import Scenes.Level.Avatar.Update exposing (setAvatarPos, moveAvatar)
 
 
 {-| initModel
@@ -25,7 +27,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initAvatar1
 
 
 {-| updateModel
@@ -36,7 +38,16 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case model.status of
+        AvatarAcitve ->
+            ( model
+                |> setAvatarPos
+                |> moveAvatar
+            , []
+            , env
+            )
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec

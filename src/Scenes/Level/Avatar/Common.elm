@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), GridLoc
+    , AvatarStatus(..), GridLoc, initAvatar1
     )
 
 {-| Common module
@@ -48,7 +48,7 @@ nullModel =
 
 initAvatar1 : Model
 initAvatar1 =
-    { status = AvatarStopped
+    { status = AvatarAcitve
     , target_loc = ( 0, 1 )
     , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
