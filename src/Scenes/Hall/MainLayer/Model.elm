@@ -51,12 +51,16 @@ updateModel env model =
             ( model, [ ( LayerParentScene, LayerStringMsg "Level" ) ], env )
 
         MouseDown x ( a, b ) ->
-            case mouseClickedState env model ( a, b ) of
+            let
+                n_model =
+                    { model | click_pos = ( a, b ) }
+            in
+            case mouseClickedState env n_model ( a, b ) of
                 1 ->
-                    btn_1_clicked env model
+                    btn_1_clicked env n_model
 
                 _ ->
-                    ( model, [], env )
+                    ( n_model, [], env )
 
         _ ->
             ( model, [], env )
@@ -87,7 +91,7 @@ viewModel env model =
         rend =
             [ renderStr env ( 200, 50 ) "HALL"
             , renderButtonPureColor env model.btn_1 Color.gray
-            , renderTime env model
+            , renderStr env ( 200, 500 ) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group

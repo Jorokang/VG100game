@@ -41,6 +41,7 @@ type alias Model =
     { status : HallStatus
     , btn_1 : Button
     , time : Int
+    , click_pos : Point
     }
 
 
@@ -58,6 +59,7 @@ nullModel =
     { status = Active
     , btn_1 = initButtonLevel
     , time = 0
+    , click_pos = ( -1, -1 )
     }
 
 
