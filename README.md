@@ -1,4 +1,4 @@
-[Project 2]: [Purification and contamination in the mind]
+[Project 2]: [Inner Battle]
 
 # Readme
 This file contains relevant information about installation and startup.
