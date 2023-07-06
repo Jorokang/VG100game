@@ -173,6 +173,9 @@ gameUpdate msg model =
 
                             SOMPrompt name title ->
                                 ( lastModel, lastCmds ++ [ prompt { name = name, title = title } ], lastAudioCmds )
+
+                            SOMIntMsg _ ->
+                                ( lastModel, lastCmds, lastAudioCmds )
                     )
                     ( newModel, [], [] )
                     som

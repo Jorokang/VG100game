@@ -127,7 +127,7 @@ initEnemy1 =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Dead
+    { status = Alive
     , body =
         [ { val =
                 { color = Color.black
@@ -137,7 +137,7 @@ initEnemy1 =
           }
         ]
     , core = nullEnemyCore
-    , map_size = ( 4, 3 )
+    , map_size = ( 3, 4 )
     , seed = seed
     , randNum = number
     , time = 0
