@@ -28,6 +28,9 @@ Examples:
 [
 ( "ball", getResourcePath "img/ball.png" ),
 ( "car", getResourcePath "img/car.jpg" )
+][
+( "ball", getResourcePath "img/ball.png" ),
+( "car", getResourcePath "img/car.jpg" )
 ]
 
 -}

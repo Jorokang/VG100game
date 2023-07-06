@@ -17,13 +17,10 @@ import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneOutputMsg(..))
+import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Hall.Common exposing (Model)
 import Scenes.Hall.LayerBase exposing (CommonData)
-import Lib.Scene.Base exposing (SceneInitData(..))
-import Lib.Scene.Transitions.Base exposing (genTransition)
-import Lib.Scene.Transitions.Base exposing (nullTransition)
-import Lib.Scene.Transitions.Base exposing (SingleTrans)
 
 
 {-| handleLayerMsg
@@ -44,8 +41,9 @@ handleLayerMsg env lmsg model =
             let
                 sid =
                     NullSceneInitData
-                trans = 
-                    Just ( genTransition 1 1 rawTransition rawTransition )
+
+                trans =
+                    Just (genTransition 1 1 rawTransition rawTransition)
             in
             ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
 
@@ -54,8 +52,9 @@ handleLayerMsg env lmsg model =
 
 
 rawTransition : SingleTrans
-rawTransition _ _ _=
+rawTransition _ _ _ =
     Canvas.empty
+
 
 {-| updateModel
 
