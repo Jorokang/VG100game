@@ -25,13 +25,13 @@ renderFrameStatus env model =
                 FrameInactive ->
                     "Inactive"
     in
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 300, 600 ) nullCoorData) str
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 300, 570 ) nullCoorData) str
 
 
 renderStamina : EnvC -> Model -> Renderable
 renderStamina env model =
     let
         str =
-            String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
+            "Stamina: " ++ String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
     in
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 10, 600 ) nullCoorData) str
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 10, 570 ) nullCoorData) str

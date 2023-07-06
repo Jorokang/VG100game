@@ -75,10 +75,12 @@ updateModel env model =
                     ( model, [], env )
 
                 MouseDown _ ( a, b ) ->
-                    ( clickFreeCell model ( a, b )
-                    , []
-                    , env
-                    )
+                    {- ( clickFreeCell model ( a, b )
+                       , []
+                       , env
+                       )
+                    -}
+                    ( model, [], env )
 
                 _ ->
                     ( model, [], env )
