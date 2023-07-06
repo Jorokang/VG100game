@@ -3,7 +3,7 @@ module Scenes.Hall.MainLayer.Update exposing (..)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, HallStatus(..), Model)
-import Scenes.Level.Frame.Functions exposing (nullCoorData, coorChange)
+import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
 mouseClickedState : EnvC -> Model -> ( Float, Float ) -> Int

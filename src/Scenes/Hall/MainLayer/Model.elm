@@ -20,9 +20,8 @@ import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
 import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Level.Frame.Functions exposing (addPoint, point2Int)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
-import Scenes.Level.Frame.Functions exposing (nullCoorData, coorChange)
 
 
 {-| initModel

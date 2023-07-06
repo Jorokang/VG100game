@@ -6,11 +6,10 @@ import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import List
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model)
-import Scenes.Level.Frame.Functions exposing (addPoint, nullCoorData, coorChange, lengthChange)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 import Tuple
-import Scenes.Hall.MainLayer.Common exposing (nullModel)
 
 
 renderStr : EnvC -> Point -> String -> Renderable

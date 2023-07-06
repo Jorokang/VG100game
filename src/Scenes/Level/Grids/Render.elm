@@ -6,7 +6,7 @@ import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, nullCoorData, cellLength, coorChange, grid2real, lengthChange)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, Model, Plot, PlotEffect(..))
 
 

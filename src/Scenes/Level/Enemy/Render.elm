@@ -5,15 +5,15 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
+import Json.Decode exposing (null)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
 import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, nullCoorData, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, point2Int, rightCell, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Tuple
-import Json.Decode exposing (null)
 
 
 {-| render the whole enemy body(explicitly the body field in model)
@@ -358,7 +358,7 @@ renderEnemyCore env model =
             int2Point model.core.loc
 
         ( x, y ) =
-            ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength )
+            coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) nullCoorData
     in
     shapes
         [ transform
@@ -368,7 +368,7 @@ renderEnemyCore env model =
             ]
         , fill Color.red
         ]
-        [ rect (coorChange env ( x, y ) nullCoorData) (lengthChange env (cellLength / 2) nullCoorData) (lengthChange env (cellLength / 2) nullCoorData) ]
+        [ rect ( x, y ) (lengthChange env (cellLength / 2) nullCoorData) (lengthChange env (cellLength / 2) nullCoorData) ]
 
 
 {-| render the enmy's eye

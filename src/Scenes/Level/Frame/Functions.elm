@@ -189,3 +189,10 @@ map2d max_line cur =
 grid2real : ( Int, Int ) -> Point
 grid2real ( x, y ) =
     ( toFloat x * cellLength, toFloat y * cellLength )
+
+
+{-| transfer real position into GridLoc
+-}
+real2grid : Point -> ( Int, Int )
+real2grid ( x, y ) =
+    ( round x // round cellLength, round y // round cellLength )
