@@ -77,18 +77,40 @@ scalePointLength pos k =
 --global coordinates control function
 
 
-coorChange : EnvC -> Point -> Point
-coorChange env pos =
-    posToReal env.globalData pos
+type CoorType
+    = CoorEnemy
+    | CoorCard
+    | CoorAvatar
+    | CoorNull
+
+
+type alias CoorData =
+    { coortype : CoorType
+
+    --  Other Data
+    }
+
+
+nullCoorData : CoorData
+nullCoorData =
+    { coortype = CoorNull
+    }
+
+
+coorChange : EnvC -> Point -> CoorData -> Point
+coorChange env pos _ =
+    pos
+        |> posToReal env.globalData
 
 
 
 --global length control function
 
 
-lengthChange : EnvC -> Float -> Float
-lengthChange env l =
-    lengthToReal env.globalData l
+lengthChange : EnvC -> Float -> CoorData -> Float
+lengthChange env l _ =
+    l
+        |> lengthToReal env.globalData
 
 
 
