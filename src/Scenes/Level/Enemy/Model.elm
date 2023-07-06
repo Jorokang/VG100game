@@ -45,7 +45,10 @@ Add your logic to handle LayerMsg here
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env _ model =
-    ( model, [], env )
+    ( model
+    , []
+    , env
+    )
 
 
 {-| viewModel
