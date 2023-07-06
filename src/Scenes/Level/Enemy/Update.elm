@@ -6,7 +6,7 @@ import Color exposing (Color)
 import Html exposing (a)
 import List
 import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, maxEyeV, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, cellLength, coorChange, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, rightCell, scalePoint, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
 
@@ -28,7 +28,6 @@ erodeCell model new_loc =
                 , target_loc = model.eye.target_loc
                 }
         }
-
 
 {-| Erode the target cell
 -}
