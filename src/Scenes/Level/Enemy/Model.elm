@@ -48,31 +48,31 @@ updateModel env model =
                     )
 
                 KeyDown x ->
-                    case x of
-                        32 ->
-                            --space->erode target
-                            ( erodeTarget model
-                            , []
-                            , env
-                            )
+                    {- case x of
+                       32 ->
+                           --space->erode target
+                           ( erodeTarget model
+                           , []
+                           , env
+                           )
 
-                        38 ->
-                            --arrowup->set random target
-                            ( targetRandomCell model
-                            , []
-                            , env
-                            )
+                       38 ->
+                           --arrowup->set random target
+                           ( targetRandomCell model
+                           , []
+                           , env
+                           )
 
-                        40 ->
-                            --arrowdown->set nearest target
-                            ( targetNearestCell model
-                            , []
-                            , env
-                            )
-
-                        _ ->
-                            --do nothing
-                            ( model, [], env )
+                       40 ->
+                           --arrowdown->set nearest target
+                           ( targetNearestCell model
+                           , []
+                           , env
+                           )
+                       _ ->
+                    -}
+                    --do nothing
+                    ( model, [], env )
 
                 MouseDown _ ( a, b ) ->
                     ( clickFreeCell model ( a, b )
@@ -108,8 +108,24 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerMsgPlayerTurn ->
+            --set the target
+            ( targetNearestCell model
+            , []
+            , env
+            )
+
+        LayerMsgEnemyTurn ->
+            --erode the target
+            ( erodeTarget model
+            , []
+            , env
+            )
+
+        _ ->
+            ( model, [], env )
 
 
 {-| viewModel

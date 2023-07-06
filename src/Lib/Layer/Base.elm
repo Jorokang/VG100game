@@ -50,6 +50,8 @@ type LayerMsg
     | LayerSoundMsg String String AudioOption
     | LayerStopSoundMsg String
     | LayerChangeSceneMsg String
+    | LayerMsgPlayerTurn --revealing that it's Player's turn in the level
+    | LayerMsgEnemyTurn --revealing that it's Enemy's turn in the level
     | NullLayerMsg
 
 
