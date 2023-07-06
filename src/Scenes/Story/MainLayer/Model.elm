@@ -12,7 +12,8 @@ module Scenes.Story.MainLayer.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable, empty, text)
+import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Story.SceneInit exposing (StoryInit)
@@ -58,4 +59,4 @@ If you have other elements than components, add them after viewComponent.
 -}
 viewModel : EnvC -> Model -> Renderable
 viewModel _ _ =
-    empty
+    text [ font { size = 48, family = "Arial", style = "" }, align Center ] ( 50, 50 ) "Story"
