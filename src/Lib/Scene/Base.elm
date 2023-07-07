@@ -78,6 +78,7 @@ type SceneOutputMsg
     | SOMStopAudio String
     | SOMSetVolume Float
     | SOMPrompt String String -- name, title
+    | SOMIntMsg Int
 
 
 {-| This datatype is used in Scene definition.

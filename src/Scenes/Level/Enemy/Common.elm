@@ -14,7 +14,7 @@ import Color exposing (Color)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Frame.Functions exposing (cellLength, coorChange, int2Point, point2Int)
+import Scenes.Level.Frame.Functions exposing (cellLength, int2Point, point2Int)
 import Scenes.Level.LayerBase exposing (CommonData)
 import Time exposing (Posix, now)
 
@@ -127,7 +127,7 @@ initEnemy1 =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Dead
+    { status = Alive
     , body =
         [ { val =
                 { color = Color.black
@@ -137,7 +137,7 @@ initEnemy1 =
           }
         ]
     , core = nullEnemyCore
-    , map_size = ( 4, 3 )
+    , map_size = ( 3, 4 )
     , seed = seed
     , randNum = number
     , time = 0
