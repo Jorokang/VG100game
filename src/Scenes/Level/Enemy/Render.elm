@@ -5,13 +5,12 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Json.Decode exposing (null)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
 import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, point2Int, rightCell, scalePointLength, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Tuple
 
@@ -107,7 +106,7 @@ renderEnemyBlockCentral env model x =
     in
     Canvas.group
         []
-        [ shapes [ fill color ] [ rect (coorChange env (grid2real loc) nullCoorData) (lengthChange env cellLength nullCoorData) (lengthChange env cellLength nullCoorData) ]
+        [ shapes [ fill color ] [ rect (coorChange env (grid2real loc)) (lengthChange env cellLength) (lengthChange env cellLength) ]
         ]
 
 
@@ -284,13 +283,14 @@ renderTentaclePixels env model color ( rotate, offset ) pos =
         , renderTentaclePixel env color ( x, y + 2 * delta ) l2 ( rotate, addPoint offset offset2 ) flag2
         , renderTentaclePixel env color ( x, y - delta ) l3 ( rotate, addPoint offset offset3 ) flag3
         , renderTentaclePixel env color ( x, y - 2 * delta ) l4 ( rotate, addPoint offset offset4 ) flag4
+        , renderNum env rotate
         ]
 
 
 renderTentaclePixel : EnvC -> Color -> Point -> Int -> ( Int, Point ) -> Int -> Renderable
 renderTentaclePixel env color pos l ( rotate, offset ) flag =
     --if (flag==1) then
-    shapes [ fill color ] [ rect (coorChange env (offsetPoint rotate offset pos) nullCoorData) (lengthChange env (toFloat l) nullCoorData) (lengthChange env (toFloat l) nullCoorData) ]
+    shapes [ fill color ] [ rect (coorChange env (offsetPoint rotate offset pos)) (lengthChange env (toFloat l)) (lengthChange env (toFloat l)) ]
 
 
 
@@ -357,7 +357,7 @@ renderEnemyCore env model =
             int2Point model.core.loc
 
         ( x, y ) =
-            coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) nullCoorData
+            ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength )
     in
     shapes
         [ transform
@@ -367,7 +367,7 @@ renderEnemyCore env model =
             ]
         , fill Color.red
         ]
-        [ rect ( x, y ) (lengthChange env (cellLength / 2) nullCoorData) (lengthChange env (cellLength / 2) nullCoorData) ]
+        [ rect (coorChange env ( x, y )) (lengthChange env (cellLength / 2)) (lengthChange env (cellLength / 2)) ]
 
 
 {-| render the enmy's eye
@@ -386,6 +386,6 @@ renderEnemyEye env model =
     in
     Canvas.group
         []
-        [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos nullCoorData) (lengthChange env 20 nullCoorData) ]
-        , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos nullCoorData) (lengthChange env 15 nullCoorData) ]
+        [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos) (lengthChange env 20) ]
+        , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos) (lengthChange env 15) ]
         ]

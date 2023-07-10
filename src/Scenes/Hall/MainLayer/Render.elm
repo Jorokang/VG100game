@@ -6,15 +6,15 @@ import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import List
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 import Tuple
 
 
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos) str
 
 
 renderButtons : EnvC -> Model -> Renderable
@@ -53,11 +53,11 @@ renderButtonPureColor env btn color =
         _ ->
             Canvas.group
                 []
-                [ shapes [ fill color ] [ rect (coorChange env btn.pos nullCoorData) (lengthChange env sx nullCoorData) (lengthChange env sy nullCoorData) ]
-                , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
+                [ shapes [ fill color ] [ rect (coorChange env btn.pos) (lengthChange env sx) (lengthChange env sy) ]
+                , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos) text_
                 ]
 
 
 renderTime : EnvC -> Model -> Renderable
 renderTime env model =
-    renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Hall Time: " ++ String.fromInt model.time)
+    renderStr env ( 200, 500 ) ("Hall Time: " ++ String.fromInt model.time)

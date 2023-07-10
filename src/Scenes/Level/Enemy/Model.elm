@@ -18,7 +18,11 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
+<<<<<<< HEAD
 import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell)
+=======
+import Scenes.Level.Enemy.Update exposing (erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
+>>>>>>> aa5a6e838a2ba820ee903123a81a8e2be481b133
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -48,39 +52,31 @@ updateModel env model =
                     )
 
                 KeyDown x ->
-                    {- case x of
-                       32 ->
-                           --space->erode target
-                           ( erodeTarget model
-                           , []
-                           , env
-                           )
+                    case x of
+                        32 ->
+                            --space->erode target
+                            ( erodeTarget model
+                            , []
+                            , env
+                            )
 
-                       38 ->
-                           --arrowup->set random target
-                           ( targetRandomCell model
-                           , []
-                           , env
-                           )
+                        38 ->
+                            --arrowup->set random target
+                            ( targetRandomCell model
+                            , []
+                            , env
+                            )
 
-                       40 ->
-                           --arrowdown->set nearest target
-                           ( targetNearestCell model
-                           , []
-                           , env
-                           )
-                       _ ->
-                    -}
-                    --do nothing
-                    ( model, [], env )
+                        40 ->
+                            --arrowdown->set nearest target
+                            ( targetNearestCell model
+                            , []
+                            , env
+                            )
 
-                MouseDown _ ( a, b ) ->
-                    {- ( clickFreeCell model ( a, b )
-                       , []
-                       , env
-                       )
-                    -}
-                    ( model, [], env )
+                        _ ->
+                            --do nothing
+                            ( model, [], env )
 
                 _ ->
                     ( model, [], env )

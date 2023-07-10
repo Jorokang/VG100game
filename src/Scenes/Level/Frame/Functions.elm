@@ -1,7 +1,7 @@
 module Scenes.Level.Frame.Functions exposing (..)
 
 import Canvas exposing (Point)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Env.Env as Env
 import Scenes.Level.LayerBase exposing (CommonData)
 import Tuple exposing (first, second)
@@ -77,40 +77,18 @@ scalePointLength pos k =
 --global coordinates control function
 
 
-type CoorType
-    = CoorEnemy
-    | CoorCard
-    | CoorAvatar
-    | CoorNull
-
-
-type alias CoorData =
-    { coortype : CoorType
-
-    --  Other Data
-    }
-
-
-nullCoorData : CoorData
-nullCoorData =
-    { coortype = CoorNull
-    }
-
-
-coorChange : EnvC -> Point -> CoorData -> Point
-coorChange env pos _ =
+coorChange : EnvC -> Point -> Point
+coorChange _ pos =
     pos
-        |> posToReal env.globalData
 
 
 
 --global length control function
 
 
-lengthChange : EnvC -> Float -> CoorData -> Float
-lengthChange env l _ =
+lengthChange : EnvC -> Float -> Float
+lengthChange _ l =
     l
-        |> lengthToReal env.globalData
 
 
 
@@ -189,6 +167,7 @@ map2d max_line cur =
 grid2real : ( Int, Int ) -> Point
 grid2real ( x, y ) =
     ( toFloat x * cellLength, toFloat y * cellLength )
+<<<<<<< HEAD
 
 
 {-| transfer real position into GridLoc
@@ -196,3 +175,5 @@ grid2real ( x, y ) =
 real2grid : Point -> ( Int, Int )
 real2grid ( x, y ) =
     ( round x // round cellLength, round y // round cellLength )
+=======
+>>>>>>> aa5a6e838a2ba820ee903123a81a8e2be481b133

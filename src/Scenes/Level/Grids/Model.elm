@@ -41,33 +41,33 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
-                {- KeyDown x ->
-                   --modify the effect of (0,0) for testing
-                   case x of
-                       40 ->
-                           --arrow down -> empty
-                           ( modifyPlotEffect model ( 0, 0 ) Empty
-                           , []
-                           , env
-                           )
+                KeyDown x ->
+                    --modify the effect of (0,0) for testing
+                    case x of
+                        40 ->
+                            --arrow down -> empty
+                            ( modifyPlotEffect model ( 0, 0 ) Empty
+                            , []
+                            , env
+                            )
 
-                       37 ->
-                           --arrow left -> angry
-                           ( modifyPlotEffect model ( 0, 0 ) Angry
-                           , []
-                           , env
-                           )
+                        37 ->
+                            --arrow left -> angry
+                            ( modifyPlotEffect model ( 0, 0 ) Angry
+                            , []
+                            , env
+                            )
 
-                       39 ->
-                           --arrow right -> lazy
-                           ( modifyPlotEffect model ( 0, 0 ) Lazy
-                           , []
-                           , env
-                           )
+                        39 ->
+                            --arrow right -> lazy
+                            ( modifyPlotEffect model ( 0, 0 ) Lazy
+                            , []
+                            , env
+                            )
 
-                       _ ->
-                           ( model, [], env )
-                -}
+                        _ ->
+                            ( model, [], env )
+
                 _ ->
                     ( model, [], env )
 

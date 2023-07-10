@@ -6,7 +6,7 @@ import Color exposing (Color)
 import Html exposing (a)
 import List
 import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, maxEyeV, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, cellLength, coorChange, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
 
@@ -14,14 +14,7 @@ import Tuple
 -}
 erodeCell : Model -> GridLoc -> Model
 erodeCell model new_loc =
-    let
-        ( nx, ny ) =
-            new_loc
-
-        ( sx, sy ) =
-            model.map_size
-    in
-    if List.any (checkCellLoc new_loc) model.body || (nx < 0) || (ny < 0) || (nx > sx) || (ny > sy) then
+    if List.any (checkCellLoc new_loc) model.body || (Tuple.first new_loc < 0) || (Tuple.second new_loc < 0) then
         model
 
     else
@@ -58,14 +51,14 @@ setTarget model loc =
         v =
             scalePointLength eye_vec maxEyeV
 
-        target_eroded =
+        targeted_eroded =
             List.any (checkCellLoc loc) model.body
 
         new_eye =
             { pos = model.eye.pos
             , v = v
             , target = eye_target
-            , target_eroded = target_eroded
+            , target_eroded = targeted_eroded
             , target_loc = loc
             }
     in
@@ -189,45 +182,6 @@ targetNearestCell model =
                     ( -1, -1 )
     in
     setTarget model loc
-
-
-{-| set the particular cell uneroded
--}
-freeCell : Model -> GridLoc -> Model
-freeCell model loc =
-    let
-        ( nx, ny ) =
-            loc
-
-        ( sx, sy ) =
-            model.map_size
-
-        new_model1 =
-            { model | body = List.filter (\x -> x.loc /= loc) model.body }
-
-        new_model2 =
-            if loc == real2grid model.eye.pos then
-                setTarget new_model1 model.core.loc
-
-            else
-                new_model1
-    in
-    if (nx < 0) || (ny < 0) || (nx > sx) || (ny > sy) then
-        model
-
-    else
-        new_model2
-
-
-{-| click to free cell
--}
-clickFreeCell : Model -> Point -> Model
-clickFreeCell model click_pos =
-    let
-        loc =
-            real2grid click_pos
-    in
-    freeCell model loc
 
 
 {-| generate the complementary set of enemy body in grids
