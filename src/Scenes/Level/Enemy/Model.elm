@@ -18,11 +18,13 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-<<<<<<< HEAD
+
 import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell)
-=======
+
 import Scenes.Level.Enemy.Update exposing (erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
->>>>>>> aa5a6e838a2ba820ee903123a81a8e2be481b133
+
+import Scenes.Level.Enemy.Update exposing (erodeTarget, moveEnemyEye, targetNearestCell, targetRandomCell)
+
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 

@@ -20,6 +20,8 @@ import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
 import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, point2Int)
+import Time exposing (posixToMillis)
 
 
 {-| initModel
@@ -84,5 +86,14 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [ renderStr env ( 200, 50 ) "HALL"
+            , renderButtonPureColor env model.btn_1 Color.gray
+            , renderStr env ( 200, 500 ) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+            ]
+    in
+    Canvas.group
+        []
+        rend
