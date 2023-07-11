@@ -1,9 +1,11 @@
 module Lib.Component.Base exposing
-    ( DefinedTypes(..)
+    ( ComponentMsg(..)
+    , ComponentTarget(..)
+    , DefinedTypes(..)
+    , ComponentInitData(..)
     , Component
     , Data
     , nullComponent
-    , ComponentInitData(..), ComponentMsg(..), ComponentTarget(..)
     )
 
 {-|
