@@ -3,10 +3,13 @@ module Scenes.Level.Avatar.Update exposing (..)
 import Area exposing (inAcres)
 import Base exposing (Msg(..))
 import Canvas exposing (Point)
+import Html.Attributes exposing (rel)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
+import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, negPoint, nullCoorData, pointDistance, scalePointLength)
+import Scenes.Level.Grids.Common exposing (Grid)
 
 
 {-| judge selection of the Avatar
@@ -25,6 +28,21 @@ judgeAvatarSelection env click_pos model =
 2: up
 3: right
 4: lower
+-----------------------------
+| | | |16 | | | |
+-----------------------------
+| | |15 | 7 |17 | | |
+-----------------------------
+| |14 | 6 | 2 | 8 |18 | |
+-----------------------------
+|13 | 5 | 1 | 0 | 3 | 9 |19 |
+-----------------------------
+| |24 |12 | 4 |10 |20 | |
+-----------------------------
+| | |23 |11 |21 | | |
+-----------------------------
+| | | |22 | | | |
+-----------------------------
 -}
 judgeMovingSelection : EnvC -> Point -> Model -> Int
 judgeMovingSelection env click_pos model =
@@ -125,100 +143,23 @@ moveAvatar model =
         v =
             scalePointLength vec maxAvatarV
     in
-    if dis <= maxAvatarV then
-        { model
-            | pos = target_pos
-            , cur_loc = model.target_loc
-            , status = AvatarAcitve
-        }
-
-    else
-        { model | pos = addPoint model.pos v }
-
-
-{-| update function when model.status == AvatarActive
--}
-updateModelActive : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelActive env model =
-    case env.msg of
-        MouseDown x ( a, b ) ->
-            if judgeAvatarSelection env ( a, b ) model then
-                ( { model | status = AvatarSelected }
-                , []
-                , env
-                )
+    case model.status of
+        AvatarMoving ->
+            if dis <= maxAvatarV then
+                { model
+                    | pos = target_pos
+                    , cur_loc = model.target_loc
+                    , status = AvatarActive
+                }
 
             else
-                ( model, [], env )
+                { model | pos = addPoint model.pos v }
 
         _ ->
-            ( model, [], env )
+            model
 
 
-{-| update function when model.status == AvatarSelected
--}
-updateModelSelected : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelSelected env model =
-    case env.msg of
-        MouseDown x ( a, b ) ->
-            let
-                ( locx, locy ) =
-                    model.cur_loc
-
-                cost_msg =
-                    [ ( LayerName "Frame", LayerIntMsg 1 ) ]
-            in
-            case judgeMovingSelection env ( a, b ) model of
-                1 ->
-                    ( setAvatarTarget model ( locx - 1, locy )
-                    , cost_msg
-                    , env
-                    )
-
-                2 ->
-                    ( setAvatarTarget model ( locx, locy - 1 )
-                    , cost_msg
-                    , env
-                    )
-
-                3 ->
-                    ( setAvatarTarget model ( locx + 1, locy )
-                    , cost_msg
-                    , env
-                    )
-
-                4 ->
-                    ( setAvatarTarget model ( locx, locy + 1 )
-                    , cost_msg
-                    , env
-                    )
-
-                _ ->
-                    ( { model | status = AvatarAcitve }
-                    , []
-                    , env
-                    )
-
-        _ ->
-            ( model, [], env )
-
-
-{-| update function when model.status == AvatarMoving
--}
-updateModelMoving : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelMoving env model =
-    case env.msg of
-        Tick new_time ->
-            ( moveAvatar model
-            , []
-            , env
-            )
-
-        _ ->
-            ( model, [], env )
-
-
-{-| remove a cell from avail_grids ( most likely it is eroded by the enemy )
+{-| remove a cell from avail\_grids ( most likely it is eroded by the enemy )
 -}
 erodeAvailGrids : Model -> GridLoc -> Model
 erodeAvailGrids model loc =
@@ -228,7 +169,6 @@ erodeAvailGrids model loc =
 
         new_model1 =
             { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
-            
     in
     if loc == model.cur_loc then
         setAvatarTarget model model.core_loc
@@ -236,8 +176,69 @@ erodeAvailGrids model loc =
     else
         new_model1
 
-{-| add a cell to avail_grids ( most likely the cell is retrieved from the enemy )
+
+{-| add a cell to avail\_grids ( most likely the cell is retrieved from the enemy )
 -}
 retrieveAvailGrids : Model -> GridLoc -> Model
 retrieveAvailGrids model loc =
     { model | avail_grids = loc :: model.avail_grids }
+
+
+{-| return an int representing the relative position
+-}
+relativeLoc : GridLoc -> GridLoc -> GridLoc
+relativeLoc ( cx, cy ) ( locx, locy ) =
+    ( locx - cx, locy - cy )
+
+
+{-| Judge whther a loc is able to move to (whether this loc is in the avail\_loc)
+-}
+judgeLocAvail : Model -> GridLoc -> Bool
+judgeLocAvail model loc =
+    List.any (\x -> x == loc) model.avail_grids
+
+
+{-| Update click event
+-}
+updateClickEvent : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateClickEvent env model loc =
+    let
+        delta_loc =
+            relativeLoc model.cur_loc loc
+
+        ( dx, dy ) =
+            delta_loc
+    in
+    case model.status of
+        AvatarActive ->
+            if delta_loc == ( 0, 0 ) then
+                ( { model | status = AvatarSelected }
+                , []
+                , env
+                )
+
+            else
+                ( model, [], env )
+
+        AvatarSelected ->
+            if judgeLocAvail model loc then
+                if abs (dx + dy) == 1 then
+                    ( setAvatarTarget model loc
+                    , [ ( LayerName "Frame", LayerIntMsg 1 ) ]
+                    , env
+                    )
+
+                else
+                    ( { model | status = AvatarActive }
+                    , []
+                    , env
+                    )
+
+            else
+                ( { model | status = AvatarActive }
+                , []
+                , env
+                )
+
+        _ ->
+            ( model, [], env )

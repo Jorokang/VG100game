@@ -116,7 +116,7 @@ updateModelRec env lmsg model =
         LayerMsgEnemyTurn ->
             --erode the target
             ( erodeTarget model
-            , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target) ]
+            , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
 

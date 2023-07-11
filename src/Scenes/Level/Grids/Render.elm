@@ -7,7 +7,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, Model, Plot, PlotEffect(..))
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..))
 
 
 {-| render the whole grid

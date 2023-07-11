@@ -1,12 +1,13 @@
 module Scenes.Level.Avatar.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, circle, group, rect, shapes, text)
+import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, Model, avatarRadius, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius)
+import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
 
 
 {-| render the Avatar
@@ -23,41 +24,43 @@ hintColor =
     rgb255 152 251 152
 
 
-{-| render the hints of movable cells
+{-| render the hint of a single cell
 -}
-renderMovingHint : EnvC -> Model -> Renderable
-renderMovingHint env model =
+renderSingleHint : EnvC -> Model -> GridLoc -> Renderable
+renderSingleHint env model loc =
     let
-        ( locx, locy ) =
-            model.cur_loc
-
         offset =
             6
 
         real_l =
             lengthChange env (cellLength - 2 * offset) nullCoorData
 
-        left_pos =
-            addPoint (grid2real ( locx - 1, locy )) ( offset, offset )
+        pos =
+            addPoint (grid2real loc) ( offset, offset )
+    in
+    if judgeLocAvail model loc then
+        shapes [ fill hintColor ] [ rect (coorChange env pos nullCoorData) real_l real_l ]
 
-        upper_pos =
-            addPoint (grid2real ( locx, locy - 1 )) ( offset, offset )
+    else
+        empty
 
-        right_pos =
-            addPoint (grid2real ( locx + 1, locy )) ( offset, offset )
 
-        lower_pos =
-            addPoint (grid2real ( locx, locy + 1 )) ( offset, offset )
+{-| render the hints of movable cells
+-}
+renderMovingHint : EnvC -> Model -> List GridLoc -> Renderable
+renderMovingHint env model delta_locs =
+    let
+        locs =
+            List.map (addLoc model.cur_loc) delta_locs
+
+        rend =
+            List.map (renderSingleHint env model) locs
     in
     case model.status of
         AvatarSelected ->
             Canvas.group
                 []
-                [ shapes [ fill hintColor ] [ rect (coorChange env left_pos nullCoorData) real_l real_l ]
-                , shapes [ fill hintColor ] [ rect (coorChange env upper_pos nullCoorData) real_l real_l ]
-                , shapes [ fill hintColor ] [ rect (coorChange env right_pos nullCoorData) real_l real_l ]
-                , shapes [ fill hintColor ] [ rect (coorChange env lower_pos nullCoorData) real_l real_l ]
-                ]
+                rend
 
         _ ->
             Canvas.empty

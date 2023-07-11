@@ -11,16 +11,16 @@ module Scenes.Level.Avatar.Common exposing
 
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
-import Scenes.Level.Frame.Functions exposing (cellLength, allGrids)
-import Scenes.Level.LayerBase exposing (CommonData)
+import Scenes.Level.Frame.Functions exposing (allGrids, cellLength)
 import Scenes.Level.Grids.Common exposing (Grid)
+import Scenes.Level.LayerBase exposing (CommonData)
 
 
 {-| Model
 Add your own data here.
 -}
 type AvatarStatus
-    = AvatarAcitve --not selected in player's turn
+    = AvatarActive --not selected in player's turn
     | AvatarSelected --selected in player's turn
     | AvatarMoving --moving in player's turn
     | AvatarStopped --stopped
@@ -29,6 +29,7 @@ type AvatarStatus
 
 type alias GridLoc =
     ( Int, Int )
+
 
 type alias Model =
     { status : AvatarStatus
@@ -39,6 +40,7 @@ type alias Model =
     , core_loc : GridLoc
     }
 
+
 {-| nullModel
 -}
 nullModel : Model
@@ -48,7 +50,7 @@ nullModel =
     , cur_loc = ( 0, 0 )
     , pos = ( 0, 0 )
     , avail_grids = []
-    , core_loc = (0,0)
+    , core_loc = ( 0, 0 )
     }
 
 
@@ -59,8 +61,9 @@ initAvatar1 size =
     , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
     , avail_grids = allGrids size
-    , core_loc = (0,0)
+    , core_loc = ( 0, 0 )
     }
+
 
 avatarRadius : Float
 avatarRadius =

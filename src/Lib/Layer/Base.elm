@@ -56,6 +56,7 @@ type LayerMsg
     | LayerMsgClearCell GridLoc --Clear a cell
     | LayerMsgErodeCell GridLoc --Erode a cell
     | LayerMsgEnemyErodeCell GridLoc --The enemy erodes a cell (sent by the enemy)
+    | LayerMsgClickLoc GridLoc --mouse click the grids on a cell
     | NullLayerMsg
 
 

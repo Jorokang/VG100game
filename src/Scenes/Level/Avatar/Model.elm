@@ -15,14 +15,11 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, Model, initAvatar1, nullModel)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
 import Scenes.Level.Avatar.Render exposing (renderAvatar, renderMovingHint, renderStr)
-import Scenes.Level.Avatar.Update exposing (loc2Pos, setAvatarPos, setAvatarStill, updateModelActive, updateModelMoving, updateModelSelected)
+import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, loc2Pos, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateClickEvent)
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import String
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids)
-import Scenes.Level.Avatar.Update exposing (retrieveAvailGrids)
 
 
 {-| initModel
@@ -45,15 +42,12 @@ updateModel env model =
         n_model =
             setAvatarPos model
     in
-    case model.status of
-        AvatarAcitve ->
-            updateModelActive env n_model
-
-        AvatarSelected ->
-            updateModelSelected env n_model
-
-        AvatarMoving ->
-            updateModelMoving env n_model
+    case env.msg of
+        Tick new_time ->
+            ( moveAvatar n_model
+            , []
+            , env
+            )
 
         _ ->
             ( n_model, [], env )
@@ -76,7 +70,7 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgPlayerTurn ->
-            ( { model | status = AvatarAcitve }
+            ( { model | status = AvatarActive }
             , []
             , env
             )
@@ -84,7 +78,7 @@ updateModelRec env lmsg model =
         LayerIntMsg x ->
             case x of
                 1 ->
-                    ( { model | status = AvatarAcitve }
+                    ( { model | status = AvatarActive }
                     , []
                     , env
                     )
@@ -98,29 +92,26 @@ updateModelRec env lmsg model =
 
                 _ ->
                     ( model, [], env )
+
         LayerMsgErodeCell loc ->
             ( erodeAvailGrids model loc, [], env )
+
         LayerMsgClearCell loc ->
             ( retrieveAvailGrids model loc, [], env )
+
+        LayerMsgClickLoc loc ->
+            updateClickEvent env model loc
 
         _ ->
             ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         str =
             case model.status of
-                AvatarAcitve ->
+                AvatarActive ->
                     "Active"
 
                 AvatarInactive ->
@@ -137,7 +128,7 @@ viewModel env model =
 
         rend =
             [ renderAvatar env model
-            , renderMovingHint env model
+            , renderMovingHint env model deltaLocsDis1
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             ]
     in
@@ -149,3 +140,14 @@ viewModel env model =
             Canvas.group
                 []
                 rend
+
+
+{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
+-}
+deltaLocsDis1 : List GridLoc
+deltaLocsDis1 =
+    [ ( -1, 0 )
+    , ( 0, -1 )
+    , ( 1, 0 )
+    , ( 0, 1 )
+    ]
