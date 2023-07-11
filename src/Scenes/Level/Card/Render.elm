@@ -1,11 +1,12 @@
 module Scenes.Level.Card.Render exposing (..)
 
-import Canvas exposing (Renderable, rect, shapes, text)
+import Canvas exposing (Point, Renderable, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
+import Scenes.Hall.MainLayer.Render exposing (renderStr)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
-import Scenes.Level.Card.Common exposing (Card, EnvC, Model)
+import Scenes.Level.Card.Common exposing (Card, EnvC, Model, giveErrorCard)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData, scalePoint)
 import Tuple exposing (first)
 
@@ -26,6 +27,17 @@ renderHandCards env model =
         ]
 
 
+renderTestMessage : EnvC -> Model -> Renderable
+renderTestMessage env model =
+    Canvas.group
+        []
+        [ renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.point) ++ ", " ++ String.fromFloat (Tuple.second model.point))
+        , renderStr env (coorChange env ( 200, 650 ) nullCoorData) ("hands:" ++ String.fromInt (List.length model.hand) ++ pileToString model.hand)
+        , renderStr env (coorChange env ( 200, 750 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
+        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("piles:" ++ String.fromInt (List.length model.discard) ++ pileToString model.discard)
+        ]
+
+
 renderHelper : EnvC -> Model -> Int -> Int -> Renderable
 renderHelper env model index length =
     let
@@ -41,6 +53,30 @@ renderHelper env model index length =
         Canvas.group
             []
             [ element ]
+
+
+cardArea : EnvC -> Model -> List Point
+cardArea env model =
+    List.map pointHelper <|
+        List.range 1 (List.length model.hand)
+
+
+pointHelper : Int -> Point
+pointHelper num =
+    addPoint ( 0, 600 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
+
+
+pileToString : List Card -> String
+pileToString pile =
+    if List.length pile == 0 then
+        " "
+
+    else
+        let
+            card =
+                Maybe.withDefault giveErrorCard (List.head pile)
+        in
+        " " ++ card.name ++ pileToString (List.drop 1 pile)
 
 
 renderCard : EnvC -> Card -> Int -> Renderable
