@@ -27,22 +27,31 @@ judgeAvatarSelection env click_pos model =
 1: left
 2: up
 3: right
-4: lower
------------------------------
-| | | |16 | | | |
------------------------------
-| | |15 | 7 |17 | | |
------------------------------
-| |14 | 6 | 2 | 8 |18 | |
------------------------------
-|13 | 5 | 1 | 0 | 3 | 9 |19 |
------------------------------
-| |24 |12 | 4 |10 |20 | |
------------------------------
-| | |23 |11 |21 | | |
------------------------------
-| | | |22 | | | |
------------------------------
+
+
+## 4: lower
+
+
+## | | | |16 | | | |
+
+
+## | | |15 | 7 |17 | | |
+
+
+## | |14 | 6 | 2 | 8 |18 | |
+
+
+## |13 | 5 | 1 | 0 | 3 | 9 |19 |
+
+
+## | |24 |12 | 4 |10 |20 | |
+
+
+## | | |23 |11 |21 | | |
+
+
+## | | | |22 | | | |
+
 -}
 judgeMovingSelection : EnvC -> Point -> Model -> Int
 judgeMovingSelection env click_pos model =
@@ -171,7 +180,7 @@ erodeAvailGrids model loc =
             { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
     in
     if loc == model.cur_loc then
-        setAvatarTarget model model.core_loc
+        setAvatarTarget new_model1 model.core_loc
 
     else
         new_model1

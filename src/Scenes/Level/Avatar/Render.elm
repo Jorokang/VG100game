@@ -71,3 +71,28 @@ renderMovingHint env model delta_locs =
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+
+
+{-| For testing
+-}
+renderAvailLocs : EnvC -> Model -> Renderable
+renderAvailLocs env model =
+    let
+        rend =
+            List.map2 (renderSingleTuple env) model.avail_grids (List.range 1 100)
+    in
+    Canvas.group
+        []
+        rend
+
+
+renderSingleTuple : EnvC -> ( Int, Int ) -> Int -> Renderable
+renderSingleTuple env ( x, y ) d =
+    let
+        str =
+            "(" ++ String.fromInt x ++ ", " ++ String.fromInt y ++ ")"
+
+        pos =
+            ( 800, toFloat (d * 40) )
+    in
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
