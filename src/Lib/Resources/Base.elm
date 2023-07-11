@@ -1,7 +1,7 @@
 module Lib.Resources.Base exposing
     ( saveSprite
-    , igetSprite
     , getTexture
+    , igetSprite
     )
 
 {-|
@@ -20,8 +20,8 @@ If some asset is not found, the game will panic and throw an error (alert).
 After the resources are loaded, we can get those data from globaldata.sprites.
 
 @docs saveSprite
+@docs getTexture
 @docs igetSprite
-@docs getResourcePath
 
 -}
 
