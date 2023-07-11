@@ -216,3 +216,28 @@ updateModelMoving env model =
 
         _ ->
             ( model, [], env )
+
+
+{-| remove a cell from avail_grids ( most likely it is eroded by the enemy )
+-}
+erodeAvailGrids : Model -> GridLoc -> Model
+erodeAvailGrids model loc =
+    let
+        ( nx, ny ) =
+            loc
+
+        new_model1 =
+            { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
+            
+    in
+    if loc == model.cur_loc then
+        setAvatarTarget model model.core_loc
+
+    else
+        new_model1
+
+{-| add a cell to avail_grids ( most likely the cell is retrieved from the enemy )
+-}
+retrieveAvailGrids : Model -> GridLoc -> Model
+retrieveAvailGrids model loc =
+    { model | avail_grids = loc :: model.avail_grids }

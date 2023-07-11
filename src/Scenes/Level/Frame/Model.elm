@@ -60,7 +60,7 @@ Add your logic to handle LayerMsg here
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
-        LayerIntMsg x ->
+        LayerIntMsg x ->    --reduce 1 stamina
             case x of
                 1 ->
                     --cost 1 stamina
@@ -80,19 +80,22 @@ updateModelRec env lmsg model =
 
                 _ ->
                     ( model, [], env )
+        LayerMsgEnemyErodeCell loc ->
+            ( model
+            , [ (LayerName "Avatar", LayerMsgErodeCell loc) ]
+            , env
+            )
+        LayerMsgClearCell loc ->
+            ( model
+            , [ (LayerName "Avatar", LayerMsgClearCell loc)
+              , (LayerName "Enemy", LayerMsgClearCell loc)
+              ]
+            , env
+            )
 
         _ ->
             ( model, [], env )
 
-
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let

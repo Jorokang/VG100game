@@ -21,6 +21,8 @@ import Scenes.Level.Avatar.Update exposing (loc2Pos, setAvatarPos, setAvatarStil
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import String
+import Scenes.Level.Avatar.Update exposing (erodeAvailGrids)
+import Scenes.Level.Avatar.Update exposing (retrieveAvailGrids)
 
 
 {-| initModel
@@ -28,7 +30,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    initAvatar1
+    initAvatar1 ( 3, 4 )
 
 
 {-| updateModel
@@ -96,6 +98,10 @@ updateModelRec env lmsg model =
 
                 _ ->
                     ( model, [], env )
+        LayerMsgErodeCell loc ->
+            ( erodeAvailGrids model loc, [], env )
+        LayerMsgClearCell loc ->
+            ( retrieveAvailGrids model loc, [], env )
 
         _ ->
             ( model, [], env )
