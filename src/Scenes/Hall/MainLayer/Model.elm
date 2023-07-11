@@ -89,9 +89,9 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) "HALL"
+            [ renderStr env (coorChange env ( 200, 200 ) nullCoorData) "HALL"
             , renderButtonPureColor env model.btn_1 Color.gray
-            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+            , renderStr env (coorChange env ( 200, 800 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group
