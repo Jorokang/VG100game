@@ -56,20 +56,16 @@ updateModel env model =
                     { model | click_pos = ( a, b ) }
 
                 s =
-                    Tuple.first (checkall n_model ( a, b ))
+                    checkall n_model ( a, b )
 
-                btn =
-                    Tuple.second (checkall n_model ( a, b ))
-                --change the btn status
-                levelbtn =
-                    { btn | status = ButtonPressed }
+                --change the btn status      
             in
             case s of
                 "Level1" ->
                     ( { n_model
                         | status = Inactive
                         , levels =
-                            { level1 = levelbtn
+                            { level1 = { l1 | status = ButtonPressed}
                             , level2 = l2
                             , level3 = l3
                             }
@@ -83,7 +79,7 @@ updateModel env model =
                         | status = Inactive
                         , levels =
                             { level1 = l1
-                            , level2 = levelbtn
+                            , level2 = { l2 | status = ButtonPressed}
                             , level3 = l3
                             }
                       }
@@ -97,7 +93,7 @@ updateModel env model =
                         , levels =
                             { level1 = l1
                             , level2 = l2
-                            , level3 = levelbtn
+                            , level3 = { l3 | status = ButtonPressed}
                             }
                       }
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]

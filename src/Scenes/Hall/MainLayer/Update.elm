@@ -27,19 +27,19 @@ clickcheck ( a, b ) btn =
 
 
 --can improve: change String to type
---
+--check every btn and return the string of the btn clicked
 
 
-checkall : Model -> ( Float, Float ) -> ( String, Button )
+checkall : Model -> ( Float, Float ) -> String
 checkall model ( a, b ) =
     if clickcheck ( a, b ) model.levels.level1 then
-        ( model.levels.level1.text, model.levels.level1 )
+        model.levels.level1.text
 
     else if clickcheck ( a, b ) model.levels.level2 then
-        ( model.levels.level2.text, model.levels.level2 )
+        model.levels.level2.text
 
     else if clickcheck ( a, b ) model.levels.level3 then
-        ( model.levels.level3.text, model.levels.level3 )
+        model.levels.level3.text
 
     else
-        ( "", model.levels.level1 )
+        ""

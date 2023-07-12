@@ -58,7 +58,7 @@ l1 =
     { status = ButtonActive
     , pos = ( 900, 200 )
     , size = ( 100, 100 )
-    , text = "Level"
+    , text = "Level1"
     }
 
 
@@ -67,7 +67,7 @@ l2 =
     { status = ButtonActive
     , pos = ( 1100, 200 )
     , size = ( 100, 100 )
-    , text = "Level"
+    , text = "Level2"
     }
 
 
@@ -76,7 +76,7 @@ l3 =
     { status = ButtonActive
     , pos = ( 1300, 200 )
     , size = ( 100, 100 )
-    , text = "Level"
+    , text = "Level3"
     }
 
 
