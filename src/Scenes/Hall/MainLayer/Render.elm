@@ -5,6 +5,7 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
+import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
@@ -12,27 +13,39 @@ import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 import Tuple
 
 
+
+--render text
+
+
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+
+
+
+--render every button
 
 
 renderButtons : EnvC -> Model -> Renderable
 renderButtons env model =
     let
         rend =
-            [(renderButton env) model.levels.level1
-            ,(renderButton env) model.levels.level2
-            ,(renderButton env) model.levels.level3
+            [ renderButton env model.levels.level1
+            , renderButton env model.levels.level2
+            , renderButton env model.levels.level3
             ]
     in
     Canvas.group
         []
         rend
 
+
+
 --render one button
-renderButton : EnvC -> Button ->  Renderable
-renderButton env btn  =
+
+
+renderButton : EnvC -> Button -> Renderable
+renderButton env btn =
     let
         ( sx, sy ) =
             btn.size
@@ -55,8 +68,9 @@ renderButton env btn  =
         _ ->
             Canvas.group
                 []
-                [--to do: rendersprite
-                text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
+                --render img and text
+                [ renderSprite env.globalData [] btn.pos ( 500, 500 ) "level"
+                , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
                 ]
 
 

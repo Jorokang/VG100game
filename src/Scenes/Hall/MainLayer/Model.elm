@@ -14,14 +14,13 @@ module Scenes.Hall.MainLayer.Model exposing
 
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
-import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, HallStatus(..), nullModel)
+import Scenes.Hall.MainLayer.Common exposing (ButtonStatus(..), EnvC, HallStatus(..), Model, l1, l2, l3, nullModel)
 import Scenes.Hall.MainLayer.Render exposing (renderButtons, renderStr, renderTime)
-import Scenes.Hall.MainLayer.Update exposing (clickcheck, checkall)
+import Scenes.Hall.MainLayer.Update exposing (checkall)
 import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
+import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 import Time exposing (posixToMillis)
 
 
@@ -55,20 +54,56 @@ updateModel env model =
             let
                 n_model =
                     { model | click_pos = ( a, b ) }
+
+                s =
+                    Tuple.first (checkall n_model ( a, b ))
+
+                btn =
+                    Tuple.second (checkall n_model ( a, b ))
+                --change the btn status
+                levelbtn =
+                    { btn | status = ButtonPressed }
             in
-            case checkall n_model ( a, b ) of
-                "Level1" -> ({ n_model | status = Inactive}
+            case s of
+                "Level1" ->
+                    ( { n_model
+                        | status = Inactive
+                        , levels =
+                            { level1 = levelbtn
+                            , level2 = l2
+                            , level3 = l3
+                            }
+                      }
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
-                "Level2" -> ({ n_model | status = Inactive}
+
+                "Level2" ->
+                    ( { n_model
+                        | status = Inactive
+                        , levels =
+                            { level1 = l1
+                            , level2 = levelbtn
+                            , level3 = l3
+                            }
+                      }
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
-                "Level3" -> ({ n_model | status = Inactive}
+
+                "Level3" ->
+                    ( { n_model
+                        | status = Inactive
+                        , levels =
+                            { level1 = l1
+                            , level2 = l2
+                            , level3 = levelbtn
+                            }
+                      }
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
+
                 _ ->
                     ( n_model, [], env )
 
@@ -101,7 +136,7 @@ viewModel env model =
         rend =
             [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) "HALL"
             , renderButtons env model
-            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+            , renderStr env (coorChange env ( 200, 700 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group
