@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderMovingHint, renderStr)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
 import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, loc2Pos, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateClickEvent)
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
 import Scenes.Level.SceneInit exposing (LevelInit)
@@ -129,8 +129,10 @@ viewModel env model =
         rend =
             [ renderAvatar env model
             , renderMovingHint env model deltaLocsDis1
+            , renderShadow env model
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             , renderAvailLocs env model
+            , renderSingleTuple2 env model.pos
             ]
     in
     case model.status of

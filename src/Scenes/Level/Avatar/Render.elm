@@ -2,9 +2,10 @@ module Scenes.Level.Avatar.Render exposing (..)
 
 import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
+import Html exposing (b)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
@@ -66,6 +67,76 @@ renderMovingHint env model delta_locs =
             Canvas.empty
 
 
+choose1 : Float -> Float -> Float
+choose1 a b =
+    if a < b then
+        a
+
+    else
+        b
+
+
+maxShadowX : Float
+maxShadowX =
+    cellLength * 6
+
+
+maxShadowY : Float
+maxShadowY =
+    cellLength * 7
+
+
+{-| render the shadow
+-}
+renderShadow : EnvC -> Model -> Renderable
+renderShadow env model =
+    let
+        ( px, py ) =
+            model.pos
+
+        r1 =
+            cellLength * 2.6
+
+        r2 =
+            cellLength * 1.2
+
+        l1 =
+            2000
+
+        l2 =
+            1000
+
+        r_maxX =
+            lengthChange env maxShadowX nullCoorData
+
+        r_maxY =
+            lengthChange env maxShadowY nullCoorData
+
+        rend1 =
+            Canvas.group
+                []
+                [ shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env (px - r1) nullCoorData) r_maxY ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) r_maxX (lengthChange env (py - r1) nullCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r1, 0 ) nullCoorData) (lengthChange env (max (maxShadowX - px - r1) 0) nullCoorData) r_maxY ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, py + r1 ) nullCoorData) r_maxX (lengthChange env (max (maxShadowY - py - r1) 0) nullCoorData) ]
+                ]
+
+        rend2 =
+            Canvas.group
+                [ filter "opacity(30%)" ]
+                [ shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r1) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px - r2) (r1 - r2)) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (choose1 (py - r2) (r1 - r2)) nullCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) ]
+                ]
+    in
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        ]
+
+
 {-| For testing
 -}
 renderStr : EnvC -> String -> Point -> Renderable
@@ -94,5 +165,17 @@ renderSingleTuple env ( x, y ) d =
 
         pos =
             ( 800, toFloat (d * 40) )
+    in
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+
+
+renderSingleTuple2 : EnvC -> ( Float, Float ) -> Renderable
+renderSingleTuple2 env ( x, y ) =
+    let
+        str =
+            "(" ++ String.fromFloat x ++ ", " ++ String.fromFloat y ++ ")"
+
+        pos =
+            ( 1000, 20 )
     in
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
