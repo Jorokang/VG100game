@@ -18,7 +18,7 @@ import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids)
-import Scenes.Level.Grids.Update exposing (modifyPlotEffect)
+import Scenes.Level.Grids.Update exposing (clickPos2Loc, modifyPlotEffect)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -41,33 +41,21 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
-                {- KeyDown x ->
-                   --modify the effect of (0,0) for testing
-                   case x of
-                       40 ->
-                           --arrow down -> empty
-                           ( modifyPlotEffect model ( 0, 0 ) Empty
-                           , []
-                           , env
-                           )
+                MouseDown x ( a, b ) ->
+                    let
+                        judge =
+                            clickPos2Loc env model ( a, b )
+                    in
+                    case judge of
+                        Just loc ->
+                            ( model
+                            , [ ( LayerName "Avatar", LayerMsgClickLoc loc ) ]
+                            , env
+                            )
 
-                       37 ->
-                           --arrow left -> angry
-                           ( modifyPlotEffect model ( 0, 0 ) Angry
-                           , []
-                           , env
-                           )
+                        Nothing ->
+                            ( model, [], env )
 
-                       39 ->
-                           --arrow right -> lazy
-                           ( modifyPlotEffect model ( 0, 0 ) Lazy
-                           , []
-                           , env
-                           )
-
-                       _ ->
-                           ( model, [], env )
-                -}
                 _ ->
                     ( model, [], env )
 
