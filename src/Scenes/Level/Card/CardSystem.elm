@@ -1,8 +1,8 @@
 module Scenes.Level.Card.CardSystem exposing (..)
 
-import Canvas exposing (Point)
 import Random exposing (Generator, Seed)
-import Scenes.Level.Card.Common exposing (Card, Model, giveErrorCard_2)
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard_2)
+import Scenes.Level.Card.Common exposing (Model)
 
 
 shufflePile : List Card -> Seed -> ( List Card, Seed )
@@ -90,29 +90,6 @@ takeCard pile pos =
 
         element =
             Maybe.withDefault giveErrorCard_2 <|
-                List.head <|
-                    List.reverse temp
-
-        npile =
-            head ++ tail
-    in
-    ( element, npile )
-
-
-takePoint : List Point -> Int -> ( Point, List Point )
-takePoint pile pos =
-    let
-        tail =
-            List.drop pos pile
-
-        temp =
-            List.take pos pile
-
-        head =
-            List.take (pos - 1) pile
-
-        element =
-            Maybe.withDefault ( -1, -1 ) <|
                 List.head <|
                     List.reverse temp
 

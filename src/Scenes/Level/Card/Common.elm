@@ -1,6 +1,6 @@
 module Scenes.Level.Card.Common exposing
     ( Model, nullModel, EnvC
-    , Card, CardStatus(..), giveErrorCard, giveErrorCard_2
+    , CardStatus(..)
     )
 
 {-| Common module
@@ -12,6 +12,7 @@ module Scenes.Level.Card.Common exposing
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Random exposing (Seed, initialSeed)
+import Scenes.Level.Card.CardCreate exposing (Card, giveCard, giveErrorCard)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -22,17 +23,6 @@ type CardStatus
     = Active
     | Stopped
     | Inactive
-
-
-
---card name and the cost
-
-
-type alias Card =
-    { name : String
-    , id : Int
-    , cost : Int
-    }
 
 
 
@@ -52,34 +42,14 @@ type alias Model =
 
 nullModel : Model
 nullModel =
-    { hand = [ giveCard1, giveCard2, giveErrorCard, giveCard1 ]
+    { hand = [ giveCard 1, giveCard 2, giveErrorCard, giveCard 1 ]
     , discard = []
-    , deck = [ giveCard1, giveCard2, giveCard2, giveCard1, giveCard1, giveCard2, giveCard1, giveCard2 ]
+    , deck = [ giveCard 1, giveCard 2, giveCard 2, giveCard 1, giveCard 1, giveCard 2, giveCard 1, giveCard 2 ]
     , seed = initialSeed 42
     , status = Active
     , point = ( 0, 0 )
     , click_status = False
     }
-
-
-giveCard1 : Card
-giveCard1 =
-    { name = "card1", id = 1, cost = 0 }
-
-
-giveCard2 : Card
-giveCard2 =
-    { name = "card2", id = 2, cost = 0 }
-
-
-giveErrorCard : Card
-giveErrorCard =
-    { name = "error", id = -1, cost = -1 }
-
-
-giveErrorCard_2 : Card
-giveErrorCard_2 =
-    { name = "error_take", id = -2, cost = -1 }
 
 
 {-| Convenient type alias for the environment

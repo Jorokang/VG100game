@@ -3,14 +3,15 @@ module Scenes.Level.Card.CardUnique exposing (..)
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Level.Card.CardCreate exposing (Card)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
-import Scenes.Level.Card.Common exposing (Card, EnvC, Model)
+import Scenes.Level.Card.Common exposing (EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
 
-cardArea : EnvC -> Model -> List Point
-cardArea env model =
+cardArea : Model -> List Point
+cardArea model =
     List.map pointHelper <|
         List.range 1 (List.length model.hand)
 
@@ -41,11 +42,11 @@ clicked model lp =
             ( bool, nindex + 1 )
 
 
-clickDetect : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-clickDetect env model =
+clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+clickDetect model =
     let
         ( bool, index ) =
-            clicked model (cardArea env model)
+            clicked model (cardArea model)
 
         nmodel =
             { model | click_status = False }

@@ -13,11 +13,11 @@ module Scenes.Level.Card.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardUnique exposing (clickDetect)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
-import Scenes.Level.Card.Render exposing (renderCard, renderHandCards, renderTestMessage)
+import Scenes.Level.Card.Render exposing (renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -41,13 +41,13 @@ updateModel env model =
             let
                 ( checked_model, msg ) =
                     if model.click_status then
-                        clickDetect env model
+                        clickDetect model
 
                     else
                         ( model, [] )
             in
             case env.msg of
-                MouseDown x ( a, b ) ->
+                MouseDown _ ( a, b ) ->
                     ( { checked_model | point = ( a, b ), click_status = True }, msg, env )
 
                 _ ->

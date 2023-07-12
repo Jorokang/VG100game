@@ -5,9 +5,10 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Scenes.Hall.MainLayer.Render exposing (renderStr)
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
-import Scenes.Level.Card.Common exposing (Card, EnvC, Model, giveErrorCard)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData, scalePoint)
+import Scenes.Level.Card.Common exposing (EnvC, Model)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData, scalePoint)
 import Tuple exposing (first)
 
 
