@@ -1,15 +1,13 @@
 module Scenes.Level.Avatar.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
+import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Html exposing (b)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
-import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
 
 
 {-| render the Avatar
@@ -130,7 +128,8 @@ renderShadow env model =
                 , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
                 , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) ]
                 ]
-                --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
+
+        --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
     in
     Canvas.group
         []
