@@ -25,7 +25,7 @@ renderFrameStatus env model =
                 FrameInactive ->
                     "Inactive"
     in
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 570, 570 ) nullCoorData) str
+    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 300, 570 ) nullCoorData) str
 
 
 renderStamina : EnvC -> Model -> Renderable

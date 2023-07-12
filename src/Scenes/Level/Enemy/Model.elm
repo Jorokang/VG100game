@@ -103,12 +103,6 @@ updateRandNum model =
     }
 
 
-{-| updateModelRec
-Default update function
-
-Add your logic to handle LayerMsg here
-
--}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
@@ -122,7 +116,7 @@ updateModelRec env lmsg model =
         LayerMsgEnemyTurn ->
             --erode the target
             ( erodeTarget model
-            , []
+            , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
 

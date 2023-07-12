@@ -1,13 +1,18 @@
 module Scenes.Level.Card.Render exposing (..)
 
-import Canvas exposing (Renderable, rect, shapes, text)
+import Canvas exposing (Point, Renderable, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Color
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
-import Scenes.Level.Card.Common exposing (Card, EnvC, Model)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData, scalePoint)
+import Scenes.Level.Card.Common exposing (EnvC, Model)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData, scalePoint)
 import Tuple exposing (first)
+
+
+renderStr : EnvC -> Point -> String -> Renderable
+renderStr env pos str =
+    text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
 renderHandCards : EnvC -> Model -> Renderable
@@ -23,6 +28,19 @@ renderHandCards env model =
         []
         [ renderHelper env model index length
         , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 780 ) nullCoorData) "Hand Cards"
+        ]
+
+
+renderTestMessage : EnvC -> Model -> Renderable
+renderTestMessage env model =
+    Canvas.group
+        []
+        [ renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.point) ++ ", " ++ String.fromFloat (Tuple.second model.point))
+        , renderStr env (coorChange env ( 200, 750 ) nullCoorData) ("hands:" ++ String.fromInt (List.length model.hand) ++ pileToString model.hand)
+        , renderStr env (coorChange env ( 200, 775 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
+        , renderStr env (coorChange env ( 200, 800 ) nullCoorData) ("piles:" ++ String.fromInt (List.length model.discard) ++ pileToString model.discard)
+        , renderStr env (coorChange env ( 200, 825 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
+        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         ]
 
 
@@ -43,19 +61,24 @@ renderHelper env model index length =
             [ element ]
 
 
+pileToString : List Card -> String
+pileToString pile =
+    if List.length pile == 0 then
+        " "
+
+    else
+        let
+            card =
+                Maybe.withDefault giveErrorCard (List.head pile)
+        in
+        ", " ++ card.name ++ String.fromInt card.cost ++ pileToString (List.drop 1 pile)
+
+
 renderCard : EnvC -> Card -> Int -> Renderable
 renderCard env card num =
     let
         color =
-            case card.id of
-                1 ->
-                    Color.black
-
-                2 ->
-                    Color.yellow
-
-                _ ->
-                    Color.red
+            card.img
 
         interval =
             100

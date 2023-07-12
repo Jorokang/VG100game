@@ -13,11 +13,8 @@ import Scenes.Menu.LayerBase exposing (CommonData)
 {-| Model
 Add your own data here.
 -}
-
-
-
 type alias Model =
-    { }
+    {}
 
 
 {-| nullModel
