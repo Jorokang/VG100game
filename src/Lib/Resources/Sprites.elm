@@ -33,4 +33,4 @@ Examples:
 -}
 allTexture : List ( String, String )
 allTexture =
-    [( "light_shade", getResourcePath "img/light_shade.png" )]
+    []
