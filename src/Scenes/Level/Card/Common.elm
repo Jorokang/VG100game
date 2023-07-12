@@ -21,7 +21,8 @@ Add your own data here.
 -}
 type CardStatus
     = Active
-    | Stopped
+    | Moving
+    | Playing
     | Inactive
 
 
@@ -36,18 +37,22 @@ type alias Model =
     , seed : Seed
     , status : CardStatus
     , point : Point
+    , turn_status : Int
+    , spirit : Int
     , click_status : Bool
     }
 
 
 nullModel : Model
 nullModel =
-    { hand = [ giveCard 1, giveCard 2, giveErrorCard, giveCard 1 ]
+    { hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 6, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
     , discard = []
-    , deck = [ giveCard 1, giveCard 2, giveCard 2, giveCard 1, giveCard 1, giveCard 2, giveCard 1, giveCard 2 ]
+    , deck = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 6, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
     , seed = initialSeed 42
     , status = Active
     , point = ( 0, 0 )
+    , turn_status = 5
+    , spirit = 30
     , click_status = False
     }
 

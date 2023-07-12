@@ -64,8 +64,20 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env msg model =
+    case msg of
+        LayerMsgPlayerTurn ->
+            ( { model | status = Active, turn_status = model.turn_status + 1 }, [], env )
+
+        LayerMsgEnemyTurn ->
+            if model.turn_status > 0 then
+                ( { model | status = Inactive, turn_status = 0 }, [], env )
+
+            else
+                ( { model | status = Inactive }, [], env )
+
+        _ ->
+            ( model, [], env )
 
 
 {-| viewModel

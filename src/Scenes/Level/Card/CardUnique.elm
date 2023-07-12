@@ -42,6 +42,20 @@ clicked model lp =
             ( bool, nindex + 1 )
 
 
+costSpirit : Model -> Card -> ( Bool, Model )
+costSpirit model card =
+    if model.spirit < card.cost then
+        ( False, model )
+
+    else
+        ( True, { model | spirit = model.spirit - card.cost } )
+
+
+costTurn : Model -> Model
+costTurn model =
+    model
+
+
 clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 clickDetect model =
     let
@@ -59,15 +73,22 @@ clickDetect model =
 
 
 playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
-playCard model pos =
+playCard model index =
     let
         card =
-            first (takeCard model.hand pos)
+            first (takeCard model.hand index)
 
-        nmodel =
-            dropCard model pos
+        ( enough, nmodel ) =
+            costSpirit model card
+
+        nnmodel =
+            dropCard nmodel index
     in
-    cardToEffect nmodel card
+    if enough && model.turn_status > 0 then
+        cardToEffect { nnmodel | turn_status = model.turn_status - 1 } card
+
+    else
+        ( model, [] )
 
 
 cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -118,54 +139,63 @@ cardToEffect model card =
 
 card_1 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_1 model =
-    ( model, [ ( LayerName "Enemy", LayerMsgClearCell ( 3, 3 ) ) ] )
+    --( model, [ ( LayerName "Enemy", LayerMsgClearDirection 2 ) ] )
+    ( model, [] )
 
 
 card_2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_2 model =
-    ( drawCard model 2, [] )
+    --( model, [ ( LayerName "Enemy", LayerMsgProtectCell ) ] )
+    ( model, [] )
 
 
 card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_3 model =
-    ( model, [] )
+    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [] )
 
 
 card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_4 model =
+    --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
     ( model, [] )
 
 
 card_5 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_5 model =
-    ( model, [] )
+    ( drawCard model 2, [] )
 
 
 card_6 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_6 model =
+    --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
     ( model, [] )
 
 
 card_7 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_7 model =
-    ( model, [] )
+    ( drawCard model 3, [] )
 
 
 card_8 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_8 model =
+    --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
     ( model, [] )
 
 
 card_9 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_9 model =
+    --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
     ( model, [] )
 
 
 card_10 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_10 model =
-    ( model, [] )
+    --( { model | spirit = model.spirit + 5 }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
+    ( { model | spirit = model.spirit + 5 }, [] )
 
 
 card_11 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_11 model =
+    -- "-1" means Clear All
+    --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
     ( model, [] )
