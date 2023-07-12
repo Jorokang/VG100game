@@ -5,49 +5,19 @@ import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
 import Scenes.Level.Card.Common exposing (Card, EnvC, Model)
-import Scenes.Level.Card.Render exposing (cardArea)
+import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
 
-playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
-playCard model pos =
-    let
-        card =
-            first (takeCard model.hand pos)
-
-        nmodel =
-            dropCard model pos
-    in
-    cardToEffect nmodel card
+cardArea : EnvC -> Model -> List Point
+cardArea env model =
+    List.map pointHelper <|
+        List.range 1 (List.length model.hand)
 
 
-cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
-cardToEffect model card =
-    case card.id of
-        1 ->
-            card1 model
-
-        2 ->
-            card2 model
-
-        _ ->
-            ( model, [] )
-
-
-
-{-
-   W.I.P.
--}
-
-
-card1 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card1 model =
-    ( model, [ ( LayerName "Avatar", LayerMsgClearCell ( 3, 3 ) ) ] )
-
-
-card2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card2 model =
-    ( drawCard model 2, [] )
+pointHelper : Int -> Point
+pointHelper num =
+    addPoint ( 0, 600 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
 
 
 clicked : Model -> List Point -> ( Bool, Int )
@@ -85,3 +55,116 @@ clickDetect env model =
 
     else
         ( nmodel, [] )
+
+
+playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
+playCard model pos =
+    let
+        card =
+            first (takeCard model.hand pos)
+
+        nmodel =
+            dropCard model pos
+    in
+    cardToEffect nmodel card
+
+
+cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
+cardToEffect model card =
+    case card.id of
+        1 ->
+            card_1 model
+
+        2 ->
+            card_2 model
+
+        3 ->
+            card_3 model
+
+        4 ->
+            card_4 model
+
+        5 ->
+            card_5 model
+
+        6 ->
+            card_6 model
+
+        7 ->
+            card_7 model
+
+        8 ->
+            card_8 model
+
+        9 ->
+            card_9 model
+
+        10 ->
+            card_10 model
+
+        11 ->
+            card_11 model
+
+        _ ->
+            ( model, [] )
+
+
+
+{-
+   W.I.P.
+-}
+
+
+card_1 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_1 model =
+    ( model, [ ( LayerName "Enemy", LayerMsgClearCell ( 3, 3 ) ) ] )
+
+
+card_2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_2 model =
+    ( drawCard model 2, [] )
+
+
+card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_3 model =
+    ( model, [] )
+
+
+card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_4 model =
+    ( model, [] )
+
+
+card_5 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_5 model =
+    ( model, [] )
+
+
+card_6 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_6 model =
+    ( model, [] )
+
+
+card_7 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_7 model =
+    ( model, [] )
+
+
+card_8 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_8 model =
+    ( model, [] )
+
+
+card_9 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_9 model =
+    ( model, [] )
+
+
+card_10 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_10 model =
+    ( model, [] )
+
+
+card_11 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+card_11 model =
+    ( model, [] )

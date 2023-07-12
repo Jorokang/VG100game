@@ -55,17 +55,6 @@ renderHelper env model index length =
             [ element ]
 
 
-cardArea : EnvC -> Model -> List Point
-cardArea env model =
-    List.map pointHelper <|
-        List.range 1 (List.length model.hand)
-
-
-pointHelper : Int -> Point
-pointHelper num =
-    addPoint ( 0, 600 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
-
-
 pileToString : List Card -> String
 pileToString pile =
     if List.length pile == 0 then

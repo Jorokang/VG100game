@@ -71,7 +71,7 @@ dropCard : Model -> Int -> Model
 dropCard model pos =
     let
         ( dcard, nhand ) =
-            takeCard model.deck pos
+            takeCard model.hand pos
     in
     { model | discard = dcard :: model.discard, hand = nhand }
 
