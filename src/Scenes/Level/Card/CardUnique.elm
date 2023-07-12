@@ -18,7 +18,7 @@ cardArea model =
 
 pointHelper : Int -> Point
 pointHelper num =
-    addPoint ( 0, 600 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
+    addPoint ( 0, 725 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
 
 
 clicked : Model -> List Point -> ( Bool, Int )
@@ -66,10 +66,14 @@ clickDetect model =
             { model | click_status = False }
     in
     if bool then
-        playCard nmodel index
+        if nmodel.selected_card == index then
+            playCard { nmodel | selected_card = -1 } index
+
+        else
+            ( { nmodel | selected_card = index }, [] )
 
     else
-        ( nmodel, [] )
+        ( { nmodel | selected_card = -1 }, [] )
 
 
 playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )

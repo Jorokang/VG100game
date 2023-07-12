@@ -15,22 +15,6 @@ renderStr env pos str =
     text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
-renderHandCards : EnvC -> Model -> Renderable
-renderHandCards env model =
-    let
-        length =
-            List.length model.hand
-
-        index =
-            1
-    in
-    Canvas.group
-        []
-        [ renderHelper env model index length
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 780 ) nullCoorData) "Hand Cards"
-        ]
-
-
 renderTestMessage : EnvC -> Model -> Renderable
 renderTestMessage env model =
     Canvas.group
@@ -47,8 +31,11 @@ renderTestMessage env model =
 renderHelper : EnvC -> Model -> Int -> Int -> Renderable
 renderHelper env model index length =
     let
+        selected =
+            model.selected_card == index
+
         element =
-            renderCard env (first (takeCard model.hand index)) index
+            renderCard env (first (takeCard model.hand index)) index selected
     in
     if index < length then
         Canvas.group
@@ -59,6 +46,22 @@ renderHelper env model index length =
         Canvas.group
             []
             [ element ]
+
+
+renderHandCards : EnvC -> Model -> Renderable
+renderHandCards env model =
+    let
+        length =
+            List.length model.hand
+
+        index =
+            1
+    in
+    Canvas.group
+        []
+        [ renderHelper env model index length
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 780 ) nullCoorData) "Hand Cards"
+        ]
 
 
 pileToString : List Card -> String
@@ -74,15 +77,24 @@ pileToString pile =
         ", " ++ card.name ++ String.fromInt card.cost ++ pileToString (List.drop 1 pile)
 
 
-renderCard : EnvC -> Card -> Int -> Renderable
-renderCard env card num =
+renderCard : EnvC -> Card -> Int -> Bool -> Renderable
+renderCard env card num selected =
     let
         color =
             card.img
 
         interval =
             100
+
+        offset =
+            15
     in
-    shapes
-        [ fill color ]
-        [ rect (coorChange env (addPoint ( 0, 600 ) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env 80 nullCoorData) (lengthChange env 120 nullCoorData) ]
+    if selected then
+        shapes
+            [ fill color ]
+            [ rect (coorChange env (addPoint ( 0 - offset, 725 - offset ) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env (80 + 2 * offset) nullCoorData) (lengthChange env (120 + 2 * offset) nullCoorData) ]
+
+    else
+        shapes
+            [ fill color ]
+            [ rect (coorChange env (addPoint ( 0, 725 ) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env 80 nullCoorData) (lengthChange env 120 nullCoorData) ]

@@ -50,6 +50,9 @@ updateModel env model =
                 MouseDown _ ( a, b ) ->
                     ( { checked_model | point = ( a, b ), click_status = True }, msg, env )
 
+                MouseMove ( a, b ) ->
+                    ( { checked_model | point = ( a, b ) }, msg, env )
+
                 _ ->
                     ( checked_model, msg, env )
 
