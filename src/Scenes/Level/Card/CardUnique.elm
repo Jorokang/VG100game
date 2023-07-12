@@ -5,7 +5,7 @@ import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardCreate exposing (Card)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
-import Scenes.Level.Card.Common exposing (EnvC, Model)
+import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
@@ -49,11 +49,6 @@ costSpirit model card =
 
     else
         ( True, { model | spirit = model.spirit - card.cost } )
-
-
-costTurn : Model -> Model
-costTurn model =
-    model
 
 
 clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -155,7 +150,7 @@ card_2 model =
 
 card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_3 model =
-    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [] )
+    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8, status = Playing }, [] )
 
 
 card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -166,7 +161,7 @@ card_4 model =
 
 card_5 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_5 model =
-    ( drawCard model 2, [] )
+    ( drawCard { model | status = Playing } 2, [] )
 
 
 card_6 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -177,7 +172,7 @@ card_6 model =
 
 card_7 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_7 model =
-    ( drawCard model 3, [] )
+    ( drawCard { model | status = Playing } 3, [] )
 
 
 card_8 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -194,8 +189,8 @@ card_9 model =
 
 card_10 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_10 model =
-    --( { model | spirit = model.spirit + 5 }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
-    ( { model | spirit = model.spirit + 5 }, [] )
+    --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
+    ( { model | spirit = model.spirit + 5, status = Playing }, [] )
 
 
 card_11 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
