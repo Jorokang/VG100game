@@ -21,7 +21,10 @@ renderButtons : EnvC -> Model -> Renderable
 renderButtons env model =
     let
         rend =
-            List.map (renderButton env) model.levels
+            [(renderButton env) model.levels.level1
+            ,(renderButton env) model.levels.level2
+            ,(renderButton env) model.levels.level3
+            ]
     in
     Canvas.group
         []

@@ -13,6 +13,7 @@ import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
 import Html exposing (i)
+import Html exposing (button)
 
 
 type HallStatus
@@ -34,13 +35,18 @@ type alias Button =
     , text : String
     }
 
+type alias Levelbtn =
+    { level1 : Button
+    , level2 : Button
+    , level3 : Button
+    }
 
 {-| Model
 Add your own data here.
 -}
 type alias Model =
     { status : HallStatus
-    , levels : List Button
+    , levels : Levelbtn
     , time : Int
     , click_pos : Point
     }
@@ -55,8 +61,12 @@ initButton =
     }
 
 --initialize the level buttons position
-levelbuttons : List Button
-levelbuttons = [initButton, {initButton | pos = (1100,200)}, {initButton | pos = (1300,200)}]
+levelbuttons : Levelbtn
+levelbuttons = 
+    { level1 = initButton
+    , level2 = {initButton | pos = (1100,200)}
+    , level3 = {initButton | pos = (1300,200)}
+    }
 
 nullModel : Model
 nullModel =

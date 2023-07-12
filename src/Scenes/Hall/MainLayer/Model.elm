@@ -16,11 +16,12 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
-import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
+import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, HallStatus(..), nullModel)
+import Scenes.Hall.MainLayer.Render exposing (renderButtons, renderStr, renderTime)
+import Scenes.Hall.MainLayer.Update exposing (clickcheck, checkall)
 import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, point2Int)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
 
 
@@ -55,10 +56,19 @@ updateModel env model =
                 n_model =
                     { model | click_pos = ( a, b ) }
             in
-            case mouseClickedState env n_model ( a, b ) of
-                1 ->
-                    btn_1_clicked env n_model
-
+            case checkall n_model ( a, b ) of
+                "Level1" -> ({ n_model | status = Inactive}
+                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
+                    , env
+                    )
+                "Level2" -> ({ n_model | status = Inactive}
+                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
+                    , env
+                    )
+                "Level3" -> ({ n_model | status = Inactive}
+                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
+                    , env
+                    )
                 _ ->
                     ( n_model, [], env )
 
@@ -89,9 +99,9 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderStr env ( 200, 50 ) "HALL"
-            , renderButtonPureColor env model.btn_1 Color.gray
-            , renderStr env ( 200, 500 ) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) "HALL"
+            , renderButtons env model
+            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group

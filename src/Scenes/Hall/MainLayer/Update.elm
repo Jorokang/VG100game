@@ -3,38 +3,29 @@ module Scenes.Hall.MainLayer.Update exposing (..)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, HallStatus(..), Model)
-import Scenes.Level.Frame.Functions exposing (point2Int)
+import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
+import Html exposing (button)
 
 
-mouseClickedState : EnvC -> Model -> ( Float, Float ) -> Int
-mouseClickedState env model ( a, b ) =
-    if judgeMouseRect (posToReal env.globalData ( a, b )) model.btn_1.pos model.btn_1.size then
-        1
 
+--check one button, if clicked, will give out the level's string
+
+clickcheck : ( Float, Float ) -> Button -> Bool
+clickcheck ( a, b ) btn =
+    if judgeMouseRect ( a, b ) btn.pos btn.size then
+        case btn.status of
+            ButtonActive -> True
+            _ -> False
     else
-        0
+        False
 
-
-btn_1_clicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-btn_1_clicked env model =
-    let
-        btn =
-            model.btn_1
-    in
-    case btn.status of
-        ButtonInactive ->
-            ( model, [], env )
-
-        _ ->
-            ( { model
-                | status = Inactive
-                , btn_1 =
-                    { status = ButtonPressed
-                    , pos = btn.pos
-                    , size = btn.size
-                    , text = btn.text
-                    }
-              }
-            , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
-            , env
-            )
+checkall : Model -> ( Float, Float) -> String
+checkall model (a, b) =
+    if clickcheck (a, b) model.levels.level1 then
+        model.levels.level1.text
+    else if clickcheck (a, b) model.levels.level2 then
+        model.levels.level2.text
+    else if clickcheck (a, b) model.levels.level3 then
+        model.levels.level3.text
+    else
+        ""
