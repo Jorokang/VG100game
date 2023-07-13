@@ -20,6 +20,7 @@ import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEff
 import Scenes.Level.Grids.Render exposing (renderGrids)
 import Scenes.Level.Grids.Update exposing (clickPos2Loc, modifyPlotEffect)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Grids.Update exposing (updatePlayerTurn)
 
 
 {-| initModel
@@ -73,8 +74,12 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerMsgPlayerTurn ->
+            updatePlayerTurn env model
+        _ ->
+            ( model, [], env )
 
 
 viewModel : EnvC -> Model -> Renderable

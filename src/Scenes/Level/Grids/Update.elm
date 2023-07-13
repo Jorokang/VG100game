@@ -4,7 +4,17 @@ import Canvas exposing (Point)
 import List
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, lengthChange, negPoint, nullCoorData, point2Int)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, GridLoc, Model, Plot, PlotEffect(..))
+import Scenes.Level.Grids.Common exposing (Plot, Cell, Grid)
 
+{-| Update player turn beginning
+-}
+updatePlayerTurn : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updatePlayerTurn env model =
+    ( model
+        |> reduceGridProtection
+    , []
+    , env
+    )
 
 {-| Judge the mouse click and give the grid location of the click.
 -}
@@ -70,3 +80,23 @@ mapComplementGrids new_loc x =
 
     else
         True
+
+{-| reduce all protection by 1 at the beginning of player's turn
+-}
+reduceGridProtection : Model -> Model
+reduceGridProtection model =
+    { model | grids = List.map reduceCellProtection model.grids }
+
+{-| reduce the protection of a single plot
+-}
+reduceCellProtection : Cell Plot -> Cell Plot
+reduceCellProtection x =
+    let
+        val = x.val
+        p = val.protection
+        new_val =   if ( p > 0 ) then
+                        { val | protection = p-1 }
+                    else
+                        val
+    in
+    { x | val = new_val }

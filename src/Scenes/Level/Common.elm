@@ -56,8 +56,8 @@ initModel env init =
     { commonData = initCommonData env layerInitData
     , layers =
         [ GridsG.getLayerT <| Grids.initLayer (addCommonData nullCommonData env) layerInitData
-        , AvatarG.getLayerT <| Avatar.initLayer (addCommonData nullCommonData env) layerInitData
         , EnemyG.getLayerT <| Enemy.initLayer (addCommonData nullCommonData env) layerInitData
+        , AvatarG.getLayerT <| Avatar.initLayer (addCommonData nullCommonData env) layerInitData
         , FrameG.getLayerT <| Frame.initLayer (addCommonData nullCommonData env) layerInitData
         , CardG.getLayerT <| Card.initLayer (addCommonData nullCommonData env) layerInitData
         ]
