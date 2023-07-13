@@ -79,6 +79,7 @@ type alias Model =
     , time : Int
     , target : GridLoc
     , eye : EnemyEye
+    , recursion_times : Int
     }
 
 
@@ -124,6 +125,7 @@ nullModel =
     , time = 0
     , target = ( -1, -1 )
     , eye = nullEnemyEye
+    , recursion_times = 0
     }
 
 
@@ -149,6 +151,7 @@ initEnemy1 =
     , time = 0
     , target = ( -1, -1 )
     , eye = nullEnemyEye
+    , recursion_times = 0
     }
 
 

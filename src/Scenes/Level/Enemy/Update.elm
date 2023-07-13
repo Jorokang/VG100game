@@ -10,6 +10,17 @@ import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemySta
 import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
+{-| basic settings when enemy's round begin
+-}
+updateEnemyRound : Model -> Model
+updateEnemyRound model =
+    { model | recursion_times = 0 }
+
+{-| should be used when recursing
+-}
+increaseRecursionNum : Model -> Model
+increaseRecursionNum model =
+    { model | recursion_times = model.recursion_times+1 }
 
 {-| update the enemy at setting target status
 
@@ -38,16 +49,25 @@ updateEnemySettingTarget env model prior =
 -}
 handlePermissionMsg : EnvC -> Model -> GridLoc -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 handlePermissionMsg env model loc permission =
-    case permission of
-        1 ->
-            ( { model | status = EnemyAlive }
-            , []
-            , env
-            )
+    let
+        avail_num = List.length (complementGrids model)
+    in
+    if model.recursion_times <= avail_num then
+        case permission of
+            1 ->
+                ( { model | status = EnemyAlive }
+                , []
+                , env
+                )
 
-        _ ->
-            updateEnemySettingTarget env model ErodeRandom
-
+            _ ->
+                updateEnemySettingTarget env (increaseRecursionNum model) ErodeRandom
+    else
+        ( { model | status = EnemyAlive }
+            |> targetCore
+        , []
+        , env
+        )
 
 {-| handle protect cell msg
 -}
@@ -166,10 +186,13 @@ erodeRandomCell model =
         loc =
             ( locx, locy )
     in
-    --if (List.any ( checkCellLoc loc ) model.body) then
-    --erodeRandomCell model
-    --else
     erodeCell model loc
+
+{-| set the core as target ( which means the enemy skip this round )
+-}
+targetCore : Model -> Model
+targetCore model =
+    setTarget model model.core.loc
 
 
 {-| randomly set a cell as the target to erode
@@ -177,22 +200,15 @@ erodeRandomCell model =
 targetRandomCell : Model -> Model
 targetRandomCell model =
     let
-        sx =
-            Tuple.first model.map_size
-
-        sy =
-            Tuple.second model.map_size
-
-        locx =
-            round (toFloat model.randNum / 1000.0 * toFloat sx)
-
-        locy =
-            round (toFloat (model.randNum // 10) / 100.0 * toFloat sy)
-
-        loc =
-            ( locx, locy )
+        cl = complementGrids model
+        mod_num = List.length cl
+        cl2 = List.drop (modBy mod_num model.randNum) cl
+        head0 = List.head cl2
+        head1 =     case head0 of
+                        Just x -> x
+                        Nothing -> ( 0, 0 )
     in
-    setTarget model loc
+    setTarget model head1
 
 
 {-| erode the nearest cell to the core that is not contained
