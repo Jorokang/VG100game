@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemySettingTarget, updateEnemyRound)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemyRound, updateEnemySettingTarget)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 

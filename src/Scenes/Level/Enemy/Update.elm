@@ -10,17 +10,20 @@ import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemySta
 import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
+
 {-| basic settings when enemy's round begin
 -}
 updateEnemyRound : Model -> Model
 updateEnemyRound model =
     { model | recursion_times = 0 }
 
+
 {-| should be used when recursing
 -}
 increaseRecursionNum : Model -> Model
 increaseRecursionNum model =
-    { model | recursion_times = model.recursion_times+1 }
+    { model | recursion_times = model.recursion_times + 1 }
+
 
 {-| update the enemy at setting target status
 
@@ -50,7 +53,8 @@ updateEnemySettingTarget env model prior =
 handlePermissionMsg : EnvC -> Model -> GridLoc -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 handlePermissionMsg env model loc permission =
     let
-        avail_num = List.length (complementGrids model)
+        avail_num =
+            List.length (complementGrids model)
     in
     if model.recursion_times <= avail_num then
         case permission of
@@ -62,12 +66,14 @@ handlePermissionMsg env model loc permission =
 
             _ ->
                 updateEnemySettingTarget env (increaseRecursionNum model) ErodeRandom
+
     else
         ( { model | status = EnemyAlive }
             |> targetCore
         , []
         , env
         )
+
 
 {-| handle protect cell msg
 -}
@@ -188,6 +194,7 @@ erodeRandomCell model =
     in
     erodeCell model loc
 
+
 {-| set the core as target ( which means the enemy skip this round )
 -}
 targetCore : Model -> Model
@@ -200,13 +207,25 @@ targetCore model =
 targetRandomCell : Model -> Model
 targetRandomCell model =
     let
-        cl = complementGrids model
-        mod_num = List.length cl
-        cl2 = List.drop (modBy mod_num model.randNum) cl
-        head0 = List.head cl2
-        head1 =     case head0 of
-                        Just x -> x
-                        Nothing -> ( 0, 0 )
+        cl =
+            complementGrids model
+
+        mod_num =
+            List.length cl
+
+        cl2 =
+            List.drop (modBy mod_num model.randNum) cl
+
+        head0 =
+            List.head cl2
+
+        head1 =
+            case head0 of
+                Just x ->
+                    x
+
+                Nothing ->
+                    ( 0, 0 )
     in
     setTarget model head1
 
