@@ -5,7 +5,7 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
-import Scenes.Level.Card.Common exposing (EnvC, Model)
+import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData, scalePoint)
 import Tuple exposing (first)
 
@@ -17,14 +17,31 @@ renderStr env pos str =
 
 renderTestMessage : EnvC -> Model -> Renderable
 renderTestMessage env model =
+    let
+        str =
+            case model.status of
+                Active ->
+                    "Active"
+
+                Inactive ->
+                    "Inactive"
+
+                Moving ->
+                    "Moving"
+
+                Playing ->
+                    "Playing"
+    in
     Canvas.group
         []
         [ renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.point) ++ ", " ++ String.fromFloat (Tuple.second model.point))
         , renderStr env (coorChange env ( 200, 750 ) nullCoorData) ("hands:" ++ String.fromInt (List.length model.hand) ++ pileToString model.hand)
-        , renderStr env (coorChange env ( 200, 775 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
-        , renderStr env (coorChange env ( 200, 800 ) nullCoorData) ("piles:" ++ String.fromInt (List.length model.discard) ++ pileToString model.discard)
-        , renderStr env (coorChange env ( 200, 825 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
-        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
+        , renderStr env (coorChange env ( 200, 770 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
+        , renderStr env (coorChange env ( 200, 790 ) nullCoorData) ("piles:" ++ String.fromInt (List.length model.discard) ++ pileToString model.discard)
+        , renderStr env (coorChange env ( 200, 810 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
+        , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
+        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
+        , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
         ]
 
 
@@ -32,7 +49,7 @@ renderHelper : EnvC -> Model -> Int -> Int -> Renderable
 renderHelper env model index length =
     let
         selected =
-            model.selected_card == index
+            model.selected_pos == index
 
         element =
             renderCard env (first (takeCard model.hand index)) index selected

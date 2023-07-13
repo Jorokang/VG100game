@@ -15,6 +15,8 @@ module Scenes.Level.Card.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Level.Card.CardCreate exposing (giveErrorCard)
+import Scenes.Level.Card.CardSystem exposing (dropCard)
 import Scenes.Level.Card.CardUnique exposing (clickDetect)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
 import Scenes.Level.Card.Render exposing (renderHandCards, renderTestMessage)
@@ -78,6 +80,17 @@ updateModelRec env msg model =
 
             else
                 ( { model | status = Inactive }, [], env )
+
+        LayerMsgCardType id ->
+            if id == model.selected_card.id then
+                let
+                    nmodel =
+                        { model | status = Active, selected_pos = -1, selected_card = giveErrorCard, turn_status = model.turn_status - 1 }
+                in
+                ( dropCard nmodel model.selected_pos, [], env )
+
+            else
+                ( model, [], env )
 
         _ ->
             ( model, [], env )

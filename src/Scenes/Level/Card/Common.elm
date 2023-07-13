@@ -40,7 +40,8 @@ type alias Model =
     , turn_status : Int
     , spirit : Int
     , click_status : Bool
-    , selected_card : Int
+    , selected_pos : Int
+    , selected_card : Card
     }
 
 
@@ -55,7 +56,8 @@ nullModel =
     , turn_status = 5
     , spirit = 30
     , click_status = False
-    , selected_card = -1
+    , selected_pos = -1
+    , selected_card = giveErrorCard
     }
 
 

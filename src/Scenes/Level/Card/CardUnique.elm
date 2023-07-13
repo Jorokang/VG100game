@@ -3,7 +3,7 @@ module Scenes.Level.Card.CardUnique exposing (..)
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Card.CardCreate exposing (Card)
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
@@ -42,13 +42,14 @@ clicked model lp =
             ( bool, nindex + 1 )
 
 
-costSpirit : Model -> Card -> ( Bool, Model )
-costSpirit model card =
-    if model.spirit < card.cost then
-        ( False, model )
+costSpirit : Model -> Model
+costSpirit model =
+    { model | spirit = model.spirit - model.selected_card.cost }
 
-    else
-        ( True, { model | spirit = model.spirit - card.cost } )
+
+enoughSpirit : Model -> Bool
+enoughSpirit model =
+    model.spirit > model.selected_card.cost
 
 
 clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -59,32 +60,37 @@ clickDetect model =
 
         nmodel =
             { model | click_status = False }
-    in
-    if bool then
-        if nmodel.selected_card == index then
-            playCard { nmodel | selected_card = -1 } index
 
-        else
-            ( { nmodel | selected_card = index }, [] )
-
-    else
-        ( { nmodel | selected_card = -1 }, [] )
-
-
-playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
-playCard model index =
-    let
         card =
             first (takeCard model.hand index)
+    in
+    if bool then
+        if nmodel.selected_pos == index && enoughSpirit model then
+            playCard nmodel
 
-        ( enough, nmodel ) =
-            costSpirit model card
+        else
+            ( { nmodel | selected_pos = index, selected_card = card }, [] )
+
+    else
+        ( { nmodel | selected_pos = -1, selected_card = giveErrorCard }, [] )
+
+
+playCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+playCard model =
+    let
+        card =
+            model.selected_card
+
+        nmodel =
+            costSpirit model
 
         nnmodel =
-            dropCard nmodel index
+            { model | status = Playing }
+
+        --{ nmodel | selected_pos = -1, selected_card = giveErrorCard }
     in
-    if enough && model.turn_status > 0 then
-        cardToEffect { nnmodel | turn_status = model.turn_status - 1 } card
+    if model.turn_status > 0 then
+        cardToEffect nnmodel card
 
     else
         ( model, [] )
@@ -148,7 +154,7 @@ card_2 model =
 
 card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_3 model =
-    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8, status = Playing }, [] )
+    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
 
 card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -159,7 +165,7 @@ card_4 model =
 
 card_5 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_5 model =
-    ( drawCard { model | status = Playing } 2, [] )
+    ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
 
 card_6 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -170,7 +176,7 @@ card_6 model =
 
 card_7 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_7 model =
-    ( drawCard { model | status = Playing } 3, [] )
+    ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
 
 card_8 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -188,7 +194,7 @@ card_9 model =
 card_10 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_10 model =
     --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
-    ( { model | spirit = model.spirit + 5, status = Playing }, [] )
+    ( { model | spirit = model.spirit + 5 }, [] )
 
 
 card_11 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
