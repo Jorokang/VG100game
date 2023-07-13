@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), genEmptyPlots, initGrids1
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), genEmptyPlots, initGrids1, emptyPlot
     )
 
 {-| Common module

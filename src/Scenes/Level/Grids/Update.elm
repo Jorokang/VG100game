@@ -4,7 +4,8 @@ import Canvas exposing (Point)
 import List
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, lengthChange, negPoint, nullCoorData, point2Int)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, GridLoc, Model, Plot, PlotEffect(..))
-import Scenes.Level.Grids.Common exposing (Plot, Cell, Grid)
+import Scenes.Level.Grids.Common exposing (Plot, Cell, Grid, emptyPlot)
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 
 {-| Update player turn beginning
 -}
@@ -51,7 +52,7 @@ modifyPlotEffect model loc new_effcet =
             List.filter (mapComplementGrids loc) model.grids
 
         new_cell =
-            { val = { effect = new_effcet }
+            { val = { emptyPlot | effect = new_effcet }
             , loc = loc
             }
 

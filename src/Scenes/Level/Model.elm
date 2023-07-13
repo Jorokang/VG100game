@@ -15,7 +15,7 @@ module Scenes.Level.Model exposing
 import Canvas exposing (Renderable)
 import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
-import Lib.Layer.Base exposing (LayerMsg(..))
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneOutputMsg(..))
 import Scenes.Level.Common exposing (Model)
