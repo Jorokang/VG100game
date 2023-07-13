@@ -3,12 +3,12 @@ module Scenes.Hall.MainLayer.Update exposing (..)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, HallStatus(..), Model)
-import Scenes.Level.Frame.Functions exposing (point2Int)
+import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
 mouseClickedState : EnvC -> Model -> ( Float, Float ) -> Int
 mouseClickedState env model ( a, b ) =
-    if judgeMouseRect (posToReal env.globalData ( a, b )) model.btn_1.pos model.btn_1.size then
+    if judgeMouseRect ( a, b ) model.btn_1.pos model.btn_1.size then
         1
 
     else

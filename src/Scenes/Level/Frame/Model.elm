@@ -12,9 +12,12 @@ module Scenes.Level.Frame.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
+import Base exposing (Msg(..))
+import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
+import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderStamina)
+import Scenes.Level.Frame.Update exposing (costPlayerStamina, switchTurn)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -23,7 +26,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initFrame1
 
 
 {-| updateModel
@@ -34,7 +37,18 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        KeyDown x ->
+            case x of
+                13 ->
+                    --enter -> switch turn
+                    switchTurn env model
+
+                _ ->
+                    ( model, [], env )
+
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
@@ -44,18 +58,56 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerIntMsg x ->
+            --reduce 1 stamina
+            case x of
+                1 ->
+                    --cost 1 stamina
+                    if model.player_data.cur_stamina == 0 then
+                        ( model
+                        , [ ( LayerName "Avatar", LayerIntMsg 0 ) ]
+                          --disable avatar
+                        , env
+                        )
+
+                    else
+                        ( model
+                            |> costPlayerStamina
+                        , []
+                        , env
+                        )
+
+                _ ->
+                    ( model, [], env )
+
+        LayerMsgEnemyErodeCell loc ->
+            ( model
+            , [ ( LayerName "Avatar", LayerMsgErodeCell loc ) ]
+            , env
+            )
+
+        LayerMsgClearCell loc ->
+            ( model
+            , [ ( LayerName "Avatar", LayerMsgClearCell loc )
+              , ( LayerName "Enemy", LayerMsgClearCell loc )
+              ]
+            , env
+            )
+
+        _ ->
+            ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        rend =
+            [ renderFrameStatus env model
+            , renderStamina env model
+            ]
+    in
+    Canvas.group
+        []
+        rend

@@ -12,9 +12,12 @@ module Scenes.Level.Avatar.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, empty)
+import Base exposing (Msg(..))
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (EnvC, Model, nullModel)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
+import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -23,7 +26,7 @@ Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
 initModel _ _ =
-    nullModel
+    initAvatar1 ( 3, 4 )
 
 
 {-| updateModel
@@ -34,7 +37,19 @@ Add your logic to handle msg here
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    let
+        n_model =
+            setAvatarPos model
+    in
+    case env.msg of
+        Tick new_time ->
+            ( moveAvatar n_model
+            , []
+            , env
+            )
+
+        _ ->
+            ( n_model, [], env )
 
 
 {-| updateModelRec
@@ -44,18 +59,104 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
-    ( model, [], env )
+updateModelRec env lmsg model =
+    case lmsg of
+        LayerMsgEnemyTurn ->
+            ( { model | status = AvatarStopped }
+                |> setAvatarStill
+            , []
+            , env
+            )
+
+        LayerMsgPlayerTurn ->
+            ( { model | status = AvatarActive }
+            , []
+            , env
+            )
+
+        LayerIntMsg x ->
+            case x of
+                1 ->
+                    ( { model | status = AvatarActive }
+                    , []
+                    , env
+                    )
+
+                0 ->
+                    ( { model | status = AvatarStopped }
+                        |> setAvatarStill
+                    , []
+                    , env
+                    )
+
+                _ ->
+                    ( model, [], env )
+
+        LayerMsgErodeCell loc ->
+            ( erodeAvailGrids model loc, [], env )
+
+        LayerMsgClearCell loc ->
+            ( retrieveAvailGrids model loc, [], env )
+
+        LayerMsgClickLoc loc ->
+            updateClickEvent env model loc
+
+        LayerMsgCardType card_type ->
+            updateCardType env model card_type
+
+        _ ->
+            ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    empty
+viewModel env model =
+    let
+        str =
+            case model.status of
+                AvatarActive ->
+                    "Active"
+
+                AvatarInactive ->
+                    "Inactive"
+
+                AvatarMoving ->
+                    "Moving"
+
+                AvatarCard ->
+                    "Using Card"
+
+                AvatarSelected ->
+                    "Selevted"
+
+                AvatarStopped ->
+                    "Stopped"
+
+        rend =
+            [ renderAvatar env model
+            , renderMovingHint env model
+            , renderCardHint env model
+            , renderShadow env model
+            , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
+            , renderAvailLocs env model
+            , renderSingleTuple2 env model.pos
+            ]
+    in
+    case model.status of
+        AvatarInactive ->
+            Canvas.empty
+
+        _ ->
+            Canvas.group
+                []
+                rend
+
+
+{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
+-}
+deltaLocsDis1 : List GridLoc
+deltaLocsDis1 =
+    [ ( -1, 0 )
+    , ( 0, -1 )
+    , ( 1, 0 )
+    , ( 0, 1 )
+    ]
