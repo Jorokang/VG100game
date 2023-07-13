@@ -36,6 +36,11 @@ initModel _ _ =
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
+        EnemyDead ->
+            ( model
+            , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+            , env
+            )
         EnemyAlive ->
             case env.msg of
                 Tick newTime ->
