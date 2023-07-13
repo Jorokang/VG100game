@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, nullModel, initModelWin, initModelLoose)
+import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLoose, initModelWin, nullModel)
 import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
 import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
@@ -32,8 +32,10 @@ initModel _ i =
     case i.status of
         0 ->
             initModelLoose
+
         1 ->
             initModelWin
+
         _ ->
             nullModel
 
@@ -53,9 +55,8 @@ updateModel env model =
             , env
             )
 
- --       KeyDown x ->
-   --         ( model, [ ( LayerParentScene, LayerStringMsg "Level" ) ], env )
-
+        --       KeyDown x ->
+        --         ( model, [ ( LayerParentScene, LayerStringMsg "Level" ) ], env )
         MouseDown x ( a, b ) ->
             let
                 n_model =

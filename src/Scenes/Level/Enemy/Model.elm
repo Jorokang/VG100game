@@ -41,6 +41,7 @@ updateModel env model =
             , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
             , env
             )
+
         EnemyAlive ->
             case env.msg of
                 Tick newTime ->

@@ -262,8 +262,9 @@ freeCell model loc =
             else
                 new_model1
     in
-    if (nx,ny) == model.core.loc then
+    if ( nx, ny ) == model.core.loc then
         { model | status = EnemyDead }
+
     else if (nx < 0) || (ny < 0) || (nx > sx) || (ny > sy) then
         model
 

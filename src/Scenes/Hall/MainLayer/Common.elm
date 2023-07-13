@@ -1,7 +1,6 @@
 module Scenes.Hall.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , Button, ButtonStatus(..), HallStatus(..)
-    , initModelWin, initModelLoose
+    , Button, ButtonStatus(..), HallStatus(..), initModelLoose, initModelWin
     )
 
 {-| Common module
@@ -65,6 +64,7 @@ nullModel =
     , hall_name = "Hall"
     }
 
+
 initModelWin : Model
 initModelWin =
     { status = Active
@@ -83,6 +83,7 @@ initModelLoose =
     , click_pos = ( -1, -1 )
     , hall_name = "You lost all light."
     }
+
 
 {-| Convenient type alias for the environment
 -}
