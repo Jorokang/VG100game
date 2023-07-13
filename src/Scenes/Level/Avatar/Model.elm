@@ -104,6 +104,12 @@ updateModelRec env lmsg model =
         LayerMsgCardType card_type ->
             updateCardType env model card_type
 
+        LayerMsgModifySpirit x -?
+            ( modifySpirit model x
+            , []
+            , env
+            )
+
         _ ->
             ( model, [], env )
 
@@ -149,14 +155,3 @@ viewModel env model =
             Canvas.group
                 []
                 rend
-
-
-{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
--}
-deltaLocsDis1 : List GridLoc
-deltaLocsDis1 =
-    [ ( -1, 0 )
-    , ( 0, -1 )
-    , ( 1, 0 )
-    , ( 0, 1 )
-    ]

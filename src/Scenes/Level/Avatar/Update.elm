@@ -23,6 +23,11 @@ loc2Pos : GridLoc -> Point
 loc2Pos ( lx, ly ) =
     ( (toFloat lx + 0.5) * cellLength, (toFloat ly + 0.5) * cellLength )
 
+{-| simply increase or decrease the spirit by an int
+-}
+modifySpirit : Model -> Int -> Model
+modifySpirit model delta =
+    { model | spirit = model.spirit + delta }
 
 {-| ensure that the pos is synchronized with loc
 -}

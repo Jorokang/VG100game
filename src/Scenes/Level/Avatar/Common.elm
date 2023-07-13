@@ -46,6 +46,7 @@ type alias Model =
     , avail_grids : List GridLoc
     , core_loc : GridLoc
     , map_size : GridLoc
+    , spirit : Int
     }
 
 
@@ -61,6 +62,7 @@ nullModel =
     , avail_grids = []
     , core_loc = ( 0, 0 )
     , map_size = ( 0, 0 )
+    , spirit = 0
     }
 
 
@@ -74,6 +76,7 @@ initAvatar1 size =
     , avail_grids = allGrids size
     , core_loc = ( 0, 0 )
     , map_size = size
+    , spirit = 30
     }
 
 
