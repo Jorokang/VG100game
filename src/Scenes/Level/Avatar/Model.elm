@@ -16,8 +16,8 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr)
+import Scenes.Level.Avatar.Update exposing (moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -29,12 +29,6 @@ initModel _ _ =
     initAvatar1 ( 3, 4 )
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     let
@@ -93,7 +87,7 @@ updateModelRec env lmsg model =
                     ( model, [], env )
 
         LayerMsgErodeCell loc ->
-            ( erodeAvailGrids model loc, [], env )
+            updateErodeMsg env model loc
 
         LayerMsgClearCell loc ->
             ( retrieveAvailGrids model loc, [], env )
@@ -103,6 +97,9 @@ updateModelRec env lmsg model =
 
         LayerMsgCardType card_type ->
             updateCardType env model card_type
+
+        LayerMsgModifySpirit x ->
+            updateModifySpirit env model x
 
         _ ->
             ( model, [], env )
@@ -116,8 +113,8 @@ viewModel env model =
                 AvatarActive ->
                     "Active"
 
-                AvatarInactive ->
-                    "Inactive"
+                AvatarDead ->
+                    "Dead"
 
                 AvatarMoving ->
                     "Moving"
@@ -139,24 +136,14 @@ viewModel env model =
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             , renderAvailLocs env model
             , renderSingleTuple2 env model.pos
+            , renderSpirit env model
             ]
     in
     case model.status of
-        AvatarInactive ->
-            Canvas.empty
+        AvatarDead ->
+            renderStr env ("Avatar status : " ++ str) ( 500, 400 )
 
         _ ->
             Canvas.group
                 []
                 rend
-
-
-{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
--}
-deltaLocsDis1 : List GridLoc
-deltaLocsDis1 =
-    [ ( -1, 0 )
-    , ( 0, -1 )
-    , ( 1, 0 )
-    , ( 0, 1 )
-    ]

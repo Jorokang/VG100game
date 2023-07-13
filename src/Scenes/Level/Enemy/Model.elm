@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemySettingTarget)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemyRound, updateEnemySettingTarget)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -36,6 +36,12 @@ initModel _ _ =
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
+        EnemyDead ->
+            ( model
+            , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+            , env
+            )
+
         EnemyAlive ->
             case env.msg of
                 Tick newTime ->
@@ -77,7 +83,9 @@ updateModelRec env lmsg model =
 
         LayerMsgEnemyTurn ->
             --erode the target
-            ( erodeTarget model
+            ( model
+                |> updateEnemyRound
+                |> erodeTarget
             , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
