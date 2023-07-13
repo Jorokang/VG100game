@@ -138,8 +138,7 @@ cardToEffect model card =
 
 card_1 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_1 model =
-    --( model, [ ( LayerName "Enemy", LayerMsgClearDirection 2 ) ] )
-    ( model, [] )
+    ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
 
 
 card_2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
