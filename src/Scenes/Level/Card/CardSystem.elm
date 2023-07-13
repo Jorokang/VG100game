@@ -62,11 +62,6 @@ drawCard model amount =
         drawCard nnmodel (amount - 1)
 
 
-sortPile : List Card -> List Card
-sortPile pile =
-    List.sortBy .id pile
-
-
 dropCard : Model -> Int -> Model
 dropCard model pos =
     let
@@ -74,6 +69,11 @@ dropCard model pos =
             takeCard model.hand pos
     in
     { model | discard = dcard :: model.discard, hand = nhand }
+
+
+sortPile : List Card -> List Card
+sortPile pile =
+    List.sortBy .id pile
 
 
 takeCard : List Card -> Int -> ( Card, List Card )

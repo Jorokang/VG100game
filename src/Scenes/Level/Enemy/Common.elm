@@ -85,16 +85,6 @@ type alias Model =
 
 {-| nullModel
 -}
-nullEnemyCore : Cell EnemyCore
-nullEnemyCore =
-    { val =
-        { color = Color.red
-        , hp = 1
-        }
-    , loc = ( 3, 1 )
-    }
-
-
 nullEnemyEye : EnemyEye
 nullEnemyEye =
     { pos = ( 350, 150 )
@@ -102,6 +92,16 @@ nullEnemyEye =
     , target = ( 350, 150 )
     , target_eroded = True
     , target_loc = ( 3, 1 )
+    }
+
+
+nullEnemyCore : Cell EnemyCore
+nullEnemyCore =
+    { val =
+        { color = Color.red
+        , hp = 1
+        }
+    , loc = ( 3, 1 )
     }
 
 

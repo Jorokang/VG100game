@@ -10,15 +10,15 @@ import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
 
+pointHelper : Int -> Point
+pointHelper num =
+    addPoint ( 0, 725 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
+
+
 cardArea : Model -> List Point
 cardArea model =
     List.map pointHelper <|
         List.range 1 (List.length model.hand)
-
-
-pointHelper : Int -> Point
-pointHelper num =
-    addPoint ( 0, 725 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
 
 
 clicked : Model -> List Point -> ( Bool, Int )
@@ -51,6 +51,25 @@ costSpirit model card =
         ( True, { model | spirit = model.spirit - card.cost } )
 
 
+playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
+playCard model index =
+    let
+        card =
+            first (takeCard model.hand index)
+
+        ( enough, nmodel ) =
+            costSpirit model card
+
+        nnmodel =
+            dropCard nmodel index
+    in
+    if enough && model.turn_status > 0 then
+        cardToEffect { nnmodel | turn_status = model.turn_status - 1 } card
+
+    else
+        ( model, [] )
+
+
 clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 clickDetect model =
     let
@@ -69,25 +88,6 @@ clickDetect model =
 
     else
         ( { nmodel | selected_card = -1 }, [] )
-
-
-playCard : Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ) )
-playCard model index =
-    let
-        card =
-            first (takeCard model.hand index)
-
-        ( enough, nmodel ) =
-            costSpirit model card
-
-        nnmodel =
-            dropCard nmodel index
-    in
-    if enough && model.turn_status > 0 then
-        cardToEffect { nnmodel | turn_status = model.turn_status - 1 } card
-
-    else
-        ( model, [] )
 
 
 cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
