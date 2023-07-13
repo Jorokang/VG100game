@@ -1,6 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), GridLoc, initEnemy1, maxEyeV, ErodePriority(..)
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, maxEyeV
     )
 
 {-| Common module
@@ -27,6 +27,7 @@ type EnemyState
     | EnemySettingTarget
     | EnemyStopped
     | EnemyDead
+
 
 type ErodePriority
     = ErodeNearest

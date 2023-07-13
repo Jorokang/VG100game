@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -216,6 +216,23 @@ updateCardClickEvent env model loc =
                 , env
                 )
 
+        CardType_2 ->
+            let
+                avail_card_loc =
+                    filterAvailCardLoc model (offsetRelativePos model.cur_loc cardClickPos0)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType2 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , []
+                , env
+                )
+
         CardType_None ->
             ( model, [], env )
 
@@ -296,6 +313,29 @@ cardActiveType1 env model loc =
             )
 
 
+{-| Card 2 active
+-}
+cardActiveType2 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType2 env model loc =
+    if List.any (\x -> x == loc) cardClickPos0 then
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , [ ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc loc) 2 ) ]
+        , env
+        )
+
+    else
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , []
+        , env
+        )
+
+
 {-| filter for click pos (move available grids)
 -}
 filterAvailCardLoc : Model -> List GridLoc -> List GridLoc
@@ -324,6 +364,12 @@ updateCardType env model card_type =
     case card_type of
         1 ->
             ( { model | status = AvatarCard, card_status = CardType_1 }
+            , []
+            , env
+            )
+
+        2 ->
+            ( { model | status = AvatarCard, card_status = CardType_2 }
             , []
             , env
             )

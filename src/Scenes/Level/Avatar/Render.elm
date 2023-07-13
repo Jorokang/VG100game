@@ -5,7 +5,7 @@ import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
 
@@ -35,17 +35,6 @@ hintSetting =
     in
     [ filter "opacity(50%)"
     , fill hint_color
-    ]
-
-
-{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
--}
-deltaLocsDis1 : List GridLoc
-deltaLocsDis1 =
-    [ ( -1, 0 )
-    , ( 0, -1 )
-    , ( 1, 0 )
-    , ( 0, 1 )
     ]
 
 
@@ -103,7 +92,7 @@ renderMovingHint : EnvC -> Model -> Renderable
 renderMovingHint env model =
     case model.status of
         AvatarSelected ->
-            renderMultiHint env model deltaLocsDis1 FilterModeAvailCell
+            renderMultiHint env model cardClickPos0 FilterModeAvailCell
 
         _ ->
             Canvas.empty
@@ -116,6 +105,9 @@ renderCardHint env model =
     case model.card_status of
         CardType_1 ->
             renderMultiHint env model cardClickPos1 FilterModeMapCell
+
+        CardType_2 ->
+            renderMultiHint env model cardClickPos0 FilterModeAvailCell
 
         CardType_None ->
             Canvas.empty

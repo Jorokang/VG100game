@@ -18,10 +18,8 @@ import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids)
-import Scenes.Level.Grids.Update exposing (clickPos2Loc, modifyPlotEffect)
+import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Grids.Update exposing (updatePlayerTurn)
-import Scenes.Level.Grids.Update exposing (checkErodePermission)
 
 
 {-| initModel
@@ -79,8 +77,13 @@ updateModelRec env lmsg model =
     case lmsg of
         LayerMsgPlayerTurn ->
             updatePlayerTurn env model
+
         LayerMsgErodePermission loc x ->
             checkErodePermission env model loc
+
+        LayerMsgProtectCell loc x ->
+            updateProtectCell env model loc x
+
         _ ->
             ( model, [], env )
 

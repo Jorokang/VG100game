@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos1, initAvatar1
+    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, initAvatar1
     )
 
 {-| Common module
@@ -29,6 +29,7 @@ type AvatarStatus
 
 type CardSelectionStatus
     = CardType_1
+    | CardType_2
     | CardType_None
 
 
@@ -83,6 +84,11 @@ avatarRadius =
 
 {-| About card type setup
 -}
+cardClickPos0 : List GridLoc
+cardClickPos0 =
+    [ ( -1, 0 ), ( 0, -1 ), ( 1, 0 ), ( 0, 1 ) ]
+
+
 cardClickPos1 : List GridLoc
 cardClickPos1 =
     [ ( 1, 0 ), ( 2, 0 ), ( -1, 0 ), ( -2, 0 ), ( 0, 1 ), ( 0, 2 ), ( 0, -1 ), ( 0, -2 ) ]

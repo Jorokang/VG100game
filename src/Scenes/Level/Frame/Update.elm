@@ -4,6 +4,7 @@ import Base exposing (Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model)
 
+
 {-| swtich the turn
 -}
 switchTurn : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -12,7 +13,8 @@ switchTurn env model =
         FramePlayerTurn ->
             ( { model | status = FrameEnemyTurn }
             , [ ( LayerName "Enemy", LayerMsgEnemyTurn )
-              , ( LayerName "Avatar", LayerMsgEnemyTurn ) ]
+              , ( LayerName "Avatar", LayerMsgEnemyTurn )
+              ]
             , env
             )
 
@@ -21,7 +23,8 @@ switchTurn env model =
                 |> restorePlayerStamina
             , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
               , ( LayerName "Avatar", LayerMsgPlayerTurn )
-              , ( LayerName "Grids", LayerMsgPlayerTurn ) ]
+              , ( LayerName "Grids", LayerMsgPlayerTurn )
+              ]
             , env
             )
 
@@ -29,19 +32,21 @@ switchTurn env model =
             ( { model | status = FramePlayerTurn }
                 |> restorePlayerStamina
             , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
-              , ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
+              , ( LayerName "Avatar", LayerMsgPlayerTurn )
+              ]
             , env
             )
 
         _ ->
             ( model, [], env )
 
+
 {-| check whether the erode target is valid
 -}
 checkErodePermission : EnvC -> Model -> ( Int, Int ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 checkErodePermission env model loc =
     ( model
-    , [ ( LayerName "Grids", LayerMsgErodePermission loc 0 )]
+    , [ ( LayerName "Grids", LayerMsgErodePermission loc 0 ) ]
     , env
     )
 

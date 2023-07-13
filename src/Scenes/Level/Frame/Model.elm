@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
 import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderStamina)
-import Scenes.Level.Frame.Update exposing (costPlayerStamina, switchTurn, checkErodePermission)
+import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, switchTurn)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 

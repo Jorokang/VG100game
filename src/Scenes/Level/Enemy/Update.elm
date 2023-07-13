@@ -4,38 +4,60 @@ import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
 import Color exposing (Color)
 import Html exposing (a)
-import List
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, maxEyeV, nullModel, ErodePriority(..))
+import List
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, initEnemy1, maxEyeV, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
+
 {-| update the enemy at setting target status
-1. choose the target by priority
-2. send LayerMsg to frame to ask for permission
+
+1.  choose the target by priority
+2.  send LayerMsg to frame to ask for permission
+
 -}
-updateEnemySettingtarget : EnvC -> Model -> ErodePriority -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateEnemySettingtarget env model prior =
+updateEnemySettingTarget : EnvC -> Model -> ErodePriority -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateEnemySettingTarget env model prior =
     let
-        n_model =   case prior of
-                        ErodeNearest -> targetNearestCell model
-                        ErodeRandom -> targetRandomCell model
+        n_model =
+            case prior of
+                ErodeNearest ->
+                    targetNearestCell model
+
+                ErodeRandom ->
+                    targetRandomCell model
     in
     ( { n_model | status = EnemySettingTarget }
-    , [ (LayerName "Frame", LayerMsgErodePermission n_model.target 0 ) ]
+    , [ ( LayerName "Frame", LayerMsgErodePermission n_model.target 0 ) ]
     , env
     )
+
 
 {-| handle permission LayerMsg
 -}
 handlePermissionMsg : EnvC -> Model -> GridLoc -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 handlePermissionMsg env model loc permission =
     case permission of
-        1 -> ( { model | status = EnemyAlive }
-             , []
-             , env
-             )
-        _ -> updateEnemySettingtarget env model ErodeRandom
+        1 ->
+            ( { model | status = EnemyAlive }
+            , []
+            , env
+            )
+
+        _ ->
+            updateEnemySettingTarget env model ErodeRandom
+
+
+{-| handle protect cell msg
+-}
+handleProtectMsg : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+handleProtectMsg env model loc =
+    if loc == model.target then
+        updateEnemySettingTarget env model ErodeNearest
+
+    else
+        ( model, [], env )
 
 
 {-| The enemy erodes one cell if this cell is not contained by it

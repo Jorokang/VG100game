@@ -143,8 +143,7 @@ card_1 model =
 
 card_2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_2 model =
-    --( model, [ ( LayerName "Enemy", LayerMsgProtectCell ) ] )
-    ( model, [] )
+    ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
 
 
 card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )

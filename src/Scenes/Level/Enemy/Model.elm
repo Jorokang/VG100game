@@ -15,13 +15,12 @@ module Scenes.Level.Enemy.Model exposing
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point, Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1, ErodePriority(..))
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemySettingtarget)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemySettingTarget)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
-import Scenes.Level.Enemy.Update exposing (handlePermissionMsg)
 
 
 {-| initModel
@@ -74,7 +73,7 @@ updateModelRec env lmsg model =
     case lmsg of
         LayerMsgPlayerTurn ->
             --set the target
-            updateEnemySettingtarget env model ErodeNearest
+            updateEnemySettingTarget env model ErodeNearest
 
         LayerMsgEnemyTurn ->
             --erode the target
@@ -92,18 +91,13 @@ updateModelRec env lmsg model =
         LayerMsgErodePermission loc x ->
             handlePermissionMsg env model loc x
 
+        LayerMsgProtectCell loc x ->
+            handleProtectMsg env model loc
+
         _ ->
             ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let

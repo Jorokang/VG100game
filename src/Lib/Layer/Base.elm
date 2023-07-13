@@ -59,6 +59,7 @@ type LayerMsg
     | LayerMsgClickLoc GridLoc --mouse click the grids on a cell
     | LayerMsgCardType Int --the card type
     | LayerMsgErodePermission GridLoc Int --check whether this cell is protected (Int: 0 -> denied/asking; 1 -> approved)
+    | LayerMsgProtectCell GridLoc Int --protect the cell for x rounds
     | NullLayerMsg
 
 
