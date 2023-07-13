@@ -16,9 +16,10 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr, renderSpirit)
+import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, modifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Avatar.Render exposing (renderSpirit)
 
 
 {-| initModel
@@ -104,7 +105,7 @@ updateModelRec env lmsg model =
         LayerMsgCardType card_type ->
             updateCardType env model card_type
 
-        LayerMsgModifySpirit x -?
+        LayerMsgModifySpirit x ->
             ( modifySpirit model x
             , []
             , env
@@ -145,6 +146,7 @@ viewModel env model =
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             , renderAvailLocs env model
             , renderSingleTuple2 env model.pos
+            , renderSpirit env model
             ]
     in
     case model.status of

@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -27,7 +27,13 @@ loc2Pos ( lx, ly ) =
 -}
 modifySpirit : Model -> Int -> Model
 modifySpirit model delta =
-    { model | spirit = model.spirit + delta }
+    let
+        n_spirit0 = model.spirit + delta
+        n_spirit1 = if (n_spirit0<0) then 0
+                    else if (n_spirit0>maxSpirit) then maxSpirit
+                    else n_spirit0
+    in
+    { model | spirit = n_spirit1 }
 
 {-| ensure that the pos is synchronized with loc
 -}
