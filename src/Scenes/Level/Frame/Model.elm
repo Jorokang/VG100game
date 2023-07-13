@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
 import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderStamina)
-import Scenes.Level.Frame.Update exposing (costPlayerStamina, switchTurn)
+import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, switchTurn)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -61,6 +61,7 @@ updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, Layer
 updateModelRec env lmsg model =
     case lmsg of
         LayerIntMsg x ->
+            --reduce 1 stamina
             case x of
                 1 ->
                     --cost 1 stamina
@@ -81,18 +82,27 @@ updateModelRec env lmsg model =
                 _ ->
                     ( model, [], env )
 
+        LayerMsgEnemyErodeCell loc ->
+            ( model
+            , [ ( LayerName "Avatar", LayerMsgErodeCell loc ) ]
+            , env
+            )
+
+        LayerMsgClearCell loc ->
+            ( model
+            , [ ( LayerName "Avatar", LayerMsgClearCell loc )
+              , ( LayerName "Enemy", LayerMsgClearCell loc )
+              ]
+            , env
+            )
+
+        LayerMsgErodePermission loc x ->
+            checkErodePermission env model loc
+
         _ ->
             ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let

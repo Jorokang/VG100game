@@ -1,6 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), GridLoc, initEnemy1, maxEyeV
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, maxEyeV
     )
 
 {-| Common module
@@ -23,9 +23,15 @@ import Time exposing (Posix, now)
 Add your own data here.
 -}
 type EnemyState
-    = Alive
-    | Stopped
-    | Dead
+    = EnemyAlive
+    | EnemySettingTarget
+    | EnemyStopped
+    | EnemyDead
+
+
+type ErodePriority
+    = ErodeNearest
+    | ErodeRandom
 
 
 type alias GridLoc =
@@ -73,6 +79,7 @@ type alias Model =
     , time : Int
     , target : GridLoc
     , eye : EnemyEye
+    , recursion_times : Int
     }
 
 
@@ -109,7 +116,7 @@ nullModel =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Stopped
+    { status = EnemyStopped
     , body = []
     , core = nullEnemyCore
     , map_size = ( 0, 0 )
@@ -118,6 +125,7 @@ nullModel =
     , time = 0
     , target = ( -1, -1 )
     , eye = nullEnemyEye
+    , recursion_times = 0
     }
 
 
@@ -127,7 +135,7 @@ initEnemy1 =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Alive
+    { status = EnemyAlive
     , body =
         [ { val =
                 { color = Color.black
@@ -143,6 +151,7 @@ initEnemy1 =
     , time = 0
     , target = ( -1, -1 )
     , eye = nullEnemyEye
+    , recursion_times = 0
     }
 
 

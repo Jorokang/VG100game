@@ -38,6 +38,13 @@ addPoint a b =
     ( first a + first b, second a + second b )
 
 
+{-| add to GridLoc together
+-}
+addLoc : ( Int, Int ) -> ( Int, Int ) -> ( Int, Int )
+addLoc a b =
+    ( first a + first b, second a + second b )
+
+
 
 --mutiply the Point by a float k
 

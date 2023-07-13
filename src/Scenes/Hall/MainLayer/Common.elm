@@ -1,6 +1,6 @@
 module Scenes.Hall.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , Button, ButtonStatus(..), HallStatus(..)
+    , Button, ButtonStatus(..), HallStatus(..), initModelLoose, initModelWin
     )
 
 {-| Common module
@@ -42,6 +42,7 @@ type alias Model =
     , btn_1 : Button
     , time : Int
     , click_pos : Point
+    , hall_name : String
     }
 
 
@@ -60,6 +61,27 @@ nullModel =
     , btn_1 = initButtonLevel
     , time = 0
     , click_pos = ( -1, -1 )
+    , hall_name = "Hall"
+    }
+
+
+initModelWin : Model
+initModelWin =
+    { status = Active
+    , btn_1 = initButtonLevel
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = "You defeat the enemy in Level 1 !"
+    }
+
+
+initModelLoose : Model
+initModelLoose =
+    { status = Active
+    , btn_1 = initButtonLevel
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = "You lost all light."
     }
 
 

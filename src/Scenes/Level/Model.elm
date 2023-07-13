@@ -15,9 +15,10 @@ module Scenes.Level.Model exposing
 import Canvas exposing (Renderable)
 import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
-import Lib.Layer.Base exposing (LayerMsg(..))
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneOutputMsg(..))
+import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Scenes.Hall.SceneInit exposing (initHallLoose, initHallWin)
 import Scenes.Level.Common exposing (Model)
 import Scenes.Level.LayerBase exposing (CommonData)
 
@@ -35,6 +36,22 @@ handleLayerMsg env lmsg model =
 
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
+
+        LayerMsgLevelComplete x ->
+            handleLayerMsgLevelComplete env model x
+
+        _ ->
+            ( model, [], env )
+
+
+handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> ( Model, List SceneOutputMsg, EnvC CommonData )
+handleLayerMsgLevelComplete env model x =
+    case x of
+        0 ->
+            ( model, [ SOMChangeScene ( HallInitData initHallLoose, "Hall", Nothing ) ], env )
+
+        1 ->
+            ( model, [ SOMChangeScene ( HallInitData initHallWin, "Hall", Nothing ) ], env )
 
         _ ->
             ( model, [], env )

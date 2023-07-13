@@ -1,9 +1,11 @@
 module Lib.Component.Base exposing
-    ( DefinedTypes(..)
+    ( ComponentMsg(..)
+    , ComponentTarget(..)
+    , DefinedTypes(..)
+    , ComponentInitData(..)
     , Component
     , Data
     , nullComponent
-    , ComponentInitData(..), ComponentMsg(..), ComponentTarget(..)
     )
 
 {-|
@@ -21,8 +23,10 @@ It is **not** fast to communicate between many components.
 
 Gamecomponents have better speed when communicating with each other. (their message types are built-in)
 
-@docs ComponentTMsg
+@docs ComponentMsg
+@docs ComponentTarget
 @docs DefinedTypes
+@docs ComponentInitData
 @docs Component
 @docs Data
 @docs nullComponent

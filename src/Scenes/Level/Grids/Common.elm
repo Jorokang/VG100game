@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), genEmptyPlots, initGrids1
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1
     )
 
 {-| Common module
@@ -44,6 +44,7 @@ type alias Grid a =
 
 type alias Plot =
     { effect : PlotEffect
+    , protection : Int --indicates how many turns is this plot protected. 0 for no protection.
     }
 
 
@@ -69,6 +70,7 @@ nullModel =
 emptyPlot : Plot
 emptyPlot =
     { effect = Empty
+    , protection = 0
     }
 
 
