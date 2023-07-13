@@ -58,14 +58,14 @@ updateModel env model =
                 s =
                     checkall n_model ( a, b )
 
-                --change the btn status      
+                --change the btn status
             in
             case s of
                 "Level1" ->
                     ( { n_model
                         | status = Inactive
                         , levels =
-                            { level1 = { l1 | status = ButtonPressed}
+                            { level1 = { l1 | status = ButtonPressed }
                             , level2 = l2
                             , level3 = l3
                             }
@@ -79,10 +79,11 @@ updateModel env model =
                         | status = Inactive
                         , levels =
                             { level1 = l1
-                            , level2 = { l2 | status = ButtonPressed}
+                            , level2 = { l2 | status = ButtonPressed }
                             , level3 = l3
                             }
-                      } --to do : level2
+                      }
+                      --to do : level2
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
@@ -93,24 +94,29 @@ updateModel env model =
                         , levels =
                             { level1 = l1
                             , level2 = l2
-                            , level3 = { l3 | status = ButtonPressed}
+                            , level3 = { l3 | status = ButtonPressed }
                             }
-                      } --to do : level3
+                      }
+                      --to do : level3
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
+
                 "setting" ->
                     ( { n_model
                         | status = Inactive
-                        , setting = { status = ButtonPressed
-                                    , pos = ( 1300, 400 )
-                                    , size = ( 100, 100 )
-                                    , text = "setting"
-                                    }
-                      } -- now it links to level, to be changed
+                        , setting =
+                            { status = ButtonPressed
+                            , pos = ( 1300, 400 )
+                            , size = ( 100, 100 )
+                            , text = "setting"
+                            }
+                      }
+                      -- now it links to level, to be changed
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
+
                 _ ->
                     ( n_model, [], env )
 
@@ -141,7 +147,7 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) "HALL"
+            [ renderSprite env.globalData [] ( 0, 0 ) ( 1900, 1600 ) "menu"
             , renderButtons env model
             , renderStr env (coorChange env ( 200, 700 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]

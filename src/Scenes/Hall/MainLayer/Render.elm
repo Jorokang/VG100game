@@ -67,11 +67,12 @@ renderButton env btn =
             Canvas.empty
 
         _ ->
+            --render img and text
             Canvas.group
                 []
-                --render img and text
-                [ renderSprite env.globalData [] btn.pos ( 600, 300 ) "level"
-                , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
+                -- to do : fix the svg position
+                [ --renderSprite env.globalData [] btn.pos ( 600, 300 ) "level" ,
+                  text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
                 ]
 
 

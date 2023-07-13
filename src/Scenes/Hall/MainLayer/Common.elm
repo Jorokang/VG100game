@@ -57,7 +57,7 @@ type alias Model =
 l1 : Button
 l1 =
     { status = ButtonActive
-    , pos = ( 900, 200 )
+    , pos = ( 900, 600 )
     , size = ( 100, 100 )
     , text = "Level1"
     }
@@ -66,7 +66,7 @@ l1 =
 l2 : Button
 l2 =
     { status = ButtonActive
-    , pos = ( 1100, 200 )
+    , pos = ( 1100, 600 )
     , size = ( 100, 100 )
     , text = "Level2"
     }
@@ -75,18 +75,21 @@ l2 =
 l3 : Button
 l3 =
     { status = ButtonActive
-    , pos = ( 1300, 200 )
+    , pos = ( 1300, 600 )
     , size = ( 100, 100 )
     , text = "Level3"
     }
 
+
 initsetting : Button
 initsetting =
     { status = ButtonActive
-    , pos = ( 1300, 400 )
+    , pos = ( 1300, 800 )
     , size = ( 100, 100 )
     , text = "setting"
     }
+
+
 
 --initialize the level buttons position
 

@@ -43,5 +43,6 @@ checkall model ( a, b ) =
 
     else if clickcheck ( a, b ) model.setting then
         model.setting.text
+
     else
         ""
