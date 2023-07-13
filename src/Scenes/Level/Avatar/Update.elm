@@ -320,7 +320,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -1, 0 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -2, 0 )) )
-              , ( LayerName "Card", LayerMsgCardType 1)
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -332,7 +332,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 1, 0 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 2, 0 )) )
-              , ( LayerName "Card", LayerMsgCardType 1)
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -344,7 +344,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 1 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 2 )) )
-              , ( LayerName "Card", LayerMsgCardType 1)
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -356,7 +356,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -1 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -2 )) )
-              , ( LayerName "Card", LayerMsgCardType 1)
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -366,7 +366,7 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-            , [ ( LayerName "Card", LayerMsgCardType -1) ]
+            , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
             , env
             )
 
@@ -380,7 +380,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , ( LayerName "Card", LayerMsgCardType 1) :: (List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0)
+        , ( LayerName "Card", LayerMsgCardType 1 ) :: List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
         , env
         )
 
@@ -389,7 +389,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , [ ( LayerName "Card", LayerMsgCardType -1) ]
+        , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
         , env
         )
 
