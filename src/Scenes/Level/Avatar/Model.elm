@@ -13,12 +13,11 @@ module Scenes.Level.Avatar.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
 import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, loc2Pos, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
-import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, scalePointLength)
+import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -102,12 +101,9 @@ updateModelRec env lmsg model =
         LayerMsgClickLoc loc ->
             updateClickEvent env model loc
 
-<<<<<<< HEAD
-=======
         LayerMsgCardType card_type ->
             updateCardType env model card_type
 
->>>>>>> feat/Frame
         _ ->
             ( model, [], env )
 
@@ -137,12 +133,8 @@ viewModel env model =
 
         rend =
             [ renderAvatar env model
-<<<<<<< HEAD
-            , renderMovingHint env model deltaLocsDis1
-=======
             , renderMovingHint env model
             , renderCardHint env model
->>>>>>> feat/Frame
             , renderShadow env model
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             , renderAvailLocs env model

@@ -12,7 +12,6 @@ module Scenes.Level.Avatar.Common exposing
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Level.Frame.Functions exposing (allGrids, cellLength)
-import Scenes.Level.Grids.Common exposing (Grid)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 

@@ -1,15 +1,13 @@
 module Scenes.Level.Avatar.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
+import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Html exposing (b)
-import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
-import Scenes.Level.Avatar.Update exposing (filterAvailCardLoc, judgeLocAvail, offsetRelativePos)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
+import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
 
 
 type FilterMode

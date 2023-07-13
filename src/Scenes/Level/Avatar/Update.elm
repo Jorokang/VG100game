@@ -1,16 +1,9 @@
 module Scenes.Level.Avatar.Update exposing (..)
 
-import Area exposing (inAcres)
-import Base exposing (Msg(..))
 import Canvas exposing (Point)
-import Html exposing (li)
-import Html.Attributes exposing (list, rel)
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
-import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, lowerCell, negPoint, nullCoorData, pointDistance, scalePointLength)
-import Scenes.Level.Grids.Common exposing (Grid)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
 {-| judge selection of the Avatar
