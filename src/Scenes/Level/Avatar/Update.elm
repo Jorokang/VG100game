@@ -23,17 +23,27 @@ loc2Pos : GridLoc -> Point
 loc2Pos ( lx, ly ) =
     ( (toFloat lx + 0.5) * cellLength, (toFloat ly + 0.5) * cellLength )
 
+
 {-| simply increase or decrease the spirit by an int
 -}
 modifySpirit : Model -> Int -> Model
 modifySpirit model delta =
     let
-        n_spirit0 = model.spirit + delta
-        n_spirit1 = if (n_spirit0<0) then 0
-                    else if (n_spirit0>maxSpirit) then maxSpirit
-                    else n_spirit0
+        n_spirit0 =
+            model.spirit + delta
+
+        n_spirit1 =
+            if n_spirit0 < 0 then
+                0
+
+            else if n_spirit0 > maxSpirit then
+                maxSpirit
+
+            else
+                n_spirit0
     in
     { model | spirit = n_spirit1 }
+
 
 {-| ensure that the pos is synchronized with loc
 -}
@@ -178,7 +188,9 @@ updateClickEvent env model loc =
             if judgeLocAvail model loc then
                 if abs (dx + dy) == 1 then
                     ( setAvatarTarget model loc
-                    , [ ( LayerName "Frame", LayerIntMsg 1 ) ]
+                    , [ ( LayerName "Frame", LayerIntMsg 1 )
+                      , ( LayerName "Avatar", LayerMsgModifySpirit -3 )
+                      ]
                     , env
                     )
 

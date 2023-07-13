@@ -5,11 +5,11 @@ import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
+import Html exposing (label)
+import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
-import List exposing (length)
-import Html exposing (label)
 
 
 type FilterMode
@@ -188,42 +188,58 @@ renderShadow env model =
         , rend2
         ]
 
+
 {-| render the spirit value in a long box
 -}
 renderSpirit : EnvC -> Model -> Renderable
 renderSpirit env model =
     let
-        max_box_color = Color.rgb255 25 25 112 --dark blue
+        max_box_color =
+            Color.rgb255 25 25 112
+
+        --dark blue
         label_pos =
             ( 550, 40 )
+
         ( box_x, box_y ) =
             ( 450, 50 )
+
         ( box_l, box_w ) =
             ( 200, 15 )
+
         ( spirit_x, spirit_y ) =
             ( 460, 53 )
+
         ( spirit_max_l, spirit_w ) =
             ( 180, 9 )
+
         spirit_l =
-            (toFloat spirit_max_l) / (toFloat maxSpirit) * (toFloat model.spirit)
-        spirit_color = Color.rgb255 255 240 245  --LavenderBlush
+            toFloat spirit_max_l / toFloat maxSpirit * toFloat model.spirit
+
+        spirit_color =
+            Color.rgb255 255 240 245
+
+        --LavenderBlush
         render_label =
             text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit"
+
         render_max_box =
             shapes
-            [ fill max_box_color ]
-            [ rect (coorChange env ( box_x, box_y ) nullCoorData) (lengthChange env box_l nullCoorData) (lengthChange env box_w nullCoorData) ]
+                [ fill max_box_color ]
+                [ rect (coorChange env ( box_x, box_y ) nullCoorData) (lengthChange env box_l nullCoorData) (lengthChange env box_w nullCoorData) ]
+
         render_spirit =
             shapes
-            [ fill spirit_color ]
-            [ rect (coorChange env ( spirit_x, spirit_y ) nullCoorData) (lengthChange env spirit_l nullCoorData) (lengthChange env spirit_w nullCoorData) ]
+                [ fill spirit_color ]
+                [ rect (coorChange env ( spirit_x, spirit_y ) nullCoorData) (lengthChange env spirit_l nullCoorData) (lengthChange env spirit_w nullCoorData) ]
     in
     Canvas.group
-    []
-    [ render_max_box
-    , render_spirit
-    , render_label
-    ]
+        []
+        [ render_max_box
+        , render_spirit
+        , render_label
+        ]
+
 
 {-| For testing
 -}

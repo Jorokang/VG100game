@@ -100,9 +100,8 @@ cardClickPos1 =
 {-| restrict the max spirit
 -}
 maxSpirit : Int
-maxSpirit = 
+maxSpirit =
     30
-
 
 
 {-| Convenient type alias for the environment

@@ -99,6 +99,7 @@ mapPlot plot loc =
     , loc = loc
     }
 
+
 {-| Convenient type alias for the environment
 -}
 type alias EnvC =
