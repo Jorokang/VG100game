@@ -366,7 +366,7 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-            , []
+            , [ ( LayerName "Card", LayerMsgCardType -1) ]
             , env
             )
 
@@ -389,7 +389,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , []
+        , [ ( LayerName "Card", LayerMsgCardType -1) ]
         , env
         )
 

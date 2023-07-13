@@ -14,6 +14,7 @@ switchTurn env model =
             ( { model | status = FrameEnemyTurn }
             , [ ( LayerName "Enemy", LayerMsgEnemyTurn )
               , ( LayerName "Avatar", LayerMsgEnemyTurn )
+              , ( LayerName "Card", LayerMsgEnemyTurn )
               ]
             , env
             )
@@ -24,6 +25,7 @@ switchTurn env model =
             , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
               , ( LayerName "Avatar", LayerMsgPlayerTurn )
               , ( LayerName "Grids", LayerMsgPlayerTurn )
+              , ( LayerName "Card", LayerMsgPlayerTurn )
               ]
             , env
             )
@@ -33,6 +35,7 @@ switchTurn env model =
                 |> restorePlayerStamina
             , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
               , ( LayerName "Avatar", LayerMsgPlayerTurn )
+              , ( LayerName "Card", LayerMsgPlayerTurn )
               ]
             , env
             )
