@@ -82,7 +82,7 @@ updateModel env model =
                             , level2 = { l2 | status = ButtonPressed}
                             , level3 = l3
                             }
-                      }
+                      } --to do : level2
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
@@ -95,11 +95,22 @@ updateModel env model =
                             , level2 = l2
                             , level3 = { l3 | status = ButtonPressed}
                             }
-                      }
+                      } --to do : level3
                     , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
                     , env
                     )
-
+                "setting" ->
+                    ( { n_model
+                        | status = Inactive
+                        , setting = { status = ButtonPressed
+                                    , pos = ( 1300, 400 )
+                                    , size = ( 100, 100 )
+                                    , text = "setting"
+                                    }
+                      } -- now it links to level, to be changed
+                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
+                    , env
+                    )
                 _ ->
                     ( n_model, [], env )
 

@@ -41,5 +41,7 @@ checkall model ( a, b ) =
     else if clickcheck ( a, b ) model.levels.level3 then
         model.levels.level3.text
 
+    else if clickcheck ( a, b ) model.setting then
+        model.setting.text
     else
         ""

@@ -33,6 +33,7 @@ renderButtons env model =
             [ renderButton env model.levels.level1
             , renderButton env model.levels.level2
             , renderButton env model.levels.level3
+            , renderButton env model.setting
             ]
     in
     Canvas.group
@@ -69,7 +70,7 @@ renderButton env btn =
             Canvas.group
                 []
                 --render img and text
-                [ renderSprite env.globalData [] btn.pos ( 500, 500 ) "level"
+                [ renderSprite env.globalData [] btn.pos ( 600, 300 ) "level"
                 , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
                 ]
 

@@ -50,6 +50,7 @@ type alias Model =
     , levels : Levelbtn
     , time : Int
     , click_pos : Point
+    , setting : Button
     }
 
 
@@ -79,7 +80,13 @@ l3 =
     , text = "Level3"
     }
 
-
+initsetting : Button
+initsetting =
+    { status = ButtonActive
+    , pos = ( 1300, 400 )
+    , size = ( 100, 100 )
+    , text = "setting"
+    }
 
 --initialize the level buttons position
 
@@ -98,6 +105,7 @@ nullModel =
     , levels = levelbuttons
     , time = 0
     , click_pos = ( -1, -1 )
+    , setting = initsetting
     }
 
 
