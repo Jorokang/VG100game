@@ -17,9 +17,8 @@ import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
 import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr)
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, modifySpirit, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
+import Scenes.Level.Avatar.Update exposing (updateErodeMsg, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
-
 
 {-| initModel
 Add components here
@@ -29,12 +28,6 @@ initModel _ _ =
     initAvatar1 ( 3, 4 )
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     let
@@ -93,7 +86,7 @@ updateModelRec env lmsg model =
                     ( model, [], env )
 
         LayerMsgErodeCell loc ->
-            ( erodeAvailGrids model loc, [], env )
+            updateErodeMsg env model loc
 
         LayerMsgClearCell loc ->
             ( retrieveAvailGrids model loc, [], env )
@@ -105,10 +98,7 @@ updateModelRec env lmsg model =
             updateCardType env model card_type
 
         LayerMsgModifySpirit x ->
-            ( modifySpirit model x
-            , []
-            , env
-            )
+            updateModifySpirit env model x
 
         _ ->
             ( model, [], env )
@@ -122,8 +112,8 @@ viewModel env model =
                 AvatarActive ->
                     "Active"
 
-                AvatarInactive ->
-                    "Inactive"
+                AvatarDead ->
+                    "Dead"
 
                 AvatarMoving ->
                     "Moving"
@@ -149,8 +139,8 @@ viewModel env model =
             ]
     in
     case model.status of
-        AvatarInactive ->
-            Canvas.empty
+        AvatarDead ->
+            renderStr env ("Avatar status : " ++ str) ( 500, 400 )
 
         _ ->
             Canvas.group

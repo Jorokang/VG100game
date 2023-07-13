@@ -23,6 +23,19 @@ loc2Pos : GridLoc -> Point
 loc2Pos ( lx, ly ) =
     ( (toFloat lx + 0.5) * cellLength, (toFloat ly + 0.5) * cellLength )
 
+updateModifySpirit : EnvC -> Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModifySpirit env model x =
+    let
+        n_model = modifySpirit model x
+    in
+    case n_model.status of
+        AvatarDead ->
+            ( n_model
+            , [ (LayerParentScene, LayerMsgLevelComplete 0) ]
+            , env
+            )
+        _ ->
+            ( n_model, [], env )
 
 {-| simply increase or decrease the spirit by an int
 -}
@@ -42,7 +55,10 @@ modifySpirit model delta =
             else
                 n_spirit0
     in
-    { model | spirit = n_spirit1 }
+    if (n_spirit1 > 0) then
+        { model | spirit = n_spirit1 }
+    else
+        { model | status = AvatarDead }
 
 
 {-| ensure that the pos is synchronized with loc
@@ -115,11 +131,16 @@ moveAvatar model =
         _ ->
             model
 
+{-| The spirit decreasing value when the Avatar is eroded by the enemy
+-}
+spiritLossAtErosion : Int
+spiritLossAtErosion =
+    -10
 
 {-| remove a cell from avail\_grids ( most likely it is eroded by the enemy )
 -}
-erodeAvailGrids : Model -> GridLoc -> Model
-erodeAvailGrids model loc =
+updateErodeMsg : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateErodeMsg env model loc =
     let
         ( nx, ny ) =
             loc
@@ -128,10 +149,13 @@ erodeAvailGrids model loc =
             { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
     in
     if loc == model.cur_loc then
-        setAvatarTarget new_model1 model.core_loc
+        ( setAvatarTarget new_model1 model.core_loc
+        , [ (LayerName "Avatar", LayerMsgModifySpirit spiritLossAtErosion) ]
+        , env
+        )
 
     else
-        new_model1
+        ( new_model1, [], env )
 
 
 {-| add a cell to avail\_grids ( most likely the cell is retrieved from the enemy )

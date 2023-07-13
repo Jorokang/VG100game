@@ -24,7 +24,7 @@ type AvatarStatus
     | AvatarMoving --moving in player's turn
     | AvatarCard --using the card
     | AvatarStopped --stopped
-    | AvatarInactive --inactive
+    | AvatarDead --dead -> loose (spirit == 0)
 
 
 type CardSelectionStatus
@@ -54,7 +54,7 @@ type alias Model =
 -}
 nullModel : Model
 nullModel =
-    { status = AvatarInactive
+    { status = AvatarActive
     , card_status = CardType_None
     , target_loc = ( 0, 0 )
     , cur_loc = ( 0, 0 )
@@ -68,7 +68,7 @@ nullModel =
 
 initAvatar1 : GridLoc -> Model
 initAvatar1 size =
-    { status = AvatarInactive
+    { status = AvatarActive
     , card_status = CardType_None
     , target_loc = ( 0, 1 )
     , cur_loc = ( 0, 1 )

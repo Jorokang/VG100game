@@ -51,7 +51,7 @@ nullModel =
 
 initFrame1 : Model
 initFrame1 =
-    { status = FrameStopped
+    { status = FramePlayerTurn
     , time = 0
     , player_data =
         { cur_stamina = 3
