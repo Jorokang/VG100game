@@ -1,7 +1,7 @@
 module Scenes.Level.Avatar.Render exposing (..)
 
 import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
-import Canvas.Settings exposing (fill)
+import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
@@ -25,9 +25,17 @@ renderAvatar env model =
         [ circle (coorChange env model.pos nullCoorData) (lengthChange env avatarRadius nullCoorData) ]
 
 
-hintColor : Color
-hintColor =
-    rgb255 152 251 152
+{-| settings for rendering hints
+-}
+hintSetting : List Setting
+hintSetting =
+    let
+        hint_color =
+            rgb255 152 251 152
+    in
+    [ filter "opacity(50%)"
+    , fill hint_color
+    ]
 
 
 {-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
@@ -67,7 +75,7 @@ renderSingleHint env model mode loc =
                     List.any (\x -> x == loc) (allGrids model.map_size)
     in
     if judge then
-        shapes [ fill hintColor ] [ rect (coorChange env pos nullCoorData) real_l real_l ]
+        shapes hintSetting [ rect (coorChange env pos nullCoorData) real_l real_l ]
 
     else
         empty

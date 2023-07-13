@@ -55,7 +55,7 @@ updateModel env model =
 
                         Nothing ->
                             ( model
-                            , [ (LayerName "Avatar", LayerMsgClickLoc (-1,-1) ) ]
+                            , [ ( LayerName "Avatar", LayerMsgClickLoc ( -1, -1 ) ) ]
                             , env
                             )
 
