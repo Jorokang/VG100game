@@ -247,10 +247,8 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( -1, 0 ))
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( -2, 0 ))
-            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( -1, 0 )) )
-              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( -2, 0 )) )
+            , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -1, 0 )) )
+              , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -2, 0 )) )
               ]
             , env
             )
@@ -260,10 +258,8 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 1, 0 ))
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 2, 0 ))
-            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 1, 0 )) )
-              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 2, 0 )) )
+            , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 1, 0 )) )
+              , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 2, 0 )) )
               ]
             , env
             )
@@ -273,10 +269,8 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, 1 ))
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, 2 ))
-            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, 1 )) )
-              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, 2 )) )
+            , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 1 )) )
+              , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 2 )) )
               ]
             , env
             )
@@ -286,10 +280,8 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, -1 ))
-                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, -2 ))
-            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, -1 )) )
-              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, -2 )) )
+            , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -1 )) )
+              , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -2 )) )
               ]
             , env
             )

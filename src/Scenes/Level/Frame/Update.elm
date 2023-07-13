@@ -10,21 +10,25 @@ switchTurn env model =
     case model.status of
         FramePlayerTurn ->
             ( { model | status = FrameEnemyTurn }
-            , [ ( LayerName "Enemy", LayerMsgEnemyTurn ), ( LayerName "Avatar", LayerMsgEnemyTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgEnemyTurn )
+              , ( LayerName "Avatar", LayerMsgEnemyTurn ) ]
             , env
             )
 
         FrameEnemyTurn ->
             ( { model | status = FramePlayerTurn }
                 |> restorePlayerStamina
-            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ), ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
+              , ( LayerName "Avatar", LayerMsgPlayerTurn )
+              , ( LayerName "Grids", LayerMsgPlayerTurn ) ]
             , env
             )
 
         FrameStopped ->
             ( { model | status = FramePlayerTurn }
                 |> restorePlayerStamina
-            , [ ( LayerName "Enemy", LayerMsgPlayerTurn ), ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
+            , [ ( LayerName "Enemy", LayerMsgPlayerTurn )
+              , ( LayerName "Avatar", LayerMsgPlayerTurn ) ]
             , env
             )
 
