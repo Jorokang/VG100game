@@ -3,12 +3,13 @@ module Scenes.Level.Avatar.Update exposing (..)
 import Area exposing (inAcres)
 import Base exposing (Msg(..))
 import Canvas exposing (Point)
-import Html.Attributes exposing (rel)
+import Html exposing (li)
+import Html.Attributes exposing (list, rel)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, lowerCell, negPoint, nullCoorData, pointDistance, scalePointLength)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, lowerCell, negPoint, nullCoorData, pointDistance, scalePointLength)
 import Scenes.Level.Grids.Common exposing (Grid)
 
 
@@ -21,73 +22,6 @@ judgeAvatarSelection env click_pos model =
             pointDistance click_pos model.pos
     in
     dis <= avatarRadius
-
-
-{-| judge selection of the four grids surrounding the Avatar
-1: left
-2: up
-3: right
-
-
-## 4: lower
-
-
-## | | | |16 | | | |
-
-
-## | | |15 | 7 |17 | | |
-
-
-## | |14 | 6 | 2 | 8 |18 | |
-
-
-## |13 | 5 | 1 | 0 | 3 | 9 |19 |
-
-
-## | |24 |12 | 4 |10 |20 | |
-
-
-## | | |23 |11 |21 | | |
-
-
-## | | | |22 | | | |
-
--}
-judgeMovingSelection : EnvC -> Point -> Model -> Int
-judgeMovingSelection env click_pos model =
-    let
-        ( locx, locy ) =
-            model.cur_loc
-
-        size =
-            ( cellLength, cellLength )
-
-        left_pos =
-            grid2real ( locx - 1, locy )
-
-        upper_pos =
-            grid2real ( locx, locy - 1 )
-
-        right_pos =
-            grid2real ( locx + 1, locy )
-
-        lower_pos =
-            grid2real ( locx, locy + 1 )
-    in
-    if judgeMouseRect click_pos left_pos size then
-        1
-
-    else if judgeMouseRect click_pos upper_pos size then
-        2
-
-    else if judgeMouseRect click_pos right_pos size then
-        3
-
-    else if judgeMouseRect click_pos lower_pos size then
-        4
-
-    else
-        0
 
 
 {-| get the center of the GridLoc
@@ -193,7 +127,14 @@ retrieveAvailGrids model loc =
     { model | avail_grids = loc :: model.avail_grids }
 
 
-{-| return an int representing the relative position
+{-| add a cell to avail\_grids ( most likely the cell is retrieved from the enemy )
+-}
+retrieveAvailGrids2 : GridLoc -> Model -> Model
+retrieveAvailGrids2 loc model =
+    { model | avail_grids = loc :: model.avail_grids }
+
+
+{-| return an loc representing the relative position
 -}
 relativeLoc : GridLoc -> GridLoc -> GridLoc
 relativeLoc ( cx, cy ) ( locx, locy ) =
@@ -248,6 +189,159 @@ updateClickEvent env model loc =
                 , []
                 , env
                 )
+
+        AvatarCard ->
+            updateCardClickEvent env model loc
+
+        _ ->
+            ( model, [], env )
+
+
+{-| deal with click event of card
+-}
+updateCardClickEvent : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateCardClickEvent env model loc =
+    let
+        relative_loc =
+            relativeLoc model.cur_loc loc
+    in
+    case model.card_status of
+        CardType_1 ->
+            let
+                avail_card_loc =
+                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos1)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType1 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , []
+                , env
+                )
+
+        CardType_None ->
+            ( model, [], env )
+
+
+{-| Card 1 active
+-}
+cardActiveType1 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType1 env model loc =
+    let
+        dir =
+            if loc == ( -1, 0 ) || loc == ( -2, 0 ) then
+                1
+
+            else if loc == ( 1, 0 ) || loc == ( 2, 0 ) then
+                2
+
+            else if loc == ( 0, 1 ) || loc == ( 0, 2 ) then
+                3
+
+            else if loc == ( 0, -1 ) || loc == ( 0, -2 ) then
+                4
+
+            else
+                0
+    in
+    case dir of
+        1 ->
+            ( { model
+                | status = AvatarActive
+                , card_status = CardType_None
+              }
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( -1, 0 ))
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( -2, 0 ))
+            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( -1, 0 )) )
+              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( -2, 0 )) )
+              ]
+            , env
+            )
+
+        2 ->
+            ( { model
+                | status = AvatarActive
+                , card_status = CardType_None
+              }
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 1, 0 ))
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 2, 0 ))
+            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 1, 0 )) )
+              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 2, 0 )) )
+              ]
+            , env
+            )
+
+        3 ->
+            ( { model
+                | status = AvatarActive
+                , card_status = CardType_None
+              }
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, 1 ))
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, 2 ))
+            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, 1 )) )
+              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, 2 )) )
+              ]
+            , env
+            )
+
+        4 ->
+            ( { model
+                | status = AvatarActive
+                , card_status = CardType_None
+              }
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, -1 ))
+                |> retrieveAvailGrids2 (addLoc model.cur_loc ( 0, -2 ))
+            , [ ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, -1 )) )
+              , ( LayerName "Enemy", LayerMsgClearCell (addLoc model.cur_loc ( 0, -2 )) )
+              ]
+            , env
+            )
+
+        _ ->
+            ( { model
+                | status = AvatarActive
+                , card_status = CardType_None
+              }
+            , []
+            , env
+            )
+
+
+{-| filter for click pos (move available grids)
+-}
+filterAvailCardLoc : Model -> List GridLoc -> List GridLoc
+filterAvailCardLoc model list_loc =
+    List.filter (\x1 -> List.any (\x2 -> x2 == x1) model.avail_grids) list_loc
+
+
+{-| filter for click pos (purify available grids, as long as it is in the map)
+-}
+filterMapCardLoc : Model -> List GridLoc -> List GridLoc
+filterMapCardLoc model list_loc =
+    List.filter (\x1 -> List.any (\x2 -> x2 == x1) (allGrids model.map_size)) list_loc
+
+
+{-| add the relative location list to a COM
+-}
+offsetRelativePos : GridLoc -> List GridLoc -> List GridLoc
+offsetRelativePos com list_loc =
+    List.map (addLoc com) list_loc
+
+
+{-| deal with specific card msg
+-}
+updateCardType : EnvC -> Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateCardType env model card_type =
+    case card_type of
+        1 ->
+            ( { model | status = AvatarCard, card_status = CardType_1 }
+            , []
+            , env
+            )
 
         _ ->
             ( model, [], env )

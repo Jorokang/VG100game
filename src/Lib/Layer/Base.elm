@@ -57,6 +57,7 @@ type LayerMsg
     | LayerMsgErodeCell GridLoc --Erode a cell
     | LayerMsgEnemyErodeCell GridLoc --The enemy erodes a cell (sent by the enemy)
     | LayerMsgClickLoc GridLoc --mouse click the grids on a cell
+    | LayerMsgCardType Int --the card type
     | NullLayerMsg
 
 

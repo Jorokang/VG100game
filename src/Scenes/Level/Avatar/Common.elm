@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), GridLoc, avatarRadius, initAvatar1
+    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos1, initAvatar1
     )
 
 {-| Common module
@@ -23,8 +23,14 @@ type AvatarStatus
     = AvatarActive --not selected in player's turn
     | AvatarSelected --selected in player's turn
     | AvatarMoving --moving in player's turn
+    | AvatarCard --using the card
     | AvatarStopped --stopped
     | AvatarInactive --inactive
+
+
+type CardSelectionStatus
+    = CardType_1
+    | CardType_None
 
 
 type alias GridLoc =
@@ -33,11 +39,13 @@ type alias GridLoc =
 
 type alias Model =
     { status : AvatarStatus
+    , card_status : CardSelectionStatus
     , target_loc : GridLoc
     , cur_loc : GridLoc
     , pos : Point
     , avail_grids : List GridLoc
     , core_loc : GridLoc
+    , map_size : GridLoc
     }
 
 
@@ -46,28 +54,39 @@ type alias Model =
 nullModel : Model
 nullModel =
     { status = AvatarInactive
+    , card_status = CardType_None
     , target_loc = ( 0, 0 )
     , cur_loc = ( 0, 0 )
     , pos = ( 0, 0 )
     , avail_grids = []
     , core_loc = ( 0, 0 )
+    , map_size = ( 0, 0 )
     }
 
 
 initAvatar1 : GridLoc -> Model
 initAvatar1 size =
     { status = AvatarInactive
+    , card_status = CardType_None
     , target_loc = ( 0, 1 )
     , cur_loc = ( 0, 1 )
     , pos = ( 0, 0 )
     , avail_grids = allGrids size
     , core_loc = ( 0, 0 )
+    , map_size = size
     }
 
 
 avatarRadius : Float
 avatarRadius =
     cellLength * 0.35
+
+
+{-| About card type setup
+-}
+cardClickPos1 : List GridLoc
+cardClickPos1 =
+    [ ( 1, 0 ), ( 2, 0 ), ( -1, 0 ), ( -2, 0 ), ( 0, 1 ), ( 0, 2 ), ( 0, -1 ), ( 0, -2 ) ]
 
 
 {-| Convenient type alias for the environment

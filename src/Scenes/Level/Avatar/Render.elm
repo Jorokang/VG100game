@@ -1,13 +1,21 @@
 module Scenes.Level.Avatar.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
+import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (filter)
+import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, avatarRadius)
-import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
+import Html exposing (b)
+import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos1)
+import Scenes.Level.Avatar.Update exposing (filterAvailCardLoc, judgeLocAvail, offsetRelativePos)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, lowerCell, nullCoorData)
+
+
+type FilterMode
+    = FilterModeNone
+    | FilterModeAvailCell
+    | FilterModeMapCell
 
 
 {-| render the Avatar
@@ -24,10 +32,21 @@ hintColor =
     rgb255 152 251 152
 
 
+{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
+-}
+deltaLocsDis1 : List GridLoc
+deltaLocsDis1 =
+    [ ( -1, 0 )
+    , ( 0, -1 )
+    , ( 1, 0 )
+    , ( 0, 1 )
+    ]
+
+
 {-| render the hint of a single cell
 -}
-renderSingleHint : EnvC -> Model -> GridLoc -> Renderable
-renderSingleHint env model loc =
+renderSingleHint : EnvC -> Model -> FilterMode -> GridLoc -> Renderable
+renderSingleHint env model mode loc =
     let
         offset =
             6
@@ -37,35 +56,67 @@ renderSingleHint env model loc =
 
         pos =
             addPoint (grid2real loc) ( offset, offset )
+
+        judge =
+            case mode of
+                FilterModeNone ->
+                    True
+
+                FilterModeAvailCell ->
+                    judgeLocAvail model loc
+
+                FilterModeMapCell ->
+                    List.any (\x -> x == loc) (allGrids model.map_size)
     in
-    if judgeLocAvail model loc then
+    if judge then
         shapes [ fill hintColor ] [ rect (coorChange env pos nullCoorData) real_l real_l ]
 
     else
         empty
 
 
-{-| render the hints of movable cells
+{-| render multiple hints
 -}
-renderMovingHint : EnvC -> Model -> List GridLoc -> Renderable
-renderMovingHint env model delta_locs =
+renderMultiHint : EnvC -> Model -> List GridLoc -> FilterMode -> Renderable
+renderMultiHint env model delta_locs mode =
     let
         locs =
             List.map (addLoc model.cur_loc) delta_locs
 
         rend =
-            List.map (renderSingleHint env model) locs
+            List.map (renderSingleHint env model mode) locs
     in
+    Canvas.group
+        []
+        rend
+
+
+{-| render moving hints
+-}
+renderMovingHint : EnvC -> Model -> Renderable
+renderMovingHint env model =
     case model.status of
         AvatarSelected ->
-            Canvas.group
-                []
-                rend
+            renderMultiHint env model deltaLocsDis1 FilterModeAvailCell
 
         _ ->
             Canvas.empty
 
 
+{-| render card hint
+-}
+renderCardHint : EnvC -> Model -> Renderable
+renderCardHint env model =
+    case model.card_status of
+        CardType_1 ->
+            renderMultiHint env model cardClickPos1 FilterModeMapCell
+
+        CardType_None ->
+            Canvas.empty
+
+
+{-| tool function
+-}
 choose1 : Float -> Float -> Float
 choose1 a b =
     if a < b then
@@ -77,12 +128,12 @@ choose1 a b =
 
 maxShadowX : Float
 maxShadowX =
-    cellLength * 6
+    cellLength * 4
 
 
 maxShadowY : Float
 maxShadowY =
-    cellLength * 7
+    cellLength * 5
 
 
 {-| render the shadow
