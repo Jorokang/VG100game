@@ -82,15 +82,15 @@ updateModelRec env msg model =
                 ( { model | status = Inactive }, [], env )
 
         LayerMsgCardType id ->
+            let
+                nmodel =
+                    { model | status = Active, selected_pos = -1, selected_card = giveErrorCard }
+            in
             if id == model.selected_card.id then
-                let
-                    nmodel =
-                        { model | status = Active, selected_pos = -1, selected_card = giveErrorCard, turn_status = model.turn_status - 1 }
-                in
-                ( dropCard nmodel model.selected_pos, [], env )
+                ( dropCard { nmodel | turn_status = model.turn_status - 1 } model.selected_pos, [], env )
 
             else
-                ( model, [], env )
+                ( nmodel, [], env )
 
         _ ->
             ( model, [], env )
