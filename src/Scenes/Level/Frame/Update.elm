@@ -4,7 +4,8 @@ import Base exposing (Msg(..))
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model)
 
-
+{-| swtich the turn
+-}
 switchTurn : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 switchTurn env model =
     case model.status of
@@ -34,6 +35,15 @@ switchTurn env model =
 
         _ ->
             ( model, [], env )
+
+{-| check whether the erode target is valid
+-}
+checkErodePermission : EnvC -> Model -> ( Int, Int ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+checkErodePermission env model loc =
+    ( model
+    , [ ( LayerName "Grids", LayerMsgErodePermission loc 0 )]
+    , env
+    )
 
 
 restorePlayerStamina : Model -> Model

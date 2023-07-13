@@ -21,6 +21,7 @@ import Scenes.Level.Grids.Render exposing (renderGrids)
 import Scenes.Level.Grids.Update exposing (clickPos2Loc, modifyPlotEffect)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Level.Grids.Update exposing (updatePlayerTurn)
+import Scenes.Level.Grids.Update exposing (checkErodePermission)
 
 
 {-| initModel
@@ -78,6 +79,8 @@ updateModelRec env lmsg model =
     case lmsg of
         LayerMsgPlayerTurn ->
             updatePlayerTurn env model
+        LayerMsgErodePermission loc x ->
+            checkErodePermission env model loc
         _ ->
             ( model, [], env )
 

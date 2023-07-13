@@ -58,7 +58,7 @@ type LayerMsg
     | LayerMsgEnemyErodeCell GridLoc --The enemy erodes a cell (sent by the enemy)
     | LayerMsgClickLoc GridLoc --mouse click the grids on a cell
     | LayerMsgCardType Int --the card type
-    | LayerMsgErodePermission Int --check whether this cell is protected
+    | LayerMsgErodePermission GridLoc Int --check whether this cell is protected (Int: 0 -> denied/asking; 1 -> approved)
     | NullLayerMsg
 
 

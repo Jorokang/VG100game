@@ -1,6 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), GridLoc, initEnemy1, maxEyeV
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), GridLoc, initEnemy1, maxEyeV, ErodePriority(..)
     )
 
 {-| Common module
@@ -23,9 +23,14 @@ import Time exposing (Posix, now)
 Add your own data here.
 -}
 type EnemyState
-    = Alive
-    | Stopped
-    | Dead
+    = EnemyAlive
+    | EnemySettingTarget
+    | EnemyStopped
+    | EnemyDead
+
+type ErodePriority
+    = ErodeNearest
+    | ErodeRandom
 
 
 type alias GridLoc =
@@ -109,7 +114,7 @@ nullModel =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Stopped
+    { status = EnemyStopped
     , body = []
     , core = nullEnemyCore
     , map_size = ( 0, 0 )
@@ -127,7 +132,7 @@ initEnemy1 =
         ( number, seed ) =
             randomEnemy (Random.initialSeed 0)
     in
-    { status = Alive
+    { status = EnemyAlive
     , body =
         [ { val =
                 { color = Color.black

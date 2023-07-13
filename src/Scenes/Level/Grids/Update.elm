@@ -6,6 +6,8 @@ import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, 
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, GridLoc, Model, Plot, PlotEffect(..))
 import Scenes.Level.Grids.Common exposing (Plot, Cell, Grid, emptyPlot)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Level.Frame.Update exposing (checkErodePermission)
+import Lib.Env.Env exposing (Env)
 
 {-| Update player turn beginning
 -}
@@ -16,6 +18,31 @@ updatePlayerTurn env model =
     , []
     , env
     )
+
+{-| check erode permission
+-}
+checkErodePermission : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+checkErodePermission env model loc =
+    if (List.any (checkSingleErodePermission loc) model.grids) then
+        ( model
+        , [ (LayerName "Enemy", LayerMsgErodePermission loc 1) ]
+        , env
+        )
+    else
+        ( model
+        , [ (LayerName "Enemy", LayerMsgErodePermission loc 0) ]
+        , env
+        )
+
+{-| check single cell available
+(tool function used for map)
+-}
+checkSingleErodePermission : GridLoc -> Cell Plot -> Bool
+checkSingleErodePermission loc x =
+    if (x.loc == loc && x.val.protection<=0) then
+        True
+    else
+        False
 
 {-| Judge the mouse click and give the grid location of the click.
 -}
