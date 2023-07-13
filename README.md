@@ -1,4 +1,4 @@
-[Project 2]: [Inner Battle]
+[Project 2]: [Light in Nightmares]
 
 # Readme
 This file contains relevant information about installation and startup.
