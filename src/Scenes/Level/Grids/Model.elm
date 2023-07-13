@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty)
 import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderProtection)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
@@ -98,6 +98,7 @@ viewModel env model =
 
                 _ ->
                     [ renderGrids env model
+                    , renderProtection env model
                     ]
     in
     Canvas.group

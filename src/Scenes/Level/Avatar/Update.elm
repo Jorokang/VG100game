@@ -322,7 +322,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , [ ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc loc) 2 ) ]
+        , List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
         , env
         )
 
