@@ -19,7 +19,7 @@ import Scenes.Level.Card.CardCreate exposing (giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (dropCard)
 import Scenes.Level.Card.CardUnique exposing (clickDetect)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
-import Scenes.Level.Card.Render exposing (renderHandCards, renderTestMessage)
+import Scenes.Level.Card.Render exposing (renderCardInfo, renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -110,4 +110,5 @@ viewModel env model =
         []
         [ renderHandCards env model
         , renderTestMessage env model
+        , renderCardInfo env model
         ]

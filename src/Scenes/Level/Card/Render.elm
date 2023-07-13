@@ -15,6 +15,45 @@ renderStr env pos str =
     text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
+giveInfoList : List String
+giveInfoList =
+    [ "purify two grids in a direction"
+    , "protect a grid in all four directions for two turn"
+    , "skip your next turn and gain 8 points of spirit energy"
+    , "make the range of light bigger"
+    , "draw two cards from your deck"
+    , "recall the emotion of the eight grids around you"
+    , "draw three cards from your deck"
+    , "purify the eight grids around you"
+    , "summon a table light on your right for two turns and he will pure the grid he pass"
+    , "gain 5 points of spirit power and have a additional move stage in next turn"
+    , "delete a row or a column beside you"
+    ]
+
+
+renderCardInfo : EnvC -> Model -> Renderable
+renderCardInfo env model =
+    let
+        ( name, info, cost ) =
+            if model.selected_pos == -1 then
+                ( "", "", "" )
+
+            else
+                ( model.selected_card.name
+                , Maybe.withDefault "" <|
+                    List.head <|
+                        List.drop (model.selected_card.id - 1) giveInfoList
+                , String.fromInt model.selected_card.cost ++ " spirits"
+                )
+    in
+    Canvas.group
+        []
+        [ renderStr env (coorChange env ( 900, 250 ) nullCoorData) ("Card name: " ++ name)
+        , renderStr env (coorChange env ( 900, 290 ) nullCoorData) ("Info: " ++ info)
+        , renderStr env (coorChange env ( 900, 370 ) nullCoorData) ("Cost: " ++ cost)
+        ]
+
+
 renderTestMessage : EnvC -> Model -> Renderable
 renderTestMessage env model =
     let
