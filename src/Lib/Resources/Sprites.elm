@@ -33,4 +33,4 @@ Examples:
 -}
 allTexture : List ( String, String )
 allTexture =
-    []
+    [ ( "level", getResourcePath "img/level.svg" ) ]

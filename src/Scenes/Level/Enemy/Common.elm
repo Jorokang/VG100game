@@ -14,7 +14,7 @@ import Color exposing (Color)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Frame.Functions exposing (cellLength, coorChange, int2Point, point2Int)
+import Scenes.Level.Frame.Functions exposing (cellLength, int2Point, point2Int)
 import Scenes.Level.LayerBase exposing (CommonData)
 import Time exposing (Posix, now)
 
