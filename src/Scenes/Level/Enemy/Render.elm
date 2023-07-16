@@ -11,7 +11,7 @@ import List
 import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Tuple
 
@@ -107,7 +107,7 @@ renderEnemyBlockCentral env model x =
     in
     Canvas.group
         []
-        [ shapes [ fill color ] [ rect (coorChange env (grid2real loc) nullCoorData) (lengthChange env cellLength nullCoorData) (lengthChange env cellLength nullCoorData) ]
+        [ shapes [ fill color ] [ rect (coorChange env (grid2real loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
         ]
 
 
@@ -290,7 +290,7 @@ renderTentaclePixels env model color ( rotate, offset ) pos =
 renderTentaclePixel : EnvC -> Color -> Point -> Int -> ( Int, Point ) -> Int -> Renderable
 renderTentaclePixel env color pos l ( rotate, offset ) flag =
     --if (flag==1) then
-    shapes [ fill color ] [ rect (coorChange env (offsetPoint rotate offset pos) nullCoorData) (lengthChange env (toFloat l) nullCoorData) (lengthChange env (toFloat l) nullCoorData) ]
+    shapes [ fill color ] [ rect (coorChange env (offsetPoint rotate offset pos) mapCoorData) (lengthChange env (toFloat l) mapCoorData) (lengthChange env (toFloat l) mapCoorData) ]
 
 
 
@@ -338,14 +338,14 @@ offsetPoint rotate offset pos =
 -}
 renderNum : EnvC -> Int -> Renderable
 renderNum env num =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 50, 50 ) nullCoorData) ("rotate:" ++ String.fromInt num)
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 50, 50 ) mapCoorData) ("rotate:" ++ String.fromInt num)
 
 
 {-| generic function of rendering circle
 -}
 renderCircle : EnvC -> Point -> Int -> Color -> Renderable
 renderCircle env pos radius color =
-    shapes [ fill color ] [ circle (coorChange env pos nullCoorData) (lengthChange env (toFloat radius) nullCoorData) ]
+    shapes [ fill color ] [ circle (coorChange env pos mapCoorData) (lengthChange env (toFloat radius) mapCoorData) ]
 
 
 {-| render the enemy's core
@@ -357,7 +357,7 @@ renderEnemyCore env model =
             int2Point model.core.loc
 
         ( x, y ) =
-            coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) nullCoorData
+            coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) mapCoorData
     in
     shapes
         [ transform
@@ -367,7 +367,7 @@ renderEnemyCore env model =
             ]
         , fill Color.red
         ]
-        [ rect ( x, y ) (lengthChange env (cellLength / 2) nullCoorData) (lengthChange env (cellLength / 2) nullCoorData) ]
+        [ rect ( x, y ) (lengthChange env (cellLength / 2) mapCoorData) (lengthChange env (cellLength / 2) mapCoorData) ]
 
 
 {-| render the enmy's eye
@@ -386,6 +386,6 @@ renderEnemyEye env model =
     in
     Canvas.group
         []
-        [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos nullCoorData) (lengthChange env 20 nullCoorData) ]
-        , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos nullCoorData) (lengthChange env 15 nullCoorData) ]
+        [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos mapCoorData) (lengthChange env 20 mapCoorData) ]
+        , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos mapCoorData) (lengthChange env 15 mapCoorData) ]
         ]

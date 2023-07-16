@@ -132,7 +132,8 @@ viewModel env model =
             [ renderAvatar env model
             , renderMovingHint env model
             , renderCardHint env model
-            , renderShadow env model
+
+            --, renderShadow env model
             , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
             , renderAvailLocs env model
             , renderSingleTuple2 env model.pos

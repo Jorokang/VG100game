@@ -16,6 +16,7 @@ import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Renderable, empty)
 import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap)
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids, renderProtection)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
@@ -41,10 +42,13 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
-                MouseDown x ( a, b ) ->
+                MouseDown x cpos ->
                     let
+                        npos =
+                            addPoint cpos (negPoint offsetCoorMap)
+
                         judge =
-                            clickPos2Loc env model ( a, b )
+                            clickPos2Loc env model npos
                     in
                     case judge of
                         Just loc ->

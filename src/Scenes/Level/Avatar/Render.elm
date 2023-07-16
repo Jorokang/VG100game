@@ -9,7 +9,7 @@ import Html exposing (label)
 import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, mapCoorData)
 
 
 type FilterMode
@@ -24,7 +24,7 @@ renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
     shapes
         [ fill Color.yellow ]
-        [ circle (coorChange env model.pos nullCoorData) (lengthChange env avatarRadius nullCoorData) ]
+        [ circle (coorChange env model.pos mapCoorData) (lengthChange env avatarRadius mapCoorData) ]
 
 
 {-| settings for rendering hints
@@ -49,7 +49,7 @@ renderSingleHint env model mode loc =
             6
 
         real_l =
-            lengthChange env (cellLength - 2 * offset) nullCoorData
+            lengthChange env (cellLength - 2 * offset) mapCoorData
 
         pos =
             addPoint (grid2real loc) ( offset, offset )
@@ -66,7 +66,7 @@ renderSingleHint env model mode loc =
                     List.any (\x -> x == loc) (allGrids model.map_size)
     in
     if judge then
-        shapes hintSetting [ rect (coorChange env pos nullCoorData) real_l real_l ]
+        shapes hintSetting [ rect (coorChange env pos mapCoorData) real_l real_l ]
 
     else
         empty
@@ -157,27 +157,27 @@ renderShadow env model =
             1000
 
         r_maxX =
-            lengthChange env maxShadowX nullCoorData
+            lengthChange env maxShadowX mapCoorData
 
         r_maxY =
-            lengthChange env maxShadowY nullCoorData
+            lengthChange env maxShadowY mapCoorData
 
         rend1 =
             Canvas.group
                 []
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env (px - r1) nullCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) r_maxX (lengthChange env (py - r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r1, 0 ) nullCoorData) (lengthChange env (max (maxShadowX - px - r1) 0) nullCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, py + r1 ) nullCoorData) r_maxX (lengthChange env (max (maxShadowY - py - r1) 0) nullCoorData) ]
+                [ shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (px - r1) mapCoorData) r_maxY ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) mapCoorData) r_maxX (lengthChange env (py - r1) mapCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (maxShadowX - px - r1) 0) mapCoorData) r_maxY ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) r_maxX (lengthChange env (max (maxShadowY - py - r1) 0) mapCoorData) ]
                 ]
 
         rend2 =
             Canvas.group
                 [ filter "opacity(30%)" ]
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r1) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px - r2) (r1 - r2)) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (choose1 (py - r2) (r1 - r2)) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) ]
+                [ shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r1) 0, max (py - r1) 0 ) mapCoorData) (lengthChange env (choose1 (px - r2) (r1 - r2)) mapCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) mapCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, max (py - r1) 0 ) mapCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) mapCoorData) (lengthChange env (choose1 (py - r2) (r1 - r2)) mapCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) mapCoorData) (lengthChange env (r1 - r2) mapCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) mapCoorData) ]
+                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) mapCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) mapCoorData) (lengthChange env (r1 - r2) mapCoorData) ]
                 ]
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
@@ -221,17 +221,17 @@ renderSpirit env model =
 
         --LavenderBlush
         render_label =
-            text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit"
+            text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos mapCoorData) "spirit"
 
         render_max_box =
             shapes
                 [ fill max_box_color ]
-                [ rect (coorChange env ( box_x, box_y ) nullCoorData) (lengthChange env box_l nullCoorData) (lengthChange env box_w nullCoorData) ]
+                [ rect (coorChange env ( box_x, box_y ) mapCoorData) (lengthChange env box_l mapCoorData) (lengthChange env box_w mapCoorData) ]
 
         render_spirit =
             shapes
                 [ fill spirit_color ]
-                [ rect (coorChange env ( spirit_x, spirit_y ) nullCoorData) (lengthChange env spirit_l nullCoorData) (lengthChange env spirit_w nullCoorData) ]
+                [ rect (coorChange env ( spirit_x, spirit_y ) mapCoorData) (lengthChange env spirit_l mapCoorData) (lengthChange env spirit_w mapCoorData) ]
     in
     Canvas.group
         []
@@ -245,7 +245,7 @@ renderSpirit env model =
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
 {-| For testing
@@ -270,7 +270,7 @@ renderSingleTuple env ( x, y ) d =
         pos =
             ( 800, toFloat (d * 40) )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
 renderSingleTuple2 : EnvC -> ( Float, Float ) -> Renderable
@@ -282,4 +282,4 @@ renderSingleTuple2 env ( x, y ) =
         pos =
             ( 1000, 20 )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str

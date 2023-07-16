@@ -6,7 +6,7 @@ import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..))
 import Time exposing (ZoneName(..))
 
@@ -50,12 +50,12 @@ renderPlot env x =
             3
 
         rl =
-            lengthChange env (cellLength - 2 * offset) nullCoorData
+            lengthChange env (cellLength - 2 * offset) mapCoorData
 
         rend_base =
             shapes
                 [ fill color ]
-                [ rect (coorChange env (addPoint pos ( offset, offset )) nullCoorData) rl rl ]
+                [ rect (coorChange env (addPoint pos ( offset, offset )) mapCoorData) rl rl ]
     in
     Canvas.group
         []
@@ -79,10 +79,10 @@ renderPlotGuard env x =
             3
 
         rl =
-            lengthChange env (cellLength - 4 * offset) nullCoorData
+            lengthChange env (cellLength - 4 * offset) mapCoorData
 
         r_pos =
-            coorChange env (addPoint pos ( 2 * offset, 2 * offset )) nullCoorData
+            coorChange env (addPoint pos ( 2 * offset, 2 * offset )) mapCoorData
     in
     if x.val.protection > 0 then
         shapes
@@ -99,7 +99,7 @@ renderPlotGuard env x =
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
 {-| For testing
@@ -127,4 +127,4 @@ renderSingleTuple env x d =
         pos =
             ( 1000, toFloat (d * 40) )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str

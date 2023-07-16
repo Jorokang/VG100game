@@ -85,9 +85,9 @@ scalePointLength pos k =
 
 
 type CoorType
-    = CoorEnemy
+    = CoorUI
     | CoorCard
-    | CoorAvatar
+    | CoorMap
     | CoorNull
 
 
@@ -104,9 +104,29 @@ nullCoorData =
     }
 
 
+mapCoorData : CoorData
+mapCoorData =
+    { coortype = CoorMap
+    }
+
+
+offsetCoorMap : Point
+offsetCoorMap =
+    ( 400, 100 )
+
+
 coorChange : EnvC -> Point -> CoorData -> Point
-coorChange env pos _ =
-    pos
+coorChange env pos cdata =
+    let
+        npos =
+            case cdata.coortype of
+                CoorMap ->
+                    addPoint pos offsetCoorMap
+
+                _ ->
+                    pos
+    in
+    npos
         |> posToReal env.globalData
 
 
