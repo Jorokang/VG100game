@@ -36,6 +36,7 @@ type alias PlayerData =
 type alias NextRoundButton =
     { status : NextRoundButtonStatus
     , size : Point
+    , pos : Point
     , b_rotation_1 : Float
     , b_angular_v_1 : Float
     , b_rotation_2 : Float
@@ -81,6 +82,7 @@ nullNextRoundB : NextRoundButton
 nullNextRoundB =
     { status = NRBStable
     , size = (100, 100)
+    , pos = (1200, 600)
     , b_rotation_1 = 0
     , b_angular_v_1 = 0
     , b_rotation_2 = 0

@@ -8,6 +8,7 @@ import Color exposing (Color)
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton)
 import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData, sizeChange, scalePoint, nextRoundBCoorData)
 import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Frame.Functions exposing (addPoint)
 
 
 renderFrameStatus : EnvC -> Model -> Renderable
@@ -45,16 +46,17 @@ renderStamina env model =
 renderNextRoundB : EnvC -> Model -> Renderable
 renderNextRoundB env model =
     let
-        (k1, k2) = coorChange env (sizeChange env (scalePoint model.next_round_b.size 0.5) nextRoundBCoorData) nextRoundBCoorData
-        rotation_setting_1 =  transform   [ translate k1 k2
-                                        , rotate model.next_round_b.b_rotation_1
+        btn = model.next_round_b
+        (k1, k2) = sizeChange env (scalePoint btn.size 1) nextRoundBCoorData
+        rotation_setting_1 =  transform [ translate k1 k2
+                                        , rotate (degrees model.next_round_b.b_rotation_1)
                                         , translate -k1 -k2]
-        rotation_setting_2 =  transform   [ translate k1 k2
-                                        , rotate model.next_round_b.b_rotation_2
+        rotation_setting_2 =  transform [ translate k1 k2
+                                        , rotate (degrees model.next_round_b.b_rotation_2)
                                         , translate -k1 -k2]
             
-        rend =  [ renderSprite env.globalData [rotation_setting_1] (coorChange env (0,0) nextRoundBCoorData) (sizeChange env model.next_round_b.size nextRoundBCoorData) "next_round_button_1"
-                , renderSprite env.globalData [rotation_setting_2] (coorChange env (0,0) nextRoundBCoorData) (sizeChange env model.next_round_b.size nextRoundBCoorData) "next_round_button_2"
+        rend =  [ renderSprite env.globalData [rotation_setting_1] btn.pos btn.size "next_round_button_1"
+                , renderSprite env.globalData [rotation_setting_2] btn.pos btn.size "next_round_button_2"
                 ]
     in
     Canvas.group

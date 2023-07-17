@@ -116,7 +116,7 @@ mapCoorData = {
 nextRoundBCoorData : CoorData
 nextRoundBCoorData = {
         coortype = CoorUI
-    ,   offset = (1200, 600)
+    ,   offset = (0, 0)
     ,   scale = 1
     }
 

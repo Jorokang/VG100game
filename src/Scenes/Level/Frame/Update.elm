@@ -96,11 +96,11 @@ rotateNRBV2 = -5
 judgeMouseOnNRB : EnvC -> Model -> Bool
 judgeMouseOnNRB env model =
     let
-        mpos = env.globalData.mousePos
-        mpos2 = addPoint mpos (negPoint nextRoundBCoorData.offset)
-        bl = (Tuple.first model.next_round_b.size) / 2 * nextRoundBCoorData.scale
-        bpos = addPoint (addPoint (0,0) (negPoint nextRoundBCoorData.offset)) (bl,bl)
-        dis = pointDistance mpos2 bpos
+        btn = model.next_round_b
+        mpos = addPoint env.globalData.mousePos nextRoundBCoorData.offset
+        bl = (Tuple.first btn.size) / 2 * nextRoundBCoorData.scale
+        bpos = addPoint btn.pos (bl,bl)
+        dis = pointDistance mpos bpos
     in
     dis <= bl
     
@@ -124,8 +124,20 @@ rotateNRB_J btn =
 
 rotateNRB : NextRoundButton -> NextRoundButton
 rotateNRB btn =
-    { btn | b_rotation_1 = btn.b_rotation_1 + btn.b_angular_v_1
-          , b_angular_v_1 = btn.b_rotation_2 + btn.b_angular_v_2
+    let
+        t1 = btn.b_rotation_1 + btn.b_angular_v_1
+        r1 =    if t1 >= 360 then
+                    t1-360
+                else
+                    t1
+        t2 = btn.b_rotation_2 + btn.b_angular_v_2
+        r2 =    if t2 <= 0 then
+                    t2+360
+                else
+                    t2
+    in
+    { btn | b_rotation_1 = t1
+          , b_angular_v_1 = t2
     }
 
 {-| Update the state of the button
