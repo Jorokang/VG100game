@@ -21,6 +21,7 @@ import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEff
 import Scenes.Level.Grids.Render exposing (renderGrids, renderSingleTuple)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Grids.Render exposing (renderLevelBackground)
 
 
 {-| initModel
@@ -107,8 +108,8 @@ viewModel env model =
                     []
 
                 _ ->
-                    [ renderGrids env model
-
+                    [ renderLevelBackground env
+                    , renderGrids env model
                     --, renderSingleTuple env model.last_click
                     ]
     in

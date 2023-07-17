@@ -221,8 +221,10 @@ renderSpirit env model =
 
         --LavenderBlush
         render_label =
-            text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos mapCoorData) "spirit"
-
+            Canvas.group
+            [fill Color.white]
+            [text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos mapCoorData) "spirit"]
+            
         render_max_box =
             shapes
                 [ fill max_box_color ]

@@ -6,9 +6,10 @@ import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData, mapCoorData)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..))
 import Time exposing (ZoneName(..))
+import Scenes.Level.Frame.Functions exposing (nullCoorData)
 
 
 {-| render the whole grid
@@ -94,6 +95,26 @@ renderPlotGuard env x =
     else
         empty
 
+{-|
+render the background of level
+-}
+renderLevelBackground : EnvC -> Renderable
+renderLevelBackground env =
+    let
+        background_1 = shapes
+                [ fill (Color.rgb255 255 240 200 ) ]
+                [ rect (coorChange env (0,0) nullCoorData) (lengthChange env 1920 nullCoorData) (lengthChange env 1080 nullCoorData) 
+                ]
+        background_2 = shapes
+                [ fill (Color.rgb255 20 30 40 ) ]
+                [ rect (coorChange env (100,50) nullCoorData) (lengthChange env 720 nullCoorData) (lengthChange env 600 nullCoorData) 
+                ]
+    in
+    Canvas.group
+    []
+    [ background_1
+    , background_2
+    ]
 
 {-| For testing
 -}

@@ -126,12 +126,12 @@ nextRoundBCoorData =
 
 offsetCoorMap : Point
 offsetCoorMap =
-    ( 400, 100 )
+    ( 150, 100 )
 
 
 scaleCoorMap : Float
 scaleCoorMap =
-    0.5
+    0.75
 
 
 coorChange : EnvC -> Point -> CoorData -> Point

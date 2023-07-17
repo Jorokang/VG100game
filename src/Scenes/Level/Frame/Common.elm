@@ -88,7 +88,7 @@ nullNextRoundB : NextRoundButton
 nullNextRoundB =
     { status = NRBStable
     , radius = 50
-    , pos = ( 1200, 600 )
+    , pos = ( 820, 650 )
     , scale = 1
     , scale_v = 0.03
     , max_scale = 1.24
