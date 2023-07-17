@@ -41,10 +41,15 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
+                Tick _ ->
+                    ( { model | last_click = env.globalData.mousePos }
+                    , []
+                    , env
+                    )
+
                 MouseDown x cpos ->
                     let
                         npos =
-                            --addPoint cpos (negPoint offsetCoorMap)
                             scalePoint (addPoint cpos (negPoint offsetCoorMap)) (1.0 / scaleCoorMap)
 
                         judge =

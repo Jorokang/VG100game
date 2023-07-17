@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , FrameStatus(..), initFrame1, NextRoundButton
+    , FrameStatus(..), initFrame1, NextRoundButton, NextRoundButtonStatus(..)
     )
 
 {-| Common module
@@ -9,6 +9,7 @@ module Scenes.Level.Frame.Common exposing
 
 -}
 
+import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Level.LayerBase exposing (CommonData)
 
@@ -19,6 +20,10 @@ type FrameStatus
     | FrameStopped
     | FrameInactive
 
+type NextRoundButtonStatus
+    = NRBStable
+    | NRBReturning
+    | NRBRotating
 
 {-| Model
 Add your own data here.
@@ -29,8 +34,12 @@ type alias PlayerData =
     }
 
 type alias NextRoundButton =
-    { button_rotation : Float
-    , button_angular_v : Float        
+    { status : NextRoundButtonStatus
+    , size : Point
+    , b_rotation_1 : Float
+    , b_angular_v_1 : Float
+    , b_rotation_2 : Float
+    , b_angular_v_2 : Float 
     }
 --degrees
 
@@ -39,7 +48,7 @@ type alias Model =
     { status : FrameStatus
     , time : Int
     , player_data : PlayerData
-    , next_round_button : NextRoundButton
+    , next_round_b : NextRoundButton
     }
 
 
@@ -53,7 +62,7 @@ nullModel =
         { cur_stamina = 0
         , max_stamina = 0
         }
-    , next_round_button = nullNextRoundButton
+    , next_round_b = nullNextRoundB
     }
 
 
@@ -65,13 +74,17 @@ initFrame1 =
         { cur_stamina = 3
         , max_stamina = 3
         }
-    , next_round_button = nullNextRoundButton
+    , next_round_b = nullNextRoundB
     }
 
-nullNextRoundButton : NextRoundButton
-nullNextRoundButton =
-    { button_rotation= 0
-    , button_angular_v = 0
+nullNextRoundB : NextRoundButton
+nullNextRoundB =
+    { status = NRBStable
+    , size = (100, 100)
+    , b_rotation_1 = 0
+    , b_angular_v_1 = 0
+    , b_rotation_2 = 0
+    , b_angular_v_2 = 0
     }
 
 

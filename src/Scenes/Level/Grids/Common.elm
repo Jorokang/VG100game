@@ -21,13 +21,12 @@ type GridsStatus
     | Inactive
 
 
-type
-    PlotEffect
-    --represents the effect of the plot
+{-| represents the effect of the plot
+-}
+type PlotEffect
     = Empty
     | Angry
     | Lazy
-
 
 type alias GridLoc =
     ( Int, Int )

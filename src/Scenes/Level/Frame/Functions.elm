@@ -106,7 +106,6 @@ nullCoorData = {
     ,   scale = 1
     }
 
-
 mapCoorData : CoorData
 mapCoorData = {
         coortype = CoorMap
@@ -114,6 +113,12 @@ mapCoorData = {
     ,   scale = 1
     }
 
+nextRoundBCoorData : CoorData
+nextRoundBCoorData = {
+        coortype = CoorUI
+    ,   offset = (1200, 600)
+    ,   scale = 1
+    }
 
 offsetCoorMap : Point
 offsetCoorMap =
@@ -127,39 +132,37 @@ scaleCoorMap =
 coorChange : EnvC -> Point -> CoorData -> Point
 coorChange env pos cdata =
     let
-        npos =
-            case cdata.coortype of
-                CoorMap ->
-                    addPoint (scalePoint pos scaleCoorMap) offsetCoorMap
+        npos1 = addPoint (scalePoint pos cdata.scale) cdata.offset
+        npos2 = case cdata.coortype of
+                    CoorMap ->
+                        addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
 
-                _ ->
-                    pos
+                    _ ->
+                        npos1
     in
-    npos
+    npos2
         |> posToReal env.globalData
 
 
 
---global length control function
-
-
+{-| global length control function
+-}
 lengthChange : EnvC -> Float -> CoorData -> Float
 lengthChange env l cdata =
     let
-        nl =    case cdata.coortype of
+        nl1 = l*cdata.scale
+        nl2 =    case cdata.coortype of
                     CoorMap ->
-                        l*scaleCoorMap
+                        nl1*scaleCoorMap
                     _ ->
-                        l
+                        nl1
     in
-    nl
+    nl2
         |> lengthToReal env.globalData
 
 sizeChange : EnvC -> Point -> CoorData -> Point
 sizeChange env (l1, l2) cdata =
     ( lengthChange env l1 cdata, lengthChange env l2 cdata )
-
-
 
 {-|
    ****Cell:
