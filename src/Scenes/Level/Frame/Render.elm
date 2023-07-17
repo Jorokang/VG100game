@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, group, text)
+import Canvas exposing (Point, Renderable, group, text, circle, shapes)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Canvas.Settings.Advanced exposing (transform, rotate, translate)
@@ -8,7 +8,7 @@ import Color exposing (Color)
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton)
 import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData, sizeChange, scalePoint, nextRoundBCoorData)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Functions exposing (addPoint)
+import Scenes.Level.Frame.Functions exposing (lengthChange)
 
 
 renderFrameStatus : EnvC -> Model -> Renderable
@@ -47,17 +47,8 @@ renderNextRoundB : EnvC -> Model -> Renderable
 renderNextRoundB env model =
     let
         btn = model.next_round_b
-        (k1, k2) = sizeChange env (scalePoint btn.size 1) nextRoundBCoorData
-        rotation_setting_1 =  transform [ translate k1 k2
-                                        , rotate (degrees model.next_round_b.b_rotation_1)
-                                        , translate -k1 -k2]
-        rotation_setting_2 =  transform [ translate k1 k2
-                                        , rotate (degrees model.next_round_b.b_rotation_2)
-                                        , translate -k1 -k2]
-            
-        rend =  [ renderSprite env.globalData [rotation_setting_1] btn.pos btn.size "next_round_button_1"
-                , renderSprite env.globalData [rotation_setting_2] btn.pos btn.size "next_round_button_2"
-                ]
+        nradius = btn.radius * btn.scale
+        rend =  [ shapes [fill Color.yellow] [circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData)] ]
     in
     Canvas.group
     []

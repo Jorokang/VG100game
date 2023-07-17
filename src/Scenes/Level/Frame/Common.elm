@@ -22,8 +22,8 @@ type FrameStatus
 
 type NextRoundButtonStatus
     = NRBStable
-    | NRBReturning
-    | NRBRotating
+    | NRBClicked
+    | NRBBig
 
 {-| Model
 Add your own data here.
@@ -35,12 +35,11 @@ type alias PlayerData =
 
 type alias NextRoundButton =
     { status : NextRoundButtonStatus
-    , size : Point
+    , radius : Float
     , pos : Point
-    , b_rotation_1 : Float
-    , b_angular_v_1 : Float
-    , b_rotation_2 : Float
-    , b_angular_v_2 : Float 
+    , scale : Float
+    , scale_v : Float
+    , max_scale : Float
     }
 --degrees
 
@@ -81,12 +80,11 @@ initFrame1 =
 nullNextRoundB : NextRoundButton
 nullNextRoundB =
     { status = NRBStable
-    , size = (100, 100)
+    , radius = 50
     , pos = (1200, 600)
-    , b_rotation_1 = 0
-    , b_angular_v_1 = 0
-    , b_rotation_2 = 0
-    , b_angular_v_2 = 0
+    , scale = 1
+    , scale_v = 0.03
+    , max_scale =1.24
     }
 
 
