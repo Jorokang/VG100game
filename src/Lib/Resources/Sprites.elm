@@ -33,4 +33,9 @@ Examples:
 -}
 allTexture : List ( String, String )
 allTexture =
-    []
+    [ ( "pattern_1", getResourcePath "img/pattern_1.png" )
+    , ( "pattern_2", getResourcePath "img/pattern_2.png" )
+    , ( "pattern_3", getResourcePath "img/pattern_3.png" )
+    , ( "pattern_4", getResourcePath "img/pattern_4.png" )
+    , ( "pattern_5", getResourcePath "img/pattern_5.png" )
+    ]

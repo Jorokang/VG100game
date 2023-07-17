@@ -18,10 +18,9 @@ import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids, renderSingleTuple)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderSingleTuple)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Grids.Render exposing (renderLevelBackground)
 
 
 {-| initModel
@@ -110,6 +109,7 @@ viewModel env model =
                 _ ->
                     [ renderLevelBackground env
                     , renderGrids env model
+
                     --, renderSingleTuple env model.last_click
                     ]
     in

@@ -28,9 +28,9 @@ renderFrameStatus env model =
                     "Inactive"
     in
     Canvas.group
-    [fill Color.white]
-    [text [ font { size = 32, family = "Arial", style = "" }, align Left ] (coorChange env ( 150, 550 ) nullCoorData) str]
-    
+        [ fill Color.white ]
+        [ text [ font { size = 32, family = "Arial", style = "" }, align Left ] (coorChange env ( 150, 550 ) nullCoorData) str ]
+
 
 renderStamina : EnvC -> Model -> Renderable
 renderStamina env model =
@@ -39,8 +39,8 @@ renderStamina env model =
             "Stamina: " ++ String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
     in
     Canvas.group
-    [fill Color.white]
-    [text [ font { size = 32, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 200 ) nullCoorData) str]
+        [ fill Color.white ]
+        [ text [ font { size = 32, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 200 ) nullCoorData) str ]
 
 
 {-| function controlling the next\_round button
