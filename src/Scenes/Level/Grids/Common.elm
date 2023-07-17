@@ -9,6 +9,7 @@ module Scenes.Level.Grids.Common exposing
 
 -}
 
+import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Level.Frame.Functions exposing (allGrids)
 import Scenes.Level.LayerBase exposing (CommonData)
@@ -52,6 +53,7 @@ type alias Model =
     { status : GridsStatus
     , map_size : GridLoc
     , grids : Grid Plot
+    , last_click : Point
     }
 
 
@@ -64,6 +66,7 @@ nullModel =
     { status = Stopped
     , map_size = ( 0, 0 )
     , grids = []
+    , last_click = (0,0)
     }
 
 
@@ -83,6 +86,7 @@ initGrids1 =
     { status = Active
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
+    , last_click = (0,0)
     }
 
 

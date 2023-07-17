@@ -102,29 +102,13 @@ renderStr env str pos =
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
-{-| For testing
--}
-renderProtection : EnvC -> Model -> Renderable
-renderProtection env model =
-    let
-        rend =
-            List.map2 (renderSingleTuple env) model.grids (List.range 1 100)
-    in
-    Canvas.group
-        []
-        rend
-
-
-renderSingleTuple : EnvC -> Cell Plot -> Int -> Renderable
-renderSingleTuple env x d =
+renderSingleTuple : EnvC -> Point -> Renderable
+renderSingleTuple env x =
     let
         ( locx, locy ) =
-            x.loc
+            x
 
         str =
-            "(" ++ String.fromInt locx ++ ", " ++ String.fromInt locy ++ ") : " ++ String.fromInt x.val.protection
-
-        pos =
-            ( 1000, toFloat (d * 40) )
+            "last click in Grids : (" ++ String.fromFloat locx ++ ", " ++ String.fromFloat locy ++ ") : "
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 800, 200 ) mapCoorData) str

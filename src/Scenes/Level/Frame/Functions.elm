@@ -91,28 +91,37 @@ type CoorType
     | CoorNull
 
 
-type alias CoorData =
-    { coortype : CoorType
-
+type alias CoorData = {
+        coortype : CoorType
+    ,   offset : Point
+    ,   scale : Float
     --  Other Data
     }
 
 
 nullCoorData : CoorData
-nullCoorData =
-    { coortype = CoorNull
+nullCoorData = {
+        coortype = CoorNull
+    ,   offset = (0,0)
+    ,   scale = 1
     }
 
 
 mapCoorData : CoorData
-mapCoorData =
-    { coortype = CoorMap
+mapCoorData = {
+        coortype = CoorMap
+    ,   offset = (0,0)
+    ,   scale = 1
     }
 
 
 offsetCoorMap : Point
 offsetCoorMap =
     ( 400, 100 )
+
+scaleCoorMap : Float
+scaleCoorMap = 
+    0.5
 
 
 coorChange : EnvC -> Point -> CoorData -> Point
@@ -121,7 +130,7 @@ coorChange env pos cdata =
         npos =
             case cdata.coortype of
                 CoorMap ->
-                    addPoint pos offsetCoorMap
+                    addPoint (scalePoint pos scaleCoorMap) offsetCoorMap
 
                 _ ->
                     pos
@@ -135,8 +144,15 @@ coorChange env pos cdata =
 
 
 lengthChange : EnvC -> Float -> CoorData -> Float
-lengthChange env l _ =
-    l
+lengthChange env l cdata =
+    let
+        nl =    case cdata.coortype of
+                    CoorMap ->
+                        l*scaleCoorMap
+                    _ ->
+                        l
+    in
+    nl
         |> lengthToReal env.globalData
 
 

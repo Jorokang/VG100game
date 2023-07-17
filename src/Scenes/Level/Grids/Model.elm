@@ -16,12 +16,11 @@ import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Renderable, empty)
 import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap)
+import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids, renderProtection)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderSingleTuple)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
-
 
 {-| initModel
 Add components here
@@ -45,20 +44,21 @@ updateModel env model =
                 MouseDown x cpos ->
                     let
                         npos =
-                            addPoint cpos (negPoint offsetCoorMap)
+                            --addPoint cpos (negPoint offsetCoorMap)
+                            scalePoint (addPoint cpos (negPoint offsetCoorMap)) (1.0 / scaleCoorMap)
 
                         judge =
                             clickPos2Loc env model npos
                     in
                     case judge of
                         Just loc ->
-                            ( model
+                            ( { model | last_click = npos }
                             , [ ( LayerName "Avatar", LayerMsgClickLoc loc ) ]
                             , env
                             )
 
                         Nothing ->
-                            ( model
+                            ( { model | last_click = npos }
                             , [ ( LayerName "Avatar", LayerMsgClickLoc ( -1, -1 ) ) ]
                             , env
                             )
@@ -102,7 +102,7 @@ viewModel env model =
 
                 _ ->
                     [ renderGrids env model
-                    , renderProtection env model
+                    , renderSingleTuple env model.last_click
                     ]
     in
     Canvas.group
