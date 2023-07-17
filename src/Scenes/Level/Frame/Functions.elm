@@ -38,6 +38,13 @@ addPoint a b =
     ( first a + first b, second a + second b )
 
 
+{-| add to GridLoc together
+-}
+addLoc : ( Int, Int ) -> ( Int, Int ) -> ( Int, Int )
+addLoc a b =
+    ( first a + first b, second a + second b )
+
+
 
 --mutiply the Point by a float k
 
@@ -78,14 +85,16 @@ scalePointLength pos k =
 
 
 type CoorType
-    = CoorEnemy
+    = CoorUI
     | CoorCard
-    | CoorAvatar
+    | CoorMap
     | CoorNull
 
 
 type alias CoorData =
     { coortype : CoorType
+    , offset : Point
+    , scale : Float
 
     --  Other Data
     }
@@ -94,32 +103,83 @@ type alias CoorData =
 nullCoorData : CoorData
 nullCoorData =
     { coortype = CoorNull
+    , offset = ( 0, 0 )
+    , scale = 1
     }
 
 
+mapCoorData : CoorData
+mapCoorData =
+    { coortype = CoorMap
+    , offset = ( 0, 0 )
+    , scale = 1
+    }
+
+
+nextRoundBCoorData : CoorData
+nextRoundBCoorData =
+    { coortype = CoorUI
+    , offset = ( 0, 0 )
+    , scale = 1
+    }
+
+
+offsetCoorMap : Point
+offsetCoorMap =
+    ( 150, 100 )
+
+
+scaleCoorMap : Float
+scaleCoorMap =
+    0.75
+
+
 coorChange : EnvC -> Point -> CoorData -> Point
-coorChange env pos _ =
-    pos
+coorChange env pos cdata =
+    let
+        npos1 =
+            addPoint (scalePoint pos cdata.scale) cdata.offset
+
+        npos2 =
+            case cdata.coortype of
+                CoorMap ->
+                    addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
+
+                _ ->
+                    npos1
+    in
+    npos2
         |> posToReal env.globalData
 
 
-
---global length control function
-
-
+{-| global length control function
+-}
 lengthChange : EnvC -> Float -> CoorData -> Float
-lengthChange env l _ =
-    l
+lengthChange env l cdata =
+    let
+        nl1 =
+            l * cdata.scale
+
+        nl2 =
+            case cdata.coortype of
+                CoorMap ->
+                    nl1 * scaleCoorMap
+
+                _ ->
+                    nl1
+    in
+    nl2
         |> lengthToReal env.globalData
 
 
+sizeChange : EnvC -> Point -> CoorData -> Point
+sizeChange env ( l1, l2 ) cdata =
+    ( lengthChange env l1 cdata, lengthChange env l2 cdata )
 
-{-
-   ****Cell:
-   Get the coordinates of the Cell next to the given position
+
+{-| \*\*\*\*Cell:
+Get the coordinates of the Cell next to the given position
 -}
-
-
 leftCell : Point -> Point
 leftCell x =
     ( first x - cellLength, second x )

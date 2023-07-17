@@ -1,12 +1,8 @@
 module Scenes.Level.Card.CardSystem exposing (..)
 
 import Random exposing (Generator, Seed)
-import Scenes.Level.Card.Common exposing (Card, Model)
-
-
-giveErrorCard : Card
-giveErrorCard =
-    { name = "error", id = -1, cost = -1 }
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard_2)
+import Scenes.Level.Card.Common exposing (Model)
 
 
 shufflePile : List Card -> Seed -> ( List Card, Seed )
@@ -57,7 +53,7 @@ drawCard model amount =
             ncard :: nmodel.hand
 
         nnmodel =
-            { nmodel | deck = sortPile ndeck, hand = nhand }
+            { nmodel | deck = ndeck, hand = nhand }
     in
     if amount == 1 then
         nnmodel
@@ -75,7 +71,7 @@ dropCard : Model -> Int -> Model
 dropCard model pos =
     let
         ( dcard, nhand ) =
-            takeCard model.deck pos
+            takeCard model.hand pos
     in
     { model | discard = dcard :: model.discard, hand = nhand }
 
@@ -83,13 +79,8 @@ dropCard model pos =
 takeCard : List Card -> Int -> ( Card, List Card )
 takeCard pile pos =
     let
-        len =
-            List.length pile
-
         tail =
-            List.reverse <|
-                List.take (len - pos) <|
-                    List.reverse pile
+            List.drop pos pile
 
         temp =
             List.take pos pile
@@ -98,7 +89,7 @@ takeCard pile pos =
             List.take (pos - 1) pile
 
         element =
-            Maybe.withDefault giveErrorCard <|
+            Maybe.withDefault giveErrorCard_2 <|
                 List.head <|
                     List.reverse temp
 

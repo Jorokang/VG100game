@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), genEmptyPlots, initGrids1
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1
     )
 
 {-| Common module
@@ -9,6 +9,7 @@ module Scenes.Level.Grids.Common exposing
 
 -}
 
+import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Level.Frame.Functions exposing (allGrids)
 import Scenes.Level.LayerBase exposing (CommonData)
@@ -20,9 +21,9 @@ type GridsStatus
     | Inactive
 
 
-type
-    PlotEffect
-    --represents the effect of the plot
+{-| represents the effect of the plot
+-}
+type PlotEffect
     = Empty
     | Angry
     | Lazy
@@ -44,6 +45,7 @@ type alias Grid a =
 
 type alias Plot =
     { effect : PlotEffect
+    , protection : Int --indicates how many turns is this plot protected. 0 for no protection.
     }
 
 
@@ -51,6 +53,7 @@ type alias Model =
     { status : GridsStatus
     , map_size : GridLoc
     , grids : Grid Plot
+    , last_click : Point
     }
 
 
@@ -63,12 +66,14 @@ nullModel =
     { status = Stopped
     , map_size = ( 0, 0 )
     , grids = []
+    , last_click = ( 0, 0 )
     }
 
 
 emptyPlot : Plot
 emptyPlot =
     { effect = Empty
+    , protection = 0
     }
 
 
@@ -81,6 +86,7 @@ initGrids1 =
     { status = Active
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
+    , last_click = ( 0, 0 )
     }
 
 
