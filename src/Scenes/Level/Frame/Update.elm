@@ -1,10 +1,11 @@
 module Scenes.Level.Frame.Update exposing (..)
 
-import Base exposing (Msg(..), GlobalData)
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButtonStatus(..), NextRoundButton)
-import Scenes.Level.Frame.Functions exposing (nullCoorData, nextRoundBCoorData, pointDistance, addPoint, negPoint)
+import Base exposing (GlobalData, Msg(..))
+import Canvas exposing (Point)
 import Lib.Env.Env exposing (Env)
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton, NextRoundButtonStatus(..))
+import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, nextRoundBCoorData, nullCoorData, pointDistance)
 
 
 {-| swtich the turn
@@ -79,61 +80,112 @@ costPlayerStamina model =
             }
     }
 
+
+
 --The following functions are the determined values of the next_round_button
 
+
 returnNRBV1 : Float
-returnNRBV1 = 5
+returnNRBV1 =
+    5
+
 
 returnNRBV2 : Float
-returnNRBV2 = -5
+returnNRBV2 =
+    -5
+
 
 rotateNRBV1 : Float
-rotateNRBV1 = 2
+rotateNRBV1 =
+    2
+
 
 rotateNRBV2 : Float
-rotateNRBV2 = -2
+rotateNRBV2 =
+    -2
+
 
 judgeMouseOnNRB : EnvC -> Model -> Bool
 judgeMouseOnNRB env model =
     let
-        btn = model.next_round_b
-        mpos = addPoint env.globalData.mousePos nextRoundBCoorData.offset
-        bl = btn.radius * btn.scale * nextRoundBCoorData.scale
-        dis = pointDistance mpos btn.pos
+        btn =
+            model.next_round_b
+
+        mpos =
+            addPoint env.globalData.mousePos nextRoundBCoorData.offset
+
+        bl =
+            btn.radius * btn.scale * nextRoundBCoorData.scale
+
+        dis =
+            pointDistance mpos btn.pos
     in
     dis <= bl
+
 
 moveNRB : NextRoundButton -> NextRoundButton
 moveNRB btn =
     case btn.status of
         NRBStable ->
-            if (btn.scale-btn.scale_v <= 1) then
+            if btn.scale - btn.scale_v <= 1 then
                 { btn | scale = 1 }
+
             else
-                { btn | scale = btn.scale-btn.scale_v }
+                { btn | scale = btn.scale - btn.scale_v }
 
         NRBBig ->
-            if (btn.scale+btn.scale_v>=btn.max_scale) then
+            if btn.scale + btn.scale_v >= btn.max_scale then
                 { btn | scale = btn.max_scale }
+
             else
-                { btn | scale = btn.scale+btn.scale_v }
+                { btn | scale = btn.scale + btn.scale_v }
+
         NRBClicked ->
             { btn | scale = 1 }
 
-    
 
 {-| Update the state of the button
 -}
 updateTickNRB : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateTickNRB env model =
     let
-        btn = model.next_round_b
-        btn1 =  if (judgeMouseOnNRB env model) then
-                    { btn | status = NRBBig }
-                else
-                    { btn | status = NRBStable }
+        btn =
+            model.next_round_b
+
+        btn1 =
+            if judgeMouseOnNRB env model then
+                { btn | status = NRBBig }
+
+            else
+                { btn | status = NRBStable }
     in
     ( { model | next_round_b = moveNRB btn1 }
     , []
     , env
     )
+
+
+updateMouseClickNRB : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateMouseClickNRB env model click_pos =
+    let
+        btn =
+            model.next_round_b
+
+        mpos =
+            addPoint click_pos nextRoundBCoorData.offset
+
+        bl =
+            btn.radius * btn.scale * nextRoundBCoorData.scale
+
+        dis =
+            pointDistance mpos btn.pos
+
+        clicked_btn =
+            { btn | status = NRBClicked }
+    in
+    if dis <= bl then
+        { model | next_round_b = clicked_btn }
+            |> switchTurn env
+
+    else
+        ( model, [], env )

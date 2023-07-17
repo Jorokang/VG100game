@@ -91,58 +91,65 @@ type CoorType
     | CoorNull
 
 
-type alias CoorData = {
-        coortype : CoorType
-    ,   offset : Point
-    ,   scale : Float
+type alias CoorData =
+    { coortype : CoorType
+    , offset : Point
+    , scale : Float
+
     --  Other Data
     }
 
 
 nullCoorData : CoorData
-nullCoorData = {
-        coortype = CoorNull
-    ,   offset = (0,0)
-    ,   scale = 1
+nullCoorData =
+    { coortype = CoorNull
+    , offset = ( 0, 0 )
+    , scale = 1
     }
+
 
 mapCoorData : CoorData
-mapCoorData = {
-        coortype = CoorMap
-    ,   offset = (0,0)
-    ,   scale = 1
+mapCoorData =
+    { coortype = CoorMap
+    , offset = ( 0, 0 )
+    , scale = 1
     }
 
+
 nextRoundBCoorData : CoorData
-nextRoundBCoorData = {
-        coortype = CoorUI
-    ,   offset = (0, 0)
-    ,   scale = 1
+nextRoundBCoorData =
+    { coortype = CoorUI
+    , offset = ( 0, 0 )
+    , scale = 1
     }
+
 
 offsetCoorMap : Point
 offsetCoorMap =
     ( 400, 100 )
 
+
 scaleCoorMap : Float
-scaleCoorMap = 
+scaleCoorMap =
     0.5
 
 
 coorChange : EnvC -> Point -> CoorData -> Point
 coorChange env pos cdata =
     let
-        npos1 = addPoint (scalePoint pos cdata.scale) cdata.offset
-        npos2 = case cdata.coortype of
-                    CoorMap ->
-                        addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
+        npos1 =
+            addPoint (scalePoint pos cdata.scale) cdata.offset
 
-                    _ ->
-                        npos1
+        npos2 =
+            case cdata.coortype of
+                CoorMap ->
+                    addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
+
+                _ ->
+                    npos1
     in
     npos2
         |> posToReal env.globalData
-
 
 
 {-| global length control function
@@ -150,26 +157,29 @@ coorChange env pos cdata =
 lengthChange : EnvC -> Float -> CoorData -> Float
 lengthChange env l cdata =
     let
-        nl1 = l*cdata.scale
-        nl2 =    case cdata.coortype of
-                    CoorMap ->
-                        nl1*scaleCoorMap
-                    _ ->
-                        nl1
+        nl1 =
+            l * cdata.scale
+
+        nl2 =
+            case cdata.coortype of
+                CoorMap ->
+                    nl1 * scaleCoorMap
+
+                _ ->
+                    nl1
     in
     nl2
         |> lengthToReal env.globalData
 
+
 sizeChange : EnvC -> Point -> CoorData -> Point
-sizeChange env (l1, l2) cdata =
+sizeChange env ( l1, l2 ) cdata =
     ( lengthChange env l1 cdata, lengthChange env l2 cdata )
 
-{-|
-   ****Cell:
-   Get the coordinates of the Cell next to the given position
+
+{-| \*\*\*\*Cell:
+Get the coordinates of the Cell next to the given position
 -}
-
-
 leftCell : Point -> Point
 leftCell x =
     ( first x - cellLength, second x )

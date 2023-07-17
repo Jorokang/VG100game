@@ -28,6 +28,7 @@ type PlotEffect
     | Angry
     | Lazy
 
+
 type alias GridLoc =
     ( Int, Int )
 
@@ -65,7 +66,7 @@ nullModel =
     { status = Stopped
     , map_size = ( 0, 0 )
     , grids = []
-    , last_click = (0,0)
+    , last_click = ( 0, 0 )
     }
 
 
@@ -85,7 +86,7 @@ initGrids1 =
     { status = Active
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
-    , last_click = (0,0)
+    , last_click = ( 0, 0 )
     }
 
 

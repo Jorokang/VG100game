@@ -22,6 +22,7 @@ import Scenes.Level.Grids.Render exposing (renderGrids, renderSingleTuple)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
+
 {-| initModel
 Add components here
 -}

@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , FrameStatus(..), initFrame1, NextRoundButton, NextRoundButtonStatus(..)
+    , FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), initFrame1
     )
 
 {-| Common module
@@ -20,10 +20,12 @@ type FrameStatus
     | FrameStopped
     | FrameInactive
 
+
 type NextRoundButtonStatus
     = NRBStable
     | NRBClicked
     | NRBBig
+
 
 {-| Model
 Add your own data here.
@@ -33,6 +35,7 @@ type alias PlayerData =
     , max_stamina : Int
     }
 
+
 type alias NextRoundButton =
     { status : NextRoundButtonStatus
     , radius : Float
@@ -41,6 +44,9 @@ type alias NextRoundButton =
     , scale_v : Float
     , max_scale : Float
     }
+
+
+
 --degrees
 
 
@@ -77,14 +83,15 @@ initFrame1 =
     , next_round_b = nullNextRoundB
     }
 
+
 nullNextRoundB : NextRoundButton
 nullNextRoundB =
     { status = NRBStable
     , radius = 50
-    , pos = (1200, 600)
+    , pos = ( 1200, 600 )
     , scale = 1
     , scale_v = 0.03
-    , max_scale =1.24
+    , max_scale = 1.24
     }
 
 
