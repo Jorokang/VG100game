@@ -108,7 +108,8 @@ viewModel env model =
 
                 _ ->
                     [ renderGrids env model
-                    , renderSingleTuple env model.last_click
+
+                    --, renderSingleTuple env model.last_click
                     ]
     in
     Canvas.group

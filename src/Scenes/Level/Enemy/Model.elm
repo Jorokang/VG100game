@@ -14,17 +14,15 @@ module Scenes.Level.Enemy.Model exposing
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point, Renderable, empty, group)
+import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import List
 import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, updatePlayerRound, updateEnemyRound, updateEnemySettingTarget, updateEndRound)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
-import Scenes.Level.Enemy.Update exposing (curPriority)
-import Scenes.Level.Enemy.Update exposing (resetRecursionTimes)
-import List
-import Lib.Env.Env exposing (Env)
 
 
 {-| initModel
@@ -50,8 +48,9 @@ updateModel env model =
             case env.msg of
                 Tick newTime ->
                     let
-                        nmodel = { model | time = Time.posixToMillis newTime }
-                                    |> updateRandNum
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
                     in
                     ( --{ model | time = Time.posixToMillis newTime }
                       nmodel
@@ -66,11 +65,12 @@ updateModel env model =
             case env.msg of
                 Tick newTime ->
                     let
-                        nmodel = { model | time = Time.posixToMillis newTime }
-                                    |> updateRandNum
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
                     in
                     moveEnemyEye env nmodel
-                    
+
                 _ ->
                     ( model, [], env )
 
@@ -111,13 +111,14 @@ updateModelRec env lmsg model =
             , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
-        
+
         LayerMsgEnemyTurn ->
             updateEnemySettingTarget env (updateEnemyRound model) (curPriority model)
 
         LayerMsgEnemySetTarget ->
-            if (List.isEmpty model.target_priority) then
+            if List.isEmpty model.target_priority then
                 updateEndRound env model
+
             else
                 updateEnemySettingTarget env model (curPriority model)
 

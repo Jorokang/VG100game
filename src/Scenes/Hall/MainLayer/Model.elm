@@ -98,7 +98,8 @@ viewModel env model =
         rend =
             [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
             , renderButtonPureColor env model.btn_1 Color.gray
-            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+
+            --, renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group

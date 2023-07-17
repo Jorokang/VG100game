@@ -99,6 +99,7 @@ updateModelRec env lmsg model =
         LayerMsgPlayerTurn ->
             if model.status == FrameEnemyTurn then
                 switchTurn env model
+
             else
                 ( model, [], env )
 

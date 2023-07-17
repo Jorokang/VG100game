@@ -161,6 +161,7 @@ initEnemy1 =
     , eroding = True
     }
 
+
 targetPriority1 : List ErodePriority
 targetPriority1 =
     [ ErodeNearest, ErodeNearest ]

@@ -59,28 +59,28 @@ tentacleDir model loc =
             loc
 
         right =
-            if (List.any (checkCellLoc ( x + 1, y )) model.body  || x==(Tuple.first model.map_size)) then
+            if List.any (checkCellLoc ( x + 1, y )) model.body || x == Tuple.first model.map_size then
                 []
 
             else
                 [ 1 ]
 
         up =
-            if (List.any (checkCellLoc ( x, y - 1 )) model.body  || y==0) then
+            if List.any (checkCellLoc ( x, y - 1 )) model.body || y == 0 then
                 []
-            
+
             else
                 [ 4 ]
 
         left =
-            if (List.any (checkCellLoc ( x - 1, y )) model.body  || x==0) then
+            if List.any (checkCellLoc ( x - 1, y )) model.body || x == 0 then
                 []
 
             else
                 [ 7 ]
 
         down =
-            if (List.any (checkCellLoc ( x, y + 1 )) model.body || y==(Tuple.second model.map_size)) then
+            if List.any (checkCellLoc ( x, y + 1 )) model.body || y == Tuple.second model.map_size then
                 []
 
             else
