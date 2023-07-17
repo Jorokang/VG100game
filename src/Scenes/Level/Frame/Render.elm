@@ -52,7 +52,9 @@ renderNextRoundB env model =
             btn.radius * btn.scale
 
         rend =
-            [ shapes [ fill Color.yellow ] [ circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData) ] ]
+            [ shapes [ fill Color.yellow ] [ circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData) ]
+            , text [ font { size = round(20*btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+            ]
     in
     Canvas.group
         []
