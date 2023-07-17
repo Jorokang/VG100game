@@ -1,6 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, maxEyeV
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, maxEyeV, targetPriority1
     )
 
 {-| Common module
@@ -25,6 +25,7 @@ Add your own data here.
 type EnemyState
     = EnemyAlive
     | EnemySettingTarget
+    | EnemyMoving
     | EnemyStopped
     | EnemyDead
 
@@ -80,6 +81,8 @@ type alias Model =
     , target : GridLoc
     , eye : EnemyEye
     , recursion_times : Int
+    , target_priority : List ErodePriority
+    , eroding : Bool
     }
 
 
@@ -126,6 +129,8 @@ nullModel =
     , target = ( -1, -1 )
     , eye = nullEnemyEye
     , recursion_times = 0
+    , target_priority = []
+    , eroding = False
     }
 
 
@@ -152,7 +157,13 @@ initEnemy1 =
     , target = ( -1, -1 )
     , eye = nullEnemyEye
     , recursion_times = 0
+    , target_priority = targetPriority1
+    , eroding = True
     }
+
+targetPriority1 : List ErodePriority
+targetPriority1 =
+    [ ErodeNearest, ErodeNearest ]
 
 
 {-| Convenient type alias for the environment

@@ -41,15 +41,6 @@ updateModel env model =
         Tick _ ->
             updateTickNRB env model
 
-        KeyDown x ->
-            case x of
-                13 ->
-                    --enter -> switch turn
-                    switchTurn env model
-
-                _ ->
-                    ( model, [], env )
-
         MouseDown x mpos ->
             updateMouseClickNRB env model mpos
 
@@ -104,6 +95,12 @@ updateModelRec env lmsg model =
 
         LayerMsgErodePermission loc x ->
             checkErodePermission env model loc
+
+        LayerMsgPlayerTurn ->
+            if model.status == FrameEnemyTurn then
+                switchTurn env model
+            else
+                ( model, [], env )
 
         _ ->
             ( model, [], env )

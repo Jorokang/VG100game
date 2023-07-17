@@ -62,6 +62,8 @@ type LayerMsg
     | LayerMsgProtectCell GridLoc Int --protect the cell for x rounds
     | LayerMsgModifySpirit Int --modify the spirit
     | LayerMsgLevelComplete Int -- 0->loose; 1->win;
+    | LayerMsgEnemyErodeTarget
+    | LayerMsgEnemySetTarget
     | NullLayerMsg
 
 
