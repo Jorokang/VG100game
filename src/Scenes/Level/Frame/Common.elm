@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , FrameStatus(..), initFrame1
+    , FrameStatus(..), initFrame1, NextRoundButton
     )
 
 {-| Common module
@@ -28,11 +28,18 @@ type alias PlayerData =
     , max_stamina : Int
     }
 
+type alias NextRoundButton =
+    { button_rotation : Float
+    , button_angular_v : Float        
+    }
+--degrees
+
 
 type alias Model =
     { status : FrameStatus
     , time : Int
     , player_data : PlayerData
+    , next_round_button : NextRoundButton
     }
 
 
@@ -46,6 +53,7 @@ nullModel =
         { cur_stamina = 0
         , max_stamina = 0
         }
+    , next_round_button = nullNextRoundButton
     }
 
 
@@ -57,6 +65,13 @@ initFrame1 =
         { cur_stamina = 3
         , max_stamina = 3
         }
+    , next_round_button = nullNextRoundButton
+    }
+
+nullNextRoundButton : NextRoundButton
+nullNextRoundButton =
+    { button_rotation= 0
+    , button_angular_v = 0
     }
 
 

@@ -155,9 +155,13 @@ lengthChange env l cdata =
     nl
         |> lengthToReal env.globalData
 
+sizeChange : EnvC -> Point -> CoorData -> Point
+sizeChange env (l1, l2) cdata =
+    ( lengthChange env l1 cdata, lengthChange env l2 cdata )
 
 
-{-
+
+{-|
    ****Cell:
    Get the coordinates of the Cell next to the given position
 -}

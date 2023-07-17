@@ -36,4 +36,6 @@ Examples:
 -}
 allTexture : List ( String, String )
 allTexture =
-    []
+    [ ( "next_round_button_1", getResourcePath "img/next_round_button_1.png" )
+    , ( "next_round_button_2", getResourcePath "img/next_round_button_2.png" )
+    ]
