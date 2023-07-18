@@ -29,16 +29,23 @@ updateModifySpirit env model x =
     let
         n_model =
             modifySpirit model x
+
+        msg =
+            if x == 0 then
+                [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
+
+            else
+                []
     in
     case n_model.status of
         AvatarDead ->
             ( n_model
-            , [ ( LayerParentScene, LayerMsgLevelComplete 0 ) ]
+            , ( LayerParentScene, LayerMsgLevelComplete 0 ) :: msg
             , env
             )
 
         _ ->
-            ( n_model, [], env )
+            ( n_model, msg, env )
 
 
 {-| simply increase or decrease the spirit by an int

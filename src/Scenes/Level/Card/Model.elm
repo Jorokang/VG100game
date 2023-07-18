@@ -92,6 +92,9 @@ updateModelRec env msg model =
             else
                 ( nmodel, [], env )
 
+        LayerMsgModifySpirit x ->
+            ( { model | spirit = x }, [], env )
+
         _ ->
             ( model, [], env )
 
