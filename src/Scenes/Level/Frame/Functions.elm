@@ -141,6 +141,7 @@ scaleCoorMap : Float
 scaleCoorMap =
     0.75
 
+
 {-| The global coordinate control function
 -}
 coorChange : EnvC -> Point -> CoorData -> Point
@@ -161,7 +162,7 @@ coorChange env pos cdata =
         |> posToReal env.globalData
 
 
-{-| The version for Sprite (without posToReal) of coorChange 
+{-| The version for Sprite (without posToReal) of coorChange
 -}
 coorChangeS : EnvC -> Point -> CoorData -> Point
 coorChangeS env pos cdata =
@@ -178,6 +179,7 @@ coorChangeS env pos cdata =
                     npos1
     in
     npos2
+
 
 {-| global length control function
 -}
@@ -198,6 +200,7 @@ lengthChange env l cdata =
     nl2
         |> lengthToReal env.globalData
 
+
 {-| The sprite version for lengthChange ( without lengthToReal )
 -}
 lengthChangeS : EnvC -> Float -> CoorData -> Float
@@ -216,11 +219,13 @@ lengthChangeS env l cdata =
     in
     nl2
 
+
 {-| Tuple version of lengthChange
 -}
 sizeChange : EnvC -> Point -> CoorData -> Point
 sizeChange env ( l1, l2 ) cdata =
     ( lengthChange env l1 cdata, lengthChange env l2 cdata )
+
 
 {-| Sprite version of sizeChange
 -}
