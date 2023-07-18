@@ -131,6 +131,7 @@ viewModel env model =
         rend =
             [ renderAvatar env model
             , renderMovingHint env model
+            , renderShadow env model
             , renderCardHint env model
             , renderSpirit env model
             ]

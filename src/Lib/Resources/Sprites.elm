@@ -38,4 +38,5 @@ allTexture =
     , ( "pattern_3", getResourcePath "img/pattern_3.png" )
     , ( "pattern_4", getResourcePath "img/pattern_4.png" )
     , ( "pattern_5", getResourcePath "img/pattern_5.png" )
+    , ( "light_shade", getResourcePath "img/light_shade.png" )
     ]

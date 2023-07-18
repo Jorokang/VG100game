@@ -116,6 +116,14 @@ mapCoorData =
     }
 
 
+shadowCoorData : CoorData
+shadowCoorData =
+    { coortype = CoorUI
+    , offset = ( 150, 100 )
+    , scale = 0.75
+    }
+
+
 nextRoundBCoorData : CoorData
 nextRoundBCoorData =
     { coortype = CoorUI

@@ -9,7 +9,7 @@ import Html exposing (label)
 import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, mapCoorData)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData, mapCoorData, shadowCoorData)
 
 
 type FilterMode
@@ -126,58 +126,35 @@ choose1 a b =
         b
 
 
-maxShadowX : Float
-maxShadowX =
-    cellLength * 4
-
-
-maxShadowY : Float
-maxShadowY =
-    cellLength * 5
-
-
 {-| render the shadow
+100, 50 -> 720, 600
 -}
 renderShadow : EnvC -> Model -> Renderable
 renderShadow env model =
     let
+        ( bx, by ) =
+            (100, 50)
+        ( dx, dy ) =
+            ( 50, 50 )
+        ( sx, sy ) =
+            (720, 600)
+        lx = lengthChange env sx shadowCoorData
+        ly = lengthChange env sy shadowCoorData
         ( px, py ) =
-            model.pos
+            addPoint model.pos (0,0)
+        colorb = Color.rgb255 20 30 40
 
         r1 =
-            cellLength * 2.6
-
-        r2 =
-            cellLength * 1.2
-
-        l1 =
-            2000
-
-        l2 =
-            1000
-
-        r_maxX =
-            lengthChange env maxShadowX mapCoorData
-
-        r_maxY =
-            lengthChange env maxShadowY mapCoorData
+            cellLength * 1.6
 
         rend1 =
             Canvas.group
                 []
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (px - r1) mapCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) mapCoorData) r_maxX (lengthChange env (py - r1) mapCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (maxShadowX - px - r1) 0) mapCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) r_maxX (lengthChange env (max (maxShadowY - py - r1) 0) mapCoorData) ]
-                ]
-
-        rend2 =
-            Canvas.group
-                [ filter "opacity(30%)" ]
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r1) 0, max (py - r1) 0 ) mapCoorData) (lengthChange env (choose1 (px - r2) (r1 - r2)) mapCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) mapCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, max (py - r1) 0 ) mapCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) mapCoorData) (lengthChange env (choose1 (py - r2) (r1 - r2)) mapCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) mapCoorData) (lengthChange env (r1 - r2) mapCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) mapCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) mapCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) mapCoorData) (lengthChange env (r1 - r2) mapCoorData) ]
+                --[ shapes [ fill colorb ] [ rect (coorChange env ( bx, by ) shadowCoorData) (lengthChange env (max (px - r1 - bx) 0) shadowCoorData) ly ]
+                [ shapes [ fill colorb ] [ rect (coorChange env ( 0,0 ) mapCoorData) (lengthChange env (max (px-r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0,0 ) mapCoorData) lx (lengthChange env (max (py-r1) 0) mapCoorData) ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) lx (lengthChange env (max (sy - py - r1) 0) mapCoorData) ]
                 ]
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
@@ -185,7 +162,6 @@ renderShadow env model =
     Canvas.group
         []
         [ rend1
-        , rend2
         ]
 
 
