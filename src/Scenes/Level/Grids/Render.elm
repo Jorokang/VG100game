@@ -173,13 +173,13 @@ renderLevelBackground env =
         background_1 =
             shapes
                 [ fill (Color.rgb255 255 240 200) ]
-                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 1920 shadowCoorData) (lengthChange env 1080 shadowCoorData)
+                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2536 shadowCoorData) (lengthChange env 1600 shadowCoorData)
                 ]
 
         background_2 =
             shapes
                 [ fill (Color.rgb255 20 30 40) ]
-                [ rect (coorChange env ( 100, 50 ) nullCoorData) (lengthChange env 720 shadowCoorData) (lengthChange env 600 shadowCoorData)
+                [ rect (coorChange env ( 150, 100 ) nullCoorData) (lengthChange env 1080 shadowCoorData) (lengthChange env 960 shadowCoorData)
                 ]
     in
     Canvas.group

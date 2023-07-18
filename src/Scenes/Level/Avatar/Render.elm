@@ -9,7 +9,8 @@ import Html exposing (label)
 import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData, mapCoorData, shadowCoorData)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData, mapCoorData, shadowCoorData, coorChangeS, sizeChangeS, lengthChangeS)
+import Lib.Render.Sprite exposing (renderSprite)
 
 
 type FilterMode
@@ -141,11 +142,15 @@ renderShadow env model =
         lx = lengthChange env sx shadowCoorData
         ly = lengthChange env sy shadowCoorData
         ( px, py ) =
-            addPoint model.pos (0,0)
+            model.pos
         colorb = Color.rgb255 20 30 40
 
         r1 =
             cellLength * 1.6
+        r2 =
+            cellLength * 1.7
+
+        spos = ( px-r2, py-r2 ) 
 
         rend1 =
             Canvas.group
@@ -155,6 +160,7 @@ renderShadow env model =
                 , shapes [ fill colorb ] [ rect (coorChange env ( 0,0 ) mapCoorData) lx (lengthChange env (max (py-r1) 0) mapCoorData) ]
                 , shapes [ fill colorb ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - r1) 0) mapCoorData) ly ]
                 , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) lx (lengthChange env (max (sy - py - r1) 0) mapCoorData) ]
+                , renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( 2*r2, 2*r2 ) mapCoorData) "light_shade"
                 ]
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
