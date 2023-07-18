@@ -42,9 +42,9 @@ clicked model lp =
             ( bool, nindex + 1 )
 
 
-costSpirit : Model -> Model
+costSpirit : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 costSpirit model =
-    { model | spirit = model.spirit - model.selected_card.cost }
+    ( { model | spirit = model.spirit - model.selected_card.cost }, [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ] )
 
 
 enoughSpirit : Model -> Bool
@@ -154,7 +154,7 @@ card_2 model =
 
 card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 card_3 model =
-    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Card", LayerMsgCardType 3 ) ] )
+    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
 
 card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
