@@ -76,6 +76,40 @@ dropCard model pos =
     { model | discard = dcard :: model.discard, hand = nhand }
 
 
+dropCardByCard : Model -> Card -> Model
+dropCardByCard model card =
+    let
+        ( bool, pos ) =
+            searchCard model.hand card
+    in
+    if bool then
+        dropCard model pos
+
+    else
+        model
+
+
+searchCard : List Card -> Card -> ( Bool, Int )
+searchCard pile card =
+    if List.length pile == 0 then
+        ( False, -1 )
+
+    else
+        let
+            ( head, npile ) =
+                takeCard pile 1
+        in
+        if card.id == head.id then
+            ( True, 1 )
+
+        else
+            let
+                ( bool, pos ) =
+                    searchCard npile card
+            in
+            ( bool, pos + 1 )
+
+
 takeCard : List Card -> Int -> ( Card, List Card )
 takeCard pile pos =
     let
