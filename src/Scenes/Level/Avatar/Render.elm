@@ -23,9 +23,11 @@ type FilterMode
 -}
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
-    shapes
-        [ fill Color.yellow ]
-        [ circle (coorChange env model.pos mapCoorData) (lengthChange env avatarRadius mapCoorData) ]
+    let
+        pos =
+            addPoint model.pos ( -0.5 * cellLength, -0.5 * cellLength )
+    in
+    renderSprite env.globalData [] (coorChangeS env pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "avatar"
 
 
 {-| settings for rendering hints
@@ -155,10 +157,10 @@ renderShadow env model =
             Color.rgb255 20 30 40
 
         r1 =
-            cellLength * 1.6
+            cellLength * 1.7
 
         r2 =
-            cellLength * 1.7
+            cellLength * 1.8
 
         spos =
             ( px - r2, py - r2 )
