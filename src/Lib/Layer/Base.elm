@@ -65,6 +65,7 @@ type LayerMsg
     | LayerMsgEnemyErodeTarget
     | LayerMsgEnemySetTarget
     | LayerMsgAvatarModifyLight Float
+    | LayerMsgIncreaseStamina Int Int
     | NullLayerMsg
 
 

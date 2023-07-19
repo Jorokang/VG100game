@@ -141,9 +141,8 @@ cardToEffect model card =
 
         --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
         10 ->
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 5 ), ( LayerName "Frame", LayerMsgIncreaseStamina 1 1 ), ( LayerName "Card", LayerMsgCardType 10 ) ] )
 
-        --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
         11 ->
             ( model, [ ( LayerName "Avatar", LayerMsgCardType 11 ) ] )
 
