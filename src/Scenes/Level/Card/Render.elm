@@ -5,7 +5,7 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (white)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveBackPile, giveDeckSize, giveErrorCard, giveHandSize)
+import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChange, sizeChangeS)
@@ -139,7 +139,23 @@ renderDeckCards env model =
     Canvas.group
         []
         [ renderHelper env model index length (giveBackPile model.deck) giveDeckSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 80 ) nullCoorData) "Deck Cards"
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 50 ) nullCoorData) "Deck Cards"
+        ]
+
+
+renderDiscardCards : EnvC -> Model -> Renderable
+renderDiscardCards env model =
+    let
+        length =
+            List.length model.discard
+
+        index =
+            1
+    in
+    Canvas.group
+        []
+        [ renderHelper env model index length (giveBackPile model.discard) giveDiscardSize
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 250 ) nullCoorData) "Deck Cards"
         ]
 
 

@@ -88,6 +88,17 @@ giveDeckSize =
     }
 
 
+giveDiscardSize : PileSize
+giveDiscardSize =
+    { name = "pile"
+    , startPoint = ( 850, 300 )
+    , length = 120
+    , width = 80
+    , interval = 3
+    , offset = 15
+    }
+
+
 giveBackPile : List Card -> List Card
 giveBackPile pile =
     List.map (\x -> giveBackCard) pile
