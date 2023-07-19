@@ -24,7 +24,7 @@ renderMasking env model =
     let
         masking = shapes
                     [ fill (Color.white)
-                    , filter "opacity(50%)" ]
+                    , filter "opacity(66%)" ]
                     [ rect (posToReal env.globalData (0,0)) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
     in
     case model.status of

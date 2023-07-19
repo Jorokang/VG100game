@@ -42,4 +42,6 @@ allTexture =
     , ( "avatar", getResourcePath "img/avatar.png" )
     , ( "room_background_1", getResourcePath "img/room_background_1.png" )
     , ( "room_background_2", getResourcePath "img/room_background_2.png" )
+    , ( "family_painting_1", getResourcePath "img/family_painting_1.png" )
+    , ( "family_painting_2", getResourcePath "img/family_painting_2.png" )
     ]

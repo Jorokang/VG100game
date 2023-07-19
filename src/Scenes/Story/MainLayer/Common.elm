@@ -46,16 +46,16 @@ nullStoryItem =
     , str = ""
     }
 
-initStoryItem1 : StoryItem
-initStoryItem1 =
-    { c_pos = (0,0)
-    , c_size = (100, 100)
-    , c_sprite_name = "pattern_1"
+familyPaintingItem : StoryItem
+familyPaintingItem =
+    { c_pos = (30, 800)
+    , c_size = (100, 130)
+    , c_sprite_name = "family_painting_1"
     , c_scale = 1
-    , v_pos = (100,100)
-    , v_size = (1000, 500)
-    , v_sprite_name = "pattern_2"
-    , str = "test"
+    , v_pos = (500,200)
+    , v_size = (800, 800)
+    , v_sprite_name = "family_painting_2"
+    , str = "Mum and Dad and Me"
     }
 
 button2Hall : StoryItem
@@ -80,7 +80,7 @@ nullModel =
 initModel1 : Model
 initModel1 =
     { status = StoryRoom
-    , family_painting = initStoryItem1
+    , family_painting = familyPaintingItem
     , button_hall = button2Hall
     }
 
