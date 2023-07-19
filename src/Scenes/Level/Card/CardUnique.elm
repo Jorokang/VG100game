@@ -52,9 +52,19 @@ costSpirit model =
     [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ]
 
 
+enoughTurn : Model -> Bool
+enoughTurn model =
+    model.turn_status > 0
+
+
 enoughSpirit : Model -> Bool
 enoughSpirit model =
     model.spirit > model.selected_card.cost
+
+
+selected : Model -> Int -> Card -> Model
+selected model pos card =
+    { model | selected_card = card, selected_pos = pos }
 
 
 notSelected : Model -> Model
@@ -88,6 +98,39 @@ clickDetect model =
 
     else
         ( notSelected model, [] )
+
+
+clickCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+clickCard model =
+    let
+        ( bool, index ) =
+            clicked model (cardArea model)
+
+        nmodel =
+            { model | click_status = False }
+
+        card =
+            first (takeCard model.hand index)
+    in
+    if bool then
+        if nmodel.selected_pos == -1 then
+            if index /= -1 then
+                selectCard (selected nmodel index card) card
+
+            else
+                ( notSelected nmodel, [] )
+
+        else if index == model.selected_pos then
+            endCard nmodel card
+
+        else if index /= -1 then
+            selectCard (selected nmodel index card) card
+
+        else
+            ( notSelected nmodel, [] )
+
+    else
+        ( notSelected nmodel, [] )
 
 
 playCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -127,9 +170,9 @@ cardToEffect model card =
             ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
         6 ->
+            --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
             ( model, [] )
 
-        --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
         7 ->
             ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
@@ -137,9 +180,9 @@ cardToEffect model card =
             ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
         9 ->
+            --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
             ( model, [] )
 
-        --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
         10 ->
             ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 5 ), ( LayerName "Frame", LayerMsgIncreaseStamina 1 1 ), ( LayerName "Card", LayerMsgCardType 10 ) ] )
 
@@ -152,85 +195,89 @@ cardToEffect model card =
 
 selectCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
 selectCard model card =
-    case card.id of
-        1 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
+    if enoughSpirit model && enoughTurn model then
+        case card.id of
+            1 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
 
-        2 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
+            2 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
 
-        3 ->
-            ( model, [] )
+            3 ->
+                ( model, [] )
 
-        4 ->
-            ( model, [] )
+            4 ->
+                ( model, [] )
 
-        5 ->
-            ( model, [] )
+            5 ->
+                ( model, [] )
 
-        6 ->
-            ( model, [] )
+            6 ->
+                ( model, [] )
 
-        7 ->
-            ( model, [] )
+            7 ->
+                ( model, [] )
 
-        8 ->
-            ( model, [] )
+            8 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
-        9 ->
-            ( model, [] )
+            9 ->
+                ( model, [] )
 
-        10 ->
-            ( model, [] )
+            10 ->
+                ( model, [] )
 
-        11 ->
-            ( model, [] )
+            11 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 11 ) ] )
 
-        _ ->
-            ( model, [] )
+            _ ->
+                ( model, [] )
+
+    else
+        ( model, [] )
 
 
 endCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
 endCard model card =
-    case card.id of
-        1 ->
-            ( model, [] )
+    if enoughSpirit model && enoughTurn model then
+        case card.id of
+            1 ->
+                ( model, [] )
 
-        2 ->
-            ( model, [] )
+            2 ->
+                ( model, [] )
 
-        3 ->
-            ( { model | turn_status = model.turn_status - 1 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
+            3 ->
+                ( { model | turn_status = model.turn_status - 1 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
-        4 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )
+            4 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )
 
-        5 ->
-            ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
+            5 ->
+                ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
-        6 ->
-            ( model, [] )
+            6 ->
+                --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
+                ( model, [] )
 
-        --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
-        7 ->
-            ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
+            7 ->
+                ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
-        8 ->
-            ( model, [] )
+            8 ->
+                ( model, [] )
 
-        --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
-        9 ->
-            ( model, [] )
+            9 ->
+                --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
+                ( model, [] )
 
-        --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
-        10 ->
-            ( model, [] )
+            10 ->
+                ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 5 ), ( LayerName "Frame", LayerMsgIncreaseStamina 1 1 ), ( LayerName "Card", LayerMsgCardType 10 ) ] )
 
-        --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
-        11 ->
-            ( model, [] )
+            11 ->
+                ( model, [] )
 
-        -- "-1" means Clear All
-        --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
-        _ ->
-            ( model, [] )
+            _ ->
+                ( model, [] )
+
+    else
+        ( model, [] )
