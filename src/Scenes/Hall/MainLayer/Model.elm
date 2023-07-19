@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLoose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderButtonPureColor, renderStr, renderTime)
 import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
@@ -96,10 +96,9 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
+            [ renderBackground env model
+            , renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
             , renderButtonPureColor env model.btn_1 Color.gray
-
-            --, renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
             ]
     in
     Canvas.group
