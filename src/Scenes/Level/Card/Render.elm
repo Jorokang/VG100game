@@ -83,7 +83,7 @@ renderTestMessage env model =
         , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.2.7"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.2.9"
         ]
 
 

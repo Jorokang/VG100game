@@ -30,6 +30,7 @@ type AvatarStatus
 type CardSelectionStatus
     = CardType_1
     | CardType_2
+    | CardType_11
     | CardType_None
 
 

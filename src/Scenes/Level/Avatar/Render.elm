@@ -114,6 +114,9 @@ renderCardHint env model =
         CardType_2 ->
             renderMultiHint env model cardClickPos0 FilterModeAvailCell
 
+        CardType_11 ->
+            renderMultiHint env model cardClickPos0 FilterModeMapCell
+
         CardType_None ->
             Canvas.empty
 

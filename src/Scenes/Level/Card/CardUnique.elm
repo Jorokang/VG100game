@@ -146,10 +146,8 @@ cardToEffect model card =
 
         --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
         11 ->
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 11 ) ] )
 
-        -- "-1" means Clear All
-        --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
         _ ->
             ( model, [] )
 
