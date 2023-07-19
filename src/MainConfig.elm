@@ -27,7 +27,7 @@ import Lib.Scene.Base exposing (SceneInitData(..))
 -}
 initScene : String
 initScene =
-    "Hall"
+    "Story"
 
 
 {-| Initial scene settings

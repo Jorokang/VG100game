@@ -17,6 +17,8 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Story.SceneInit exposing (StoryInit)
+import Scenes.Story.MainLayer.Common exposing (initModel1)
+import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
 
 
 {-| initModel
@@ -24,15 +26,9 @@ Add components here
 -}
 initModel : EnvC -> StoryInit -> Model
 initModel _ _ =
-    nullModel
+    initModel1
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     ( model, [], env )
@@ -58,5 +54,13 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    text [ font { size = 48, family = "Arial", style = "" }, align Center ] ( 50, 50 ) "Story"
+viewModel env model =
+    let
+        rend = [ renderBackground env model
+               , renderMasking env model
+               , renderStoryItem env model
+               ]
+    in
+    Canvas.group
+    []
+    rend
