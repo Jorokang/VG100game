@@ -20,7 +20,7 @@ import Base exposing (Msg(..))
 import Scenes.Story.SceneInit exposing (StoryInit)
 import Scenes.Story.MainLayer.Common exposing (initModel1)
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
-import Scenes.Story.MainLayer.Update exposing (updateModelRoom, updateModelItems)
+import Scenes.Story.MainLayer.Update exposing (updateModelRoom, updateModelItems, updateModelItemsScale)
 
 
 {-| initModel
@@ -43,6 +43,8 @@ updateModel env model =
                     updateModelItems env model m_pos
                 StoryNull ->
                     ( model, [], env )
+        Tick _ ->
+            updateModelItemsScale env model
         _ ->
             ( model, [], env )
 

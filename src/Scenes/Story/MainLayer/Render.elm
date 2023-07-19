@@ -8,6 +8,8 @@ import Color exposing (Color, rgb255)
 import Scenes.Story.MainLayer.Common exposing (Model, StoryStatus(..), StoryItem, EnvC)
 import Lib.Coordinate.Coordinates exposing (posToReal, lengthToReal)
 import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Frame.Functions exposing (scalePoint, addPoint, negPoint)
+import Canvas.Settings.Advanced exposing (scale)
 
 {-| render the background of the Story Layer
     (Specifically the image of room)
@@ -36,6 +38,12 @@ renderMasking env model =
         _ ->
             masking
 
+{-| calculate the real position of the item (according to the scale) at clicking status
+-}
+realPosItemC : StoryItem -> ( Point , Point )
+realPosItemC i =
+    ( addPoint i.c_pos ( negPoint (scalePoint i.c_size ((i.c_scale-1)/2) ) ), scalePoint i.c_size i.c_scale )
+
 {-| render the StoryItem
 -}
 renderStoryItem : EnvC -> Model -> Renderable
@@ -55,10 +63,11 @@ renderStoryItem env model =
         StoryRoom ->
             let
                 i = model.family_painting
-                rend_s = renderSprite env.globalData [] i.c_pos i.c_size i.c_sprite_name
+                ( pos1, size1 ) = realPosItemC i
+                rend_family_painting = renderSprite env.globalData [] pos1 size1 i.c_sprite_name
             in
             Canvas.group
             []
-            [ rend_s ]
+            [ rend_family_painting ]
         StoryNull ->
             Canvas.empty

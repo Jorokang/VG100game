@@ -2,7 +2,7 @@ module Scenes.Story.MainLayer.Update exposing (..)
 
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), StoryItem, nullStoryItem)
-import Base exposing (Msg(..))
+import Base exposing (Msg(..), GlobalData)
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (posToReal, lengthToReal)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
@@ -67,3 +67,35 @@ updateModelItems env model m_pos =
         , []
         , env
         )
+
+{-| increase the scale of a single item to 1.3
+-}
+increaseItemScale : StoryItem -> StoryItem
+increaseItemScale i =
+    { i | c_scale = 1.3 }
+
+{-| decrease the scale of a single item to 1
+-}
+decreaseItemScale : StoryItem -> StoryItem
+decreaseItemScale i =
+    { i | c_scale = 1 }
+
+{-| update the scale of items when the mouse is on them at clicking status
+-}
+updateModelItemsScale : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModelItemsScale env model =
+    let
+        m_pos = env.globalData.mousePos
+        judge = judgeClickItemC model m_pos
+    in
+    case judge of
+        StoryFamilyPainting ->
+            ( { model | family_painting = increaseItemScale model.family_painting }
+            , []
+            , env
+            )
+        _ ->
+            ( { model | family_painting = decreaseItemScale model.family_painting }
+            , []
+            , env
+            )

@@ -19,6 +19,7 @@ type alias StoryItem =
     { c_pos : Point
     , c_size : Point
     , c_sprite_name : String
+    , c_scale : Float
     , v_pos : Point
     , v_size : Point
     , v_sprite_name : String
@@ -35,6 +36,7 @@ nullStoryItem =
     { c_pos = (0,0)
     , c_size = (0,0)
     , c_sprite_name = ""
+    , c_scale = 1
     , v_pos = (0,0)
     , v_size = (0,0)
     , v_sprite_name = ""
@@ -46,6 +48,7 @@ initStoryItem1 =
     { c_pos = (0,0)
     , c_size = (100, 100)
     , c_sprite_name = "pattern_1"
+    , c_scale = 1
     , v_pos = (100,100)
     , v_size = (1000, 500)
     , v_sprite_name = "pattern_2"
