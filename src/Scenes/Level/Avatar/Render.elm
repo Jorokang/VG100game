@@ -156,6 +156,9 @@ renderShadow env model =
         colorb =
             Color.rgb255 20 30 40
 
+        range =
+            model.lightRange
+
         r1 =
             cellLength * 1.7
 
@@ -163,20 +166,20 @@ renderShadow env model =
             cellLength * 1.8
 
         spos =
-            ( px - r2, py - r2 )
+            ( px - range / 2 * r2, py - range / 2 * r2 )
 
         rend1 =
             Canvas.group
                 []
                 --[ shapes [ fill colorb ] [ rect (coorChange env ( bx, by ) shadowCoorData) (lengthChange env (max (px - r1 - bx) 0) shadowCoorData) ly ]
-                [ shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (max (px - r1) 0) mapCoorData) ly ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) lx (lengthChange env (max (py - r1) 0) mapCoorData) ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - r1) 0) mapCoorData) ly ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) lx (lengthChange env (max (sy - py - r1) 0) mapCoorData) ]
+                [ shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (max (px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) lx (lengthChange env (max (py - range / 2 * r1) 0) mapCoorData) ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( px + range / 2 * r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + range / 2 * r1 ) mapCoorData) lx (lengthChange env (max (sy - py - range / 2 * r1) 0) mapCoorData) ]
                 ]
 
         rend2 =
-            renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( 2 * r2, 2 * r2 ) mapCoorData) "light_shade"
+            renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( range * r2, range * r2 ) mapCoorData) "light_shade"
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
     in

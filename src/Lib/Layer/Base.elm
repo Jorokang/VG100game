@@ -64,6 +64,7 @@ type LayerMsg
     | LayerMsgLevelComplete Int -- 0->loose; 1->win;
     | LayerMsgEnemyErodeTarget
     | LayerMsgEnemySetTarget
+    | LayerMsgAvatarModifyLight Float
     | NullLayerMsg
 
 

@@ -44,6 +44,11 @@ updateModifySpirit env model x =
             ( n_model, msg, env )
 
 
+updateModifyLight : EnvC -> Model -> Float -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModifyLight env model r =
+    ( { model | lightRange = model.lightRange + r }, [], env )
+
+
 {-| simply increase or decrease the spirit by an int
 -}
 modifySpirit : Model -> Int -> Model
@@ -269,7 +274,7 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 
@@ -286,7 +291,7 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 

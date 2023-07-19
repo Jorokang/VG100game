@@ -3,7 +3,7 @@ module Scenes.Level.Card.CardUnique exposing (..)
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard, giveHandSize)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
@@ -18,7 +18,7 @@ cardArea model =
 
 pointHelper : Int -> Point
 pointHelper num =
-    addPoint ( 0, 725 ) (scalePoint ( 100, 0 ) (toFloat num - 1))
+    addPoint giveHandSize.startPoint (scalePoint ( giveHandSize.interval + giveHandSize.width, 0 ) (toFloat num - 1))
 
 
 clicked : Model -> List Point -> ( Bool, Int )
@@ -31,7 +31,7 @@ clicked model lp =
             point =
                 Maybe.withDefault ( -1, -1 ) (List.head lp)
         in
-        if judgeMouseRect model.point point ( 80, 120 ) then
+        if judgeMouseRect model.point point ( giveHandSize.width, giveHandSize.length ) then
             ( True, 1 )
 
         else
@@ -55,6 +55,11 @@ costSpirit model =
 enoughSpirit : Model -> Bool
 enoughSpirit model =
     model.spirit > model.selected_card.cost
+
+
+notSelected : Model -> Model
+notSelected model =
+    { model | selected_card = giveErrorCard, selected_pos = -1 }
 
 
 clickedPos : Model -> ( Bool, Int )
@@ -82,7 +87,7 @@ clickDetect model =
             ( { nmodel | selected_pos = index, selected_card = card }, [] )
 
     else
-        ( { nmodel | selected_pos = -1, selected_card = giveErrorCard }, [] )
+        ( notSelected model, [] )
 
 
 playCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -90,9 +95,6 @@ playCard model =
     let
         card =
             model.selected_card
-
-        nmodel =
-            costSpirit model
 
         nnmodel =
             { model | status = Playing }
@@ -119,9 +121,8 @@ cardToEffect model card =
             ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
         4 ->
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )
 
-        --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
         5 ->
             ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
@@ -203,12 +204,11 @@ endCard model card =
             ( model, [] )
 
         3 ->
-            ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
+            ( { model | turn_status = model.turn_status - 1 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
         4 ->
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )
 
-        --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
         5 ->
             ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 

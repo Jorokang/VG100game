@@ -3,7 +3,7 @@ module Scenes.Level.Card.Render exposing (..)
 import Canvas exposing (Point, Renderable, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard)
+import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard, giveHandSize)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData, scalePoint)
@@ -81,7 +81,7 @@ renderTestMessage env model =
         , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.2.3"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.2.6"
         ]
 
 
@@ -140,18 +140,27 @@ renderCard env card num selected =
         color =
             card.img
 
-        interval =
-            100
+        startPoint =
+            giveHandSize.startPoint
 
         offset =
-            15
+            giveHandSize.offset
+
+        width =
+            giveHandSize.width
+
+        length =
+            giveHandSize.length
+
+        interval =
+            giveHandSize.interval + width
     in
     if selected then
         shapes
             [ fill color ]
-            [ rect (coorChange env (addPoint ( 0 - offset, 725 - offset ) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env (80 + 2 * offset) nullCoorData) (lengthChange env (120 + 2 * offset) nullCoorData) ]
+            [ rect (coorChange env (addPoint (addPoint ( -offset, -offset ) startPoint) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
 
     else
         shapes
             [ fill color ]
-            [ rect (coorChange env (addPoint ( 0, 725 ) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env 80 nullCoorData) (lengthChange env 120 nullCoorData) ]
+            [ rect (coorChange env (addPoint startPoint (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env width nullCoorData) (lengthChange env length nullCoorData) ]

@@ -17,7 +17,7 @@ import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
 import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr)
-import Scenes.Level.Avatar.Update exposing (moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifySpirit)
+import Scenes.Level.Avatar.Update exposing (moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -100,6 +100,9 @@ updateModelRec env lmsg model =
 
         LayerMsgModifySpirit x ->
             updateModifySpirit env model x
+
+        LayerMsgAvatarModifyLight r ->
+            updateModifyLight env model r
 
         _ ->
             ( model, [], env )

@@ -47,6 +47,7 @@ type alias Model =
     , core_loc : GridLoc
     , map_size : GridLoc
     , spirit : Int
+    , lightRange : Float
     }
 
 
@@ -63,6 +64,7 @@ nullModel =
     , core_loc = ( 0, 0 )
     , map_size = ( 0, 0 )
     , spirit = 0
+    , lightRange = 0
     }
 
 
@@ -77,6 +79,7 @@ initAvatar1 size =
     , core_loc = ( 0, 0 )
     , map_size = size
     , spirit = 30
+    , lightRange = 2
     }
 
 

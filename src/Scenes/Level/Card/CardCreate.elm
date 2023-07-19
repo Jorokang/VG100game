@@ -2,6 +2,7 @@ module Scenes.Level.Card.CardCreate exposing (..)
 
 --card name and the cost
 
+import Canvas exposing (Point)
 import Color exposing (Color, black, blue, brown, green, grey, lightGreen, lightGrey, lightRed, orange, purple, red, yellow)
 
 
@@ -10,6 +11,15 @@ type alias Card =
     , id : Int
     , cost : Int
     , img : Color
+    }
+
+
+type alias HandSize =
+    { startPoint : Point
+    , length : Float
+    , width : Float
+    , interval : Float
+    , offset : Float
     }
 
 
@@ -48,3 +58,13 @@ giveCard id =
 
     else
         giveErrorCard
+
+
+giveHandSize : HandSize
+giveHandSize =
+    { startPoint = ( 25, 725 )
+    , length = 120
+    , width = 80
+    , interval = 20
+    , offset = 15
+    }
