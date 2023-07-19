@@ -14,13 +14,17 @@ module Scenes.Hall.MainLayer.Model exposing
 
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
+import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLoose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
-import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
+import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLose, initModelWin, nullModel, Choice(..))
+import Scenes.Hall.MainLayer.Render exposing (renderButton, renderStr, renderTime)
+import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, checkopen)
 import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
+import Set exposing (Set)
+import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderButtons)
+
 
 
 {-| initModel
@@ -30,7 +34,7 @@ initModel : EnvC -> HallInit -> Model
 initModel _ i =
     case i.status of
         0 ->
-            initModelLoose
+            initModelLose
 
         1 ->
             initModelWin
@@ -53,77 +57,26 @@ updateModel env model =
             , []
             , env
             )
-
-        --       KeyDown x ->
-        --         ( model, [ ( LayerParentScene, LayerStringMsg "Level" ) ], env )
+            
         MouseDown x ( a, b ) ->
             let
                 n_model =
                     { model | click_pos = ( a, b ) }
-
-                s =
-                    checkall n_model ( a, b )
-
-                --change the btn status
             in
-            case s of
-                "Level1" ->
-                    ( { n_model
-                        | status = Inactive
-                        , levels =
-                            { level1 = { l1 | status = ButtonPressed }
-                            , level2 = l2
-                            , level3 = l3
-                            }
-                      }
-                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
-                    , env
-                    )
+            case checkopen n_model ( a, b ) of
+                Level ->
+                    btn_1_clicked env n_model
 
-                "Level2" ->
-                    ( { n_model
-                        | status = Inactive
-                        , levels =
-                            { level1 = l1
-                            , level2 = { l2 | status = ButtonPressed }
-                            , level3 = l3
-                            }
-                      }
-                      --to do : level2
-                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
-                    , env
-                    )
+                Help ->
+                    btn_1_clicked env n_model
 
-                "Level3" ->
-                    ( { n_model
-                        | status = Inactive
-                        , levels =
-                            { level1 = l1
-                            , level2 = l2
-                            , level3 = { l3 | status = ButtonPressed }
-                            }
-                      }
-                      --to do : level3
-                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
-                    , env
-                    )
+                Card ->
+                    btn_1_clicked env n_model
 
-                "setting" ->
-                    ( { n_model
-                        | status = Inactive
-                        , setting =
-                            { status = ButtonPressed
-                            , pos = ( 1300, 400 )
-                            , size = ( 100, 100 )
-                            , text = "setting"
-                            }
-                      }
-                      -- now it links to level, to be changed
-                    , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
-                    , env
-                    )
+                Setting ->
+                    ( n_model, [], env )
 
-                _ ->
+                Hall ->
                     ( n_model, [], env )
 
         _ ->
@@ -151,14 +104,15 @@ If you have other elements than components, add them after viewComponent.
 -}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
-    let
-        rend =
-            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
-            , renderButtonPureColor env model.btn_1 Color.gray
-
-            --, renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
-            ]
-    in
-    Canvas.group
-        []
-        rend
+    case model.choice of
+        Setting ->
+            rendersetting env model.setting
+        Help ->
+            renderhelp env model.help
+        Level ->
+            renderlevel env model.level
+        Card ->
+            rendercard env model.card
+        Hall ->
+            renderButtons env model
+        
