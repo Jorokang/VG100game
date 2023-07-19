@@ -5,17 +5,18 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
+import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
-import Lib.Render.Sprite exposing (renderSprite)
+
 
 {-| render the background of hall
 -}
 renderBackground : EnvC -> Model -> Renderable
 renderBackground env _ =
-    renderSprite env.globalData [] (0,0) (1920, 1080) "room_background_2"
+    renderSprite env.globalData [] ( 0, 0 ) ( 1920, 1080 ) "room_background_2"
 
 
 renderStr : EnvC -> Point -> String -> Renderable

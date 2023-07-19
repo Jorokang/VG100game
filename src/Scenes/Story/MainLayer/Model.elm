@@ -12,15 +12,14 @@ module Scenes.Story.MainLayer.Model exposing
 
 -}
 
+import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..))
-import Base exposing (Msg(..))
-import Scenes.Story.SceneInit exposing (StoryInit)
-import Scenes.Story.MainLayer.Common exposing (initModel1)
+import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), initModel1)
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
-import Scenes.Story.MainLayer.Update exposing (updateModelRoom, updateModelItems, updateModelItemsScale)
+import Scenes.Story.MainLayer.Update exposing (updateModelItems, updateModelItemsScale, updateModelRoom)
+import Scenes.Story.SceneInit exposing (StoryInit)
 
 
 {-| initModel
@@ -29,6 +28,7 @@ Add components here
 initModel : EnvC -> StoryInit -> Model
 initModel _ _ =
     initModel1
+
 
 {-| Only considering click events
 -}
@@ -39,14 +39,19 @@ updateModel env model =
             case model.status of
                 StoryRoom ->
                     updateModelRoom env model m_pos
+
                 StoryFamilyPainting ->
                     updateModelItems env model m_pos
+
                 StoryHall ->
                     ( model, [], env )
+
                 StoryNull ->
                     ( model, [], env )
+
         Tick _ ->
             updateModelItemsScale env model
+
         _ ->
             ( model, [], env )
 
@@ -73,11 +78,12 @@ If you have other elements than components, add them after viewComponent.
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
-        rend = [ renderBackground env model
-               , renderMasking env model
-               , renderStoryItem env model
-               ]
+        rend =
+            [ renderBackground env model
+            , renderMasking env model
+            , renderStoryItem env model
+            ]
     in
     Canvas.group
-    []
-    rend
+        []
+        rend
