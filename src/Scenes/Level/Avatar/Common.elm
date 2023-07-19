@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, initAvatar1, maxSpirit
+    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, maxSpirit
     )
 
 {-| Common module
@@ -30,6 +30,7 @@ type AvatarStatus
 type CardSelectionStatus
     = CardType_1
     | CardType_2
+    | CardType_8
     | CardType_11
     | CardType_None
 
@@ -99,6 +100,11 @@ cardClickPos0 =
 cardClickPos1 : List GridLoc
 cardClickPos1 =
     [ ( 1, 0 ), ( 2, 0 ), ( -1, 0 ), ( -2, 0 ), ( 0, 1 ), ( 0, 2 ), ( 0, -1 ), ( 0, -2 ) ]
+
+
+cardClickPos2 : List GridLoc
+cardClickPos2 =
+    [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
 
 
 {-| restrict the max spirit

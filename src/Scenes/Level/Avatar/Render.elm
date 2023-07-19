@@ -8,7 +8,7 @@ import Color exposing (Color, rgb255)
 import Html exposing (label)
 import Lib.Render.Sprite exposing (renderSprite)
 import List exposing (length)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, maxSpirit)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 
@@ -113,6 +113,9 @@ renderCardHint env model =
 
         CardType_2 ->
             renderMultiHint env model cardClickPos0 FilterModeAvailCell
+
+        CardType_8 ->
+            renderMultiHint env model cardClickPos2 FilterModeMapCell
 
         CardType_11 ->
             renderMultiHint env model cardClickPos0 FilterModeMapCell

@@ -93,12 +93,6 @@ updateModelRec env lmsg model =
             , env
             )
 
-        LayerMsgClearCells line ->
-            ( model
-            , List.concat <| List.map (\x -> [ ( LayerName "Avatar", LayerMsgClearCell x ), ( LayerName "Enemy", LayerMsgClearCell x ) ]) line
-            , env
-            )
-
         LayerMsgErodePermission loc x ->
             checkErodePermission env model loc
 

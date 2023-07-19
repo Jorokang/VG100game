@@ -54,7 +54,6 @@ type LayerMsg
     | LayerMsgPlayerTurn --revealing that it's Player's turn in the level
     | LayerMsgEnemyTurn --revealing that it's Enemy's turn in the level
     | LayerMsgClearCell GridLoc --Clear a cell
-    | LayerMsgClearCells (List GridLoc) --Clear a cell
     | LayerMsgErodeCell GridLoc --Erode a cell
     | LayerMsgEnemyErodeCell GridLoc --The enemy erodes a cell (sent by the enemy)
     | LayerMsgClickLoc GridLoc --mouse click the grids on a cell

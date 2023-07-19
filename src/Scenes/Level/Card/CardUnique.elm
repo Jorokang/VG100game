@@ -134,9 +134,8 @@ cardToEffect model card =
             ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
         8 ->
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
-        --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
         9 ->
             ( model, [] )
 
