@@ -44,7 +44,7 @@ renderStoryItem env model =
         StoryFamilyPainting ->
             let
                 i = model.family_painting
-                rend_s = renderSprite env.globalData [] i.pos i.size i.sprite_name
+                rend_s = renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
                 rend_t = text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 ) ) i.str
             in
             Canvas.group
@@ -52,5 +52,13 @@ renderStoryItem env model =
             [ rend_s
             , rend_t
             ]
-        _ ->
+        StoryRoom ->
+            let
+                i = model.family_painting
+                rend_s = renderSprite env.globalData [] i.c_pos i.c_size i.c_sprite_name
+            in
+            Canvas.group
+            []
+            [ rend_s ]
+        StoryNull ->
             Canvas.empty

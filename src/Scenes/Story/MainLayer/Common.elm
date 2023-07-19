@@ -1,4 +1,4 @@
-module Scenes.Story.MainLayer.Common exposing (Model, nullModel, EnvC, StoryStatus(..), initModel1, StoryItem)
+module Scenes.Story.MainLayer.Common exposing (Model, nullModel, EnvC, StoryStatus(..), initModel1, StoryItem, nullStoryItem)
 
 {-| Common module
 
@@ -16,9 +16,12 @@ type StoryStatus
     | StoryNull
 
 type alias StoryItem =
-    { pos : Point
-    , size : Point
-    , sprite_name : String
+    { c_pos : Point
+    , c_size : Point
+    , c_sprite_name : String
+    , v_pos : Point
+    , v_size : Point
+    , v_sprite_name : String
     , str : String
     }
 
@@ -29,10 +32,24 @@ type alias Model =
 
 nullStoryItem : StoryItem
 nullStoryItem =
-    { pos = (0,0)
-    , size = (0,0)
-    , sprite_name = ""
+    { c_pos = (0,0)
+    , c_size = (0,0)
+    , c_sprite_name = ""
+    , v_pos = (0,0)
+    , v_size = (0,0)
+    , v_sprite_name = ""
     , str = ""
+    }
+
+initStoryItem1 : StoryItem
+initStoryItem1 =
+    { c_pos = (0,0)
+    , c_size = (100, 100)
+    , c_sprite_name = "pattern_1"
+    , v_pos = (100,100)
+    , v_size = (1000, 500)
+    , v_sprite_name = "pattern_2"
+    , str = "test"
     }
 
 nullModel : Model
@@ -44,7 +61,7 @@ nullModel =
 initModel1 : Model
 initModel1 =
     { status = StoryRoom
-    , family_painting = nullStoryItem
+    , family_painting = initStoryItem1
     }
 
 

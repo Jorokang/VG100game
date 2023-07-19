@@ -15,10 +15,12 @@ module Scenes.Story.MainLayer.Model exposing
 import Canvas exposing (Renderable, empty, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Story.MainLayer.Common exposing (EnvC, Model, nullModel)
+import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..))
+import Base exposing (Msg(..))
 import Scenes.Story.SceneInit exposing (StoryInit)
 import Scenes.Story.MainLayer.Common exposing (initModel1)
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
+import Scenes.Story.MainLayer.Update exposing (updateModelRoom, updateModelItems)
 
 
 {-| initModel
@@ -28,10 +30,21 @@ initModel : EnvC -> StoryInit -> Model
 initModel _ _ =
     initModel1
 
-
+{-| Only considering click events
+-}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        MouseDown x m_pos ->
+            case model.status of
+                StoryRoom ->
+                    updateModelRoom env model m_pos
+                StoryFamilyPainting ->
+                    updateModelItems env model m_pos
+                StoryNull ->
+                    ( model, [], env )
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
