@@ -42,14 +42,24 @@ clicked model lp =
             ( bool, nindex + 1 )
 
 
-costSpirit : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
+updateSpirit : List ( LayerTarget, LayerMsg )
+updateSpirit =
+    [ ( LayerName "Avatar", LayerMsgModifySpirit 0 ) ]
+
+
+costSpirit : Model -> List ( LayerTarget, LayerMsg )
 costSpirit model =
-    ( { model | spirit = model.spirit - model.selected_card.cost }, [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ] )
+    [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ]
 
 
 enoughSpirit : Model -> Bool
 enoughSpirit model =
     model.spirit > model.selected_card.cost
+
+
+clickedPos : Model -> ( Bool, Int )
+clickedPos model =
+    clicked model (cardArea model)
 
 
 clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -100,105 +110,131 @@ cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
 cardToEffect model card =
     case card.id of
         1 ->
-            card_1 model
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
 
         2 ->
-            card_2 model
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
 
         3 ->
-            card_3 model
+            ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
         4 ->
-            card_4 model
+            ( model, [] )
 
+        --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
         5 ->
-            card_5 model
+            ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
         6 ->
-            card_6 model
+            ( model, [] )
 
+        --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
         7 ->
-            card_7 model
+            ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
         8 ->
-            card_8 model
+            ( model, [] )
+
+        --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
+        9 ->
+            ( model, [] )
+
+        --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
+        10 ->
+            ( model, [] )
+
+        --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
+        11 ->
+            ( model, [] )
+
+        -- "-1" means Clear All
+        --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
+        _ ->
+            ( model, [] )
+
+
+selectCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
+selectCard model card =
+    case card.id of
+        1 ->
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
+
+        2 ->
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
+
+        3 ->
+            ( model, [] )
+
+        4 ->
+            ( model, [] )
+
+        5 ->
+            ( model, [] )
+
+        6 ->
+            ( model, [] )
+
+        7 ->
+            ( model, [] )
+
+        8 ->
+            ( model, [] )
 
         9 ->
-            card_9 model
+            ( model, [] )
 
         10 ->
-            card_10 model
+            ( model, [] )
 
         11 ->
-            card_11 model
+            ( model, [] )
 
         _ ->
             ( model, [] )
 
 
+endCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
+endCard model card =
+    case card.id of
+        1 ->
+            ( model, [] )
 
-{-
-   W.I.P.
--}
+        2 ->
+            ( model, [] )
 
+        3 ->
+            ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
-card_1 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_1 model =
-    ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
+        4 ->
+            ( model, [] )
 
+        --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
+        5 ->
+            ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
 
-card_2 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_2 model =
-    ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
+        6 ->
+            ( model, [] )
 
+        --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
+        7 ->
+            ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
 
-card_3 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_3 model =
-    ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
+        8 ->
+            ( model, [] )
 
+        --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
+        9 ->
+            ( model, [] )
 
-card_4 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_4 model =
-    --( model, [ (  LayerName "Light", LayerMsgChangeLightRange 1 ) ] )
-    ( model, [] )
+        --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
+        10 ->
+            ( model, [] )
 
+        --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
+        11 ->
+            ( model, [] )
 
-card_5 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_5 model =
-    ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
-
-
-card_6 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_6 model =
-    --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
-    ( model, [] )
-
-
-card_7 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_7 model =
-    ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
-
-
-card_8 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_8 model =
-    --( model, [ ( LayerName "Enemy", LayerMsgClearAround ) ] )
-    ( model, [] )
-
-
-card_9 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_9 model =
-    --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
-    ( model, [] )
-
-
-card_10 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_10 model =
-    --( { model | spirit = model.spirit + 5, status = Playing }, [ ( LayerName "Frame", LayerMsgChangeStamina -1] )
-    ( { model | spirit = model.spirit + 5 }, [] )
-
-
-card_11 : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-card_11 model =
-    -- "-1" means Clear All
-    --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
-    ( model, [] )
+        -- "-1" means Clear All
+        --( model, [ ( LayerName "Enemy", LayerMsgClearDirection -1 ) ] )
+        _ ->
+            ( model, [] )

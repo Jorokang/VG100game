@@ -31,11 +31,7 @@ updateModifySpirit env model x =
             modifySpirit model x
 
         msg =
-            if x == 0 then
-                [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
-
-            else
-                []
+            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
     in
     case n_model.status of
         AvatarDead ->

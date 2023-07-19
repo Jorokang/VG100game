@@ -53,7 +53,7 @@ drawCard model amount =
             ncard :: nmodel.hand
 
         nnmodel =
-            { nmodel | deck = ndeck, hand = nhand }
+            { nmodel | deck = ndeck, hand = sortPile nhand }
     in
     if amount == 1 then
         nnmodel
