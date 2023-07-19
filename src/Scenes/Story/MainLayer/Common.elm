@@ -60,9 +60,9 @@ familyPaintingItem =
 
 button2Hall : StoryItem
 button2Hall = 
-    { c_pos = (200,200)
-    , c_size = (100, 100)
-    , c_sprite_name = "pattern_3"
+    { c_pos = (680,890)
+    , c_size = (600, 100)
+    , c_sprite_name = "button_hall"
     , c_scale = 1
     , v_pos = (0,0)
     , v_size = (0,0)
