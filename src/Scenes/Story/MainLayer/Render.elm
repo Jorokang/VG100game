@@ -9,16 +9,13 @@ import Scenes.Story.MainLayer.Common exposing (Model, StoryStatus(..), StoryItem
 import Lib.Coordinate.Coordinates exposing (posToReal, lengthToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Frame.Functions exposing (scalePoint, addPoint, negPoint)
-import Canvas.Settings.Advanced exposing (scale)
 
 {-| render the background of the Story Layer
     (Specifically the image of room)
 -}
 renderBackground : EnvC -> Model -> Renderable
-renderBackground env model =
-    shapes
-        [fill (Color.rgb255 20 30 40)]
-        [ rect (posToReal env.globalData (0,0)) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
+renderBackground env _ =
+    renderSprite env.globalData [] (0,0) (1920, 1080) "room_background_1"
 
 {-| render the masking of the room when viewing StoryItems
 -}

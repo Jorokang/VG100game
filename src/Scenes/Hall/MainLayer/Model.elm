@@ -22,6 +22,7 @@ import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground)
 
 
 {-| initModel
@@ -96,7 +97,8 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
+            [ renderBackground env model
+            , renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
             , renderButtonPureColor env model.btn_1 Color.gray
             ]
     in

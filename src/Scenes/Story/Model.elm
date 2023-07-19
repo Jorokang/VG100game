@@ -12,7 +12,9 @@ module Scenes.Story.Model exposing
 
 -}
 
-import Canvas exposing (Renderable)
+import Canvas exposing (Renderable, text, rect)
+import Canvas.Settings.Text exposing (TextAlign(..), align, font)
+import Canvas.Settings.Advanced exposing (filter)
 import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
@@ -21,6 +23,8 @@ import Lib.Scene.Base exposing (SceneOutputMsg(..), SceneInitData(..))
 import Scenes.Story.Common exposing (Model)
 import Scenes.Story.LayerBase exposing (CommonData)
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Lib.Coordinate.Coordinates exposing (posToReal)
+import Scenes.Story.Transition exposing (rawTransition, storyTransitionOut, hallTransitionIn)
 
 
 {-| handleLayerMsg
@@ -43,17 +47,12 @@ handleLayerMsg env lmsg model =
                     NullSceneInitData
 
                 trans =
-                    Just (genTransition 1 1 rawTransition rawTransition)
+                    Just ( genTransition 100 100 storyTransitionOut hallTransitionIn )
             in
             ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
 
         _ ->
             ( model, [], env )
-
-rawTransition : SingleTrans
-rawTransition _ _ _ =
-    Canvas.empty
-
 {-| updateModel
 
 Default update function. Normally you won't change this function.

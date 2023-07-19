@@ -40,4 +40,6 @@ allTexture =
     , ( "pattern_5", getResourcePath "img/pattern_5.png" )
     , ( "light_shade", getResourcePath "img/light_shade.png" )
     , ( "avatar", getResourcePath "img/avatar.png" )
+    , ( "room_background_1", getResourcePath "img/room_background_1.png" )
+    , ( "room_background_2", getResourcePath "img/room_background_2.png" )
     ]
