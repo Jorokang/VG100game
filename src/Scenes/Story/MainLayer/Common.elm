@@ -60,8 +60,8 @@ familyPaintingItem =
     , c_size = ( 100, 130 )
     , c_sprite_name = "family_painting_1"
     , c_scale = 1
-    , v_pos = ( 500, 200 )
-    , v_size = ( 800, 800 )
+    , v_pos = ( 500, 350 )
+    , v_size = ( 800, 469 )
     , v_sprite_name = "family_painting_2"
     , str = "Mum and Dad and Me"
     }
