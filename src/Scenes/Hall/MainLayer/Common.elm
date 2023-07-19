@@ -1,7 +1,4 @@
-module Scenes.Hall.MainLayer.Common exposing
-    ( Model, nullModel, EnvC
-    , Button, ButtonStatus(..), HallStatus(..), initModelLose, initModelWin, Choice(..)
-    )
+module Scenes.Hall.MainLayer.Common exposing(..)
 
 {-| Common module
 
@@ -25,6 +22,7 @@ type ButtonStatus
     | ButtonPressed
     | ButtonInactive
 
+--the states of Hall, decide what to render
 type Choice
     = Setting
     | Help
@@ -38,6 +36,7 @@ type alias Button =
     , size : Point
     }
 
+--all interface of set
 type alias Settingbtn =
     { open : Button
     , close : Button
@@ -55,6 +54,7 @@ initsetting =
                 }
     }
 
+--all interface of help
 type alias Helpbtn =
     { open : Button
     , close : Button
@@ -72,12 +72,14 @@ inithelp =
                 }
     }
 
+--open the level page, close it, up btn add the level number, down decrease it, confirm it
 type alias Levelbtn =
     { open : Button
     , close : Button
     , levelInt : Int
     , up : Button
     , down : Button
+    , ok : Button
     }
 
 initlevel : Levelbtn
@@ -99,6 +101,10 @@ initlevel =
                 , pos = ( 500, 200 )
                 , size = ( 100, 50 )
                 }
+    , ok = { status = ButtonInactive
+            , pos = ( 500, 200 )
+            , size = ( 100, 50 )
+            }
     }
 
 type alias Cardbtn =
@@ -106,6 +112,7 @@ type alias Cardbtn =
     , close : Button
     , cardlist : List Card
     }
+
 initcard : Cardbtn
 initcard =
     { open = {status = ButtonActive
@@ -118,6 +125,7 @@ initcard =
                 }
     , cardlist = []
     }
+
 {-| Model
 Add your own data here.
 -}
@@ -131,6 +139,7 @@ type alias Model =
     , level : Levelbtn
     , help : Helpbtn
     , card : Cardbtn
+    , choice : Choice
     }
 
 
@@ -153,6 +162,7 @@ nullModel =
     , level = initlevel
     , help = inithelp
     , card = initcard
+    , choice = Hall
     }
 
 
@@ -167,6 +177,7 @@ initModelWin =
     , level = initlevel
     , help = inithelp
     , card = initcard
+    , choice = Hall
     }
 
 
@@ -181,6 +192,7 @@ initModelLose =
     , level = initlevel
     , help = inithelp
     , card = initcard
+    , choice = Hall
     }
 
 
