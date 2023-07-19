@@ -40,4 +40,5 @@ allTexture =
     , ( "pattern_5", getResourcePath "img/pattern_5.png" )
     , ( "light_shade", getResourcePath "img/light_shade.png" )
     , ( "avatar", getResourcePath "img/avatar.png" )
+    , ( "cardback", getResourcePath "cardback.svg" )
     ]

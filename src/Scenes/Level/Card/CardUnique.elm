@@ -18,7 +18,7 @@ cardArea model =
 
 pointHelper : Int -> Point
 pointHelper num =
-    addPoint giveHandSize.startPoint (scalePoint ( giveHandSize.interval + giveHandSize.width, 0 ) (toFloat num - 1))
+    addPoint giveHandSize.startPoint (scalePoint ( giveHandSize.interval, 0 ) (toFloat num - 1))
 
 
 clicked : Model -> List Point -> ( Bool, Int )
