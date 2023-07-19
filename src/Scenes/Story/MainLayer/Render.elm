@@ -62,12 +62,19 @@ renderStoryItem env model =
             ]
         StoryRoom ->
             let
-                i = model.family_painting
-                ( pos1, size1 ) = realPosItemC i
-                rend_family_painting = renderSprite env.globalData [] pos1 size1 i.c_sprite_name
+                i1 = model.family_painting
+                i2 = model.button_hall
+                ( pos1, size1 ) = realPosItemC i1
+                ( pos2, size2 ) = realPosItemC i2
+                rend1 = renderSprite env.globalData [] pos1 size1 i1.c_sprite_name
+                rend2 = renderSprite env.globalData [] pos2 size2 i2.c_sprite_name
             in
             Canvas.group
             []
-            [ rend_family_painting ]
+            [ rend1
+            , rend2
+            ]
+        StoryHall ->
+            Canvas.empty
         StoryNull ->
             Canvas.empty

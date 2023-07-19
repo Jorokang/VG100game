@@ -50,7 +50,6 @@ handleLayerMsg env lmsg model =
         _ ->
             ( model, [], env )
 
-
 rawTransition : SingleTrans
 rawTransition _ _ _ =
     Canvas.empty

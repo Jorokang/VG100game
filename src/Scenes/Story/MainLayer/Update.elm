@@ -13,6 +13,8 @@ judgeClickItemC : Model -> Point -> StoryStatus
 judgeClickItemC model m_pos =
     if (judgeMouseRect m_pos model.family_painting.c_pos model.family_painting.c_size) then
         StoryFamilyPainting
+    else if (judgeMouseRect m_pos model.button_hall.c_pos model.button_hall.c_size) then
+        StoryHall
     else
         StoryNull
 
@@ -26,6 +28,8 @@ judgeClickItemV model m_pos =
         (i, flag) = case model.status of
                         StoryFamilyPainting ->
                             (model.family_painting, True)
+                        StoryHall ->
+                            (model.button_hall, True)
                         _ ->
                             (nullStoryItem, False)
     in
@@ -48,6 +52,11 @@ updateModelRoom env model m_pos =
         StoryFamilyPainting ->
             ( { model | status = StoryFamilyPainting }
             , []
+            , env
+            )
+        StoryHall ->
+            ( { model | status = StoryHall }
+            , [ ( LayerParentScene, LayerStringMsg "Hall" ) ]
             , env
             )
         _ ->
@@ -90,12 +99,23 @@ updateModelItemsScale env model =
     in
     case judge of
         StoryFamilyPainting ->
-            ( { model | family_painting = increaseItemScale model.family_painting }
+            ( { model | family_painting = increaseItemScale model.family_painting
+                      , button_hall = decreaseItemScale model.button_hall
+              }
+            , []
+            , env
+            )
+        StoryHall ->
+            ( { model | family_painting = decreaseItemScale model.family_painting
+                      , button_hall = increaseItemScale model.button_hall
+              }
             , []
             , env
             )
         _ ->
-            ( { model | family_painting = decreaseItemScale model.family_painting }
+            ( { model | family_painting = decreaseItemScale model.family_painting 
+                      , button_hall = decreaseItemScale model.button_hall
+              }
             , []
             , env
             )

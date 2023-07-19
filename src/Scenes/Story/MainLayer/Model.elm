@@ -41,6 +41,8 @@ updateModel env model =
                     updateModelRoom env model m_pos
                 StoryFamilyPainting ->
                     updateModelItems env model m_pos
+                StoryHall ->
+                    ( model, [], env )
                 StoryNull ->
                     ( model, [], env )
         Tick _ ->
