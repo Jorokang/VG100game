@@ -53,19 +53,20 @@ type LayerMsg
     | LayerChangeSceneMsg String
     | LayerMsgPlayerTurn --revealing that it's Player's turn in the level
     | LayerMsgEnemyTurn --revealing that it's Enemy's turn in the level
-    | LayerMsgClearCell GridLoc
+    | LayerMsgClearCell GridLoc --Clear a cell
+    | LayerMsgErodeCell GridLoc --Erode a cell
+    | LayerMsgEnemyErodeCell GridLoc --The enemy erodes a cell (sent by the enemy)
+    | LayerMsgClickLoc GridLoc --mouse click the grids on a cell
+    | LayerMsgCardType Int --the card type
+    | LayerMsgErodePermission GridLoc Int --check whether this cell is protected (Int: 0 -> denied/asking; 1 -> approved)
+    | LayerMsgProtectCell GridLoc Int --protect the cell for x rounds
+    | LayerMsgModifySpirit Int --modify the spirit
+    | LayerMsgLevelComplete Int -- 0->loose; 1->win;
+    | LayerMsgEnemyErodeTarget
+    | LayerMsgEnemySetTarget
     | NullLayerMsg
 
 
-{-| LayerTarget
-
-You can send message to a layer by using LayerTarget.
-
-LayerParentScene is used to send message to the parent scene of the layer.
-
-LayerName is used to send message to a specific layer.
-
--}
 type LayerTarget
     = LayerParentScene
     | LayerName String

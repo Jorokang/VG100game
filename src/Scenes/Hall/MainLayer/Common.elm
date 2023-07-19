@@ -1,6 +1,6 @@
 module Scenes.Hall.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , Button, ButtonStatus(..), HallStatus(..), l1, l2, l3
+    , Button, ButtonStatus(..), HallStatus(..), initModelLose, initModelWin, Choice(..)
     )
 
 {-| Common module
@@ -10,10 +10,9 @@ module Scenes.Hall.MainLayer.Common exposing
 -}
 
 import Canvas exposing (Point)
-import Html exposing (button, i)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
-
+import Scenes.Level.Card.CardCreate exposing (Card)
 
 type HallStatus
     = Active
@@ -26,89 +25,162 @@ type ButtonStatus
     | ButtonPressed
     | ButtonInactive
 
+type Choice
+    = Setting
+    | Help
+    | Level
+    | Card
+    | Hall
 
 type alias Button =
     { status : ButtonStatus
     , pos : Point
     , size : Point
-    , text : String
     }
 
+type alias Settingbtn =
+    { open : Button
+    , close : Button
+    }
+
+initsetting : Settingbtn
+initsetting =
+    { open = {status = ButtonActive
+            , pos = ( 1000, 200 )
+            , size = ( 100, 50 )
+            }
+    , close = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    }
+
+type alias Helpbtn =
+    { open : Button
+    , close : Button
+    }
+
+inithelp : Helpbtn
+inithelp =
+    { open = {status = ButtonActive
+            , pos = ( 600, 200 )
+            , size = ( 100, 50 )
+            }
+    , close = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    }
 
 type alias Levelbtn =
-    { level1 : Button
-    , level2 : Button
-    , level3 : Button
+    { open : Button
+    , close : Button
+    , levelInt : Int
+    , up : Button
+    , down : Button
     }
 
+initlevel : Levelbtn
+initlevel =
+    { open = {status = ButtonActive
+            , pos = ( 800, 200 )
+            , size = ( 100, 50 )
+            }
+    , close = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    , levelInt = 1
+    , up = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    , down = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    }
 
+type alias Cardbtn =
+    { open : Button
+    , close : Button
+    , cardlist : List Card
+    }
+initcard : Cardbtn
+initcard =
+    { open = {status = ButtonActive
+            , pos = ( 1000, 200 )
+            , size = ( 100, 50 )
+            }
+    , close = { status = ButtonInactive
+                , pos = ( 500, 200 )
+                , size = ( 100, 50 )
+                }
+    , cardlist = []
+    }
 {-| Model
 Add your own data here.
 -}
 type alias Model =
     { status : HallStatus
-    , levels : Levelbtn
+    , btn_1 : Button
     , time : Int
     , click_pos : Point
-    , setting : Button
+    , hall_name : String
+    , setting : Settingbtn
+    , level : Levelbtn
+    , help : Helpbtn
+    , card : Cardbtn
     }
 
 
-l1 : Button
-l1 =
+initButtonLevel : Button
+initButtonLevel =
     { status = ButtonActive
-    , pos = ( 900, 600 )
-    , size = ( 100, 100 )
-    , text = "Level1"
-    }
-
-
-l2 : Button
-l2 =
-    { status = ButtonActive
-    , pos = ( 1100, 600 )
-    , size = ( 100, 100 )
-    , text = "Level2"
-    }
-
-
-l3 : Button
-l3 =
-    { status = ButtonActive
-    , pos = ( 1300, 600 )
-    , size = ( 100, 100 )
-    , text = "Level3"
-    }
-
-
-initsetting : Button
-initsetting =
-    { status = ButtonActive
-    , pos = ( 1300, 800 )
-    , size = ( 100, 100 )
-    , text = "setting"
-    }
-
-
-
---initialize the level buttons position
-
-
-levelbuttons : Levelbtn
-levelbuttons =
-    { level1 = l1
-    , level2 = l2
-    , level3 = l3
+    , pos = ( 200, 200 )
+    , size = ( 100, 50 )
     }
 
 
 nullModel : Model
 nullModel =
     { status = Active
-    , levels = levelbuttons
+    , btn_1 = initButtonLevel
     , time = 0
     , click_pos = ( -1, -1 )
+    , hall_name = "Hall"
     , setting = initsetting
+    , level = initlevel
+    , help = inithelp
+    , card = initcard
+    }
+
+
+initModelWin : Model
+initModelWin =
+    { status = Active
+    , btn_1 = initButtonLevel
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = "You defeat the enemy in Level 1 !"
+    , setting = initsetting
+    , level = initlevel
+    , help = inithelp
+    , card = initcard
+    }
+
+
+initModelLose : Model
+initModelLose =
+    { status = Active
+    , btn_1 = initButtonLevel
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = "You lost all light."
+    , setting = initsetting
+    , level = initlevel
+    , help = inithelp
+    , card = initcard
     }
 
 

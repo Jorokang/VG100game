@@ -4,10 +4,135 @@ import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
 import Color exposing (Color)
 import Html exposing (a)
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, maxEyeV, nullModel)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, initEnemy1, maxEyeV, nullModel, targetPriority1)
 import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
+
+
+curPriority : Model -> ErodePriority
+curPriority model =
+    Maybe.withDefault ErodeRandom (List.head model.target_priority)
+
+
+popPriority : Model -> Model
+popPriority model =
+    { model | target_priority = List.drop 1 model.target_priority }
+
+
+{-| basic settings when enemy's round begin
+-}
+updateEnemyRound : Model -> Model
+updateEnemyRound model =
+    { model
+        | recursion_times = 0
+        , target_priority = targetPriority1
+        , eroding = True
+    }
+
+
+updatePlayerRound : Model -> Model
+updatePlayerRound model =
+    { model
+        | recursion_times = 0
+        , target_priority = targetPriority1
+        , eroding = False
+    }
+
+
+updateEndRound : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateEndRound env model =
+    ( { model | eroding = False }
+    , [ ( LayerName "Frame", LayerMsgPlayerTurn ) ]
+    , env
+    )
+
+
+resetRecursionTimes : Model -> Model
+resetRecursionTimes model =
+    { model | recursion_times = 0 }
+
+
+{-| should be used when recursing
+-}
+increaseRecursionNum : Model -> Model
+increaseRecursionNum model =
+    { model | recursion_times = model.recursion_times + 1 }
+
+
+{-| update the enemy at setting target status
+
+1.  choose the target by priority
+2.  send LayerMsg to frame to ask for permission
+
+flag : immediately erode
+
+-}
+updateEnemySettingTarget : EnvC -> Model -> ErodePriority -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateEnemySettingTarget env model prior =
+    let
+        n_model =
+            case prior of
+                ErodeNearest ->
+                    targetNearestCell model
+
+                ErodeRandom ->
+                    targetRandomCell model
+    in
+    ( { n_model | status = EnemySettingTarget }
+    , [ ( LayerName "Frame", LayerMsgErodePermission n_model.target 0 ) ]
+    , env
+    )
+
+
+{-| handle permission LayerMsg
+-}
+handlePermissionMsg : EnvC -> Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+handlePermissionMsg env model permission =
+    let
+        avail_num =
+            List.length (complementGrids model)
+
+        permitted_lmsg =
+            if model.eroding then
+                [ ( LayerName "Enemy", LayerMsgEnemyErodeTarget ) ]
+
+            else
+                []
+    in
+    if model.recursion_times <= avail_num then
+        case permission of
+            1 ->
+                ( { model | status = EnemyMoving }
+                , permitted_lmsg
+                , env
+                )
+
+            _ ->
+                updateEnemySettingTarget env (increaseRecursionNum model) ErodeRandom
+
+    else
+        ( { model
+            | status = EnemyMoving
+            , target_priority = []
+          }
+            |> targetCore
+            |> updatePlayerRound
+        , []
+        , env
+        )
+
+
+{-| handle protect cell msg
+-}
+handleProtectMsg : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+handleProtectMsg env model loc =
+    if loc == model.target then
+        updateEnemySettingTarget env model ErodeNearest
+
+    else
+        ( model, [], env )
 
 
 {-| The enemy erodes one cell if this cell is not contained by it
@@ -116,10 +241,14 @@ erodeRandomCell model =
         loc =
             ( locx, locy )
     in
-    --if (List.any ( checkCellLoc loc ) model.body) then
-    --erodeRandomCell model
-    --else
     erodeCell model loc
+
+
+{-| set the core as target ( which means the enemy skip this round )
+-}
+targetCore : Model -> Model
+targetCore model =
+    setTarget model model.core.loc
 
 
 {-| randomly set a cell as the target to erode
@@ -127,22 +256,27 @@ erodeRandomCell model =
 targetRandomCell : Model -> Model
 targetRandomCell model =
     let
-        sx =
-            Tuple.first model.map_size
+        cl =
+            complementGrids model
 
-        sy =
-            Tuple.second model.map_size
+        mod_num =
+            List.length cl
 
-        locx =
-            round (toFloat model.randNum / 1000.0 * toFloat sx)
+        cl2 =
+            List.drop (modBy mod_num model.randNum) cl
 
-        locy =
-            round (toFloat (model.randNum // 10) / 100.0 * toFloat sy)
+        head0 =
+            List.head cl2
 
-        loc =
-            ( locx, locy )
+        head1 =
+            case head0 of
+                Just x ->
+                    x
+
+                Nothing ->
+                    ( 0, 0 )
     in
-    setTarget model loc
+    setTarget model head1
 
 
 {-| erode the nearest cell to the core that is not contained
@@ -212,7 +346,10 @@ freeCell model loc =
             else
                 new_model1
     in
-    if (nx < 0) || (ny < 0) || (nx > sx) || (ny > sy) then
+    if ( nx, ny ) == model.core.loc then
+        { model | status = EnemyDead }
+
+    else if (nx < 0) || (ny < 0) || (nx > sx) || (ny > sy) then
         model
 
     else
@@ -253,8 +390,8 @@ comparisonPointDistance origin x y =
 
 {-| move the enemy's eye (according to its own data)
 -}
-moveEnemyEye : Model -> Model
-moveEnemyEye model =
+moveEnemyEye : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+moveEnemyEye env model =
     let
         eye =
             model.eye
@@ -263,10 +400,14 @@ moveEnemyEye model =
             pointDistance eye.pos eye.target
     in
     if eye.v == ( 0, 0 ) || eye.target_eroded == False then
-        model
+        ( { model | status = EnemyAlive }
+            |> popPriority
+        , [ ( LayerName "Enemy", LayerMsgEnemySetTarget ) ]
+        , env
+        )
 
     else if dis < maxEyeV then
-        { model
+        ( { model
             | eye =
                 { pos = eye.target
                 , v = ( 0, 0 )
@@ -274,10 +415,15 @@ moveEnemyEye model =
                 , target_eroded = True
                 , target_loc = eye.target_loc
                 }
-        }
+            , status = EnemyAlive
+          }
+            |> popPriority
+        , [ ( LayerName "Enemy", LayerMsgEnemySetTarget ) ]
+        , env
+        )
 
     else
-        { model
+        ( { model
             | eye =
                 { pos = addPoint eye.pos eye.v
                 , v = eye.v
@@ -285,4 +431,7 @@ moveEnemyEye model =
                 , target_eroded = True
                 , target_loc = eye.target_loc
                 }
-        }
+          }
+        , []
+        , env
+        )

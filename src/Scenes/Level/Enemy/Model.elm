@@ -14,11 +14,13 @@ module Scenes.Level.Enemy.Model exposing
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point, Renderable, empty, group)
+import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, Model, initEnemy1)
+import List
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, moveEnemyEye, targetNearestCell, targetRandomCell)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -36,51 +38,38 @@ initModel _ _ =
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
-        Alive ->
+        EnemyDead ->
+            ( model
+            , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+            , env
+            )
+
+        EnemyAlive ->
             case env.msg of
                 Tick newTime ->
+                    let
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
+                    in
                     ( --{ model | time = Time.posixToMillis newTime }
-                      { model | time = Time.posixToMillis newTime }
-                        |> updateRandNum
-                        |> moveEnemyEye
+                      nmodel
                     , []
                     , env
                     )
 
-                KeyDown x ->
-                    {- case x of
-                       32 ->
-                           --space->erode target
-                           ( erodeTarget model
-                           , []
-                           , env
-                           )
-
-                       38 ->
-                           --arrowup->set random target
-                           ( targetRandomCell model
-                           , []
-                           , env
-                           )
-
-                       40 ->
-                           --arrowdown->set nearest target
-                           ( targetNearestCell model
-                           , []
-                           , env
-                           )
-                       _ ->
-                    -}
-                    --do nothing
+                _ ->
                     ( model, [], env )
 
-                MouseDown _ ( a, b ) ->
-                    {- ( clickFreeCell model ( a, b )
-                       , []
-                       , env
-                       )
-                    -}
-                    ( model, [], env )
+        EnemyMoving ->
+            case env.msg of
+                Tick newTime ->
+                    let
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
+                    in
+                    moveEnemyEye env nmodel
 
                 _ ->
                     ( model, [], env )
@@ -103,28 +92,35 @@ updateRandNum model =
     }
 
 
-{-| updateModelRec
-Default update function
-
-Add your logic to handle LayerMsg here
-
--}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
         LayerMsgPlayerTurn ->
             --set the target
-            ( targetNearestCell model
+            --updateEnemySettingTarget env (updatePlayerRound model) ErodeRandom--(curPriority model)
+            ( updatePlayerRound model
             , []
             , env
             )
 
-        LayerMsgEnemyTurn ->
+        LayerMsgEnemyErodeTarget ->
             --erode the target
-            ( erodeTarget model
-            , []
+            ( model
+                |> erodeTarget
+                |> resetRecursionTimes
+            , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
+
+        LayerMsgEnemyTurn ->
+            updateEnemySettingTarget env (updateEnemyRound model) (curPriority model)
+
+        LayerMsgEnemySetTarget ->
+            if List.isEmpty model.target_priority then
+                updateEndRound env model
+
+            else
+                updateEnemySettingTarget env model (curPriority model)
 
         LayerMsgClearCell loc ->
             ( freeCell model loc
@@ -132,24 +128,22 @@ updateModelRec env lmsg model =
             , env
             )
 
+        LayerMsgErodePermission _ x ->
+            handlePermissionMsg env model x
+
+        LayerMsgProtectCell loc x ->
+            handleProtectMsg env model loc
+
         _ ->
             ( model, [], env )
 
 
-{-| viewModel
-Default view function
-
-If you don't have components, remove viewComponent.
-
-If you have other elements than components, add them after viewComponent.
-
--}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
             case model.status of
-                Dead ->
+                EnemyDead ->
                     []
 
                 _ ->
