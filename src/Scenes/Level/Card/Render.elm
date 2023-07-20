@@ -83,7 +83,7 @@ renderTestMessage env model =
         , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.1"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.3"
         ]
 
 
@@ -220,7 +220,7 @@ renderCard env card num selected size =
             size.interval
     in
     if color == white then
-        renderSprite env.globalData [] (coorChange env (addPoint startPoint (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (sizeChange env ( width, length ) nullCoorData) "cardback"
+        renderSprite env.globalData [] (coorChangeS env (addPoint startPoint (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
 
     else if selected then
         shapes
