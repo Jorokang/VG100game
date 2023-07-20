@@ -8,7 +8,7 @@ import Color exposing (Color, rgb255)
 import Html exposing (label)
 import Lib.Render.Sprite exposing (renderSprite)
 import List exposing (length)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, maxSpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 
@@ -221,7 +221,7 @@ renderSpirit env model =
             ( 180, 9 )
 
         spirit_l =
-            toFloat spirit_max_l / toFloat maxSpirit * toFloat model.spirit
+            toFloat spirit_max_l / toFloat model.max_spirit * toFloat model.spirit
 
         spirit_color =
             Color.rgb255 255 240 245

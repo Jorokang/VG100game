@@ -35,6 +35,6 @@ btn_1_clicked env model =
                     , text = btn.text
                     }
               }
-            , [ ( LayerParentScene, LayerStringMsg "Level" ) ]
+            , [ ( LayerParentScene, LayerStringMsg "Level1" ) ]
             , env
             )
