@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2, TableLight
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), TableLight, emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
     )
 
 {-| Common module
@@ -48,11 +48,13 @@ type alias Plot =
     , protection : Int --indicates how many turns is this plot protected. 0 for no protection.
     }
 
+
 type alias TableLight =
     { loc : GridLoc
     , dir : GridLoc
     , last_rounds : Int
     }
+
 
 type alias Model =
     { status : GridsStatus

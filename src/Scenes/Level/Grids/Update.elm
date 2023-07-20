@@ -1,14 +1,10 @@
 module Scenes.Level.Grids.Update exposing (..)
 
 import Canvas exposing (Point)
-import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, lengthChange, negPoint, nullCoorData, point2Int)
-import Scenes.Level.Frame.Update exposing (checkErodePermission)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), emptyPlot, TableLight)
-import Html.Attributes exposing (dir)
-import Scenes.Level.Frame.Functions exposing (addLoc)
+import Scenes.Level.Frame.Functions exposing (addLoc, cellLength, point2Int)
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), TableLight, emptyPlot)
 
 
 {-| Update player turn beginning
@@ -177,42 +173,51 @@ addSingleProtection loc rounds x =
     else
         x
 
+
 {-| generate a new table light
 -}
 genTableLight : Model -> GridLoc -> GridLoc -> Int -> Model
 genTableLight model loc dir last_rounds =
     let
-        new_tl = { loc = loc
-                 , dir = dir
-                 , last_rounds = last_rounds
-                 }
+        new_tl =
+            { loc = loc
+            , dir = dir
+            , last_rounds = last_rounds
+            }
     in
-    { model | table_lights = (new_tl :: model.table_lights) }
+    { model | table_lights = new_tl :: model.table_lights }
+
 
 {-| update all table lights in a new round
 -}
 updateTableLights : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateTableLights env model =
     let
-        new_tls = List.filter checkTableLight (List.map updateTableLight model.table_lights )
+        new_tls =
+            List.filter checkTableLight (List.map updateTableLight model.table_lights)
     in
-    ( { model | table_lights = new_tls}
+    ( { model | table_lights = new_tls }
     , List.map genClearCommandsTableLights model.table_lights
     , env
     )
+
+
 {-| update a single table light (tool function for the above function)
 -}
 updateTableLight : TableLight -> TableLight
 updateTableLight tl =
-    { tl | loc = addLoc tl.loc tl.dir
-         , last_rounds = tl.last_rounds - 1
-         }
+    { tl
+        | loc = addLoc tl.loc tl.dir
+        , last_rounds = tl.last_rounds - 1
+    }
+
 
 {-| check whether a single table light exists (last rounds > 0)
 -}
 checkTableLight : TableLight -> Bool
 checkTableLight tl =
     tl.last_rounds > 0
+
 
 {-| generate clear cells command
 -}

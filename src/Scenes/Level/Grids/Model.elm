@@ -13,13 +13,12 @@ module Scenes.Level.Grids.Model exposing
 -}
 
 import Base exposing (GlobalData, Msg(..))
-import Canvas exposing (Renderable, empty)
-import Html.Attributes exposing (action)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderTableLights, renderStr)
-import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell, genTableLight, updateTableLights)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -96,7 +95,7 @@ updateModelRec env lmsg model =
         LayerMsgProtectCell loc x ->
             updateProtectCell env model loc x
 
-        LayerMsgGenTableLight loc dir x -> 
+        LayerMsgGenTableLight loc dir x ->
             ( genTableLight model loc dir x
             , []
             , env
@@ -118,7 +117,7 @@ viewModel env model =
                     [ renderLevelBackground env
                     , renderGrids env model
                     , renderTableLights env model
-                    , renderStr env ("table lights num : "++String.fromInt (List.length model.table_lights)) (1000,500)
+                    , renderStr env ("table lights num : " ++ String.fromInt (List.length model.table_lights)) ( 1000, 500 )
                     ]
     in
     Canvas.group
