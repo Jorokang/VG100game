@@ -5,12 +5,13 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel, Choice(..))
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, Choice(..), EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
-import Lib.Coordinate.Coordinates exposing (posToReal, lengthToReal)
+
 
 {-| render the background of hall
 -}
@@ -32,6 +33,7 @@ renderBackground env _ =
         [ rend_sprite
         , rend_masking
         ]
+
 
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
@@ -120,7 +122,7 @@ renderlevel env level =
             , renderButton env level.up
             , renderButton env level.down
             , renderButton env level.ok
-            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) ("Level close")
+            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) "Level close"
             , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env level.close.pos nullCoorData) "level here"
             ]
@@ -142,7 +144,11 @@ rendercard env card =
         []
         rend
 
-{-let the background faded-}
+
+
+{- let the background faded -}
+
+
 renderMasking : EnvC -> Model -> Renderable
 renderMasking env model =
     let
