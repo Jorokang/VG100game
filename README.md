@@ -1,4 +1,4 @@
-[Project 2]: [Inner Battle]
+[Project 2]: [Light in Nightmares]
 
 # Readme
 This file contains relevant information about installation and startup.
@@ -33,6 +33,16 @@ Find the "index.html" and click on it.
 
 ## Usage
 
+[Choose level]
+```
+enter the level you choose by click it
+```
+
+[Play card]
+```
+Play out the card you choose by click it
+```
+
 [Move]
 ```
 In player's turn, click the yellow circle to move it
@@ -43,9 +53,6 @@ In player's turn, click the yellow circle to move it
 change the turn between enemy's and player's by press "enter"
 ```
 
-
-# Contributing
-No others' help
 
 # Author team 
 	[elm delivery guys]
