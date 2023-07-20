@@ -5,8 +5,9 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (white)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize)
+import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
 import Scenes.Level.Card.CardSystem exposing (takeCard)
+import Scenes.Level.Card.CardUnique exposing (createPosList)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChange, sizeChangeS)
 import Tuple exposing (first)
@@ -83,46 +84,25 @@ renderTestMessage env model =
         , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.3"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.6"
         ]
-
-
-renderHelper : EnvC -> Model -> Int -> Int -> List Card -> PileSize -> Renderable
-renderHelper env model index length pile size =
-    let
-        selected =
-            if size.name == "hand" then
-                model.selected_pos == index
-
-            else
-                False
-
-        element =
-            renderCard env (first (takeCard pile index)) index selected size
-    in
-    if index < length then
-        Canvas.group
-            []
-            [ element, renderHelper env model (index + 1) length pile size ]
-
-    else
-        Canvas.group
-            []
-            [ element ]
 
 
 renderHandCards : EnvC -> Model -> Renderable
 renderHandCards env model =
     let
-        length =
-            List.length model.hand
+        poss =
+            createPosList model.hand giveHandSize
 
-        index =
-            1
+        temp =
+            List.map (\x -> False) poss
+
+        selecteds =
+            modifyPos temp model.selected_pos True
     in
     Canvas.group
         []
-        [ renderHelper env model index length model.hand giveHandSize
+        [ renderListCards env model.hand poss selecteds
         , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Hand Cards"
         ]
 
@@ -130,15 +110,15 @@ renderHandCards env model =
 renderDeckCards : EnvC -> Model -> Renderable
 renderDeckCards env model =
     let
-        length =
-            List.length model.deck
+        poss =
+            createPosList model.deck giveDeckSize
 
-        index =
-            1
+        selecteds =
+            List.map (\x -> False) poss
     in
     Canvas.group
         []
-        [ renderHelper env model index length (giveBackPile model.deck) giveDeckSize
+        [ renderListCards env (giveBackPile model.deck) poss selecteds
         , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 50 ) nullCoorData) "Deck Cards"
         ]
 
@@ -146,16 +126,16 @@ renderDeckCards env model =
 renderDiscardCards : EnvC -> Model -> Renderable
 renderDiscardCards env model =
     let
-        length =
-            List.length model.discard
+        poss =
+            createPosList model.discard giveDiscardSize
 
-        index =
-            1
+        selecteds =
+            List.map (\x -> False) poss
     in
     Canvas.group
         []
-        [ renderHelper env model index length (giveBackPile model.discard) giveDiscardSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 250 ) nullCoorData) "Deck Cards"
+        [ renderListCards env (giveBackPile model.discard) poss selecteds
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 850, 250 ) nullCoorData) "Discard Cards"
         ]
 
 
@@ -172,8 +152,15 @@ pileToString pile =
         ", " ++ card.name ++ String.fromInt card.cost ++ pileToString (List.drop 1 pile)
 
 
+renderListCards : EnvC -> List Card -> List Point -> List Bool -> Renderable
+renderListCards env cards poss selecteds =
+    Canvas.group
+        []
+        (List.map3 (renderOneCard env) cards poss selecteds)
+
+
 renderOneCard : EnvC -> Card -> Point -> Bool -> Renderable
-renderOneCard env card pos bool =
+renderOneCard env card pos selected =
     let
         color =
             card.img
@@ -187,7 +174,10 @@ renderOneCard env card pos bool =
         offset =
             giveHandSize.offset
     in
-    if bool then
+    if color == white then
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
+
+    else if selected then
         shapes
             [ fill color ]
             [ rect (coorChange env (addPoint pos ( -offset, -offset )) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
@@ -196,38 +186,3 @@ renderOneCard env card pos bool =
         shapes
             [ fill color ]
             [ rect (coorChange env pos nullCoorData) (lengthChange env width nullCoorData) (lengthChange env length nullCoorData) ]
-
-
-renderCard : EnvC -> Card -> Int -> Bool -> PileSize -> Renderable
-renderCard env card num selected size =
-    let
-        color =
-            card.img
-
-        width =
-            size.width
-
-        length =
-            size.length
-
-        startPoint =
-            size.startPoint
-
-        offset =
-            size.offset
-
-        interval =
-            size.interval
-    in
-    if color == white then
-        renderSprite env.globalData [] (coorChangeS env (addPoint startPoint (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
-
-    else if selected then
-        shapes
-            [ fill color ]
-            [ rect (coorChange env (addPoint (addPoint ( -offset, -offset ) startPoint) (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
-
-    else
-        shapes
-            [ fill color ]
-            [ rect (coorChange env (addPoint startPoint (scalePoint ( interval, 0 ) (toFloat num - 1))) nullCoorData) (lengthChange env width nullCoorData) (lengthChange env length nullCoorData) ]
