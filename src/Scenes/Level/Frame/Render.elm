@@ -36,7 +36,7 @@ renderStamina : EnvC -> Model -> Renderable
 renderStamina env model =
     let
         str =
-            "Stamina: " ++ String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt (model.player_data.max_stamina + model.player_data.add_stamina)
+            "Stamina: " ++ String.fromInt model.player_data.cur_stamina ++ "/" ++ String.fromInt model.player_data.max_stamina
     in
     Canvas.group
         [ fill Color.white ]

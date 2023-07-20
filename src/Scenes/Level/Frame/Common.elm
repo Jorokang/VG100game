@@ -33,8 +33,6 @@ Add your own data here.
 type alias PlayerData =
     { cur_stamina : Int
     , max_stamina : Int
-    , add_stamina : Int
-    , turns : Int
     }
 
 
@@ -69,8 +67,6 @@ nullModel =
     , player_data =
         { cur_stamina = 0
         , max_stamina = 0
-        , add_stamina = 0
-        , turns = 0
         }
     , next_round_b = nullNextRoundB
     }
@@ -83,8 +79,6 @@ initFrame1 =
     , player_data =
         { cur_stamina = 3
         , max_stamina = 3
-        , add_stamina = 0
-        , turns = 0
         }
     , next_round_b = nullNextRoundB
     }

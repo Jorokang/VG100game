@@ -2,7 +2,6 @@ module Scenes.Level.SceneInit exposing
     ( nullLevelInit
     , LevelInit
     , initCommonData
-    , initLevel1, initLevel2
     )
 
 {-| SceneInit
@@ -20,26 +19,14 @@ import Scenes.Level.LayerBase exposing (CommonData, nullCommonData)
 {-| Init Data
 -}
 type alias LevelInit =
-    { level_id : Int
-    }
+    {}
 
 
+{-| Null LevelInit data
+-}
 nullLevelInit : LevelInit
 nullLevelInit =
-    { level_id = 0
-    }
-
-
-initLevel1 : LevelInit
-initLevel1 =
-    { level_id = 1
-    }
-
-
-initLevel2 : LevelInit
-initLevel2 =
-    { level_id = 2
-    }
+    {}
 
 
 {-| Initialize common data
