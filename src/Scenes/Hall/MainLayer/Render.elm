@@ -7,10 +7,10 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel, Choice(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
-
+import Lib.Coordinate.Coordinates exposing (posToReal, lengthToReal)
 
 {-| render the background of hall
 -}
@@ -141,3 +141,21 @@ rendercard env card =
     Canvas.group
         []
         rend
+
+{-let the background faded-}
+renderMasking : EnvC -> Model -> Renderable
+renderMasking env model =
+    let
+        masking =
+            shapes
+                [ fill Color.white
+                , filter "opacity(66%)"
+                ]
+                [ rect (posToReal env.globalData ( 0, 0 )) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
+    in
+    case model.choice of
+        Hall ->
+            Canvas.empty
+
+        _ ->
+            masking
