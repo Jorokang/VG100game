@@ -32,7 +32,6 @@ buttonInact btn =
     { btn | status = ButtonInactive }
 
 
---change the scene to Level
 buttonAct : Button -> Button
 buttonAct btn =
     { btn | status = ButtonActive }
