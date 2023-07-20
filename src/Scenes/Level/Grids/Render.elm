@@ -1,15 +1,13 @@
 module Scenes.Level.Grids.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, arc, circle, empty, group, rect, shapes, text)
+import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..))
-import Time exposing (ZoneName(..))
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), TableLight)
 
 
 {-| render the whole grid
@@ -94,6 +92,28 @@ renderPlotGuard env x =
 
     else
         empty
+
+
+{-| render table lights effect
+-}
+renderTableLights : EnvC -> Model -> Renderable
+renderTableLights env model =
+    let
+        rend =
+            List.map (renderTableLight env) model.table_lights
+    in
+    Canvas.group
+        []
+        rend
+
+
+{-| render table light effect for a single tl
+-}
+renderTableLight : EnvC -> TableLight -> Renderable
+renderTableLight env tl =
+    shapes
+        [ fill Color.red ]
+        [ rect (coorChange env (grid2real tl.loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
 
 
 {-| render single patterns by the given position and id

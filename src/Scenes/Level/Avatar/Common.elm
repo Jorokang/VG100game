@@ -31,6 +31,7 @@ type CardSelectionStatus
     = CardType_1
     | CardType_2
     | CardType_8
+    | CardType_9
     | CardType_11
     | CardType_None
 
