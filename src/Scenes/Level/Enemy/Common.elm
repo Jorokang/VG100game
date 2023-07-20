@@ -1,6 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, maxEyeV, targetPriority1
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, initEnemyLevel1, initEnemyLevel2, maxEyeV, targetPriority1
     )
 
 {-| Common module
@@ -10,7 +10,7 @@ module Scenes.Level.Enemy.Common exposing
 -}
 
 import Canvas exposing (Point)
-import Color exposing (Color)
+import Color exposing (Color, rgb255)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
@@ -92,9 +92,9 @@ nullEnemyCore : Cell EnemyCore
 nullEnemyCore =
     { val =
         { color = Color.red
-        , hp = 1
+        , hp = 0
         }
-    , loc = ( 3, 1 )
+    , loc = ( 0, 0 )
     }
 
 
@@ -160,6 +160,116 @@ initEnemy1 =
     , target_priority = targetPriority1
     , eroding = True
     }
+
+
+{-| The enemy for level 1
+-}
+initEnemyLevel1 : Model
+initEnemyLevel1 =
+    let
+        ( number, seed ) =
+            randomEnemy (Random.initialSeed 0)
+    in
+    { status = EnemyAlive
+    , body =
+        [ { val =
+                { color = Color.rgb255 30 30 40
+                , hp = 1
+                }
+          , loc = ( 5, 0 )
+          }
+        ]
+    , core = initEnemyCoreLevel1
+    , map_size = ( 5, 4 )
+    , seed = seed
+    , randNum = number
+    , time = 0
+    , target = ( -1, -1 )
+    , eye = initEnemyEyeLevel1
+    , recursion_times = 0
+    , target_priority = targetPriorityLevel1
+    , eroding = True
+    }
+
+
+initEnemyEyeLevel1 : EnemyEye
+initEnemyEyeLevel1 =
+    { pos = ( 550, 50 )
+    , v = ( 0, 0 )
+    , target = ( 550, 50 )
+    , target_eroded = True
+    , target_loc = ( 5, 0 )
+    }
+
+
+initEnemyCoreLevel1 : Cell EnemyCore
+initEnemyCoreLevel1 =
+    { val =
+        { color = Color.red
+        , hp = 1
+        }
+    , loc = ( 5, 0 )
+    }
+
+
+targetPriorityLevel1 : List ErodePriority
+targetPriorityLevel1 =
+    [ ErodeNearest ]
+
+
+{-| The enemy for level 2
+-}
+initEnemyLevel2 : Model
+initEnemyLevel2 =
+    let
+        ( number, seed ) =
+            randomEnemy (Random.initialSeed 0)
+    in
+    { status = EnemyAlive
+    , body =
+        [ { val =
+                { color = Color.rgb255 30 30 40
+                , hp = 1
+                }
+          , loc = ( 3, 6 )
+          }
+        ]
+    , core = initEnemyCoreLevel2
+    , map_size = ( 4, 6 )
+    , seed = seed
+    , randNum = number
+    , time = 0
+    , target = ( -1, -1 )
+    , eye = initEnemyEyeLevel2
+    , recursion_times = 0
+    , target_priority = targetPriorityLevel2
+    , eroding = True
+    }
+
+
+initEnemyEyeLevel2 : EnemyEye
+initEnemyEyeLevel2 =
+    { pos = ( 350, 650 )
+    , v = ( 0, 0 )
+    , target = ( 350, 650 )
+    , target_eroded = True
+    , target_loc = ( 3, 6 )
+    }
+
+
+initEnemyCoreLevel2 : Cell EnemyCore
+initEnemyCoreLevel2 =
+    { val =
+        { color = Color.purple
+        , hp = 1
+        }
+    , loc = ( 3, 6 )
+    }
+
+
+targetPriorityLevel2 : List ErodePriority
+targetPriorityLevel2 =
+    [ ErodeNearest, ErodeRandom, ErodeNearest ]
 
 
 targetPriority1 : List ErodePriority

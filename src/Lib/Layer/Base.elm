@@ -65,6 +65,8 @@ type LayerMsg
     | LayerMsgEnemyErodeTarget
     | LayerMsgEnemySetTarget
     | LayerMsgAvatarModifyLight Float
+    | LayerMsgIncreaseStamina Int Int
+    | LayerMsgGenTableLight GridLoc GridLoc Int
     | NullLayerMsg
 
 
