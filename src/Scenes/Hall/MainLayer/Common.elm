@@ -148,7 +148,7 @@ initcard : Cardbtn
 initcard =
     { open =
         { status = ButtonActive
-        , pos = ( 1000, 200 )
+        , pos = ( 400, 200 )
         , size = ( 100, 50 )
         }
     , close =

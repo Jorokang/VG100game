@@ -14,7 +14,6 @@ module Scenes.Hall.MainLayer.Model exposing
 
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
-import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLose, initModelWin, nullModel, Choice(..))
 import Scenes.Hall.MainLayer.Render exposing (renderButton, renderStr, renderTime)
@@ -112,13 +111,47 @@ updateModel env model =
                                         ( {n_model | choice = Hall}, [], env )
                     Level -> 
                         if ifClicked model.level.close (a, b) then
-                            ( {n_model | choice = Hall}, [], env )
-                        else
+                            ( {n_model | choice = Hall,
+                                level = { lev | open = buttonAct lev.open
+                                        , close = buttonInact lev.close
+                                        , up = buttonInact lev.up
+                                        , down = buttonInact lev.down
+                                        , ok = buttonInact lev.ok
+                                        }
+                                }, [], env )
+                        else if ifClicked model.level.ok (a, b) then
+                            levelokclicked env model
+                        else 
                             ({model | level = checkupdown lev (a ,b)}, [], env)
-
-
-                    _ -> 
-                        ( model, [], env )
+--to do : card , help and setting
+                    Help ->
+                        if ifClicked model.help.close (a, b) then
+                            ( {n_model | choice = Hall,
+                                help = { help | open = buttonAct help.open
+                                        , close = buttonInact help.close
+                                        }
+                                }, [], env )
+                        else 
+                            ( model, [], env )
+                    Card ->
+                        if ifClicked model.card.close (a, b) then
+                            ( {n_model | choice = Hall,
+                                card = { card | open = buttonAct card.open
+                                        , close = buttonInact card.close
+                                        }
+                                }, [], env )
+                        else 
+                            ( model, [], env )
+                    Setting ->
+                        if ifClicked model.setting.close (a, b) then
+                            ( {n_model | choice = Hall,
+                                setting = { set | open = buttonAct set.open
+                                        , close = buttonInact set.close
+                                        }
+                                }, [], env )
+                        else 
+                            ( model, [], env )
+                    
         _ ->
             ( model, [], env )
 
