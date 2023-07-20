@@ -180,8 +180,7 @@ cardToEffect model card =
             ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
         9 ->
-            --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
-            ( model, [] )
+            ( model, [ ( LayerName "Avatar", LayerMsgCardType 9 ) ] )
 
         10 ->
             ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 5 ), ( LayerName "Frame", LayerMsgIncreaseStamina 1 1 ), ( LayerName "Card", LayerMsgCardType 10 ) ] )
@@ -222,7 +221,7 @@ selectCard model card =
                 ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
             9 ->
-                ( model, [] )
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 9 ) ] )
 
             10 ->
                 ( model, [] )
@@ -267,7 +266,6 @@ endCard model card =
                 ( model, [] )
 
             9 ->
-                --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
                 ( model, [] )
 
             10 ->
