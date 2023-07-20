@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
     )
 
 {-| Common module
@@ -57,10 +57,6 @@ type alias Model =
     }
 
 
-
---null model
-
-
 nullModel : Model
 nullModel =
     { status = Stopped
@@ -77,15 +73,29 @@ emptyPlot =
     }
 
 
-
---grids for testing
-
-
 initGrids1 : Model
 initGrids1 =
     { status = Active
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
+    , last_click = ( 0, 0 )
+    }
+
+
+initGridsLevel1 : Model
+initGridsLevel1 =
+    { status = Active
+    , map_size = ( 5, 4 )
+    , grids = genEmptyPlots ( 5, 4 )
+    , last_click = ( 0, 0 )
+    }
+
+
+initGridsLevel2 : Model
+initGridsLevel2 =
+    { status = Active
+    , map_size = ( 4, 6 )
+    , grids = genEmptyPlots ( 4, 6 )
     , last_click = ( 0, 0 )
     }
 

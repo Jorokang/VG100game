@@ -12,10 +12,13 @@ module Scenes.Story.MainLayer.Model exposing
 
 -}
 
+import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Story.MainLayer.Common exposing (EnvC, Model, nullModel)
+import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), initModel1)
+import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
+import Scenes.Story.MainLayer.Update exposing (updateModelItems, updateModelItemsScale, updateModelRoom)
 import Scenes.Story.SceneInit exposing (StoryInit)
 
 
@@ -24,18 +27,33 @@ Add components here
 -}
 initModel : EnvC -> StoryInit -> Model
 initModel _ _ =
-    nullModel
+    initModel1
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
+{-| Only considering click events
 -}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
-    ( model, [], env )
+    case env.msg of
+        MouseDown x m_pos ->
+            case model.status of
+                StoryRoom ->
+                    updateModelRoom env model m_pos
+
+                StoryFamilyPainting ->
+                    updateModelItems env model m_pos
+
+                StoryHall ->
+                    ( model, [], env )
+
+                StoryNull ->
+                    ( model, [], env )
+
+        Tick _ ->
+            updateModelItemsScale env model
+
+        _ ->
+            ( model, [], env )
 
 
 {-| updateModelRec
@@ -58,5 +76,14 @@ If you have other elements than components, add them after viewComponent.
 
 -}
 viewModel : EnvC -> Model -> Renderable
-viewModel _ _ =
-    text [ font { size = 48, family = "Arial", style = "" }, align Center ] ( 50, 50 ) "Story"
+viewModel env model =
+    let
+        rend =
+            [ renderBackground env model
+            , renderMasking env model
+            , renderStoryItem env model
+            ]
+    in
+    Canvas.group
+        []
+        rend

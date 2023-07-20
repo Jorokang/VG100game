@@ -8,7 +8,7 @@ import Color exposing (Color, rgb255)
 import Html exposing (label)
 import Lib.Render.Sprite exposing (renderSprite)
 import List exposing (length)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 
@@ -23,9 +23,11 @@ type FilterMode
 -}
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
-    shapes
-        [ fill Color.yellow ]
-        [ circle (coorChange env model.pos mapCoorData) (lengthChange env avatarRadius mapCoorData) ]
+    let
+        pos =
+            addPoint model.pos ( -0.5 * cellLength, -0.5 * cellLength )
+    in
+    renderSprite env.globalData [] (coorChangeS env pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "avatar"
 
 
 {-| settings for rendering hints
@@ -112,6 +114,12 @@ renderCardHint env model =
         CardType_2 ->
             renderMultiHint env model cardClickPos0 FilterModeAvailCell
 
+        CardType_8 ->
+            renderMultiHint env model cardClickPos2 FilterModeMapCell
+
+        CardType_11 ->
+            renderMultiHint env model cardClickPos0 FilterModeMapCell
+
         CardType_None ->
             Canvas.empty
 
@@ -154,27 +162,30 @@ renderShadow env model =
         colorb =
             Color.rgb255 20 30 40
 
-        r1 =
-            cellLength * 1.6
+        range =
+            model.lightRange
 
-        r2 =
+        r1 =
             cellLength * 1.7
 
+        r2 =
+            cellLength * 1.8
+
         spos =
-            ( px - r2, py - r2 )
+            ( px - range / 2 * r2, py - range / 2 * r2 )
 
         rend1 =
             Canvas.group
                 []
                 --[ shapes [ fill colorb ] [ rect (coorChange env ( bx, by ) shadowCoorData) (lengthChange env (max (px - r1 - bx) 0) shadowCoorData) ly ]
-                [ shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (max (px - r1) 0) mapCoorData) ly ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) lx (lengthChange env (max (py - r1) 0) mapCoorData) ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( px + r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - r1) 0) mapCoorData) ly ]
-                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + r1 ) mapCoorData) lx (lengthChange env (max (sy - py - r1) 0) mapCoorData) ]
+                [ shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (max (px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) lx (lengthChange env (max (py - range / 2 * r1) 0) mapCoorData) ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( px + range / 2 * r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + range / 2 * r1 ) mapCoorData) lx (lengthChange env (max (sy - py - range / 2 * r1) 0) mapCoorData) ]
                 ]
 
         rend2 =
-            renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( 2 * r2, 2 * r2 ) mapCoorData) "light_shade"
+            renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( range * r2, range * r2 ) mapCoorData) "light_shade"
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
     in
@@ -210,7 +221,7 @@ renderSpirit env model =
             ( 180, 9 )
 
         spirit_l =
-            toFloat spirit_max_l / toFloat maxSpirit * toFloat model.spirit
+            toFloat spirit_max_l / toFloat model.max_spirit * toFloat model.spirit
 
         spirit_color =
             Color.rgb255 255 240 245
@@ -237,6 +248,21 @@ renderSpirit env model =
         , render_spirit
         , render_label
         ]
+
+
+{-| render the trapped effect if the avatar is at any eroded cells
+-}
+renderTrappedEffect : EnvC -> Model -> Renderable
+renderTrappedEffect env model =
+    let
+        rend_s =
+            renderSprite env.globalData [] (coorChangeS env (grid2real model.cur_loc) mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "trapped_effect"
+    in
+    if judgeLocAvail model model.cur_loc then
+        Canvas.empty
+
+    else
+        rend_s
 
 
 {-| For testing

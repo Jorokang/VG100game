@@ -2,7 +2,8 @@ module Scenes.Level.Card.CardCreate exposing (..)
 
 --card name and the cost
 
-import Color exposing (Color, black, blue, brown, green, grey, lightGreen, lightGrey, lightRed, orange, purple, red, yellow)
+import Canvas exposing (Point)
+import Color exposing (Color, black, blue, brown, green, grey, lightGreen, lightGrey, lightRed, orange, purple, red, white, yellow)
 
 
 type alias Card =
@@ -11,6 +12,21 @@ type alias Card =
     , cost : Int
     , img : Color
     }
+
+
+type alias PileSize =
+    { name : String
+    , startPoint : Point
+    , length : Float
+    , width : Float
+    , interval : Float
+    , offset : Float
+    }
+
+
+giveBackCard : Card
+giveBackCard =
+    { name = "back", id = 0, cost = 0, img = white }
 
 
 giveErrorCard : Card
@@ -48,3 +64,41 @@ giveCard id =
 
     else
         giveErrorCard
+
+
+giveHandSize : PileSize
+giveHandSize =
+    { name = "hand"
+    , startPoint = ( 25, 725 )
+    , length = 120
+    , width = 80
+    , interval = 100
+    , offset = 15
+    }
+
+
+giveDeckSize : PileSize
+giveDeckSize =
+    { name = "pile"
+    , startPoint = ( 850, 100 )
+    , length = 120
+    , width = 80
+    , interval = 3
+    , offset = 15
+    }
+
+
+giveDiscardSize : PileSize
+giveDiscardSize =
+    { name = "pile"
+    , startPoint = ( 850, 300 )
+    , length = 120
+    , width = 80
+    , interval = 3
+    , offset = 15
+    }
+
+
+giveBackPile : List Card -> List Card
+giveBackPile pile =
+    List.map (\x -> giveBackCard) pile

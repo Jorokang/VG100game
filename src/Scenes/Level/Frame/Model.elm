@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
 import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderNextRoundB, renderStamina)
-import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
+import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -102,6 +102,9 @@ updateModelRec env lmsg model =
 
             else
                 ( model, [], env )
+
+        LayerMsgIncreaseStamina n t ->
+            ( increaseStamina model n t, [], env )
 
         _ ->
             ( model, [], env )
