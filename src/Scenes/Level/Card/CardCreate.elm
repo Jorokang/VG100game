@@ -14,15 +14,6 @@ type alias Card =
     }
 
 
-type alias CardObject =
-    { card : Card
-    , pos : Point
-    , size : Point
-    , selected : Bool
-    , img : Color
-    }
-
-
 type alias PileSize =
     { name : String
     , startPoint : Point
@@ -111,19 +102,3 @@ giveDiscardSize =
 giveBackPile : List Card -> List Card
 giveBackPile pile =
     List.map (\x -> giveBackCard) pile
-
-
-modifyPos : List a -> Int -> a -> List a
-modifyPos list pos value =
-    if pos <= List.length list && pos > 0 then
-        let
-            before =
-                List.take (pos - 1) list
-
-            after =
-                List.drop pos list
-        in
-        before ++ [ value ] ++ after
-
-    else
-        list

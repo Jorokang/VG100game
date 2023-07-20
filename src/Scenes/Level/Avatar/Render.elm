@@ -117,9 +117,6 @@ renderCardHint env model =
         CardType_8 ->
             renderMultiHint env model cardClickPos2 FilterModeMapCell
 
-        CardType_9 ->
-            renderMultiHint env model cardClickPos0 FilterModeMapCell
-
         CardType_11 ->
             renderMultiHint env model cardClickPos0 FilterModeMapCell
 

@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), TableLight, emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
     )
 
 {-| Common module
@@ -49,19 +49,11 @@ type alias Plot =
     }
 
 
-type alias TableLight =
-    { loc : GridLoc
-    , dir : GridLoc
-    , last_rounds : Int
-    }
-
-
 type alias Model =
     { status : GridsStatus
     , map_size : GridLoc
     , grids : Grid Plot
     , last_click : Point
-    , table_lights : List TableLight
     }
 
 
@@ -71,7 +63,6 @@ nullModel =
     , map_size = ( 0, 0 )
     , grids = []
     , last_click = ( 0, 0 )
-    , table_lights = []
     }
 
 
@@ -88,7 +79,6 @@ initGrids1 =
     , map_size = ( 3, 4 )
     , grids = genEmptyPlots ( 3, 4 )
     , last_click = ( 0, 0 )
-    , table_lights = []
     }
 
 
@@ -98,7 +88,6 @@ initGridsLevel1 =
     , map_size = ( 5, 4 )
     , grids = genEmptyPlots ( 5, 4 )
     , last_click = ( 0, 0 )
-    , table_lights = []
     }
 
 
@@ -108,7 +97,6 @@ initGridsLevel2 =
     , map_size = ( 4, 6 )
     , grids = genEmptyPlots ( 4, 6 )
     , last_click = ( 0, 0 )
-    , table_lights = []
     }
 
 
