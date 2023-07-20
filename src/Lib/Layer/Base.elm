@@ -60,18 +60,15 @@ type LayerMsg
     | LayerMsgCardType Int --the card type
     | LayerMsgErodePermission GridLoc Int --check whether this cell is protected (Int: 0 -> denied/asking; 1 -> approved)
     | LayerMsgProtectCell GridLoc Int --protect the cell for x rounds
+    | LayerMsgModifySpirit Int --modify the spirit
+    | LayerMsgLevelComplete Int -- 0->loose; 1->win;
+    | LayerMsgEnemyErodeTarget
+    | LayerMsgEnemySetTarget
+    | LayerMsgAvatarModifyLight Float
+    | LayerMsgIncreaseStamina Int Int
     | NullLayerMsg
 
 
-{-| LayerTarget
-
-You can send message to a layer by using LayerTarget.
-
-LayerParentScene is used to send message to the parent scene of the layer.
-
-LayerName is used to send message to a specific layer.
-
--}
 type LayerTarget
     = LayerParentScene
     | LayerName String

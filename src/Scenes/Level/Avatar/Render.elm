@@ -5,9 +5,12 @@ import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1)
+import Html exposing (label)
+import Lib.Render.Sprite exposing (renderSprite)
+import List exposing (length)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, grid2real, lengthChange, nullCoorData)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 
 
 type FilterMode
@@ -20,9 +23,11 @@ type FilterMode
 -}
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
-    shapes
-        [ fill Color.yellow ]
-        [ circle (coorChange env model.pos nullCoorData) (lengthChange env avatarRadius nullCoorData) ]
+    let
+        pos =
+            addPoint model.pos ( -0.5 * cellLength, -0.5 * cellLength )
+    in
+    renderSprite env.globalData [] (coorChangeS env pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "avatar"
 
 
 {-| settings for rendering hints
@@ -47,7 +52,7 @@ renderSingleHint env model mode loc =
             6
 
         real_l =
-            lengthChange env (cellLength - 2 * offset) nullCoorData
+            lengthChange env (cellLength - 2 * offset) mapCoorData
 
         pos =
             addPoint (grid2real loc) ( offset, offset )
@@ -64,7 +69,7 @@ renderSingleHint env model mode loc =
                     List.any (\x -> x == loc) (allGrids model.map_size)
     in
     if judge then
-        shapes hintSetting [ rect (coorChange env pos nullCoorData) real_l real_l ]
+        shapes hintSetting [ rect (coorChange env pos mapCoorData) real_l real_l ]
 
     else
         empty
@@ -109,6 +114,12 @@ renderCardHint env model =
         CardType_2 ->
             renderMultiHint env model cardClickPos0 FilterModeAvailCell
 
+        CardType_8 ->
+            renderMultiHint env model cardClickPos2 FilterModeMapCell
+
+        CardType_11 ->
+            renderMultiHint env model cardClickPos0 FilterModeMapCell
+
         CardType_None ->
             Canvas.empty
 
@@ -124,59 +135,57 @@ choose1 a b =
         b
 
 
-maxShadowX : Float
-maxShadowX =
-    cellLength * 4
-
-
-maxShadowY : Float
-maxShadowY =
-    cellLength * 5
-
-
 {-| render the shadow
+100, 50 -> 720, 600
 -}
 renderShadow : EnvC -> Model -> Renderable
 renderShadow env model =
     let
+        ( bx, by ) =
+            ( 100, 50 )
+
+        ( dx, dy ) =
+            ( 50, 50 )
+
+        ( sx, sy ) =
+            ( 720, 600 )
+
+        lx =
+            lengthChange env sx shadowCoorData
+
+        ly =
+            lengthChange env sy shadowCoorData
+
         ( px, py ) =
             model.pos
 
+        colorb =
+            Color.rgb255 20 30 40
+
+        range =
+            model.lightRange
+
         r1 =
-            cellLength * 2.6
+            cellLength * 1.7
 
         r2 =
-            cellLength * 1.2
+            cellLength * 1.8
 
-        l1 =
-            2000
-
-        l2 =
-            1000
-
-        r_maxX =
-            lengthChange env maxShadowX nullCoorData
-
-        r_maxY =
-            lengthChange env maxShadowY nullCoorData
+        spos =
+            ( px - range / 2 * r2, py - range / 2 * r2 )
 
         rend1 =
             Canvas.group
                 []
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env (px - r1) nullCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, 0 ) nullCoorData) r_maxX (lengthChange env (py - r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r1, 0 ) nullCoorData) (lengthChange env (max (maxShadowX - px - r1) 0) nullCoorData) r_maxY ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( 0, py + r1 ) nullCoorData) r_maxX (lengthChange env (max (maxShadowY - py - r1) 0) nullCoorData) ]
+                --[ shapes [ fill colorb ] [ rect (coorChange env ( bx, by ) shadowCoorData) (lengthChange env (max (px - r1 - bx) 0) shadowCoorData) ly ]
+                [ shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) (lengthChange env (max (px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, 0 ) mapCoorData) lx (lengthChange env (max (py - range / 2 * r1) 0) mapCoorData) ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( px + range / 2 * r1, 0 ) mapCoorData) (lengthChange env (max (sx - px - range / 2 * r1) 0) mapCoorData) ly ]
+                , shapes [ fill colorb ] [ rect (coorChange env ( 0, py + range / 2 * r1 ) mapCoorData) lx (lengthChange env (max (sy - py - range / 2 * r1) 0) mapCoorData) ]
                 ]
 
         rend2 =
-            Canvas.group
-                [ filter "opacity(30%)" ]
-                [ shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r1) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px - r2) (r1 - r2)) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, max (py - r1) 0 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (choose1 (py - r2) (r1 - r2)) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( px + r2, py - r1 ) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) (lengthChange env (choose1 (py + r1) 2 * r1) nullCoorData) ]
-                , shapes [ fill Color.black ] [ rect (coorChange env ( max (px - r2) 0, py + r2 ) nullCoorData) (lengthChange env (choose1 (px + r2) (2 * r2)) nullCoorData) (lengthChange env (r1 - r2) nullCoorData) ]
-                ]
+            renderSprite env.globalData [] (coorChangeS env spos mapCoorData) (sizeChangeS env ( range * r2, range * r2 ) mapCoorData) "light_shade"
 
         --[ renderSprite env.globalData [] (0,0) (100,100) "light_shade"]
     in
@@ -187,11 +196,80 @@ renderShadow env model =
         ]
 
 
+{-| render the spirit value in a long box
+-}
+renderSpirit : EnvC -> Model -> Renderable
+renderSpirit env model =
+    let
+        max_box_color =
+            Color.rgb255 25 25 112
+
+        --dark blue
+        label_pos =
+            ( 550, 40 )
+
+        ( box_x, box_y ) =
+            ( 450, 50 )
+
+        ( box_l, box_w ) =
+            ( 200, 15 )
+
+        ( spirit_x, spirit_y ) =
+            ( 460, 53 )
+
+        ( spirit_max_l, spirit_w ) =
+            ( 180, 9 )
+
+        spirit_l =
+            toFloat spirit_max_l / toFloat model.max_spirit * toFloat model.spirit
+
+        spirit_color =
+            Color.rgb255 255 240 245
+
+        --LavenderBlush
+        render_label =
+            Canvas.group
+                [ fill Color.white ]
+                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos mapCoorData) "spirit" ]
+
+        render_max_box =
+            shapes
+                [ fill max_box_color ]
+                [ rect (coorChange env ( box_x, box_y ) mapCoorData) (lengthChange env box_l mapCoorData) (lengthChange env box_w mapCoorData) ]
+
+        render_spirit =
+            shapes
+                [ fill spirit_color ]
+                [ rect (coorChange env ( spirit_x, spirit_y ) mapCoorData) (lengthChange env spirit_l mapCoorData) (lengthChange env spirit_w mapCoorData) ]
+    in
+    Canvas.group
+        []
+        [ render_max_box
+        , render_spirit
+        , render_label
+        ]
+
+
+{-| render the trapped effect if the avatar is at any eroded cells
+-}
+renderTrappedEffect : EnvC -> Model -> Renderable
+renderTrappedEffect env model =
+    let
+        rend_s =
+            renderSprite env.globalData [] (coorChangeS env (grid2real model.cur_loc) mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "trapped_effect"
+    in
+    if judgeLocAvail model model.cur_loc then
+        Canvas.empty
+
+    else
+        rend_s
+
+
 {-| For testing
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
 {-| For testing
@@ -216,7 +294,7 @@ renderSingleTuple env ( x, y ) d =
         pos =
             ( 800, toFloat (d * 40) )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
 renderSingleTuple2 : EnvC -> ( Float, Float ) -> Renderable
@@ -228,4 +306,4 @@ renderSingleTuple2 env ( x, y ) =
         pos =
             ( 1000, 20 )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos nullCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str

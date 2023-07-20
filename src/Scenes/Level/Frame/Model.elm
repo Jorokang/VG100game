@@ -16,8 +16,8 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
-import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderStamina)
-import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, switchTurn)
+import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderNextRoundB, renderStamina)
+import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -38,14 +38,11 @@ Add your logic to handle msg here
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
-        KeyDown x ->
-            case x of
-                13 ->
-                    --enter -> switch turn
-                    switchTurn env model
+        Tick _ ->
+            updateTickNRB env model
 
-                _ ->
-                    ( model, [], env )
+        MouseDown x mpos ->
+            updateMouseClickNRB env model mpos
 
         _ ->
             ( model, [], env )
@@ -99,6 +96,16 @@ updateModelRec env lmsg model =
         LayerMsgErodePermission loc x ->
             checkErodePermission env model loc
 
+        LayerMsgPlayerTurn ->
+            if model.status == FrameEnemyTurn then
+                switchTurn env model
+
+            else
+                ( model, [], env )
+
+        LayerMsgIncreaseStamina n t ->
+            ( increaseStamina model n t, [], env )
+
         _ ->
             ( model, [], env )
 
@@ -109,6 +116,7 @@ viewModel env model =
         rend =
             [ renderFrameStatus env model
             , renderStamina env model
+            , renderNextRoundB env model
             ]
     in
     Canvas.group

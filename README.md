@@ -1,4 +1,4 @@
-[Project 2]: [Inner Battle]
+[Project 2]: [Light in Nightmares]
 
 # Readme
 This file contains relevant information about installation and startup.
@@ -32,6 +32,16 @@ Find the "index.html" and click on it.
 ```
 
 ## Usage
+
+[Choose level]
+```
+enter the level you choose by click it
+```
+
+[Play card]
+```
+Play out the card you choose by click it
+```
 
 [Move]
 ```

@@ -15,9 +15,9 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderStr)
-import Scenes.Level.Avatar.Update exposing (erodeAvailGrids, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, nullModel)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr, renderTrappedEffect)
+import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -25,16 +25,18 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    initAvatar1 ( 3, 4 )
+initModel _ i =
+    case i.level_id of
+        1 ->
+            initAvatarLevel1
+
+        2 ->
+            initAvatarLevel2
+
+        _ ->
+            nullModel
 
 
-{-| updateModel
-Default update function
-
-Add your logic to handle msg here
-
--}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     let
@@ -69,10 +71,8 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgPlayerTurn ->
-            ( { model | status = AvatarActive }
-            , []
-            , env
-            )
+            { model | status = AvatarActive }
+                |> judgeErosionDamage env
 
         LayerIntMsg x ->
             case x of
@@ -93,7 +93,7 @@ updateModelRec env lmsg model =
                     ( model, [], env )
 
         LayerMsgErodeCell loc ->
-            ( erodeAvailGrids model loc, [], env )
+            updateErodeMsg env model loc
 
         LayerMsgClearCell loc ->
             ( retrieveAvailGrids model loc, [], env )
@@ -103,6 +103,12 @@ updateModelRec env lmsg model =
 
         LayerMsgCardType card_type ->
             updateCardType env model card_type
+
+        LayerMsgModifySpirit x ->
+            updateModifySpirit env model x
+
+        LayerMsgAvatarModifyLight r ->
+            updateModifyLight env model r
 
         _ ->
             ( model, [], env )
@@ -116,8 +122,8 @@ viewModel env model =
                 AvatarActive ->
                     "Active"
 
-                AvatarInactive ->
-                    "Inactive"
+                AvatarDead ->
+                    "Dead"
 
                 AvatarMoving ->
                     "Moving"
@@ -133,30 +139,18 @@ viewModel env model =
 
         rend =
             [ renderAvatar env model
+            , renderTrappedEffect env model
             , renderMovingHint env model
-            , renderCardHint env model
             , renderShadow env model
-            , renderStr env ("Avatar status : " ++ str) ( 500, 400 )
-            , renderAvailLocs env model
-            , renderSingleTuple2 env model.pos
+            , renderCardHint env model
+            , renderSpirit env model
             ]
     in
     case model.status of
-        AvatarInactive ->
-            Canvas.empty
+        AvatarDead ->
+            renderStr env ("Avatar status : " ++ str) ( 500, 400 )
 
         _ ->
             Canvas.group
                 []
                 rend
-
-
-{-| a list of delta\_locs with the Manhattan Distance of 1 (used for renderMovingHint)
--}
-deltaLocsDis1 : List GridLoc
-deltaLocsDis1 =
-    [ ( -1, 0 )
-    , ( 0, -1 )
-    , ( 1, 0 )
-    , ( 0, 1 )
-    ]

@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -22,6 +22,56 @@ judgeAvatarSelection env click_pos model =
 loc2Pos : GridLoc -> Point
 loc2Pos ( lx, ly ) =
     ( (toFloat lx + 0.5) * cellLength, (toFloat ly + 0.5) * cellLength )
+
+
+updateModifySpirit : EnvC -> Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModifySpirit env model x =
+    let
+        n_model =
+            modifySpirit model x
+
+        msg =
+            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
+    in
+    case n_model.status of
+        AvatarDead ->
+            ( n_model
+            , ( LayerParentScene, LayerMsgLevelComplete 0 ) :: msg
+            , env
+            )
+
+        _ ->
+            ( n_model, msg, env )
+
+
+updateModifyLight : EnvC -> Model -> Float -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModifyLight env model r =
+    ( { model | lightRange = model.lightRange + r }, [], env )
+
+
+{-| simply increase or decrease the spirit by an int
+-}
+modifySpirit : Model -> Int -> Model
+modifySpirit model delta =
+    let
+        n_spirit0 =
+            model.spirit + delta
+
+        n_spirit1 =
+            if n_spirit0 < 0 then
+                0
+
+            else if n_spirit0 > model.max_spirit then
+                model.max_spirit
+
+            else
+                n_spirit0
+    in
+    if n_spirit1 > 0 then
+        { model | spirit = n_spirit1 }
+
+    else
+        { model | status = AvatarDead }
 
 
 {-| ensure that the pos is synchronized with loc
@@ -91,26 +141,54 @@ moveAvatar model =
             else
                 { model | pos = addPoint model.pos v }
 
+        AvatarActive ->
+            if dis <= maxAvatarV then
+                { model
+                    | pos = target_pos
+                    , cur_loc = model.target_loc
+                    , status = AvatarActive
+                }
+
+            else
+                { model | pos = addPoint model.pos v }
+
         _ ->
             model
 
 
+{-| The spirit decreasing value when the Avatar is eroded by the enemy
+-}
+spiritLossAtErosion : Int
+spiritLossAtErosion =
+    -10
+
+
 {-| remove a cell from avail\_grids ( most likely it is eroded by the enemy )
 -}
-erodeAvailGrids : Model -> GridLoc -> Model
-erodeAvailGrids model loc =
-    let
-        ( nx, ny ) =
-            loc
+updateErodeMsg : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateErodeMsg env model loc =
+    ( { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
+    , []
+    , env
+    )
 
-        new_model1 =
-            { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
+
+{-| judge whether the avatar is on an eroded cell at the beginning of player's turn
+-}
+judgeErosionDamage : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeErosionDamage env model =
+    let
+        judge =
+            judgeLocAvail model model.cur_loc
     in
-    if loc == model.cur_loc then
-        setAvatarTarget new_model1 model.core_loc
+    if judge then
+        ( model, [], env )
 
     else
-        new_model1
+        ( model
+        , [ ( LayerName "Avatar", LayerMsgModifySpirit spiritLossAtErosion ) ]
+        , env
+        )
 
 
 {-| add a cell to avail\_grids ( most likely the cell is retrieved from the enemy )
@@ -167,7 +245,9 @@ updateClickEvent env model loc =
             if judgeLocAvail model loc then
                 if abs (dx + dy) == 1 then
                     ( setAvatarTarget model loc
-                    , [ ( LayerName "Frame", LayerIntMsg 1 ) ]
+                    , [ ( LayerName "Frame", LayerIntMsg 1 )
+                      , ( LayerName "Avatar", LayerMsgModifySpirit -3 )
+                      ]
                     , env
                     )
 
@@ -212,7 +292,7 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 
@@ -229,7 +309,41 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+                , env
+                )
+
+        CardType_8 ->
+            let
+                avail_card_loc =
+                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos2)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType8 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+                , env
+                )
+
+        CardType_11 ->
+            let
+                avail_card_loc =
+                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos0)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType11 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 
@@ -266,6 +380,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -1, 0 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( -2, 0 )) )
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -277,6 +392,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 1, 0 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 2, 0 )) )
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -288,6 +404,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 1 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, 2 )) )
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -299,6 +416,7 @@ cardActiveType1 env model loc =
               }
             , [ ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -1 )) )
               , ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc ( 0, -2 )) )
+              , ( LayerName "Card", LayerMsgCardType 1 )
               ]
             , env
             )
@@ -308,7 +426,7 @@ cardActiveType1 env model loc =
                 | status = AvatarActive
                 , card_status = CardType_None
               }
-            , []
+            , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
             , env
             )
 
@@ -322,7 +440,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
+        , ( LayerName "Card", LayerMsgCardType 2 ) :: List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
         , env
         )
 
@@ -331,9 +449,52 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , []
+        , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
         , env
         )
+
+
+cardActiveType8 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType8 env model loc =
+    if List.any (\x -> x == loc) cardClickPos2 then
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , ( LayerName "Card", LayerMsgCardType 8 ) :: List.map (\x -> ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc x) )) cardClickPos2
+        , env
+        )
+
+    else
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+        , env
+        )
+
+
+cardActiveType11 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType11 env model loc =
+    let
+        line =
+            if loc == ( -1, 0 ) || loc == ( 1, 0 ) then
+                List.filter (\x -> Tuple.second x == Tuple.second model.cur_loc) (allGrids model.map_size)
+
+            else if loc == ( 0, 1 ) || loc == ( 0, -1 ) then
+                List.filter (\x -> Tuple.first x == Tuple.first model.cur_loc) (allGrids model.map_size)
+
+            else
+                []
+    in
+    ( { model
+        | status = AvatarActive
+        , card_status = CardType_None
+      }
+    , ( LayerName "Card", LayerMsgCardType 11 ) :: List.map (\x -> ( LayerName "Frame", LayerMsgClearCell x )) line
+    , env
+    )
 
 
 {-| filter for click pos (move available grids)
@@ -370,6 +531,18 @@ updateCardType env model card_type =
 
         2 ->
             ( { model | status = AvatarCard, card_status = CardType_2 }
+            , []
+            , env
+            )
+
+        8 ->
+            ( { model | status = AvatarCard, card_status = CardType_8 }
+            , []
+            , env
+            )
+
+        11 ->
+            ( { model | status = AvatarCard, card_status = CardType_11 }
             , []
             , env
             )
