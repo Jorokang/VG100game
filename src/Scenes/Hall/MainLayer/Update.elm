@@ -8,7 +8,7 @@ import Scenes.Hall.MainLayer.Common exposing (Levelbtn)
 
 
 
---to check if one btn clicked
+{-to check if one btn clicked-}
 
 
 ifClicked : Button -> ( Float, Float ) -> Bool
@@ -21,7 +21,7 @@ ifClicked btn ( a, b ) =
 
 
 
---decide which part should be opened
+{-decide which part should be opened-}
 
 
 checkopen : Model -> ( Float, Float ) -> Choice
@@ -117,9 +117,12 @@ downclicked lev =
 --check if up or down clicked
 checkupdown : Levelbtn -> (Float , Float) -> Levelbtn
 checkupdown lev (a , b) =
-    if ifClicked lev.up (a , b) then    
-        upclicked lev
-    else if ifClicked lev.down (a , b) then 
-        downclicked lev
+    if lev.levelInt >= 1 || lev.levelInt <= 4 then
+        if ifClicked lev.up (a , b) then    
+            upclicked lev
+        else if ifClicked lev.down (a , b) then 
+            downclicked lev
+        else 
+            lev
     else
         lev

@@ -22,8 +22,9 @@ import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
 import Set exposing (Set)
-import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderHall)
+import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderHall, renderMasking)
 import Scenes.Hall.MainLayer.Update exposing (ifClicked)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground)
 
 
 
@@ -190,14 +191,23 @@ If you have other elements than components, add them after viewComponent.
 -}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
-    case model.choice of
-        Setting ->
-            rendersetting env model.setting
-        Help ->
-            renderhelp env model.help
-        Level ->
-            renderlevel env model.level
-        Card ->
-            rendercard env model.card
-        Hall ->
-            renderHall env model
+    let
+        choice = case model.choice of
+                Setting ->
+                    rendersetting env model.setting
+                Help ->
+                    renderhelp env model.help
+                Level ->
+                    renderlevel env model.level
+                Card ->
+                    rendercard env model.card
+                Hall ->
+                    renderHall env model
+    in
+    Canvas.group
+        []
+        [ renderBackground env model
+        , renderMasking env model
+        , choice
+        ]
+    
