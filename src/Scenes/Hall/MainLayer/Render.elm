@@ -2,14 +2,36 @@ module Scenes.Hall.MainLayer.Render exposing (..)
 
 import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
+import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
-import Tuple
+
+
+{-| render the background of hall
+-}
+renderBackground : EnvC -> Model -> Renderable
+renderBackground env _ =
+    let
+        rend_sprite =
+            renderSprite env.globalData [] ( 0, 0 ) ( 1920, 1080 ) "room_background_1"
+
+        rend_masking =
+            shapes
+                [ filter "opacity(76%)"
+                , fill (Color.rgb255 20 30 40)
+                ]
+                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 1920 nullCoorData) (lengthChange env 1080 nullCoorData) ]
+    in
+    Canvas.group
+        []
+        [ rend_sprite
+        , rend_masking
+        ]
 
 
 renderStr : EnvC -> Point -> String -> Renderable

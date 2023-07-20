@@ -41,4 +41,8 @@ allTexture =
     , ( "light_shade", getResourcePath "img/light_shade.png" )
     , ( "avatar", getResourcePath "img/avatar.png" )
     , ( "cardback", getResourcePath "cardback.svg" )
+    , ( "room_background_1", getResourcePath "img/room_background_1.png" )
+    , ( "family_painting_1", getResourcePath "img/family_painting_1.png" )
+    , ( "family_painting_2", getResourcePath "img/family_painting_2.png" )
+    , ( "button_hall", getResourcePath "img/button_hall.png" )
     ]
