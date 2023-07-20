@@ -117,10 +117,20 @@ downclicked lev =
 --check if up or down clicked
 checkupdown : Levelbtn -> (Float , Float) -> Levelbtn
 checkupdown lev (a , b) =
-    if lev.levelInt >= 1 || lev.levelInt <= 4 then
+    if lev.levelInt > 1 && lev.levelInt < 4 then
         if ifClicked lev.up (a , b) then    
             upclicked lev
         else if ifClicked lev.down (a , b) then 
+            downclicked lev
+        else 
+            lev
+    else if lev.levelInt == 1 then
+        if ifClicked lev.up (a , b) then    
+            upclicked lev
+        else 
+            lev
+    else if lev.levelInt == 4 then
+        if ifClicked lev.down (a , b) then    
             downclicked lev
         else 
             lev
