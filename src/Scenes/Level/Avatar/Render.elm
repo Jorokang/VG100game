@@ -250,6 +250,21 @@ renderSpirit env model =
         ]
 
 
+{-| render the trapped effect if the avatar is at any eroded cells
+-}
+renderTrappedEffect : EnvC -> Model -> Renderable
+renderTrappedEffect env model =
+    let
+        rend_s =
+            renderSprite env.globalData [] (coorChangeS env (grid2real model.cur_loc) mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "trapped_effect"
+    in
+    if judgeLocAvail model model.cur_loc then
+        Canvas.empty
+
+    else
+        rend_s
+
+
 {-| For testing
 -}
 renderStr : EnvC -> String -> Point -> Renderable
