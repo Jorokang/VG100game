@@ -17,20 +17,28 @@ import Canvas exposing (Point, Renderable, empty, group)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, nullModel)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
 import Scenes.Level.Enemy.Update exposing (clickFreeCell, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Time exposing (posixToMillis)
+import Time
 
 
 {-| initModel
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    initEnemy1
+initModel _ i =
+    case i.level_id of
+        1 ->
+            initEnemyLevel1
+
+        2 ->
+            initEnemyLevel2
+
+        _ ->
+            nullModel
 
 
 {-| updateModel

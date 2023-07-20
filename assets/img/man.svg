@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="man.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.9653759"
+     inkscape:cx="371.17581"
+     inkscape:cy="436.55771"
+     inkscape:window-width="1920"
+     inkscape:window-height="974"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g851"
+       transform="translate(-3.9040454,-4.1732899)">
+      <circle
+         style="fill:#ffffff;stroke:#000000;stroke-width:1;paint-order:fill markers stroke"
+         id="path1106"
+         cx="116.38093"
+         cy="120.68884"
+         r="6.5291796" />
+      <path
+         style="fill:#ffffff;stroke:#000000;stroke-width:1;paint-order:fill markers stroke"
+         d="M 109.71714,161.95057 C 96.095651,113.43499 76.172997,166.74291 76.465438,159.25812 66.545182,68.458547 135.18855,89.05909 109.71714,161.95057 Z"
+         id="path1006"
+         sodipodi:nodetypes="ccc" />
+      <circle
+         style="fill:#ffffff;stroke:#000000;stroke-width:1;paint-order:fill markers stroke"
+         id="path1104"
+         cx="78.417465"
+         cy="120.82347"
+         r="6.7984238" />
+      <circle
+         style="fill:#ffffff;stroke:#000000;stroke-width:1;paint-order:fill markers stroke"
+         id="path896"
+         cx="99.418533"
+         cy="91.475822"
+         r="16.087358" />
+    </g>
+  </g>
+</svg>
