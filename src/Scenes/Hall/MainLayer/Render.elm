@@ -7,7 +7,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), EnvC, Model, nullModel)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
@@ -33,17 +33,19 @@ renderBackground env _ =
         , rend_masking
         ]
 
-
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
-renderButtons : EnvC -> Model -> Renderable
-renderButtons env model =
+renderHall : EnvC -> Model -> Renderable
+renderHall env model =
     let
         rend =
-            [ renderButtonPureColor env model.btn_1 Color.gray
+            [ renderButton env model.setting.open
+            , renderButton env model.level.open
+            , renderButton env model.card.open
+            , renderButton env model.help.open
             ]
     in
     Canvas.group
@@ -51,35 +53,91 @@ renderButtons env model =
         rend
 
 
-renderButtonPureColor : EnvC -> Button -> Color -> Renderable
-renderButtonPureColor env btn color =
+
+--to do: render a img
+
+
+renderButton : EnvC -> Button -> Renderable
+renderButton env btn =
     let
         ( sx, sy ) =
             btn.size
 
         text_pos =
             addPoint ( sx / 2, sy / 2 ) btn.pos
-
-        text_ =
-            case btn.status of
-                ButtonActive ->
-                    btn.text
-
-                _ ->
-                    "pressed"
     in
     case btn.status of
         ButtonInactive ->
             Canvas.empty
 
-        _ ->
+        ButtonActive ->
             Canvas.group
                 []
-                [ shapes [ fill color ] [ rect (coorChange env btn.pos nullCoorData) (lengthChange env sx nullCoorData) (lengthChange env sy nullCoorData) ]
-                , text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) text_
+                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) "btnimg"
                 ]
 
 
 renderTime : EnvC -> Model -> Renderable
 renderTime env model =
     renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Hall Time: " ++ String.fromInt model.time)
+
+
+
+--render the different Hall parts
+
+
+rendersetting : EnvC -> Settingbtn -> Renderable
+rendersetting env set =
+    let
+        rend =
+            [ renderButton env set.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here"
+            ]
+    in
+    Canvas.group
+        []
+        rend
+
+
+renderhelp : EnvC -> Helpbtn -> Renderable
+renderhelp env help =
+    let
+        rend =
+            [ renderButton env help.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env help.close.pos nullCoorData) "help here"
+            ]
+    in
+    Canvas.group
+        []
+        rend
+
+
+renderlevel : EnvC -> Levelbtn -> Renderable
+renderlevel env level =
+    let
+        rend =
+            [ renderButton env level.close
+            , renderButton env level.up
+            , renderButton env level.down
+            , renderButton env level.ok
+            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) ("Level close")
+            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env level.close.pos nullCoorData) "level here"
+            ]
+    in
+    Canvas.group
+        []
+        rend
+
+
+rendercard : EnvC -> Cardbtn -> Renderable
+rendercard env card =
+    let
+        rend =
+            [ renderButton env card.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env card.close.pos nullCoorData) "card here"
+            ]
+    in
+    Canvas.group
+        []
+        rend

@@ -17,7 +17,7 @@ import Canvas exposing (Renderable, empty)
 import Html.Attributes exposing (action)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
-import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
+import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderSingleTuple)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
@@ -27,8 +27,16 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    initGrids1
+initModel _ i =
+    case i.level_id of
+        1 ->
+            initGridsLevel1
+
+        2 ->
+            initGridsLevel2
+
+        _ ->
+            nullModel
 
 
 {-| updateModel

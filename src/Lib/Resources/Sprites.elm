@@ -40,9 +40,12 @@ allTexture =
     , ( "pattern_5", getResourcePath "img/pattern_5.png" )
     , ( "light_shade", getResourcePath "img/light_shade.png" )
     , ( "avatar", getResourcePath "img/avatar.png" )
-    , ( "cardback", getResourcePath "cardback.svg" )
+    , ( "cardback", getResourcePath "img/cardback.svg" )
     , ( "room_background_1", getResourcePath "img/room_background_1.png" )
     , ( "family_painting_1", getResourcePath "img/family_painting_1.png" )
     , ( "family_painting_2", getResourcePath "img/family_painting_2.png" )
     , ( "button_hall", getResourcePath "img/button_hall.png" )
+    , ( "trapped_effect", getResourcePath "img/trapped_effect.png" )
+    , ( "level", getResourcePath "img/level.svg" )
+    , ( "menu", getResourcePath "img/menu.svg" )
     ]

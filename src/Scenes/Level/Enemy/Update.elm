@@ -80,7 +80,10 @@ updateEnemySettingTarget env model prior =
                 ErodeRandom ->
                     targetRandomCell model
     in
-    ( { n_model | status = EnemySettingTarget }
+    ( { n_model
+        | status = EnemySettingTarget
+        , recursion_times = n_model.recursion_times + 1
+      }
     , [ ( LayerName "Frame", LayerMsgErodePermission n_model.target 0 ) ]
     , env
     )
@@ -113,15 +116,7 @@ handlePermissionMsg env model permission =
                 updateEnemySettingTarget env (increaseRecursionNum model) ErodeRandom
 
     else
-        ( { model
-            | status = EnemyMoving
-            , target_priority = []
-          }
-            |> targetCore
-            |> updatePlayerRound
-        , []
-        , env
-        )
+        updateEndRound env model
 
 
 {-| handle protect cell msg

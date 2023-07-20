@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, maxSpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -61,8 +61,8 @@ modifySpirit model delta =
             if n_spirit0 < 0 then
                 0
 
-            else if n_spirit0 > maxSpirit then
-                maxSpirit
+            else if n_spirit0 > model.max_spirit then
+                model.max_spirit
 
             else
                 n_spirit0
@@ -141,6 +141,17 @@ moveAvatar model =
             else
                 { model | pos = addPoint model.pos v }
 
+        AvatarActive ->
+            if dis <= maxAvatarV then
+                { model
+                    | pos = target_pos
+                    , cur_loc = model.target_loc
+                    , status = AvatarActive
+                }
+
+            else
+                { model | pos = addPoint model.pos v }
+
         _ ->
             model
 
@@ -156,21 +167,28 @@ spiritLossAtErosion =
 -}
 updateErodeMsg : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateErodeMsg env model loc =
-    let
-        ( nx, ny ) =
-            loc
+    ( { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
+    , []
+    , env
+    )
 
-        new_model1 =
-            { model | avail_grids = List.filter (\x -> x /= loc) model.avail_grids }
+
+{-| judge whether the avatar is on an eroded cell at the beginning of player's turn
+-}
+judgeErosionDamage : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeErosionDamage env model =
+    let
+        judge =
+            judgeLocAvail model model.cur_loc
     in
-    if loc == model.cur_loc then
-        ( setAvatarTarget new_model1 model.core_loc
+    if judge then
+        ( model, [], env )
+
+    else
+        ( model
         , [ ( LayerName "Avatar", LayerMsgModifySpirit spiritLossAtErosion ) ]
         , env
         )
-
-    else
-        ( new_model1, [], env )
 
 
 {-| add a cell to avail\_grids ( most likely the cell is retrieved from the enemy )
