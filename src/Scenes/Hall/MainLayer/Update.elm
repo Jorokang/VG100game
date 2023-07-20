@@ -46,7 +46,7 @@ checkopen model ( a, b ) =
 
 
 
---change the state of button
+{- change the state of button -}
 
 
 buttonInact : Button -> Button
@@ -60,7 +60,7 @@ buttonAct btn =
 
 
 
---change the Hallstate of model
+{- change the Hallstate of model -}
 
 
 hallState : Choice -> Model -> Model
@@ -69,7 +69,7 @@ hallState c model =
 
 
 
---change the scene to Level
+{- change the scene to Level -}
 
 
 levelokclicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -98,7 +98,7 @@ levelokclicked env model =
 
 
 
---change the level num
+{- change the level num -}
 
 
 upclicked : Levelbtn -> Levelbtn
@@ -120,7 +120,7 @@ downclicked lev =
 
 
 
---check if up or down clicked
+{- check if up or down clicked -}
 
 
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn

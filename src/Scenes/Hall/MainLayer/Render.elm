@@ -56,7 +56,7 @@ renderHall env model =
 
 
 
---to do: render a img
+{- to do: render a img -}
 
 
 renderButton : EnvC -> Button -> Renderable
@@ -85,7 +85,7 @@ renderTime env model =
 
 
 
---render the different Hall parts
+{- render the different Hall parts -}
 
 
 rendersetting : EnvC -> Settingbtn -> Renderable
