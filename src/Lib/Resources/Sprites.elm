@@ -46,4 +46,6 @@ allTexture =
     , ( "family_painting_2", getResourcePath "img/family_painting_2.png" )
     , ( "button_hall", getResourcePath "img/button_hall.png" )
     , ( "trapped_effect", getResourcePath "img/trapped_effect.png" )
+    , ( "level", getResourcePath "img/level.svg" )
+    , ( "menu", getResourcePath "img/menu.svg" )
     ]
