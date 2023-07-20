@@ -330,23 +330,6 @@ updateCardClickEvent env model loc =
                 , env
                 )
 
-        CardType_9 ->
-            let
-                avail_card_loc =
-                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos0)
-            in
-            if List.any (\x -> x == loc) avail_card_loc then
-                cardActiveType9 env model relative_loc
-
-            else
-                ( { model
-                    | status = AvatarActive
-                    , card_status = CardType_None
-                  }
-                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
-                , env
-                )
-
         CardType_11 ->
             let
                 avail_card_loc =
@@ -492,29 +475,6 @@ cardActiveType8 env model loc =
         )
 
 
-cardActiveType9 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-cardActiveType9 env model loc =
-    if List.any (\x -> x == loc) cardClickPos0 then
-        ( { model
-            | status = AvatarActive
-            , card_status = CardType_None
-          }
-        , [ ( LayerName "Card", LayerMsgCardType 9 )
-          , ( LayerName "Grids", LayerMsgGenTableLight (addLoc model.cur_loc loc) loc 2 )
-          ]
-        , env
-        )
-
-    else
-        ( { model
-            | status = AvatarActive
-            , card_status = CardType_None
-          }
-        , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
-        , env
-        )
-
-
 cardActiveType11 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 cardActiveType11 env model loc =
     let
@@ -577,12 +537,6 @@ updateCardType env model card_type =
 
         8 ->
             ( { model | status = AvatarCard, card_status = CardType_8 }
-            , []
-            , env
-            )
-
-        9 ->
-            ( { model | status = AvatarCard, card_status = CardType_9 }
             , []
             , env
             )
