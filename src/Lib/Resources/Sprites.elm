@@ -38,6 +38,7 @@ allTexture =
     , ( "pattern_3", getResourcePath "img/pattern_3.png" )
     , ( "pattern_4", getResourcePath "img/pattern_4.png" )
     , ( "pattern_5", getResourcePath "img/pattern_5.png" )
-    , ( "level", getResourcePath "img/level.svg" )
-    , ( "menu", getResourcePath "img/menu.svg" )
+    , ( "light_shade", getResourcePath "img/light_shade.png" )
+    , ( "avatar", getResourcePath "img/avatar.png" )
+    , ( "cardback", getResourcePath "cardback.svg" )
     ]

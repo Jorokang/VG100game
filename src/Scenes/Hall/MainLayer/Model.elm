@@ -16,17 +16,12 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLose, initModelWin, nullModel, Choice(..))
-import Scenes.Hall.MainLayer.Render exposing (renderButton, renderStr, renderTime)
-import Scenes.Hall.MainLayer.Update exposing (levelokclicked, checkopen, buttonInact, buttonAct, checkupdown)
+import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLoose, initModelWin, nullModel)
+import Scenes.Hall.MainLayer.Render exposing (renderButtonPureColor, renderStr, renderTime)
+import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, mouseClickedState)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
-import Set exposing (Set)
-import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderHall)
-import Scenes.Hall.MainLayer.Update exposing (ifClicked)
-
-
 
 
 {-| initModel
@@ -36,7 +31,7 @@ initModel : EnvC -> HallInit -> Model
 initModel _ i =
     case i.status of
         0 ->
-            initModelLose
+            initModelLoose
 
         1 ->
             initModelWin
@@ -59,66 +54,21 @@ updateModel env model =
             , []
             , env
             )
-            
+
+        --       KeyDown x ->
+        --         ( model, [ ( LayerParentScene, LayerStringMsg "Level" ) ], env )
         MouseDown x ( a, b ) ->
             let
                 n_model =
                     { model | click_pos = ( a, b ) }
-                
-                lev =
-                    model.level
-                set = 
-                    model.setting
-
-                help =
-                    model.help
-
-                card = model.card
             in
-            case model.choice of 
-                    Hall -> 
-                        case checkopen n_model ( a, b ) of
-                                    Level ->
-                                        ( {n_model | choice = Level
-                                            , level = { lev | open = buttonInact lev.open
-                                                    , close = buttonAct lev.close
-                                                    , up = buttonAct lev.up
-                                                    , down = buttonAct lev.down
-                                                    , ok = buttonAct lev.ok
-                                                    }
-                                            }, [], env )
+            case mouseClickedState env n_model ( a, b ) of
+                1 ->
+                    btn_1_clicked env n_model
 
-                                    Help ->
-                                        ( {n_model | choice = Help
-                                            , help = { help | open = buttonInact help.open
-                                                    , close = buttonAct help.close
-                                                    }
-                                            }, [], env )
+                _ ->
+                    ( n_model, [], env )
 
-                                    Card ->--to do : about card choice
-                                        ( {n_model | choice = Card
-                                            , card = { card | open = buttonInact card.open
-                                                    , close = buttonAct card.close
-                                                    }}, [], env )
-
-                                    Setting ->
-                                        ( {n_model | choice = Setting
-                                            , setting = { set | open = buttonInact set.open
-                                                    , close = buttonAct set.close
-                                                    }
-                                            }, [], env )
-
-                                    Hall ->
-                                        ( {n_model | choice = Hall}, [], env )
-                    Level -> 
-                        if ifClicked model.level.close (a, b) then
-                            ( {n_model | choice = Hall}, [], env )
-                        else
-                            ({model | level = checkupdown lev (a ,b)}, [], env)
-
-
-                    _ -> 
-                        ( model, [], env )
         _ ->
             ( model, [], env )
 
@@ -131,20 +81,7 @@ Add your logic to handle LayerMsg here
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env _ model =
-    case env.msg of
-        Tick new_time ->
-            ( { model | time = posixToMillis new_time }
-            , []
-            , env
-            )
-            
-        MouseDown x ( a, b ) ->
-            if ifClicked model.level.ok (a, b) then
-                levelokclicked env model
-            else 
-                ( model, [], env )
-        _ -> 
-            ( model, [], env )
+    ( model, [], env )
 
 
 {-| viewModel
@@ -157,15 +94,14 @@ If you have other elements than components, add them after viewComponent.
 -}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
-    case model.choice of
-        Setting ->
-            rendersetting env model.setting
-        Help ->
-            renderhelp env model.help
-        Level ->
-            renderlevel env model.level
-        Card ->
-            rendercard env model.card
-        Hall ->
-            renderHall env model
-        
+    let
+        rend =
+            [ renderStr env (coorChange env ( 200, 50 ) nullCoorData) model.hall_name
+            , renderButtonPureColor env model.btn_1 Color.gray
+
+            --, renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("click" ++ String.fromFloat (Tuple.first model.click_pos) ++ ", " ++ String.fromFloat (Tuple.second model.click_pos))
+            ]
+    in
+    Canvas.group
+        []
+        rend

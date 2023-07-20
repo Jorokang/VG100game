@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, maxSpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, maxSpirit)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -29,16 +29,24 @@ updateModifySpirit env model x =
     let
         n_model =
             modifySpirit model x
+
+        msg =
+            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
     in
     case n_model.status of
         AvatarDead ->
             ( n_model
-            , [ ( LayerParentScene, LayerMsgLevelComplete 0 ) ]
+            , ( LayerParentScene, LayerMsgLevelComplete 0 ) :: msg
             , env
             )
 
         _ ->
-            ( n_model, [], env )
+            ( n_model, msg, env )
+
+
+updateModifyLight : EnvC -> Model -> Float -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+updateModifyLight env model r =
+    ( { model | lightRange = model.lightRange + r }, [], env )
 
 
 {-| simply increase or decrease the spirit by an int
@@ -266,7 +274,7 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 
@@ -283,7 +291,41 @@ updateCardClickEvent env model loc =
                     | status = AvatarActive
                     , card_status = CardType_None
                   }
-                , []
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+                , env
+                )
+
+        CardType_8 ->
+            let
+                avail_card_loc =
+                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos2)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType8 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+                , env
+                )
+
+        CardType_11 ->
+            let
+                avail_card_loc =
+                    filterMapCardLoc model (offsetRelativePos model.cur_loc cardClickPos0)
+            in
+            if List.any (\x -> x == loc) avail_card_loc then
+                cardActiveType11 env model relative_loc
+
+            else
+                ( { model
+                    | status = AvatarActive
+                    , card_status = CardType_None
+                  }
+                , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
                 , env
                 )
 
@@ -380,7 +422,7 @@ cardActiveType2 env model loc =
             | status = AvatarActive
             , card_status = CardType_None
           }
-        , ( LayerName "Card", LayerMsgCardType 1 ) :: List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
+        , ( LayerName "Card", LayerMsgCardType 2 ) :: List.map (\x -> ( LayerName "Grids", LayerMsgProtectCell (addLoc model.cur_loc x) 2 )) cardClickPos0
         , env
         )
 
@@ -392,6 +434,49 @@ cardActiveType2 env model loc =
         , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
         , env
         )
+
+
+cardActiveType8 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType8 env model loc =
+    if List.any (\x -> x == loc) cardClickPos2 then
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , ( LayerName "Card", LayerMsgCardType 8 ) :: List.map (\x -> ( LayerName "Frame", LayerMsgClearCell (addLoc model.cur_loc x) )) cardClickPos2
+        , env
+        )
+
+    else
+        ( { model
+            | status = AvatarActive
+            , card_status = CardType_None
+          }
+        , [ ( LayerName "Card", LayerMsgCardType -1 ) ]
+        , env
+        )
+
+
+cardActiveType11 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+cardActiveType11 env model loc =
+    let
+        line =
+            if loc == ( -1, 0 ) || loc == ( 1, 0 ) then
+                List.filter (\x -> Tuple.second x == Tuple.second model.cur_loc) (allGrids model.map_size)
+
+            else if loc == ( 0, 1 ) || loc == ( 0, -1 ) then
+                List.filter (\x -> Tuple.first x == Tuple.first model.cur_loc) (allGrids model.map_size)
+
+            else
+                []
+    in
+    ( { model
+        | status = AvatarActive
+        , card_status = CardType_None
+      }
+    , ( LayerName "Card", LayerMsgCardType 11 ) :: List.map (\x -> ( LayerName "Frame", LayerMsgClearCell x )) line
+    , env
+    )
 
 
 {-| filter for click pos (move available grids)
@@ -428,6 +513,18 @@ updateCardType env model card_type =
 
         2 ->
             ( { model | status = AvatarCard, card_status = CardType_2 }
+            , []
+            , env
+            )
+
+        8 ->
+            ( { model | status = AvatarCard, card_status = CardType_8 }
+            , []
+            , env
+            )
+
+        11 ->
+            ( { model | status = AvatarCard, card_status = CardType_11 }
             , []
             , env
             )
