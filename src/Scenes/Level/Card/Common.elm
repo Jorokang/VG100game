@@ -11,6 +11,7 @@ module Scenes.Level.Card.Common exposing
 
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
+import Lib.Layer.Base exposing (LayerMsg, LayerTarget)
 import Random exposing (Seed, initialSeed)
 import Scenes.Level.Card.CardCreate exposing (Card, giveCard, giveErrorCard)
 import Scenes.Level.LayerBase exposing (CommonData)

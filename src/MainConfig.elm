@@ -18,6 +18,8 @@ This module is used for configuring the parameters of the game framework.
 
 import Base exposing (GlobalData)
 import Canvas exposing (Renderable)
+import Canvas.Settings exposing (fill)
+import Color exposing (rgb255)
 import Lib.Scene.Base exposing (SceneInitData(..))
 
 
@@ -25,7 +27,7 @@ import Lib.Scene.Base exposing (SceneInitData(..))
 -}
 initScene : String
 initScene =
-    "Hall"
+    "Story"
 
 
 {-| Initial scene settings
@@ -85,4 +87,5 @@ Canvas.shapes [ fill Color.blue ][ Canvas.rect ( 0, 0 ) (toFloat gd.realWidth) (
 -}
 background : GlobalData -> Renderable
 background gd =
+    --    Canvas.shapes [ fill <| Color.rgb255 24 33 39 ] [ Canvas.rect ( 0, 0 ) gd.internalData.realWidth gd.internalData.realHeight ]
     Canvas.clear ( 0, 0 ) gd.internalData.realWidth gd.internalData.realHeight

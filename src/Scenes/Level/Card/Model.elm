@@ -16,10 +16,10 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardCreate exposing (giveErrorCard)
-import Scenes.Level.Card.CardSystem exposing (dropCard)
-import Scenes.Level.Card.CardUnique exposing (clickDetect)
+import Scenes.Level.Card.CardSystem exposing (dropCard, dropCardByCard)
+import Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
-import Scenes.Level.Card.Render exposing (renderCardInfo, renderHandCards, renderTestMessage)
+import Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -43,7 +43,7 @@ updateModel env model =
             let
                 ( checked_model, msg ) =
                     if model.click_status then
-                        clickDetect model
+                        clickCard model
 
                     else
                         ( model, [] )
@@ -86,11 +86,14 @@ updateModelRec env msg model =
                 nmodel =
                     { model | status = Active, selected_pos = -1, selected_card = giveErrorCard }
             in
-            if id == model.selected_card.id then
-                ( dropCard { nmodel | turn_status = model.turn_status - 1 } model.selected_pos, [], env )
+            if id == model.selected_card.id && id /= -1 then
+                ( dropCardByCard { nmodel | turn_status = model.turn_status - 1 } model.selected_card, costSpirit model, env )
 
             else
                 ( nmodel, [], env )
+
+        LayerMsgModifySpirit x ->
+            ( { model | spirit = x }, [], env )
 
         _ ->
             ( model, [], env )
@@ -109,6 +112,8 @@ viewModel env model =
     Canvas.group
         []
         [ renderHandCards env model
+        , renderDeckCards env model
+        , renderDiscardCards env model
         , renderTestMessage env model
         , renderCardInfo env model
         ]

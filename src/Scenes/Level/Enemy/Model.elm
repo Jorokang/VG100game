@@ -14,21 +14,31 @@ module Scenes.Level.Enemy.Model exposing
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point, Renderable, empty, group)
+import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemy1)
+import List
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, nullModel)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
-import Scenes.Level.Enemy.Update exposing (clickFreeCell, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, targetNearestCell, targetRandomCell, updateEnemyRound, updateEnemySettingTarget)
+import Scenes.Level.Enemy.Update exposing (clickFreeCell, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Time exposing (posixToMillis)
+import Time
 
 
 {-| initModel
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    initEnemy1
+initModel _ i =
+    case i.level_id of
+        1 ->
+            initEnemyLevel1
+
+        2 ->
+            initEnemyLevel2
+
+        _ ->
+            nullModel
 
 
 {-| updateModel
@@ -45,13 +55,29 @@ updateModel env model =
         EnemyAlive ->
             case env.msg of
                 Tick newTime ->
+                    let
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
+                    in
                     ( --{ model | time = Time.posixToMillis newTime }
-                      { model | time = Time.posixToMillis newTime }
-                        |> updateRandNum
-                        |> moveEnemyEye
+                      nmodel
                     , []
                     , env
                     )
+
+                _ ->
+                    ( model, [], env )
+
+        EnemyMoving ->
+            case env.msg of
+                Tick newTime ->
+                    let
+                        nmodel =
+                            { model | time = Time.posixToMillis newTime }
+                                |> updateRandNum
+                    in
+                    moveEnemyEye env nmodel
 
                 _ ->
                     ( model, [], env )
@@ -79,16 +105,30 @@ updateModelRec env lmsg model =
     case lmsg of
         LayerMsgPlayerTurn ->
             --set the target
-            updateEnemySettingTarget env model ErodeNearest
+            --updateEnemySettingTarget env (updatePlayerRound model) ErodeRandom--(curPriority model)
+            ( updatePlayerRound model
+            , []
+            , env
+            )
 
-        LayerMsgEnemyTurn ->
+        LayerMsgEnemyErodeTarget ->
             --erode the target
             ( model
-                |> updateEnemyRound
                 |> erodeTarget
+                |> resetRecursionTimes
             , [ ( LayerName "Frame", LayerMsgEnemyErodeCell model.target ) ]
             , env
             )
+
+        LayerMsgEnemyTurn ->
+            updateEnemySettingTarget env (updateEnemyRound model) (curPriority model)
+
+        LayerMsgEnemySetTarget ->
+            if List.isEmpty model.target_priority then
+                updateEndRound env model
+
+            else
+                updateEnemySettingTarget env model (curPriority model)
 
         LayerMsgClearCell loc ->
             ( freeCell model loc
@@ -96,8 +136,8 @@ updateModelRec env lmsg model =
             , env
             )
 
-        LayerMsgErodePermission loc x ->
-            handlePermissionMsg env model loc x
+        LayerMsgErodePermission _ x ->
+            handlePermissionMsg env model x
 
         LayerMsgProtectCell loc x ->
             handleProtectMsg env model loc

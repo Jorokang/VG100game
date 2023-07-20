@@ -85,14 +85,16 @@ scalePointLength pos k =
 
 
 type CoorType
-    = CoorEnemy
+    = CoorUI
     | CoorCard
-    | CoorAvatar
+    | CoorMap
     | CoorNull
 
 
 type alias CoorData =
     { coortype : CoorType
+    , offset : Point
+    , scale : Float
 
     --  Other Data
     }
@@ -101,32 +103,140 @@ type alias CoorData =
 nullCoorData : CoorData
 nullCoorData =
     { coortype = CoorNull
+    , offset = ( 0, 0 )
+    , scale = 1
     }
 
 
+mapCoorData : CoorData
+mapCoorData =
+    { coortype = CoorMap
+    , offset = ( 0, 0 )
+    , scale = 1
+    }
+
+
+shadowCoorData : CoorData
+shadowCoorData =
+    { coortype = CoorUI
+    , offset = ( 150, 100 )
+    , scale = 0.75
+    }
+
+
+nextRoundBCoorData : CoorData
+nextRoundBCoorData =
+    { coortype = CoorUI
+    , offset = ( 0, 0 )
+    , scale = 1
+    }
+
+
+offsetCoorMap : Point
+offsetCoorMap =
+    ( 150, 100 )
+
+
+scaleCoorMap : Float
+scaleCoorMap =
+    0.75
+
+
+{-| The global coordinate control function
+-}
 coorChange : EnvC -> Point -> CoorData -> Point
-coorChange env pos _ =
-    pos
+coorChange env pos cdata =
+    let
+        npos1 =
+            addPoint (scalePoint pos cdata.scale) cdata.offset
+
+        npos2 =
+            case cdata.coortype of
+                CoorMap ->
+                    addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
+
+                _ ->
+                    npos1
+    in
+    npos2
         |> posToReal env.globalData
 
 
+{-| The version for Sprite (without posToReal) of coorChange
+-}
+coorChangeS : EnvC -> Point -> CoorData -> Point
+coorChangeS env pos cdata =
+    let
+        npos1 =
+            addPoint (scalePoint pos cdata.scale) cdata.offset
 
---global length control function
+        npos2 =
+            case cdata.coortype of
+                CoorMap ->
+                    addPoint (scalePoint npos1 scaleCoorMap) offsetCoorMap
+
+                _ ->
+                    npos1
+    in
+    npos2
 
 
+{-| global length control function
+-}
 lengthChange : EnvC -> Float -> CoorData -> Float
-lengthChange env l _ =
-    l
+lengthChange env l cdata =
+    let
+        nl1 =
+            l * cdata.scale
+
+        nl2 =
+            case cdata.coortype of
+                CoorMap ->
+                    nl1 * scaleCoorMap
+
+                _ ->
+                    nl1
+    in
+    nl2
         |> lengthToReal env.globalData
 
 
-
-{-
-   ****Cell:
-   Get the coordinates of the Cell next to the given position
+{-| The sprite version for lengthChange ( without lengthToReal )
 -}
+lengthChangeS : EnvC -> Float -> CoorData -> Float
+lengthChangeS env l cdata =
+    let
+        nl1 =
+            l * cdata.scale
+
+        nl2 =
+            case cdata.coortype of
+                CoorMap ->
+                    nl1 * scaleCoorMap
+
+                _ ->
+                    nl1
+    in
+    nl2
 
 
+{-| Tuple version of lengthChange
+-}
+sizeChange : EnvC -> Point -> CoorData -> Point
+sizeChange env ( l1, l2 ) cdata =
+    ( lengthChange env l1 cdata, lengthChange env l2 cdata )
+
+
+{-| Sprite version of sizeChange
+-}
+sizeChangeS : EnvC -> Point -> CoorData -> Point
+sizeChangeS env ( l1, l2 ) cdata =
+    ( lengthChangeS env l1 cdata, lengthChangeS env l2 cdata )
+
+
+{-| \*\*\*\*Cell:
+Get the coordinates of the Cell next to the given position
+-}
 leftCell : Point -> Point
 leftCell x =
     ( first x - cellLength, second x )

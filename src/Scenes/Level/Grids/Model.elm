@@ -13,12 +13,12 @@ module Scenes.Level.Grids.Model exposing
 -}
 
 import Base exposing (GlobalData, Msg(..))
-import Canvas exposing (Renderable, empty)
-import Html.Attributes exposing (action)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGrids1, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids, renderProtection)
-import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
+import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, nullModel)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -26,8 +26,16 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    initGrids1
+initModel _ i =
+    case i.level_id of
+        1 ->
+            initGridsLevel1
+
+        2 ->
+            initGridsLevel2
+
+        _ ->
+            nullModel
 
 
 {-| updateModel
@@ -41,20 +49,29 @@ updateModel env model =
     case model.status of
         Active ->
             case env.msg of
-                MouseDown x ( a, b ) ->
+                Tick _ ->
+                    ( { model | last_click = env.globalData.mousePos }
+                    , []
+                    , env
+                    )
+
+                MouseDown x cpos ->
                     let
+                        npos =
+                            scalePoint (addPoint cpos (negPoint offsetCoorMap)) (1.0 / scaleCoorMap)
+
                         judge =
-                            clickPos2Loc env model ( a, b )
+                            clickPos2Loc env model npos
                     in
                     case judge of
                         Just loc ->
-                            ( model
+                            ( { model | last_click = npos }
                             , [ ( LayerName "Avatar", LayerMsgClickLoc loc ) ]
                             , env
                             )
 
                         Nothing ->
-                            ( model
+                            ( { model | last_click = npos }
                             , [ ( LayerName "Avatar", LayerMsgClickLoc ( -1, -1 ) ) ]
                             , env
                             )
@@ -66,12 +83,6 @@ updateModel env model =
             ( model, [], env )
 
 
-{-| updateModelRec
-Default update function
-
-Add your logic to handle LayerMsg here
-
--}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
@@ -83,6 +94,12 @@ updateModelRec env lmsg model =
 
         LayerMsgProtectCell loc x ->
             updateProtectCell env model loc x
+
+        LayerMsgGenTableLight loc dir x ->
+            ( genTableLight model loc dir x
+            , []
+            , env
+            )
 
         _ ->
             ( model, [], env )
@@ -97,8 +114,10 @@ viewModel env model =
                     []
 
                 _ ->
-                    [ renderGrids env model
-                    , renderProtection env model
+                    [ renderLevelBackground env
+                    , renderGrids env model
+                    , renderTableLights env model
+                    , renderStr env ("table lights num : " ++ String.fromInt (List.length model.table_lights)) ( 1000, 500 )
                     ]
     in
     Canvas.group
