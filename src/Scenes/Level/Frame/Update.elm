@@ -64,19 +64,9 @@ restorePlayerStamina model =
             model.player_data.max_stamina
 
         pd =
-            if model.player_data.turns > 0 then
-                { cur_stamina = mxs + model.player_data.add_stamina
-                , max_stamina = mxs
-                , add_stamina = model.player_data.add_stamina
-                , turns = model.player_data.turns - 1
-                }
-
-            else
-                { cur_stamina = mxs
-                , max_stamina = mxs
-                , add_stamina = 0
-                , turns = 0
-                }
+            { cur_stamina = mxs
+            , max_stamina = mxs
+            }
     in
     { model | player_data = pd }
 
@@ -87,20 +77,6 @@ costPlayerStamina model =
         | player_data =
             { cur_stamina = model.player_data.cur_stamina - 1
             , max_stamina = model.player_data.max_stamina
-            , add_stamina = model.player_data.add_stamina
-            , turns = model.player_data.turns
-            }
-    }
-
-
-increaseStamina : Model -> Int -> Int -> Model
-increaseStamina model n t =
-    { model
-        | player_data =
-            { cur_stamina = model.player_data.cur_stamina
-            , max_stamina = model.player_data.max_stamina
-            , add_stamina = n
-            , turns = t
             }
     }
 

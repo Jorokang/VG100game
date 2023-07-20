@@ -12,19 +12,14 @@ module Scenes.Story.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, rect, text)
-import Canvas.Settings.Advanced exposing (filter)
-import Canvas.Settings.Text exposing (TextAlign(..), align, font)
+import Canvas exposing (Renderable)
 import Lib.Audio.Base exposing (AudioOption(..))
-import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Lib.Scene.Base exposing (SceneOutputMsg(..))
 import Scenes.Story.Common exposing (Model)
 import Scenes.Story.LayerBase exposing (CommonData)
-import Scenes.Story.Transition exposing (hallTransitionIn, rawTransition, storyTransitionOut)
 
 
 {-| handleLayerMsg
@@ -40,16 +35,6 @@ handleLayerMsg env lmsg model =
 
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
-
-        LayerStringMsg scene_name ->
-            let
-                sid =
-                    NullSceneInitData
-
-                trans =
-                    Just (genTransition 100 100 storyTransitionOut hallTransitionIn)
-            in
-            ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
 
         _ ->
             ( model, [], env )

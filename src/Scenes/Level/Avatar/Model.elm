@@ -15,9 +15,9 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, nullModel)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr, renderTrappedEffect)
-import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatar1)
+import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr)
+import Scenes.Level.Avatar.Update exposing (moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -25,16 +25,8 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ i =
-    case i.level_id of
-        1 ->
-            initAvatarLevel1
-
-        2 ->
-            initAvatarLevel2
-
-        _ ->
-            nullModel
+initModel _ _ =
+    initAvatar1 ( 3, 4 )
 
 
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -71,8 +63,10 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgPlayerTurn ->
-            { model | status = AvatarActive }
-                |> judgeErosionDamage env
+            ( { model | status = AvatarActive }
+            , []
+            , env
+            )
 
         LayerIntMsg x ->
             case x of
@@ -107,9 +101,6 @@ updateModelRec env lmsg model =
         LayerMsgModifySpirit x ->
             updateModifySpirit env model x
 
-        LayerMsgAvatarModifyLight r ->
-            updateModifyLight env model r
-
         _ ->
             ( model, [], env )
 
@@ -139,9 +130,7 @@ viewModel env model =
 
         rend =
             [ renderAvatar env model
-            , renderTrappedEffect env model
             , renderMovingHint env model
-            , renderShadow env model
             , renderCardHint env model
             , renderSpirit env model
             ]
