@@ -18,12 +18,14 @@ import Color
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (EnvC, Model, initModelLose, initModelWin, nullModel, Choice(..))
 import Scenes.Hall.MainLayer.Render exposing (renderButton, renderStr, renderTime)
-import Scenes.Hall.MainLayer.Update exposing (btn_1_clicked, checkopen)
+import Scenes.Hall.MainLayer.Update exposing (levelokclicked, checkopen, buttonInact, buttonAct, checkupdown)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
 import Time exposing (posixToMillis)
 import Set exposing (Set)
-import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderButtons)
+import Scenes.Hall.MainLayer.Render exposing (rendersetting, renderhelp, rendercard, renderlevel, renderHall)
+import Scenes.Hall.MainLayer.Update exposing (ifClicked)
+
 
 
 
@@ -62,23 +64,61 @@ updateModel env model =
             let
                 n_model =
                     { model | click_pos = ( a, b ) }
+                
+                lev =
+                    model.level
+                set = 
+                    model.setting
+
+                help =
+                    model.help
+
+                card = model.card
             in
-            case checkopen n_model ( a, b ) of
-                Level ->
-                    btn_1_clicked env n_model
+            case model.choice of 
+                    Hall -> 
+                        case checkopen n_model ( a, b ) of
+                                    Level ->
+                                        ( {n_model | choice = Level
+                                            , level = { lev | open = buttonInact lev.open
+                                                    , close = buttonAct lev.close
+                                                    , up = buttonAct lev.up
+                                                    , down = buttonAct lev.down
+                                                    , ok = buttonAct lev.ok
+                                                    }
+                                            }, [], env )
 
-                Help ->
-                    btn_1_clicked env n_model
+                                    Help ->
+                                        ( {n_model | choice = Help
+                                            , help = { help | open = buttonInact help.open
+                                                    , close = buttonAct help.close
+                                                    }
+                                            }, [], env )
 
-                Card ->
-                    btn_1_clicked env n_model
+                                    Card ->--to do : about card choice
+                                        ( {n_model | choice = Card
+                                            , card = { card | open = buttonInact card.open
+                                                    , close = buttonAct card.close
+                                                    }}, [], env )
 
-                Setting ->
-                    ( n_model, [], env )
+                                    Setting ->
+                                        ( {n_model | choice = Setting
+                                            , setting = { set | open = buttonInact set.open
+                                                    , close = buttonAct set.close
+                                                    }
+                                            }, [], env )
 
-                Hall ->
-                    ( n_model, [], env )
+                                    Hall ->
+                                        ( {n_model | choice = Hall}, [], env )
+                    Level -> 
+                        if ifClicked model.level.close (a, b) then
+                            ( {n_model | choice = Hall}, [], env )
+                        else
+                            ({model | level = checkupdown lev (a ,b)}, [], env)
 
+
+                    _ -> 
+                        ( model, [], env )
         _ ->
             ( model, [], env )
 
@@ -91,7 +131,20 @@ Add your logic to handle LayerMsg here
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env _ model =
-    ( model, [], env )
+    case env.msg of
+        Tick new_time ->
+            ( { model | time = posixToMillis new_time }
+            , []
+            , env
+            )
+            
+        MouseDown x ( a, b ) ->
+            if ifClicked model.level.ok (a, b) then
+                levelokclicked env model
+            else 
+                ( model, [], env )
+        _ -> 
+            ( model, [], env )
 
 
 {-| viewModel
@@ -114,5 +167,5 @@ viewModel env model =
         Card ->
             rendercard env model.card
         Hall ->
-            renderButtons env model
+            renderHall env model
         
