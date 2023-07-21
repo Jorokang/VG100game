@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), TableLight, emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
     )
 
 {-| Common module
@@ -43,9 +43,20 @@ type alias Grid a =
     List (Cell a)
 
 
+type alias SingleAnimation =
+    { offset : Point
+    , v : Point
+    , b1 : Float
+    , b2 : Float
+    , active : Bool
+    }
+
+
 type alias Plot =
     { effect : PlotEffect
     , protection : Int --indicates how many turns is this plot protected. 0 for no protection.
+    , anima : List SingleAnimation
+    , sprite_id : Int
     }
 
 
@@ -79,6 +90,8 @@ emptyPlot : Plot
 emptyPlot =
     { effect = Empty
     , protection = 0
+    , anima = []
+    , sprite_id = 0
     }
 
 

@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
 import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
-import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updatePlayerTurn, updateProtectCell)
+import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -51,6 +51,7 @@ updateModel env model =
             case env.msg of
                 Tick _ ->
                     ( { model | last_click = env.globalData.mousePos }
+                        |> updateGridAnimation
                     , []
                     , env
                     )

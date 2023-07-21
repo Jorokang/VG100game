@@ -3,8 +3,8 @@ module Scenes.Level.Grids.Update exposing (..)
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addLoc, cellLength, point2Int)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), TableLight, emptyPlot)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, pointDistance)
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot)
 
 
 {-| Update player turn beginning
@@ -224,3 +224,45 @@ checkTableLight tl =
 genClearCommandsTableLights : TableLight -> ( LayerTarget, LayerMsg )
 genClearCommandsTableLights tl =
     ( LayerName "Frame", LayerMsgClearCell tl.loc )
+
+
+{-| update grid animation
+-}
+updateGridAnimation : Model -> Model
+updateGridAnimation model =
+    { model | grids = List.map updatePlotAnimation model.grids }
+
+
+{-| update single plot animation
+-}
+updatePlotAnimation : Cell Plot -> Cell Plot
+updatePlotAnimation cell =
+    let
+        p =
+            cell.val
+
+        np =
+            { p | anima = List.map updateSingleAnimation p.anima }
+    in
+    { cell | val = np }
+
+
+{-| update single animation
+-}
+updateSingleAnimation : SingleAnimation -> SingleAnimation
+updateSingleAnimation p =
+    let
+        n_offset =
+            addPoint p.offset p.v
+
+        diso =
+            pointDistance ( 0, 0 ) n_offset
+    in
+    if diso < p.b2 || diso > p.b1 then
+        { p
+            | v = negPoint p.v
+            , offset = n_offset
+        }
+
+    else
+        { p | offset = n_offset }

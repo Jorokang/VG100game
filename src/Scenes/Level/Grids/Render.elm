@@ -6,8 +6,9 @@ import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), TableLight)
+import List
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, scalePoint, shadowCoorData, sizeChangeS)
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), SingleAnimation, TableLight)
 
 
 {-| render the whole grid
@@ -34,33 +35,31 @@ renderPlot env x =
         plot =
             x.val
 
-        color =
-            case plot.effect of
-                Empty ->
-                    Color.gray
-
-                Angry ->
-                    Color.darkRed
-
-                Lazy ->
-                    Color.darkGray
-
         offset =
-            3
+            ( 0, 15 )
 
-        rl =
-            lengthChange env (cellLength - 2 * offset) mapCoorData
+        offset_anima =
+            List.foldl toolFunc1 ( 0, 0 ) plot.anima
+
+        rpos =
+            addPoint (addPoint pos offset) offset_anima
+
+        size =
+            scalePoint ( cellLength * 0.8, cellLength ) 1.5
 
         rend_base =
-            shapes
-                [ fill color ]
-                [ rect (coorChange env (addPoint pos ( offset, offset )) mapCoorData) rl rl ]
+            renderSprite env.globalData [] (coorChangeS env rpos mapCoorData) (sizeChangeS env size mapCoorData) ("grid_block_" ++ String.fromInt plot.sprite_id)
     in
     Canvas.group
         []
         [ rend_base
         , renderPlotGuard env x
         ]
+
+
+toolFunc1 : SingleAnimation -> Point -> Point
+toolFunc1 a b =
+    addPoint a.offset b
 
 
 {-| render the guard effect for a single plot if it has

@@ -28,6 +28,9 @@ Examples:
 [
 ( "ball", getResourcePath "img/ball.png" ),
 ( "car", getResourcePath "img/car.jpg" )
+][
+( "ball", getResourcePath "img/ball.png" ),
+( "car", getResourcePath "img/car.jpg" )
 ]
 
 -}
@@ -48,4 +51,5 @@ allTexture =
     , ( "trapped_effect", getResourcePath "img/trapped_effect.png" )
     , ( "level", getResourcePath "img/level.svg" )
     , ( "menu", getResourcePath "img/menu.svg" )
+    , ( "grid_block_0", getResourcePath "img/grid_block_0.png" )
     ]
