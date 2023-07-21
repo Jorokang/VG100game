@@ -53,6 +53,7 @@ renderPlot env x =
     Canvas.group
         []
         [ rend_base
+        , renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
         , renderPlotGuard env x
         ]
 
@@ -221,13 +222,13 @@ renderStr env str pos =
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
-renderSingleTuple : EnvC -> Point -> Renderable
-renderSingleTuple env x =
+renderSingleTuple : EnvC -> Point -> Point -> Renderable
+renderSingleTuple env x pos =
     let
         ( locx, locy ) =
             x
 
         str =
-            "last click in Grids : (" ++ String.fromFloat locx ++ ", " ++ String.fromFloat locy ++ ") : "
+            "(" ++ String.fromFloat locx ++ ", " ++ String.fromFloat locy ++ ")"
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 800, 200 ) mapCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str

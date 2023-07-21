@@ -1,9 +1,10 @@
 module Scenes.Level.Grids.Update exposing (..)
 
 import Canvas exposing (Point)
+import Canvas.Settings.Advanced exposing (scale)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, pointDistance)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, pointDistance, scalePoint)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot)
 
 
@@ -255,14 +256,28 @@ updateSingleAnimation p =
         n_offset =
             addPoint p.offset p.v
 
-        diso =
-            pointDistance ( 0, 0 ) n_offset
+        ( x, y ) =
+            n_offset
+
+        ( hwx, hwy ) =
+            scalePoint p.static_v p.b1
+
+        ( lwx, lwy ) =
+            scalePoint p.static_v p.b2
     in
-    if diso < p.b2 || diso > p.b1 then
+    if (x <= lwx) && (y <= lwy) then
         { p
-            | v = negPoint p.v
-            , offset = n_offset
+            | offset = n_offset
+            , v = p.static_v
+        }
+
+    else if (x >= hwx) && (y >= hwy) then
+        { p
+            | offset = n_offset
+            , v = negPoint p.static_v
         }
 
     else
-        { p | offset = n_offset }
+        { p
+            | offset = n_offset
+        }

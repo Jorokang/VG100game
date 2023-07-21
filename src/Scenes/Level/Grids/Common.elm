@@ -46,6 +46,7 @@ type alias Grid a =
 type alias SingleAnimation =
     { offset : Point
     , v : Point
+    , static_v : Point
     , b1 : Float
     , b2 : Float
     , active : Bool
@@ -95,6 +96,21 @@ emptyPlot =
     }
 
 
+addAnima : Plot -> Point -> Float -> Float -> Plot
+addAnima p v b1 b2 =
+    let
+        a1 =
+            { offset = ( 0, 0 )
+            , v = v
+            , static_v = v
+            , b1 = b1
+            , b2 = b2
+            , active = True
+            }
+    in
+    { p | anima = a1 :: p.anima }
+
+
 initGrids1 : Model
 initGrids1 =
     { status = Active
@@ -134,7 +150,20 @@ genEmptyPlots map_size =
 
 mapPlot : Plot -> GridLoc -> Cell Plot
 mapPlot plot loc =
-    { val = plot
+    let
+        ( x, y ) =
+            loc
+
+        v =
+            ( 0, toFloat (modBy 2 x + modBy 2 y) )
+
+        b1 =
+            10
+
+        b2 =
+            -10
+    in
+    { val = addAnima plot v b1 b2
     , loc = loc
     }
 
