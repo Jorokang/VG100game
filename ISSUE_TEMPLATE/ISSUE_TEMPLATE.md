@@ -1,8 +1,7 @@
-name: "Template Name"
-about: "This template is for testing!"
-title: "[TEST] "
-ref: "main"
-labels:
+---
+name: issue template 1
+about: my description of issue template 1
+---
 
-- bug
-- "help needed"
+## ISSUE TEMPLATE
+
