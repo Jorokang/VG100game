@@ -8,11 +8,12 @@ import Color exposing (Color)
 import Json.Decode exposing (null)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel, MinorEyes)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Lib.Render.Sprite exposing (renderSprite)
 import Tuple
 
 
@@ -385,3 +386,20 @@ renderEnemyEye env model =
         [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos mapCoorData) (lengthChange env 20 mapCoorData) ]
         , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos mapCoorData) (lengthChange env 15 mapCoorData) ]
         ]
+
+renderEnemyMinorEyes : EnvC -> Model -> Renderable
+renderEnemyMinorEyes env model =
+    let
+        rend1 = if (model.meye1.active) then
+                    renderSprite env.globalData [] model.meye1.pos (100,100) "pattern_1"
+                else
+                    Canvas.empty
+                    
+        rend2 = if (model.meye2.active) then
+                    renderSprite env.globalData [] model.meye2.pos (100,100) "pattern_1"
+                else
+                    Canvas.empty
+    in
+    Canvas.group
+    []
+    [ rend1, rend2 ]

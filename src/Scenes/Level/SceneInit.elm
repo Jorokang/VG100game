@@ -2,7 +2,7 @@ module Scenes.Level.SceneInit exposing
     ( nullLevelInit
     , LevelInit
     , initCommonData
-    , initLevel1, initLevel2
+    , initLevel1, initLevel2, initLevel3
     )
 
 {-| SceneInit
@@ -39,6 +39,11 @@ initLevel1 =
 initLevel2 : LevelInit
 initLevel2 =
     { level_id = 2
+    }
+
+initLevel3 : LevelInit
+initLevel3 =
+    { level_id = 3
     }
 
 

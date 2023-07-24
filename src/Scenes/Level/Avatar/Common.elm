@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2
+    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
     )
 
 {-| Common module
@@ -96,9 +96,9 @@ initAvatarLevel1 =
     , target_loc = ( 0, 0 )
     , cur_loc = ( 0, 0 )
     , pos = ( 0, 0 )
-    , avail_grids = allGrids ( 5, 4 )
+    , avail_grids = allGrids ( 2, 2 )
     , core_loc = ( 0, 0 )
-    , map_size = ( 5, 4 )
+    , map_size = ( 2, 2 )
     , spirit = 30
     , max_spirit = 30
     , lightRange = 2
@@ -112,14 +112,29 @@ initAvatarLevel2 =
     , target_loc = ( 1, 0 )
     , cur_loc = ( 1, 0 )
     , pos = ( 0, 0 )
-    , avail_grids = allGrids ( 4, 6 )
+    , avail_grids = allGrids ( 4, 3 )
     , core_loc = ( 1, 0 )
-    , map_size = ( 4, 6 )
+    , map_size = ( 4, 3 )
     , spirit = 40
     , max_spirit = 40
     , lightRange = 2
     }
 
+
+initAvatarLevel3 : Model
+initAvatarLevel3 =
+    { status = AvatarActive
+    , card_status = CardType_None
+    , target_loc = ( 1, 0 )
+    , cur_loc = ( 1, 0 )
+    , pos = ( 0, 0 )
+    , avail_grids = allGrids ( 5, 5 )
+    , core_loc = ( 1, 0 )
+    , map_size = ( 5, 5 )
+    , spirit = 60
+    , max_spirit = 60
+    , lightRange = 2
+    }
 
 avatarRadius : Float
 avatarRadius =

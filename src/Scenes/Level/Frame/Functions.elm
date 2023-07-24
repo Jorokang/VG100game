@@ -119,8 +119,8 @@ mapCoorData =
 shadowCoorData : CoorData
 shadowCoorData =
     { coortype = CoorUI
-    , offset = ( 150, 100 )
-    , scale = 0.75
+    , offset = ( 0, 0 )
+    , scale = 1
     }
 
 

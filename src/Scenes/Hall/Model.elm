@@ -21,7 +21,7 @@ import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Hall.Common exposing (Model)
 import Scenes.Hall.LayerBase exposing (CommonData)
-import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, nullLevelInit)
+import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, initLevel3, nullLevelInit)
 
 
 {-| handleLayerMsg
@@ -49,6 +49,10 @@ handleLayerMsg env lmsg model =
 
                 "Level2" ->
                     ( model, [ SOMChangeScene ( LevelInitData initLevel2, "Level", trans ) ], env )
+                
+                "Level3" ->
+                    ( model, [ SOMChangeScene ( LevelInitData initLevel3, "Level", trans ) ], env )
+
 
                 _ ->
                     ( model, [ SOMChangeScene ( LevelInitData nullLevelInit, "Level", trans ) ], env )

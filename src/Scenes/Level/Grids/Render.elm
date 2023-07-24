@@ -198,7 +198,7 @@ renderLevelBackground env =
         background_1 =
             shapes
                 [ fill (Color.rgb255 255 240 200) ]
-                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2536 shadowCoorData) (lengthChange env 1600 shadowCoorData)
+                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2560 shadowCoorData) (lengthChange env 1600 shadowCoorData)
                 ]
 
         background_2 =
