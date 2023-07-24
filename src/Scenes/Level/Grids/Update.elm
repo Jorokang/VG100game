@@ -1,9 +1,10 @@
 module Scenes.Level.Grids.Update exposing (..)
 
 import Canvas exposing (Point)
+import Html exposing (nav)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addLoc, cellLength, point2Int)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, nullCoorData, point2Int)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), TableLight, emptyPlot)
 
 

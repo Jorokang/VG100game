@@ -7,7 +7,12 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton)
-import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange)
+import Scenes.Level.Frame.Functions exposing (coorChange, coorChangeS, lengthChange, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+
+
+renderScroll : EnvC -> Model -> Renderable
+renderScroll env _ =
+    renderSprite env.globalData [] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 960, 480 ) nullCoorData) "scroll"
 
 
 renderFrameStatus : EnvC -> Model -> Renderable

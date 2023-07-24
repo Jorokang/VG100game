@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
+import Scenes.Level.Avatar.Common exposing (AvatarAnima, AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -595,3 +595,44 @@ updateCardType env model card_type =
 
         _ ->
             ( model, [], env )
+
+
+{-| update model anima
+-}
+updateAnima : Model -> Model
+updateAnima model =
+    let
+        anima =
+            model.anima
+
+        ( nav, naa ) =
+            if abs anima.a_v >= anima.lim then
+                ( anima.a_v - anima.a_a, -anima.a_a )
+
+            else
+                ( anima.a_v + anima.a_a, anima.a_a )
+
+        ( npv, npa ) =
+            if abs anima.p_v >= anima.lim then
+                ( anima.p_v - anima.p_a, -anima.p_a )
+
+            else
+                ( anima.p_v + anima.p_a, anima.p_a )
+
+        napos =
+            addPoint anima.a_pos ( 0, anima.a_v )
+
+        nppos =
+            addPoint anima.p_pos ( 0, anima.p_v )
+
+        nanima =
+            { anima
+                | a_pos = napos
+                , a_v = nav
+                , a_a = naa
+                , p_pos = nppos
+                , p_v = npv
+                , p_a = npa
+            }
+    in
+    { model | anima = nanima }

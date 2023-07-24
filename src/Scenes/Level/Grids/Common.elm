@@ -122,7 +122,6 @@ initGridsLevel3 =
     }
 
 
-
 {-| generate a grids with no-effect plots of the given map size
 -}
 genEmptyPlots : GridLoc -> Grid Plot

@@ -24,10 +24,29 @@ type FilterMode
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
     let
-        pos =
-            addPoint model.pos ( -0.5 * cellLength, -0.5 * cellLength )
+        pos1 =
+            addPoint model.pos ( -1.1 * cellLength, -1.1 * cellLength )
+
+        pos2 =
+            addPoint pos1 model.anima.a_pos
+
+        pos3 =
+            addPoint pos1 model.anima.p_pos
+
+        cl =
+            cellLength * 2
+
+        rend1 =
+            renderSprite env.globalData [] (coorChangeS env pos2 mapCoorData) (sizeChangeS env ( cl, cl ) mapCoorData) "avatar"
+
+        rend2 =
+            renderSprite env.globalData [] (coorChangeS env pos3 mapCoorData) (sizeChangeS env ( cl, cl ) mapCoorData) "pillow"
     in
-    renderSprite env.globalData [] (coorChangeS env pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "avatar"
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        ]
 
 
 {-| settings for rendering hints

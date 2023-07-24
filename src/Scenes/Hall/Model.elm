@@ -49,10 +49,9 @@ handleLayerMsg env lmsg model =
 
                 "Level2" ->
                     ( model, [ SOMChangeScene ( LevelInitData initLevel2, "Level", trans ) ], env )
-                
+
                 "Level3" ->
                     ( model, [ SOMChangeScene ( LevelInitData initLevel3, "Level", trans ) ], env )
-
 
                 _ ->
                     ( model, [ SOMChangeScene ( LevelInitData nullLevelInit, "Level", trans ) ], env )

@@ -1,7 +1,6 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, initEnemy1, initEnemyLevel1, initEnemyLevel2, maxEyeV, initEnemyLevel3
-    , MinorEyes
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes, initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
     )
 
 {-| Common module
@@ -70,10 +69,12 @@ type alias EnemyEye =
     , target_loc : GridLoc
     }
 
+
 type alias MinorEyes =
     { pos : Point
     , active : Bool
     }
+
 
 type alias Model =
     { status : EnemyState
@@ -208,12 +209,13 @@ initEnemyLevel1 =
     , meye2 = initMinorEyeNull
     }
 
+
 initMinorEyeNull : MinorEyes
 initMinorEyeNull =
-    {
-      pos = (0,0)
+    { pos = ( 0, 0 )
     , active = False
     }
+
 
 initEnemyEyeLevel1 : EnemyEye
 initEnemyEyeLevel1 =
@@ -333,17 +335,17 @@ initEnemyLevel3 =
 
 initMinorEyeLevel31 : MinorEyes
 initMinorEyeLevel31 =
-    {
-      pos = (0,0)
+    { pos = ( 0, 0 )
     , active = True
     }
 
+
 initMinorEyeLevel32 : MinorEyes
 initMinorEyeLevel32 =
-    {
-      pos = (0,0)
+    { pos = ( 0, 0 )
     , active = True
     }
+
 
 initEnemyEyeLevel3 : EnemyEye
 initEnemyEyeLevel3 =
@@ -368,7 +370,6 @@ initEnemyCoreLevel3 =
 targetPriorityLevel3 : List ErodePriority
 targetPriorityLevel3 =
     [ ErodeNearest, ErodeNearest ]
-
 
 
 {-| Convenient type alias for the environment

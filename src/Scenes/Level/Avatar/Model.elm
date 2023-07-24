@@ -15,9 +15,9 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, nullModel, initAvatarLevel3)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3, nullModel)
 import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr, renderTrappedEffect)
-import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit)
+import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -48,7 +48,9 @@ updateModel env model =
     in
     case env.msg of
         Tick new_time ->
-            ( moveAvatar n_model
+            ( n_model
+                |> moveAvatar
+                |> updateAnima
             , []
             , env
             )
