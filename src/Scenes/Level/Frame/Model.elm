@@ -16,9 +16,11 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
-import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderNextRoundB, renderScroll, renderStamina)
+import Scenes.Level.Frame.Random exposing (randomFrame)
+import Scenes.Level.Frame.Render exposing (renderCandle, renderFrameStatus, renderNextRoundB, renderScroll, renderStamina)
 import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Time exposing (posixToMillis)
 
 
 {-| initModel
@@ -38,14 +40,32 @@ Add your logic to handle msg here
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
-        Tick _ ->
-            updateTickNRB env model
+        Tick new_time ->
+            updateTickNRB env (updateRandNum { model | time = posixToMillis new_time })
 
         MouseDown x mpos ->
             updateMouseClickNRB env model mpos
 
         _ ->
             ( model, [], env )
+
+
+updateRandNum : Model -> Model
+updateRandNum model =
+    let
+        ( number, seed ) =
+            randomFrame model.seed
+    in
+    { model
+        | rand_num = number
+        , seed = seed
+        , op_reg =
+            if modBy 10 model.time == 1 then
+                60 + number // 50
+
+            else
+                model.op_reg
+    }
 
 
 {-| updateModelRec
@@ -118,6 +138,7 @@ viewModel env model =
             , renderStamina env model
             , renderNextRoundB env model
             , renderScroll env model
+            , renderCandle env model
             ]
     in
     Canvas.group

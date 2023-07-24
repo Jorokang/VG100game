@@ -65,4 +65,12 @@ allTexture =
     , ( "e_10", getResourcePath "img/e_10.png" )
     , ( "e_11", getResourcePath "img/e_11.png" )
     , ( "e_12", getResourcePath "img/e_12.png" )
+    , ( "candle_0", getResourcePath "img/candle_0.png" )
+    , ( "candle_light_1", getResourcePath "img/candle_light_1.png" )
+    , ( "candle_light_2", getResourcePath "img/candle_light_2.png" )
+    , ( "candle_light_3", getResourcePath "img/candle_light_3.png" )
+    , ( "candle_light_4", getResourcePath "img/candle_light_4.png" )
+    , ( "candle_light_5", getResourcePath "img/candle_light_5.png" )
+    , ( "candle_light_6", getResourcePath "img/candle_light_6.png" )
+    , ( "candle_light_masking", getResourcePath "img/candle_light_masking.png" )
     ]
