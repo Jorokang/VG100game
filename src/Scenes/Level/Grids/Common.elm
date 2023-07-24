@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, genEmptyPlots, initGrids1, initGridsLevel1, initGridsLevel2
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2
     )
 
 {-| Common module
@@ -11,7 +11,9 @@ module Scenes.Level.Grids.Common exposing
 
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
+import Random
 import Scenes.Level.Frame.Functions exposing (allGrids)
+import Scenes.Level.Grids.Random exposing (randomGrids)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -74,16 +76,24 @@ type alias Model =
     , grids : Grid Plot
     , last_click : Point
     , table_lights : List TableLight
+    , rand_num : Int
+    , seed : Random.Seed
     }
 
 
 nullModel : Model
 nullModel =
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
     { status = Stopped
     , map_size = ( 0, 0 )
     , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []
+    , rand_num = number
+    , seed = seed
     }
 
 
@@ -113,58 +123,105 @@ addAnima p v b1 b2 =
 
 initGrids1 : Model
 initGrids1 =
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
     { status = Active
     , map_size = ( 3, 4 )
-    , grids = genEmptyPlots ( 3, 4 )
+    , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []
+    , rand_num = number
+    , seed = seed
     }
+        |> genGrids
 
 
 initGridsLevel1 : Model
 initGridsLevel1 =
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
     { status = Active
     , map_size = ( 5, 4 )
-    , grids = genEmptyPlots ( 5, 4 )
+    , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []
+    , rand_num = number
+    , seed = seed
     }
+        |> genGrids
 
 
 initGridsLevel2 : Model
 initGridsLevel2 =
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
     { status = Active
     , map_size = ( 4, 6 )
-    , grids = genEmptyPlots ( 4, 6 )
+    , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []
+    , rand_num = number
+    , seed = seed
     }
+        |> genGrids
 
 
 {-| generate a grids with no-effect plots of the given map size
 -}
-genEmptyPlots : GridLoc -> Grid Plot
-genEmptyPlots map_size =
-    List.map (mapPlot emptyPlot) (allGrids map_size)
+genGrids : Model -> Model
+genGrids model =
+    List.foldr mapPlot model (allGrids model.map_size)
 
 
-mapPlot : Plot -> GridLoc -> Cell Plot
-mapPlot plot loc =
+mapPlot : GridLoc -> Model -> Model
+mapPlot loc model =
     let
         ( x, y ) =
             loc
 
         v =
-            ( 0, toFloat (modBy 2 x + modBy 2 y) )
+            ( 0, toFloat (modBy 10 model.rand_num) / 40 )
 
         b1 =
-            10
+            6
 
         b2 =
-            -10
+            -6
+
+        nanima =
+            { offset = ( 0, 0 )
+            , v = v
+            , static_v = v
+            , b1 = b1
+            , b2 = b2
+            , active = True
+            }
+
+        plot =
+            { effect = Empty
+            , protection = 0
+            , anima = [ nanima ]
+            , sprite_id = 0
+            }
+
+        c =
+            { val = plot
+            , loc = loc
+            }
+
+        ( number, seed ) =
+            randomGrids model.seed
     in
-    { val = addAnima plot v b1 b2
-    , loc = loc
+    { model
+        | grids = c :: model.grids
+        , rand_num = number
+        , seed = seed
     }
 
 

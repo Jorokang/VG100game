@@ -45,7 +45,7 @@ renderPlot env x =
             addPoint (addPoint pos offset) offset_anima
 
         size =
-            scalePoint ( cellLength * 0.8, cellLength ) 1.5
+            ( cellLength, cellLength * 1.33 )
 
         rend_base =
             renderSprite env.globalData [] (coorChangeS env rpos mapCoorData) (sizeChangeS env size mapCoorData) ("grid_block_" ++ String.fromInt plot.sprite_id)
@@ -53,7 +53,8 @@ renderPlot env x =
     Canvas.group
         []
         [ rend_base
-        , renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
+
+        --, renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
         , renderPlotGuard env x
         ]
 
