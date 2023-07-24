@@ -92,7 +92,7 @@ levelokclicked env model =
                 , ok = buttonInact lev.ok
             }
       }
-    , [ ( LayerParentScene, LayerStringMsg ("Level" ++ String.fromInt num) ) ]
+    , [ ( LayerParentScene, LayerStringMsg "Level3" ) ]
     , env
     )
 
