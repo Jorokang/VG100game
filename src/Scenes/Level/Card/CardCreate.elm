@@ -78,7 +78,7 @@ giveCard id =
 giveHandSize : PileSize
 giveHandSize =
     { name = "hand"
-    , startPoint = ( 100, 750 )
+    , startPoint = ( 250, 750 )
     , length = 120
     , width = 80
     , interval = 100
@@ -89,7 +89,7 @@ giveHandSize =
 giveDeckSize : PileSize
 giveDeckSize =
     { name = "pile"
-    , startPoint = ( 850, 100 )
+    , startPoint = ( 100, 680 )
     , length = 120
     , width = 80
     , interval = 3
@@ -100,7 +100,7 @@ giveDeckSize =
 giveDiscardSize : PileSize
 giveDiscardSize =
     { name = "pile"
-    , startPoint = ( 850, 300 )
+    , startPoint = ( 100, 820 )
     , length = 120
     , width = 80
     , interval = 3
