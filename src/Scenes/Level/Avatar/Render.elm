@@ -25,7 +25,7 @@ renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
     let
         pos1 =
-            addPoint model.pos ( -1.1 * cellLength, -1.1 * cellLength )
+            addPoint model.pos ( -0.87 * cellLength, -0.95 * cellLength )
 
         pos2 =
             addPoint pos1 model.anima.a_pos
