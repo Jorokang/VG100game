@@ -9,7 +9,7 @@ import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, Choice(..), EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
 
@@ -48,6 +48,9 @@ renderHall env model =
             , renderButton env model.level.open
             , renderButton env model.card.open
             , renderButton env model.help.open
+            , renderSprite env.globalData [] (coorChangeS env model.help.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "help"
+            , renderSprite env.globalData [] (coorChangeS env model.setting.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "setting"
+            , renderSprite env.globalData [] (coorChangeS env model.level.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "level"
             ]
     in
     Canvas.group
@@ -57,6 +60,14 @@ renderHall env model =
 
 
 {- to do: render a img -}
+
+
+renderclose : EnvC -> Button -> Renderable
+renderclose env btn =
+    Canvas.group
+        []
+        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) (sizeChangeS env btn.size nullCoorData) "close"
+        ]
 
 
 renderButton : EnvC -> Button -> Renderable
@@ -92,7 +103,7 @@ rendersetting : EnvC -> Settingbtn -> Renderable
 rendersetting env set =
     let
         rend =
-            [ renderButton env set.close
+            [ renderclose env set.close
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here"
             ]
     in
@@ -105,7 +116,7 @@ renderhelp : EnvC -> Helpbtn -> Renderable
 renderhelp env help =
     let
         rend =
-            [ renderButton env help.close
+            [ renderclose env help.close
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env help.close.pos nullCoorData) "help here"
             ]
     in
@@ -118,10 +129,10 @@ renderlevel : EnvC -> Levelbtn -> Renderable
 renderlevel env level =
     let
         rend =
-            [ renderButton env level.close
-            , renderButton env level.up
-            , renderButton env level.down
-            , renderButton env level.ok
+            [ renderclose env level.close
+            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env level.down.size nullCoorData) "down"
+            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env level.up.size nullCoorData) "up"
+            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env level.ok.size nullCoorData) "ok"
             , renderStr env (coorChange env ( 500, 700 ) nullCoorData) "Level close"
             , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env level.close.pos nullCoorData) "level here"
@@ -136,7 +147,7 @@ rendercard : EnvC -> Cardbtn -> Renderable
 rendercard env card =
     let
         rend =
-            [ renderButton env card.close
+            [ renderclose env card.close
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env card.close.pos nullCoorData) "card here"
             ]
     in
