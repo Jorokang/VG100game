@@ -83,13 +83,6 @@ renderclose env btn =
 
 renderButton : EnvC -> Button -> Renderable
 renderButton env btn =
-    let
-        ( sx, sy ) =
-            btn.size
-
-        text_pos =
-            addPoint ( sx / 2, sy / 2 ) btn.pos
-    in
     case btn.status of
         ButtonInactive ->
             Canvas.empty
@@ -97,7 +90,7 @@ renderButton env btn =
         ButtonActive ->
             Canvas.group
                 []
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) "btnimg"
+                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env btn.size nullCoorData) "btnimg"
                 ]
 
 
