@@ -90,7 +90,7 @@ renderButton env btn =
         ButtonActive ->
             Canvas.group
                 []
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env btn.size nullCoorData) "btnimg"
+                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env btn.size nullCoorData) "btn"
                 ]
 
 
@@ -103,7 +103,7 @@ rendersetting env set =
     let
         rend =
             [ renderclose env set.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here"
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here: abababa"
             ]
     in
     Canvas.group
