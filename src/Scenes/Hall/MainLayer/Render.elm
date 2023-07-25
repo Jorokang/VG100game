@@ -49,8 +49,6 @@ renderHall env model =
             , renderButton env model.card.open
             , renderButton env model.help.open
             , renderSprite env.globalData [] (coorChangeS env model.help.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "help"
-            , renderSprite env.globalData [] (coorChangeS env model.setting.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "setting"
-            , renderSprite env.globalData [] (coorChangeS env model.level.open.pos nullCoorData) (sizeChangeS env ( 1000, 1000 ) nullCoorData) "level"
             ]
     in
     Canvas.group

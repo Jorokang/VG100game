@@ -92,7 +92,7 @@ levelokclicked env model =
                 , ok = buttonInact lev.ok
             }
       }
-    , [ ( LayerParentScene, LayerStringMsg "Level3" ) ]
+    , [ ( LayerParentScene, LayerStringMsg ("Level" ++ String.fromInt num) ) ]
     , env
     )
 
@@ -125,7 +125,7 @@ downclicked lev =
 
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
 checkupdown lev ( a, b ) =
-    if lev.levelInt > 1 && lev.levelInt < 4 then
+    if lev.levelInt > 1 && lev.levelInt < 5 then
         if ifClicked lev.up ( a, b ) then
             upclicked lev
 
@@ -142,7 +142,7 @@ checkupdown lev ( a, b ) =
         else
             lev
 
-    else if lev.levelInt == 4 then
+    else if lev.levelInt == 5 then
         if ifClicked lev.down ( a, b ) then
             downclicked lev
 

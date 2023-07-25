@@ -73,8 +73,9 @@ allTexture =
     , ( "candle_light_masking", getResourcePath "img/candle_light_masking.png" )
     , ( "help", getResourcePath "img/help.svg" )
     , ( "setting", getResourcePath "img/setting.svg" )
-    , ( "level", getResourcePath "img/level.svg" )
     , ( "close", getResourcePath "img/close.svg" )
     , ( "up", getResourcePath "img/up.svg" )
     , ( "down", getResourcePath "img/down.svg" )
+    , ( "ok", getResourcePath "img/ok.svg" )
+    , ( "level", getResourcePath "img/level.svg" )
     ]
