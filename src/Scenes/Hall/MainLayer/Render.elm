@@ -77,7 +77,7 @@ renderclose env btn =
     in
     Canvas.group
         []
-        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 3 * x, 4 * y ) "close"
+        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 4 * x, 4 * y ) "close"
         ]
 
 
