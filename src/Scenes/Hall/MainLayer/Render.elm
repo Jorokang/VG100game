@@ -33,6 +33,7 @@ renderBackground env _ =
         , rend_masking
         ]
 
+
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
@@ -120,7 +121,7 @@ renderlevel env level =
             , renderButton env level.up
             , renderButton env level.down
             , renderButton env level.ok
-            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) ("Level close")
+            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) "Level close"
             , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
             , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env level.close.pos nullCoorData) "level here"
             ]

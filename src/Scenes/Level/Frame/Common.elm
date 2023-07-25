@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), initFrame1
+    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), initFrame1
     )
 
 {-| Common module
@@ -48,8 +48,11 @@ type alias NextRoundButton =
     }
 
 
-
---degrees
+type alias ClearAnimation =
+    { pos : Point
+    , i_time : Int
+    , e_time : Int
+    }
 
 
 type alias Model =
@@ -57,6 +60,7 @@ type alias Model =
     , time : Int
     , player_data : PlayerData
     , next_round_b : NextRoundButton
+    , c_anima : List ClearAnimation
     }
 
 
@@ -73,6 +77,7 @@ nullModel =
         , turns = 0
         }
     , next_round_b = nullNextRoundB
+    , c_anima = []
     }
 
 
@@ -87,6 +92,7 @@ initFrame1 =
         , turns = 0
         }
     , next_round_b = nullNextRoundB
+    , c_anima = []
     }
 
 

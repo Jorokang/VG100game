@@ -16,9 +16,11 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
-import Scenes.Level.Frame.Render exposing (renderFrameStatus, renderNextRoundB, renderStamina)
-import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
+import Scenes.Level.Frame.Functions exposing (grid2real)
+import Scenes.Level.Frame.Render exposing (renderClearAnimations, renderFrameStatus, renderNextRoundB, renderStamina)
+import Scenes.Level.Frame.Update exposing (addAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Time
 
 
 {-| initModel
@@ -38,8 +40,8 @@ Add your logic to handle msg here
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
-        Tick _ ->
-            updateTickNRB env model
+        Tick new_time ->
+            updateTickNRB env (updateAnima { model | time = Time.posixToMillis new_time })
 
         MouseDown x mpos ->
             updateMouseClickNRB env model mpos
@@ -86,7 +88,7 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgClearCell loc ->
-            ( model
+            ( addAnima model (grid2real loc)
             , [ ( LayerName "Avatar", LayerMsgClearCell loc )
               , ( LayerName "Enemy", LayerMsgClearCell loc )
               ]
@@ -117,6 +119,7 @@ viewModel env model =
             [ renderFrameStatus env model
             , renderStamina env model
             , renderNextRoundB env model
+            , renderClearAnimations env model
             ]
     in
     Canvas.group

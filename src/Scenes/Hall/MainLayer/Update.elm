@@ -2,9 +2,8 @@ module Scenes.Hall.MainLayer.Update exposing (..)
 
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Model)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Levelbtn, Model)
 import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
-import Scenes.Hall.MainLayer.Common exposing (Levelbtn)
 
 
 
@@ -93,33 +92,44 @@ levelokclicked env model =
                 , ok = buttonInact lev.ok
             }
       }
-    , [ ( LayerParentScene, LayerStringMsg ("Level" ++ String.fromInt num ) ) ]
+    , [ ( LayerParentScene, LayerStringMsg ("Level" ++ String.fromInt num) ) ]
     , env
     )
 
 
+
 --change the level num
+
+
 upclicked : Levelbtn -> Levelbtn
 upclicked lev =
     let
-        num = lev.levelInt + 1
+        num =
+            lev.levelInt + 1
     in
-    {lev | levelInt = num }
+    { lev | levelInt = num }
+
 
 downclicked : Levelbtn -> Levelbtn
 downclicked lev =
     let
-        num = lev.levelInt - 1
+        num =
+            lev.levelInt - 1
     in
-    {lev | levelInt = num }
+    { lev | levelInt = num }
+
 
 
 --check if up or down clicked
-checkupdown : Levelbtn -> (Float , Float) -> Levelbtn
-checkupdown lev (a , b) =
-    if ifClicked lev.up (a , b) then    
+
+
+checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
+checkupdown lev ( a, b ) =
+    if ifClicked lev.up ( a, b ) then
         upclicked lev
-    else if ifClicked lev.down (a , b) then 
+
+    else if ifClicked lev.down ( a, b ) then
         downclicked lev
+
     else
         lev

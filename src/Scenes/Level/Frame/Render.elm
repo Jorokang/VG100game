@@ -6,8 +6,28 @@ import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton)
-import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange)
+import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton)
+import Scenes.Level.Frame.Functions exposing (cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+
+
+renderClearAnimation : EnvC -> Int -> ClearAnimation -> Renderable
+renderClearAnimation env time anima =
+    let
+        id_state =
+            (time - anima.i_time) // 50
+    in
+    renderSprite env.globalData [] (coorChangeS env anima.pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) ("clear_anima_" ++ String.fromInt id_state)
+
+
+renderClearAnimations : EnvC -> Model -> Renderable
+renderClearAnimations env model =
+    let
+        rend =
+            List.map (renderClearAnimation env model.time) model.c_anima
+    in
+    Canvas.group
+        []
+        rend
 
 
 renderFrameStatus : EnvC -> Model -> Renderable
