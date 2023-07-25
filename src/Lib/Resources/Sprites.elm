@@ -28,9 +28,6 @@ Examples:
 [
 ( "ball", getResourcePath "img/ball.png" ),
 ( "car", getResourcePath "img/car.jpg" )
-][
-( "ball", getResourcePath "img/ball.png" ),
-( "car", getResourcePath "img/car.jpg" )
 ]
 
 -}
@@ -73,4 +70,15 @@ allTexture =
     , ( "candle_light_5", getResourcePath "img/candle_light_5.png" )
     , ( "candle_light_6", getResourcePath "img/candle_light_6.png" )
     , ( "candle_light_masking", getResourcePath "img/candle_light_masking.png" )
+    , ( "card1", getResourcePath "img/purify.svg" )
+    , ( "card2", getResourcePath "img/guard.svg" )
+    , ( "card3", getResourcePath "img/break.svg" )
+    , ( "card4", getResourcePath "img/light up.svg" )
+    , ( "card5", getResourcePath "img/hope.svg" )
+    , ( "card6", getResourcePath "img/cardback.svg" )
+    , ( "card8", getResourcePath "img/courage.svg" )
+    , ( "card7", getResourcePath "img/endless hope.svg" )
+    , ( "card9", getResourcePath "img/sunrise.svg" )
+    , ( "card10", getResourcePath "img/thrive.svg" )
+    , ( "card11", getResourcePath "img/forget.svg" )
     ]

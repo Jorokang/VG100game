@@ -84,7 +84,7 @@ renderTestMessage env model =
         , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("selected:" ++ String.fromInt model.selected_pos ++ model.selected_card.name)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.6"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.7"
         ]
 
 
@@ -174,15 +174,14 @@ renderOneCard env card pos selected =
         offset =
             giveHandSize.offset
     in
-    if color == white then
+    if color == "cardback" then
         renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
 
     else if selected then
-        shapes
-            [ fill color ]
-            [ rect (coorChange env (addPoint pos ( -offset, -offset )) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
+        renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color
+        --shapes
+        --    [ fill color ]
+        ---   [ rect (coorChange env (addPoint pos ( -offset, -offset )) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
 
     else
-        shapes
-            [ fill color ]
-            [ rect (coorChange env pos nullCoorData) (lengthChange env width nullCoorData) (lengthChange env length nullCoorData) ]
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( width, length ) nullCoorData) color
