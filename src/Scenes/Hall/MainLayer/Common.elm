@@ -56,13 +56,13 @@ initsetting : Settingbtn
 initsetting =
     { open =
         { status = ButtonActive
-        , pos = ( 1000, 200 )
-        , size = ( 100, 100 )
+        , pos = ( 200, 500 )
+        , size = ( 200, 200 )
         }
     , close =
         { status = ButtonInactive
-        , pos = ( 700, 200 )
-        , size = ( 100, 50 )
+        , pos = ( 1600, 100 )
+        , size = ( 200, 140 )
         }
     }
 
@@ -81,13 +81,13 @@ inithelp : Helpbtn
 inithelp =
     { open =
         { status = ButtonActive
-        , pos = ( 600, 200 )
-        , size = ( 100, 100 )
+        , pos = ( 600, 500 )
+        , size = ( 200, 200 )
         }
     , close =
         { status = ButtonInactive
-        , pos = ( 500, 200 )
-        , size = ( 100, 50 )
+        , pos = ( 1600, 100 )
+        , size = ( 200, 140 )
         }
     }
 
@@ -110,29 +110,29 @@ initlevel : Levelbtn
 initlevel =
     { open =
         { status = ButtonActive
-        , pos = ( 800, 200 )
-        , size = ( 100, 50 )
+        , pos = ( 1400, 500 )
+        , size = ( 200, 140 )
         }
     , close =
         { status = ButtonInactive
-        , pos = ( 500, 300 )
-        , size = ( 100, 50 )
+        , pos = ( 1600, 100 )
+        , size = ( 200, 140 )
         }
     , levelInt = 1
     , up =
         { status = ButtonInactive
-        , pos = ( 300, 200 )
-        , size = ( 100, 100 )
+        , pos = ( 1000, 300 )
+        , size = ( 200, 140 )
         }
     , down =
         { status = ButtonInactive
-        , pos = ( 700, 200 )
-        , size = ( 100, 100 )
+        , pos = ( 300, 300 )
+        , size = ( 200, 140 )
         }
     , ok =
         { status = ButtonInactive
-        , pos = ( 500, 700 )
-        , size = ( 100, 100 )
+        , pos = ( 800, 700 )
+        , size = ( 200, 140 )
         }
     }
 
@@ -148,13 +148,13 @@ initcard : Cardbtn
 initcard =
     { open =
         { status = ButtonActive
-        , pos = ( 400, 200 )
-        , size = ( 100, 50 )
+        , pos = ( 1000, 500 )
+        , size = ( 140, 200 )
         }
     , close =
         { status = ButtonInactive
-        , pos = ( 500, 200 )
-        , size = ( 100, 50 )
+        , pos = ( 1600, 100 )
+        , size = ( 200, 140 )
         }
     , cardlist = []
     }
