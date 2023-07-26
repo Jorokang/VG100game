@@ -1,11 +1,11 @@
 module Scenes.Level.Grids.Update exposing (..)
 
 import Canvas exposing (Point)
-import Html exposing (nav)
+import Canvas.Settings.Advanced exposing (scale)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, nullCoorData, point2Int)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), TableLight, emptyPlot)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, pointDistance, scalePoint)
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot)
 
 
 {-| Update player turn beginning
@@ -225,3 +225,59 @@ checkTableLight tl =
 genClearCommandsTableLights : TableLight -> ( LayerTarget, LayerMsg )
 genClearCommandsTableLights tl =
     ( LayerName "Frame", LayerMsgClearCell tl.loc )
+
+
+{-| update grid animation
+-}
+updateGridAnimation : Model -> Model
+updateGridAnimation model =
+    { model | grids = List.map updatePlotAnimation model.grids }
+
+
+{-| update single plot animation
+-}
+updatePlotAnimation : Cell Plot -> Cell Plot
+updatePlotAnimation cell =
+    let
+        p =
+            cell.val
+
+        np =
+            { p | anima = List.map updateSingleAnimation p.anima }
+    in
+    { cell | val = np }
+
+
+{-| update single animation
+-}
+updateSingleAnimation : SingleAnimation -> SingleAnimation
+updateSingleAnimation p =
+    let
+        n_offset =
+            addPoint p.offset p.v
+
+        ( x, y ) =
+            n_offset
+
+        ( hwx, hwy ) =
+            scalePoint p.static_v p.b1
+
+        ( lwx, lwy ) =
+            scalePoint p.static_v p.b2
+    in
+    if (x <= lwx) && (y <= lwy) then
+        { p
+            | offset = n_offset
+            , v = p.static_v
+        }
+
+    else if (x >= hwx) && (y >= hwy) then
+        { p
+            | offset = n_offset
+            , v = negPoint p.static_v
+        }
+
+    else
+        { p
+            | offset = n_offset
+        }
