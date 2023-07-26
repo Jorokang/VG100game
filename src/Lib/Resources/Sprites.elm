@@ -50,7 +50,6 @@ allTexture =
     , ( "button_hall", getResourcePath "img/button_hall.png" )
     , ( "trapped_effect", getResourcePath "img/trapped_effect.png" )
     , ( "level", getResourcePath "img/level.svg" )
-    , ( "menu", getResourcePath "img/menu.svg" )
     , ( "scroll", getResourcePath "img/scroll.png" )
     , ( "pillow", getResourcePath "img/pillow.png" )
     , ( "e_1", getResourcePath "img/e_1.png" )
@@ -73,4 +72,5 @@ allTexture =
     , ( "candle_light_5", getResourcePath "img/candle_light_5.png" )
     , ( "candle_light_6", getResourcePath "img/candle_light_6.png" )
     , ( "candle_light_masking", getResourcePath "img/candle_light_masking.png" )
+    , ( "grid_block_0", getResourcePath "img/grid_block_0.png" )
     ]
