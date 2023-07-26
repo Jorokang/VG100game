@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Model, initModelLose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderButton, renderHall, renderStr, renderTime, rendercard, renderhelp, renderlevel, rendersetting)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderButton, renderHall, renderMasking, renderStr, rendercard, renderhelp, renderlevel, rendersetting)
 import Scenes.Hall.MainLayer.Update exposing (buttonAct, buttonInact, checkopen, checkupdown, ifClicked, levelokclicked)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
@@ -46,6 +46,13 @@ Default update function
 Add your logic to handle msg here
 
 -}
+
+
+
+{- to do : about card choice -}
+{- to do : card , help and setting -}
+
+
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
@@ -105,7 +112,6 @@ updateModel env model =
                             )
 
                         Card ->
-                            --to do : about card choice
                             ( { n_model
                                 | choice = Card
                                 , card =
@@ -157,7 +163,6 @@ updateModel env model =
                     else
                         ( { model | level = checkupdown lev ( a, b ) }, [], env )
 
-                --to do : card , help and setting
                 Help ->
                     if ifClicked model.help.close ( a, b ) then
                         ( { n_model
@@ -249,18 +254,27 @@ If you have other elements than components, add them after viewComponent.
 -}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
-    case model.choice of
-        Setting ->
-            rendersetting env model.setting
+    let
+        choice =
+            case model.choice of
+                Setting ->
+                    rendersetting env model.setting
 
-        Help ->
-            renderhelp env model.help
+                Help ->
+                    renderhelp env model.help
 
-        Level ->
-            renderlevel env model.level
+                Level ->
+                    renderlevel env model.level
 
-        Card ->
-            rendercard env model.card
+                Card ->
+                    rendercard env model.card
 
-        Hall ->
-            renderHall env model
+                Hall ->
+                    renderHall env model
+    in
+    Canvas.group
+        []
+        [ renderBackground env model
+        , renderMasking env model
+        , choice
+        ]

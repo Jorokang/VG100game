@@ -1,15 +1,14 @@
 module Scenes.Level.Grids.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, arc, circle, empty, group, rect, shapes, text)
+import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (filter, rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData)
-import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..))
-import Time exposing (ZoneName(..))
+import List
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, scalePoint, shadowCoorData, sizeChangeS)
+import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), SingleAnimation, TableLight)
 
 
 {-| render the whole grid
@@ -36,33 +35,33 @@ renderPlot env x =
         plot =
             x.val
 
-        color =
-            case plot.effect of
-                Empty ->
-                    Color.gray
-
-                Angry ->
-                    Color.darkRed
-
-                Lazy ->
-                    Color.darkGray
-
         offset =
-            3
+            ( 0, 15 )
 
-        rl =
-            lengthChange env (cellLength - 2 * offset) mapCoorData
+        offset_anima =
+            List.foldl toolFunc1 ( 0, 0 ) plot.anima
+
+        rpos =
+            addPoint (addPoint pos offset) offset_anima
+
+        size =
+            ( cellLength, cellLength * 1.33 )
 
         rend_base =
-            shapes
-                [ fill color ]
-                [ rect (coorChange env (addPoint pos ( offset, offset )) mapCoorData) rl rl ]
+            renderSprite env.globalData [] (coorChangeS env rpos mapCoorData) (sizeChangeS env size mapCoorData) ("grid_block_" ++ String.fromInt plot.sprite_id)
     in
     Canvas.group
         []
         [ rend_base
+
+        --, renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
         , renderPlotGuard env x
         ]
+
+
+toolFunc1 : SingleAnimation -> Point -> Point
+toolFunc1 a b =
+    addPoint a.offset b
 
 
 {-| render the guard effect for a single plot if it has
@@ -94,6 +93,28 @@ renderPlotGuard env x =
 
     else
         empty
+
+
+{-| render table lights effect
+-}
+renderTableLights : EnvC -> Model -> Renderable
+renderTableLights env model =
+    let
+        rend =
+            List.map (renderTableLight env) model.table_lights
+    in
+    Canvas.group
+        []
+        rend
+
+
+{-| render table light effect for a single tl
+-}
+renderTableLight : EnvC -> TableLight -> Renderable
+renderTableLight env tl =
+    shapes
+        [ fill Color.red ]
+        [ rect (coorChange env (grid2real tl.loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
 
 
 {-| render single patterns by the given position and id
@@ -178,13 +199,13 @@ renderLevelBackground env =
         background_1 =
             shapes
                 [ fill (Color.rgb255 255 240 200) ]
-                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2536 shadowCoorData) (lengthChange env 1600 shadowCoorData)
+                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2560 shadowCoorData) (lengthChange env 1600 shadowCoorData)
                 ]
 
         background_2 =
             shapes
                 [ fill (Color.rgb255 20 30 40) ]
-                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 1080 shadowCoorData) (lengthChange env 880 shadowCoorData)
+                [ rect (coorChange env ( 0, 0 ) nullCoorData) (lengthChange env 2560 shadowCoorData) (lengthChange env 1600 shadowCoorData)
                 ]
     in
     Canvas.group
@@ -202,13 +223,13 @@ renderStr env str pos =
     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
 
 
-renderSingleTuple : EnvC -> Point -> Renderable
-renderSingleTuple env x =
+renderSingleTuple : EnvC -> Point -> Point -> Renderable
+renderSingleTuple env x pos =
     let
         ( locx, locy ) =
             x
 
         str =
-            "last click in Grids : (" ++ String.fromFloat locx ++ ", " ++ String.fromFloat locy ++ ") : "
+            "(" ++ String.fromFloat locx ++ ", " ++ String.fromFloat locy ++ ")"
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env ( 800, 200 ) mapCoorData) str
+    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str

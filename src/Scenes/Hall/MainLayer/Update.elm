@@ -7,7 +7,7 @@ import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
 
---to check if one btn clicked
+{- to check if one btn clicked -}
 
 
 ifClicked : Button -> ( Float, Float ) -> Bool
@@ -20,7 +20,7 @@ ifClicked btn ( a, b ) =
 
 
 
---decide which part should be opened
+{- decide which part should be opened -}
 
 
 checkopen : Model -> ( Float, Float ) -> Choice
@@ -46,7 +46,7 @@ checkopen model ( a, b ) =
 
 
 
---change the state of button
+{- change the state of button -}
 
 
 buttonInact : Button -> Button
@@ -60,7 +60,7 @@ buttonAct btn =
 
 
 
---change the Hallstate of model
+{- change the Hallstate of model -}
 
 
 hallState : Choice -> Model -> Model
@@ -69,7 +69,7 @@ hallState c model =
 
 
 
---change the scene to Level
+{- change the scene to Level -}
 
 
 levelokclicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -97,10 +97,6 @@ levelokclicked env model =
     )
 
 
-
---change the level num
-
-
 upclicked : Levelbtn -> Levelbtn
 upclicked lev =
     let
@@ -118,18 +114,31 @@ downclicked lev =
     in
     { lev | levelInt = num }
 
-
-
---check if up or down clicked
-
-
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
 checkupdown lev ( a, b ) =
-    if ifClicked lev.up ( a, b ) then
-        upclicked lev
+    if lev.levelInt > 1 && lev.levelInt < 5 then
+        if ifClicked lev.up ( a, b ) then
+            upclicked lev
 
-    else if ifClicked lev.down ( a, b ) then
-        downclicked lev
+        else if ifClicked lev.down ( a, b ) then
+            downclicked lev
+
+        else
+            lev
+
+    else if lev.levelInt == 1 then
+        if ifClicked lev.up ( a, b ) then
+            upclicked lev
+
+        else
+            lev
+
+    else if lev.levelInt == 5 then
+        if ifClicked lev.down ( a, b ) then
+            downclicked lev
+
+        else
+            lev
 
     else
         lev

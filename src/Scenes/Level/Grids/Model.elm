@@ -13,13 +13,12 @@ module Scenes.Level.Grids.Model exposing
 -}
 
 import Base exposing (GlobalData, Msg(..))
-import Canvas exposing (Renderable, empty)
-import Html.Attributes exposing (action)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
-import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, nullModel)
-import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderSingleTuple)
-import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, modifyPlotEffect, updatePlayerTurn, updateProtectCell)
+import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, initGridsLevel3, nullModel)
+import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 
@@ -34,6 +33,9 @@ initModel _ i =
 
         2 ->
             initGridsLevel2
+
+        3 ->
+            initGridsLevel3
 
         _ ->
             nullModel
@@ -52,6 +54,7 @@ updateModel env model =
             case env.msg of
                 Tick _ ->
                     ( { model | last_click = env.globalData.mousePos }
+                        |> updateGridAnimation
                     , []
                     , env
                     )
@@ -84,12 +87,6 @@ updateModel env model =
             ( model, [], env )
 
 
-{-| updateModelRec
-Default update function
-
-Add your logic to handle LayerMsg here
-
--}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
@@ -101,6 +98,12 @@ updateModelRec env lmsg model =
 
         LayerMsgProtectCell loc x ->
             updateProtectCell env model loc x
+
+        LayerMsgGenTableLight loc dir x ->
+            ( genTableLight model loc dir x
+            , []
+            , env
+            )
 
         _ ->
             ( model, [], env )
@@ -117,8 +120,8 @@ viewModel env model =
                 _ ->
                     [ renderLevelBackground env
                     , renderGrids env model
-
-                    --, renderSingleTuple env model.last_click
+                    , renderTableLights env model
+                    , renderStr env ("table lights num : " ++ String.fromInt (List.length model.table_lights)) ( 1000, 500 )
                     ]
     in
     Canvas.group

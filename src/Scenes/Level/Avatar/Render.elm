@@ -10,7 +10,7 @@ import Lib.Render.Sprite exposing (renderSprite)
 import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS, grid2real)
 
 
 type FilterMode
@@ -24,10 +24,29 @@ type FilterMode
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
     let
-        pos =
-            addPoint model.pos ( -0.5 * cellLength, -0.5 * cellLength )
+        pos1 =
+            addPoint model.pos ( -0.87 * cellLength, -0.95 * cellLength )
+
+        pos2 =
+            addPoint pos1 model.anima.a_pos
+
+        pos3 =
+            addPoint pos1 model.anima.p_pos
+
+        cl =
+            cellLength * 2
+
+        rend1 =
+            renderSprite env.globalData [] (coorChangeS env pos2 mapCoorData) (sizeChangeS env ( cl, cl ) mapCoorData) "avatar"
+
+        rend2 =
+            renderSprite env.globalData [] (coorChangeS env pos3 mapCoorData) (sizeChangeS env ( cl, cl ) mapCoorData) "pillow"
     in
-    renderSprite env.globalData [] (coorChangeS env pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "avatar"
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        ]
 
 
 {-| settings for rendering hints
@@ -116,6 +135,9 @@ renderCardHint env model =
 
         CardType_8 ->
             renderMultiHint env model cardClickPos2 FilterModeMapCell
+
+        CardType_9 ->
+            renderMultiHint env model cardClickPos0 FilterModeMapCell
 
         CardType_11 ->
             renderMultiHint env model cardClickPos0 FilterModeMapCell

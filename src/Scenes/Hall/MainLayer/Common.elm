@@ -57,7 +57,7 @@ initsetting =
     { open =
         { status = ButtonActive
         , pos = ( 1000, 200 )
-        , size = ( 100, 50 )
+        , size = ( 100, 100 )
         }
     , close =
         { status = ButtonInactive
@@ -82,7 +82,7 @@ inithelp =
     { open =
         { status = ButtonActive
         , pos = ( 600, 200 )
-        , size = ( 100, 50 )
+        , size = ( 100, 100 )
         }
     , close =
         { status = ButtonInactive
@@ -122,17 +122,17 @@ initlevel =
     , up =
         { status = ButtonInactive
         , pos = ( 300, 200 )
-        , size = ( 100, 50 )
+        , size = ( 100, 100 )
         }
     , down =
         { status = ButtonInactive
         , pos = ( 700, 200 )
-        , size = ( 100, 50 )
+        , size = ( 100, 100 )
         }
     , ok =
         { status = ButtonInactive
         , pos = ( 500, 700 )
-        , size = ( 100, 50 )
+        , size = ( 100, 100 )
         }
     }
 
@@ -173,14 +173,6 @@ type alias Model =
     , help : Helpbtn
     , card : Cardbtn
     , choice : Choice
-    }
-
-
-initButtonLevel : Button
-initButtonLevel =
-    { status = ButtonActive
-    , pos = ( 200, 200 )
-    , size = ( 100, 50 )
     }
 
 

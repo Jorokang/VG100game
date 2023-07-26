@@ -2,7 +2,7 @@ module Scenes.Level.Frame.Render exposing (..)
 
 import Canvas exposing (Point, Renderable, circle, group, shapes, text)
 import Canvas.Settings exposing (fill)
-import Canvas.Settings.Advanced exposing (rotate, transform, translate)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
@@ -28,6 +28,42 @@ renderClearAnimations env model =
     Canvas.group
         []
         rend
+
+renderScroll : EnvC -> Model -> Renderable
+renderScroll env _ =
+    renderSprite env.globalData [] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "scroll"
+
+
+renderCandle : EnvC -> Model -> Renderable
+renderCandle env model =
+    let
+        light_name =
+            "candle_light_" ++ String.fromInt (modBy 6 (model.time // 100) + 1)
+
+        op =
+            "opacity(" ++ String.fromInt model.op_reg ++ "%)"
+
+        rpos =
+            coorChangeS env ( 1400, 700 ) nullCoorData
+
+        rsize =
+            sizeChangeS env ( 170, 240 ) nullCoorData
+
+        rend1 =
+            renderSprite env.globalData [] rpos rsize "candle_0"
+
+        rend2 =
+            renderSprite env.globalData [] rpos rsize light_name
+
+        rend3 =
+            renderSprite env.globalData [ filter op ] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "candle_light_masking"
+    in
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        , rend3
+        ]
 
 
 renderFrameStatus : EnvC -> Model -> Renderable

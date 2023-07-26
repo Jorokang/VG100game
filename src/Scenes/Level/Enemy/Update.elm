@@ -6,7 +6,7 @@ import Color exposing (Color)
 import Html exposing (a)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, initEnemy1, maxEyeV, nullModel, targetPriority1)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, initEnemy1, maxEyeV, nullModel)
 import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
 import Tuple
 
@@ -27,7 +27,7 @@ updateEnemyRound : Model -> Model
 updateEnemyRound model =
     { model
         | recursion_times = 0
-        , target_priority = targetPriority1
+        , target_priority = model.static_priority
         , eroding = True
     }
 
@@ -36,7 +36,7 @@ updatePlayerRound : Model -> Model
 updatePlayerRound model =
     { model
         | recursion_times = 0
-        , target_priority = targetPriority1
+        , target_priority = model.static_priority
         , eroding = False
     }
 

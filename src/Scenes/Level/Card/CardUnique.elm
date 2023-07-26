@@ -3,21 +3,32 @@ module Scenes.Level.Card.CardUnique exposing (..)
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard, giveHandSize)
+import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveErrorCard, giveHandSize)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCard, takeCard)
 import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
 
-cardArea : Model -> List Point
-cardArea model =
-    List.map pointHelper <|
+createPosList : List Card -> PileSize -> List Point
+createPosList cards size =
+    List.map (createPosListHelper size) <|
+        List.range 1 (List.length cards)
+
+
+createPosListHelper : PileSize -> Int -> Point
+createPosListHelper size num =
+    addPoint size.startPoint (scalePoint ( size.interval, 0 ) (toFloat num - 1))
+
+
+handArea : Model -> List Point
+handArea model =
+    List.map handAreaHelper <|
         List.range 1 (List.length model.hand)
 
 
-pointHelper : Int -> Point
-pointHelper num =
+handAreaHelper : Int -> Point
+handAreaHelper num =
     addPoint giveHandSize.startPoint (scalePoint ( giveHandSize.interval, 0 ) (toFloat num - 1))
 
 
@@ -72,39 +83,11 @@ notSelected model =
     { model | selected_card = giveErrorCard, selected_pos = -1 }
 
 
-clickedPos : Model -> ( Bool, Int )
-clickedPos model =
-    clicked model (cardArea model)
-
-
-clickDetect : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-clickDetect model =
-    let
-        ( bool, index ) =
-            clicked model (cardArea model)
-
-        nmodel =
-            { model | click_status = False }
-
-        card =
-            first (takeCard model.hand index)
-    in
-    if bool then
-        if nmodel.selected_pos == index && enoughSpirit model then
-            playCard nmodel
-
-        else
-            ( { nmodel | selected_pos = index, selected_card = card }, [] )
-
-    else
-        ( notSelected model, [] )
-
-
 clickCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 clickCard model =
     let
         ( bool, index ) =
-            clicked model (cardArea model)
+            clicked model (handArea model)
 
         nmodel =
             { model | click_status = False }
@@ -131,66 +114,6 @@ clickCard model =
 
     else
         ( notSelected nmodel, [] )
-
-
-playCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
-playCard model =
-    let
-        card =
-            model.selected_card
-
-        nnmodel =
-            { model | status = Playing }
-
-        --{ nmodel | selected_pos = -1, selected_card = giveErrorCard }
-    in
-    if model.turn_status > 0 then
-        cardToEffect nnmodel card
-
-    else
-        ( model, [] )
-
-
-cardToEffect : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
-cardToEffect model card =
-    case card.id of
-        1 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
-
-        2 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 2 ) ] )
-
-        3 ->
-            ( { model | turn_status = model.turn_status - 1, spirit = model.spirit + 8 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
-
-        4 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )
-
-        5 ->
-            ( drawCard model 2, [ ( LayerName "Card", LayerMsgCardType 5 ) ] )
-
-        6 ->
-            --( model, [ ( LayerName "Grids", LayerMsgRandomAround ) ] )
-            ( model, [] )
-
-        7 ->
-            ( drawCard model 3, [ ( LayerName "Card", LayerMsgCardType 7 ) ] )
-
-        8 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
-
-        9 ->
-            --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
-            ( model, [] )
-
-        10 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 5 ), ( LayerName "Frame", LayerMsgIncreaseStamina 1 1 ), ( LayerName "Card", LayerMsgCardType 10 ) ] )
-
-        11 ->
-            ( model, [ ( LayerName "Avatar", LayerMsgCardType 11 ) ] )
-
-        _ ->
-            ( model, [] )
 
 
 selectCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
@@ -222,7 +145,7 @@ selectCard model card =
                 ( model, [ ( LayerName "Avatar", LayerMsgCardType 8 ) ] )
 
             9 ->
-                ( model, [] )
+                ( model, [ ( LayerName "Avatar", LayerMsgCardType 9 ) ] )
 
             10 ->
                 ( model, [] )
@@ -267,7 +190,6 @@ endCard model card =
                 ( model, [] )
 
             9 ->
-                --( model, [ ( LayerName "Light", LayerMsgTableLight 2 ) ] )
                 ( model, [] )
 
             10 ->
