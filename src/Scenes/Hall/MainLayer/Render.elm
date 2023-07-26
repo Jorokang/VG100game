@@ -55,7 +55,6 @@ renderHall env model =
         rend
 
 
-
 renderclose : EnvC -> Button -> Renderable
 renderclose env btn =
     let
@@ -72,6 +71,7 @@ renderclose env btn =
         []
         [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 2 * x, 3 * y ) "close"
         ]
+
 
 
 {- render the different Hall parts -}
