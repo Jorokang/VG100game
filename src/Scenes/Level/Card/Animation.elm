@@ -1,4 +1,4 @@
-module Scenes.Level.Animation.Animation exposing (..)
+module Scenes.Level.Card.Animation exposing (..)
 
 import Canvas exposing (Point)
 import Scenes.Level.Card.CardCreate exposing (CardObject)
