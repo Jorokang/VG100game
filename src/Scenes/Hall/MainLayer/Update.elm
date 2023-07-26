@@ -114,6 +114,7 @@ downclicked lev =
     in
     { lev | levelInt = num }
 
+
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
 checkupdown lev ( a, b ) =
     if lev.levelInt > 1 && lev.levelInt < 5 then

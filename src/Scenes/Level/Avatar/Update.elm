@@ -30,8 +30,20 @@ updateModifySpirit env model x =
         n_model =
             modifySpirit model x
 
+        str =
+            if x > 0 then
+                "+" ++ String.fromInt x
+
+            else if x < 0 then
+                String.fromInt x
+
+            else
+                ""
+
         msg =
-            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
+            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit )
+            , ( LayerName "Frame", LayerStringMsg str )
+            ]
     in
     case n_model.status of
         AvatarDead ->

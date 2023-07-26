@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), initFrame1
+    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation, initFrame1
     )
 
 {-| Common module
@@ -57,12 +57,20 @@ type alias ClearAnimation =
     }
 
 
+type alias SpiritAnimation =
+    { str : String
+    , i_time : Int
+    , e_time : Int
+    }
+
+
 type alias Model =
     { status : FrameStatus
     , time : Int
     , player_data : PlayerData
     , next_round_b : NextRoundButton
     , c_anima : List ClearAnimation
+    , s_anima : List SpiritAnimation
     , rand_num : Int
     , seed : Random.Seed
     , op_reg : Int
@@ -87,6 +95,7 @@ nullModel =
         }
     , next_round_b = nullNextRoundB
     , c_anima = []
+    , s_anima = []
     , rand_num = number
     , seed = seed
     , op_reg = 0
@@ -109,6 +118,7 @@ initFrame1 =
         }
     , next_round_b = nullNextRoundB
     , c_anima = []
+    , s_anima = []
     , rand_num = number
     , seed = seed
     , op_reg = 0

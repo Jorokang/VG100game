@@ -16,10 +16,10 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
-import Scenes.Level.Frame.Random exposing (randomFrame)
-import Scenes.Level.Frame.Render exposing (renderCandle, renderFrameStatus, renderNextRoundB, renderScroll, renderStamina, renderClearAnimations)
-import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB,updateAnima, addAnima)
 import Scenes.Level.Frame.Functions exposing (addPoint, grid2real)
+import Scenes.Level.Frame.Random exposing (randomFrame)
+import Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderFrameStatus, renderNextRoundB, renderScroll, renderSpiritAnimations, renderStamina)
+import Scenes.Level.Frame.Update exposing (addClearAnima, addSpiritAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -107,7 +107,7 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgClearCell loc ->
-            ( addAnima model (grid2real loc)
+            ( addClearAnima model (grid2real loc)
             , [ ( LayerName "Avatar", LayerMsgClearCell loc )
               , ( LayerName "Enemy", LayerMsgClearCell loc )
               ]
@@ -127,6 +127,12 @@ updateModelRec env lmsg model =
         LayerMsgIncreaseStamina n t ->
             ( increaseStamina model n t, [], env )
 
+        LayerStringMsg str ->
+            ( addSpiritAnima model str
+            , []
+            , env
+            )
+
         _ ->
             ( model, [], env )
 
@@ -141,6 +147,7 @@ viewModel env model =
             , renderClearAnimations env model
             , renderScroll env model
             , renderCandle env model
+            , renderSpiritAnimations env model
             ]
     in
     Canvas.group

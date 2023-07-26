@@ -216,8 +216,8 @@ updateMouseClickNRB env model click_pos =
         ( model, [], env )
 
 
-addAnima : Model -> Point -> Model
-addAnima model pos =
+addClearAnima : Model -> Point -> Model
+addClearAnima model pos =
     let
         tmp_a =
             { pos = pos
@@ -228,6 +228,21 @@ addAnima model pos =
     { model | c_anima = tmp_a :: model.c_anima }
 
 
+addSpiritAnima : Model -> String -> Model
+addSpiritAnima model str =
+    let
+        tmp_a =
+            { str = str
+            , i_time = model.time
+            , e_time = model.time + 700
+            }
+    in
+    { model | s_anima = tmp_a :: model.s_anima }
+
+
 updateAnima : Model -> Model
 updateAnima model =
-    { model | c_anima = List.filter (\x -> x.e_time > model.time) model.c_anima }
+    { model
+        | c_anima = List.filter (\x -> x.e_time > model.time) model.c_anima
+        , s_anima = List.filter (\x -> x.e_time > model.time) model.s_anima
+    }

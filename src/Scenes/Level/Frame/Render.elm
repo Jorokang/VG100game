@@ -6,8 +6,8 @@ import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton)
-import Scenes.Level.Frame.Functions exposing (cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, SpiritAnimation)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
 
 
 renderClearAnimation : EnvC -> Int -> ClearAnimation -> Renderable
@@ -28,6 +28,40 @@ renderClearAnimations env model =
     Canvas.group
         []
         rend
+
+
+renderSpiritAnimation : EnvC -> Int -> SpiritAnimation -> Renderable
+renderSpiritAnimation env time anima =
+    let
+        offset =
+            ( 0, 0 - toFloat ((time - anima.i_time) // 15) )
+
+        pos =
+            addPoint ( 600, 150 ) offset
+
+        opacity =
+            round ((toFloat (time - anima.i_time) / toFloat (anima.e_time - anima.i_time)) * 100)
+
+        str_o =
+            "opacity(" ++ String.fromInt opacity ++ "%)"
+    in
+    Canvas.group
+        [ filter str_o
+        , fill Color.white
+        ]
+        [ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+
+
+renderSpiritAnimations : EnvC -> Model -> Renderable
+renderSpiritAnimations env model =
+    let
+        rend =
+            List.map (renderSpiritAnimation env model.time) model.s_anima
+    in
+    Canvas.group
+        []
+        rend
+
 
 renderScroll : EnvC -> Model -> Renderable
 renderScroll env _ =
