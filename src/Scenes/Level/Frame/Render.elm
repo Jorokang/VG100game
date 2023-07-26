@@ -37,7 +37,7 @@ renderSpiritAnimation env time anima =
             ( 0, 0 - toFloat ((time - anima.i_time) // 15) )
 
         pos =
-            addPoint ( 600, 150 ) offset
+            addPoint ( 800, 50 ) offset
 
         opacity =
             round ((toFloat (time - anima.i_time) / toFloat (anima.e_time - anima.i_time)) * 100)
