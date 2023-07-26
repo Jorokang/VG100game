@@ -70,5 +70,4 @@ allTexture =
     , ( "up", getResourcePath "img/up.svg" )
     , ( "down", getResourcePath "img/down.svg" )
     , ( "ok", getResourcePath "img/ok.svg" )
-    , ( "level", getResourcePath "img/level.svg" )
     ]
