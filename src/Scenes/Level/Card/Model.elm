@@ -15,10 +15,10 @@ module Scenes.Level.Card.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Card.CardCreate exposing (giveErrorCard)
-import Scenes.Level.Card.CardSystem exposing (dropCard, dropCardByCard)
+import Scenes.Level.Card.CardCreate exposing (CardStatus(..), Model, giveErrorCard)
+import Scenes.Level.Card.CardSystem exposing (dropCardByCard)
 import Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit)
-import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
+import Scenes.Level.Card.Common exposing (EnvC, nullModel)
 import Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 

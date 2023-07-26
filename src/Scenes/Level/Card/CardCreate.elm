@@ -3,7 +3,37 @@ module Scenes.Level.Card.CardCreate exposing (..)
 --card name and the cost
 
 import Canvas exposing (Point)
-import Color exposing (Color, black, blue, brown, green, grey, lightGreen, lightGrey, lightRed, orange, purple, red, white, yellow)
+import Random exposing (Seed)
+
+
+{-| Model
+Add your own data here.
+-}
+type CardStatus
+    = Active
+    | Moving
+    | Playing
+    | Inactive
+
+
+
+--take card from deck to hand, remove it to discard
+
+
+type alias Model =
+    { hand : List Card
+    , discard : List Card
+    , deck : List Card
+    , seed : Seed
+    , status : CardStatus
+    , point : Point
+    , turn_status : Int
+    , spirit : Int
+    , click_status : Bool
+    , selected_pos : Int
+    , selected_card : Card
+    , available : List Int
+    }
 
 
 type alias Card =
@@ -19,7 +49,7 @@ type alias CardObject =
     , pos : Point
     , size : Point
     , selected : Bool
-    , img : Color
+    , img : String
     }
 
 
@@ -110,7 +140,7 @@ giveDiscardSize =
 
 giveBackPile : List Card -> List Card
 giveBackPile pile =
-    List.map (\x -> giveBackCard) pile
+    List.map (\_ -> giveBackCard) pile
 
 
 modifyPos : List a -> Int -> a -> List a
@@ -127,3 +157,17 @@ modifyPos list pos value =
 
     else
         list
+
+
+giveTypeLimit : Int
+giveTypeLimit =
+    4
+
+
+initializeDeck : List Int -> List Card
+initializeDeck ava =
+    let
+        draft =
+            List.concat <| List.map (\x -> List.repeat giveTypeLimit x) ava
+    in
+    List.map giveCard draft

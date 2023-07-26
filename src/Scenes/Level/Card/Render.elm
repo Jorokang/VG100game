@@ -1,16 +1,12 @@
 module Scenes.Level.Card.Render exposing (..)
 
-import Canvas exposing (Point, Renderable, rect, shapes, text)
-import Canvas.Settings exposing (fill)
+import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Color exposing (white)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Card.CardCreate exposing (Card, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
-import Scenes.Level.Card.CardSystem exposing (takeCard)
+import Scenes.Level.Card.CardCreate exposing (Card, CardStatus(..), Model, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
 import Scenes.Level.Card.CardUnique exposing (createPosList)
-import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChange, sizeChangeS)
-import Tuple exposing (first)
+import Scenes.Level.Card.Common exposing (EnvC)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, nullCoorData, sizeChangeS)
 
 
 renderStr : EnvC -> Point -> String -> Renderable
@@ -76,10 +72,11 @@ renderTestMessage env model =
     in
     Canvas.group
         []
-        [ renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
+        [ renderStr env (coorChange env ( 200, 810 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
+        , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
         , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("model_status:" ++ str)
-        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.8"
+        , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.9"
         ]
 
 
@@ -90,7 +87,7 @@ renderHandCards env model =
             createPosList model.hand giveHandSize
 
         temp =
-            List.map (\x -> False) poss
+            List.map (\_ -> False) poss
 
         selecteds =
             modifyPos temp model.selected_pos True
@@ -109,7 +106,7 @@ renderDeckCards env model =
             createPosList model.deck giveDeckSize
 
         selecteds =
-            List.map (\x -> False) poss
+            List.map (\_ -> False) poss
     in
     Canvas.group
         []
@@ -125,7 +122,7 @@ renderDiscardCards env model =
             createPosList model.discard giveDiscardSize
 
         selecteds =
-            List.map (\x -> False) poss
+            List.map (\_ -> False) poss
     in
     Canvas.group
         []
@@ -174,9 +171,6 @@ renderOneCard env card pos selected =
 
     else if selected then
         renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color
-        --shapes
-        --    [ fill color ]
-        ---   [ rect (coorChange env (addPoint pos ( -offset, -offset )) nullCoorData) (lengthChange env (width + 2 * offset) nullCoorData) (lengthChange env (length + 2 * offset) nullCoorData) ]
 
     else
         renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( width, length ) nullCoorData) color
