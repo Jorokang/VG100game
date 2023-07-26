@@ -145,7 +145,7 @@ initGridsLevel1 =
             randomGrids (Random.initialSeed 0)
     in
     { status = Active
-    , map_size = ( 5, 4 )
+    , map_size = ( 2, 2 )
     , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []

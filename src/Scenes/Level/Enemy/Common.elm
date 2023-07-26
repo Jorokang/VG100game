@@ -191,7 +191,7 @@ initEnemyLevel1 =
                 { color = Color.rgb255 30 30 40
                 , hp = 1
                 }
-          , loc = ( 2, 1 )
+          , loc = ( 1, 2 )
           }
         ]
     , core = initEnemyCoreLevel1
@@ -223,7 +223,7 @@ initEnemyEyeLevel1 =
     , v = ( 0, 0 )
     , target = ( 150, 50 )
     , target_eroded = True
-    , target_loc = ( 1, 3 )
+    , target_loc = ( 1, 2 )
     }
 
 
@@ -233,7 +233,7 @@ initEnemyCoreLevel1 =
         { color = Color.red
         , hp = 1
         }
-    , loc = ( 1, 3 )
+    , loc = ( 1, 2 )
     }
 
 
