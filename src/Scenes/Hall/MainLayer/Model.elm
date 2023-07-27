@@ -13,14 +13,13 @@ module Scenes.Hall.MainLayer.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Scenes.Hall.MainLayer.CardSelect exposing (clickCard)
 import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderMasking, renderStr, rendercard, renderhelp, renderlevel, rendersetting)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting)
 import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
 import Scenes.Hall.SceneInit exposing (HallInit)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
-import Set exposing (Set)
 import Time exposing (posixToMillis)
 
 
@@ -65,7 +64,7 @@ updateModel env model =
         MouseDown x ( a, b ) ->
             let
                 n_model =
-                    { model | click_pos = ( a, b ) }
+                    clickCard { model | click_pos = ( a, b ), click_status = True }
             in
             case model.choice of
                 Hall ->
@@ -144,7 +143,11 @@ viewModel env model =
                     renderlevel env model.level
 
                 Card ->
-                    rendercard env model.card
+                    Canvas.group
+                        []
+                        [ renderHandCards env model
+                        , renderSelectedCards env model
+                        ]
 
                 Hall ->
                     case model.hall_name of

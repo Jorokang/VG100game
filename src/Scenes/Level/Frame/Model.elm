@@ -16,9 +16,10 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
+import Scenes.Level.Frame.Functions exposing (addPoint, grid2real)
 import Scenes.Level.Frame.Random exposing (randomFrame)
-import Scenes.Level.Frame.Render exposing (renderCandle, renderFrameStatus, renderNextRoundB, renderScroll, renderStamina)
-import Scenes.Level.Frame.Update exposing (checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateMouseClickNRB, updateTickNRB)
+import Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderFrameStatus, renderNextRoundB, renderScroll, renderSpiritAnimations, renderStamina)
+import Scenes.Level.Frame.Update exposing (addClearAnima, addSpiritAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)
 
@@ -41,7 +42,7 @@ updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of
         Tick new_time ->
-            updateTickNRB env (updateRandNum { model | time = posixToMillis new_time })
+            updateTickNRB env ({ model | time = posixToMillis new_time } |> updateRandNum |> updateAnima)
 
         MouseDown x mpos ->
             updateMouseClickNRB env model mpos
@@ -106,7 +107,7 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgClearCell loc ->
-            ( model
+            ( addClearAnima model (grid2real loc)
             , [ ( LayerName "Avatar", LayerMsgClearCell loc )
               , ( LayerName "Enemy", LayerMsgClearCell loc )
               ]
@@ -126,6 +127,12 @@ updateModelRec env lmsg model =
         LayerMsgIncreaseStamina n t ->
             ( increaseStamina model n t, [], env )
 
+        LayerStringMsg str ->
+            ( addSpiritAnima model str
+            , []
+            , env
+            )
+
         _ ->
             ( model, [], env )
 
@@ -134,11 +141,14 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderFrameStatus env model
-            , renderStamina env model
-            , renderNextRoundB env model
-            , renderScroll env model
+            [ --renderFrameStatus env model
+              --, renderStamina env model
+              renderNextRoundB env model
+            , renderClearAnimations env model
+
+            --, renderScroll env model
             , renderCandle env model
+            , renderSpiritAnimations env model
             ]
     in
     Canvas.group

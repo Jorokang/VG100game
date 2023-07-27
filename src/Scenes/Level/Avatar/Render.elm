@@ -228,22 +228,22 @@ renderSpirit env model =
 
         --dark blue
         label_pos =
-            ( 550, 40 )
+            ( 500, 18 )
 
         ( box_x, box_y ) =
-            ( 450, 50 )
+            ( 200, 25 )
 
         ( box_l, box_w ) =
-            ( 200, 15 )
+            ( 600, 40 )
 
         ( spirit_x, spirit_y ) =
-            ( 460, 53 )
+            addPoint ( box_x, box_y ) ( 15, 7 )
 
         ( spirit_max_l, spirit_w ) =
-            ( 180, 9 )
+            addPoint ( box_l, box_w ) ( -30, -14 )
 
         spirit_l =
-            toFloat spirit_max_l / toFloat model.max_spirit * toFloat model.spirit
+            spirit_max_l / model.spirit.max_spirit * model.spirit.cur_spirit
 
         spirit_color =
             Color.rgb255 255 240 245
@@ -252,17 +252,17 @@ renderSpirit env model =
         render_label =
             Canvas.group
                 [ fill Color.white ]
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos mapCoorData) "spirit" ]
+                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit" ]
 
         render_max_box =
             shapes
                 [ fill max_box_color ]
-                [ rect (coorChange env ( box_x, box_y ) mapCoorData) (lengthChange env box_l mapCoorData) (lengthChange env box_w mapCoorData) ]
+                [ rect (coorChange env ( box_x, box_y ) nullCoorData) (lengthChange env box_l nullCoorData) (lengthChange env box_w nullCoorData) ]
 
         render_spirit =
             shapes
                 [ fill spirit_color ]
-                [ rect (coorChange env ( spirit_x, spirit_y ) mapCoorData) (lengthChange env spirit_l mapCoorData) (lengthChange env spirit_w mapCoorData) ]
+                [ rect (coorChange env ( spirit_x, spirit_y ) nullCoorData) (lengthChange env spirit_l nullCoorData) (lengthChange env spirit_w nullCoorData) ]
     in
     Canvas.group
         []

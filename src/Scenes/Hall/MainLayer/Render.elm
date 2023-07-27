@@ -5,11 +5,13 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
+import Scenes.Hall.MainLayer.CardSelect exposing (Card, PileSize, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile)
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, Choice(..), EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChangeS)
+import Scenes.Level.Card.CardCreate exposing (modifyPos)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
 
@@ -138,56 +140,67 @@ rendercard env card =
         rend
 
 
-type alias Card =
-    { name : String
-    , id : Int
-    , cost : Int
-    , img : String
-    }
+renderHandCards : EnvC -> Model -> Renderable
+renderHandCards env model =
+    let
+        poss =
+            createPosList model.hand giveHandSize
 
+        temp =
+            List.map (\_ -> False) poss
 
-type alias PileSize =
-    { name : String
-    , startPoint : Point
-    , length : Float
-    , width : Float
-    , interval : Float
-    , offset : Float
-    }
-
-
-giveHandSize : PileSize
-giveHandSize =
-    { name = "hand"
-    , startPoint = ( 250, 750 )
-    , length = 120
-    , width = 80
-    , interval = 100
-    , offset = 15
-    }
-
-
-renderListCards : EnvC -> List Card -> List Point -> List Bool -> Renderable
-renderListCards env cards poss selecteds =
+        selecteds =
+            modifyBool model.selected_cards temp
+    in
     Canvas.group
         []
-        (List.map3 (renderOneCard env) cards poss selecteds)
+        [ renderListCards env model.hand poss selecteds giveHandSize
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Available Cards"
+        ]
 
 
-renderOneCard : EnvC -> Card -> Point -> Bool -> Renderable
-renderOneCard env card pos selected =
+renderSelectedCards : EnvC -> Model -> Renderable
+renderSelectedCards env model =
+    let
+        target =
+            selectedPile model
+
+        poss =
+            createPosList target giveSelectedSize
+
+        temp =
+            List.map (\_ -> False) poss
+
+        --modifyPos temp model.selected_pos True
+    in
+    Canvas.group
+        []
+        [ renderListCards env target poss temp giveSelectedSize
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 300 ) nullCoorData) "Selected Cards"
+        ]
+
+
+renderListCards : EnvC -> List Card -> List Point -> List Bool -> PileSize -> Renderable
+renderListCards env cards poss selecteds size =
+    Canvas.group
+        []
+        (List.map4 (renderOneCard env) cards poss selecteds (List.repeat (List.length poss) size))
+
+
+renderOneCard : EnvC -> Card -> Point -> Bool -> PileSize -> Renderable
+renderOneCard env card pos selected size =
     let
         color =
             card.img
 
         width =
-            giveHandSize.width
+            size.width
 
         length =
-            giveHandSize.length
+            size.length
 
         offset =
-            giveHandSize.offset
+            size.offset
     in
     if color == "cardback" then
         renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"

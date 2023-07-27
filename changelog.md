@@ -3,7 +3,20 @@ project2: Light in Nightmares
 # Changelog
 All notable changes to this project are documented in this file.
 
-## [0.3.0] - 2023.07.21
+## [0.4.0] Release Candidate - 2023.07.27
+### Added
+- Game has background music
+- There will be level CG in each level
+- Every Cards has its own img
+
+### Changed
+- Change the img of the avatar
+
+### Fixed
+- Enemy move each turn correctly
+- Card 9 won't be covered by enemy
+
+## [0.3.0] Beta - 2023.07.21
 
 ### Added
 - Story layer can be interacted
@@ -18,10 +31,11 @@ All notable changes to this project are documented in this file.
 ### Removed
 - Testing message is removed
 
+## [0.2.1] - 2023.07.15
 ### Fixed
 - Two kind of cards can take effect now
   
-## [0.2.0] - 2023.07.13
+## [0.2.0] Alpha - 2023.07.13
 
 ### Added
 - Card1 is implemented
@@ -33,6 +47,7 @@ All notable changes to this project are documented in this file.
 ### Changed
 - Avatar can be control to move
 
+## [0.1.1] - 2023.07.09
 ### Fixed
 - Git lfs is used now
 
