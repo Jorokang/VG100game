@@ -1,7 +1,12 @@
 module Scenes.Teaching.MainLayer.Update exposing (..)
 
 import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, AvatarAnima, AvatarSpirit)
+import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
+import Canvas exposing (Point)
+import Lib.Env.Env exposing (Env)
+import Scenes.Teaching.MainLayer.Common exposing (TeachingStatus(..))
 
 {-| update model anima
 -}
@@ -64,3 +69,123 @@ updateSpirit model =
                 { s | cur_spirit = s.cur_spirit + s.spirit_v }
     in
     { model | spirit = ns }
+
+judgeClickEnvet : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeClickEnvet env model pos =
+    case model.status of
+        Init -> judgeInit env model pos
+        Muttering1 -> judgeMuttering1 env model pos
+        Muttering2 -> judgeMuttering2 env model pos
+        Enemy1 -> judgeEnemy1 env model pos
+        Enemy2 -> judgeEnemy2 env model pos
+        Hurt -> judgeHurt env model pos
+        Muttering3 -> judgeMuttering3 env model pos
+        Card1 -> judgeCard1 env model pos
+
+clickSize : Point
+clickSize = 
+    ( 50, 50 )
+
+judgeInit : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeInit env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Muttering1 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeMuttering1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeMuttering1 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Muttering2 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeMuttering2 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeMuttering2 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Enemy1 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeEnemy1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeEnemy1 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Enemy2 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeEnemy2: EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeEnemy2 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Hurt }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeHurt : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeHurt env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Muttering3 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeMuttering3 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeMuttering3 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Card1 }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeCard1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeCard1 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( model
+        , [(LayerParentScene, LayerIntMsg 0)]
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )

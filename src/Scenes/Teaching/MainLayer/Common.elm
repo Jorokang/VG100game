@@ -1,4 +1,4 @@
-module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit)
+module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit, TeachingStatus(..))
 
 {-| Common module
 
@@ -13,6 +13,13 @@ import Scenes.Teaching.LayerBase exposing (CommonData)
 
 type TeachingStatus
     = Init
+    | Muttering1
+    | Muttering2
+    | Enemy1
+    | Enemy2
+    | Hurt
+    | Muttering3
+    | Card1
 
 type alias AvatarAnima =
     { a_pos : Point
@@ -60,6 +67,7 @@ type alias Model =
     , lightRange : Float
     , anima : AvatarAnima
     , spirit : AvatarSpirit
+    , click_pos : Point
     }
 
 
@@ -73,6 +81,7 @@ nullModel =
     , lightRange = 2
     , anima = defaultAnima
     , spirit = nullSpirit
+    , click_pos = (700, 700)
     }
 
 

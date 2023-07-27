@@ -14,12 +14,15 @@ module Scenes.Teaching.MainLayer.Model exposing
 
 import Canvas exposing (Renderable, empty, group)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel)
+import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, TeachingStatus(..))
 import Scenes.Teaching.SceneInit exposing (TeachingInit)
 import Time exposing (posixToMillis)
-import Scenes.Teaching.MainLayer.Render exposing (renderAvatar, renderShadow, renderSpirit)
-import Scenes.Teaching.MainLayer.Update exposing (updateAnima, updateSpirit)
+import Scenes.Teaching.MainLayer.Render exposing (renderAvatar, renderShadow, renderSpirit, renderClick, renderMuttering1, renderMuttering2, renderEnemy1, renderEnemy2, renderHurt, renderMuttering3, renderInit, renderCard1, renderBackgroud)
+import Scenes.Teaching.MainLayer.Update exposing (updateAnima, updateSpirit, judgeClickEnvet)
 import Base exposing (Msg(..))
+import Canvas exposing (shapes)
+import Lib.Coordinate.Coordinates exposing (posToReal)
+import Lib.Coordinate.Coordinates exposing (lengthToReal)
 
 
 {-| initModel
@@ -46,6 +49,10 @@ updateModel env model =
             , []
             , env
             )
+
+        MouseDown x pos ->
+            judgeClickEnvet env model pos
+
         _ ->
             ( model, [], env )
 
@@ -57,7 +64,7 @@ Add your logic to handle LayerMsg here
 
 -}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-updateModelRec env _ model =
+updateModelRec env lmsg model =
     ( model, [], env )
 
 
@@ -72,9 +79,22 @@ If you have other elements than components, add them after viewComponent.
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
-        rend = [ renderAvatar env model
+        rend_status = case model.status of
+                        Init -> renderInit env model
+                        Muttering1 -> renderMuttering1 env model
+                        Muttering2 -> renderMuttering2 env model
+                        Enemy1 -> renderEnemy1 env model
+                        Enemy2 -> renderEnemy2 env model
+                        Hurt -> renderHurt env model
+                        Muttering3 -> renderMuttering3 env model
+                        Card1 -> renderCard1 env model
+
+        rend = [  renderBackgroud env model
                 , renderShadow env model
+                , renderAvatar env model
                 , renderSpirit env model
+                , rend_status
+                , renderClick env model
                 ]
     in
     Canvas.group

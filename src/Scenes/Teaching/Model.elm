@@ -17,9 +17,12 @@ import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneOutputMsg(..))
+import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Scenes.Teaching.Common exposing (Model)
 import Scenes.Teaching.LayerBase exposing (CommonData)
+import Scenes.Teaching.Transition exposing (teachingTransitionOut, storyTransitionIn)
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Canvas.Settings exposing (stroke)
 
 
 {-| handleLayerMsg
@@ -35,6 +38,13 @@ handleLayerMsg env lmsg model =
 
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
+
+        LayerIntMsg _ ->
+            let
+                trans =
+                    Just (genTransition 100 100 teachingTransitionOut storyTransitionIn)
+            in
+            ( model, [ SOMChangeScene ( StoryInitData {}, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )
