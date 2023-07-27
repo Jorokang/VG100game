@@ -13,7 +13,8 @@ import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS,
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
 
-{-| render the background of hall
+{-| for the hall
+render the background of hall
 -}
 renderBackground : EnvC -> Model -> Renderable
 renderBackground env _ =
@@ -40,6 +41,9 @@ renderStr env pos str =
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
+{-| for the hall
+render the hall with four buttons
+-}
 renderHall : EnvC -> Model -> Renderable
 renderHall env model =
     let
@@ -55,6 +59,9 @@ renderHall env model =
         rend
 
 
+{-| for a choice
+render the close button
+-}
 renderclose : EnvC -> Button -> Renderable
 renderclose env btn =
     let
@@ -73,10 +80,9 @@ renderclose env btn =
         ]
 
 
-
-{- render the different Hall parts -}
-
-
+{-| for the hall
+render the four different Hall parts
+-}
 rendersetting : EnvC -> Settingbtn -> Renderable
 rendersetting env set =
     let
@@ -132,10 +138,9 @@ rendercard env card =
         rend
 
 
-
-{- let the background faded -}
-
-
+{-| for the hall
+let the background faded when click a button
+-}
 renderMasking : EnvC -> Model -> Renderable
 renderMasking env model =
     let

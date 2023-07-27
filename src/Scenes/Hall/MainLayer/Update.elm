@@ -6,10 +6,9 @@ import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(.
 import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
-
-{- to check if one btn clicked -}
-
-
+{-| for a button
+to check if one btn clicked
+-}
 ifClicked : Button -> ( Float, Float ) -> Bool
 ifClicked btn ( a, b ) =
     if btn.status == ButtonActive then
@@ -19,10 +18,9 @@ ifClicked btn ( a, b ) =
         False
 
 
-
-{- decide which part should be opened -}
-
-
+{-| in five choices
+check which choice part should be opened
+-}
 checkopen : Model -> ( Float, Float ) -> Choice
 checkopen model ( a, b ) =
     if model.choice == Hall then
@@ -45,10 +43,9 @@ checkopen model ( a, b ) =
         model.choice
 
 
-
-{- change the state of button -}
-
-
+{-| in 5 choices
+change the state of button
+-}
 buttonInact : Button -> Button
 buttonInact btn =
     { btn | status = ButtonInactive }
@@ -59,19 +56,17 @@ buttonAct btn =
     { btn | status = ButtonActive }
 
 
-
-{- change the Hallstate of model -}
-
-
+{-| in five choices
+change the Hallstate of model
+-}
 hallState : Choice -> Model -> Model
 hallState c model =
     { model | choice = c }
 
 
-
-{- change the scene to Level -}
-
-
+{-| in level choices
+when button ok is pressed, change the scene from hall to Level
+-}
 levelokclicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 levelokclicked env model =
     let
@@ -97,10 +92,9 @@ levelokclicked env model =
     )
 
 
-
-{- change the level num -}
-
-
+{-| in level choices
+change the level num by up and down
+-}
 upclicked : Levelbtn -> Levelbtn
 upclicked lev =
     let
@@ -119,10 +113,9 @@ downclicked lev =
     { lev | levelInt = num }
 
 
-
-{- check if up or down clicked -}
-
-
+{-| in level choices
+check if up or down clicked
+-}
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
 checkupdown lev ( a, b ) =
     if lev.levelInt > 1 && lev.levelInt < 5 then
@@ -153,6 +146,9 @@ checkupdown lev ( a, b ) =
         lev
 
 
+{-| in five hall choices
+change the logic here
+-}
 inlevel : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 inlevel env model ( a, b ) =
     let
@@ -254,7 +250,6 @@ insetting env model ( a, b ) =
 inhall : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 inhall env model ( a, b ) =
     let
-
         lev =
             model.level
 
