@@ -84,7 +84,7 @@ updateRevealScroll : Model -> Model
 updateRevealScroll model =
     if (model.scroll_opacity>=100) && (model.status == RevealScroll) then
         { model | status = Card1
-                , click_pos = (80, 600)
+                , click_pos = (100, 750)
                 }
     else
         model
@@ -232,7 +232,8 @@ judgeCard1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), 
 judgeCard1 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
         ( { model | status = Card2
-                  , click_pos = addPoint model.pos (-100, 0)}
+                  , click_pos = addPoint model.pos (-100, 0)
+                  }
         , []
         , env
         )

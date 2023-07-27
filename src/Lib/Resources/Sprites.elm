@@ -72,4 +72,6 @@ allTexture =
     , ( "ok", getResourcePath "img/ok.svg" )
     , ( "kill", getResourcePath "img/kill.png" )
     , ( "text_box", getResourcePath "img/text_box.png" )
+    , ( "mouse_0", getResourcePath "img/mouse_0.png" )
+    , ( "laser", getResourcePath "img/laser.png" )
     ]
