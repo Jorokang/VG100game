@@ -1,13 +1,13 @@
 module Scenes.Level.Card.Animation exposing (..)
 
 import Canvas exposing (Point)
-import Scenes.Level.Card.CardCreate exposing (CardObject, Model, giveHandSize)
+import Scenes.Level.Card.CardCreate exposing (CardObject, CardStatus(..), Model, giveHandSize)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 
 
 type MoveStatus
     = Moving Point Int
-    | Null
+    | Rest
 
 
 type alias MoveData =
@@ -37,11 +37,55 @@ getMoveTarget model =
 --( 0, 0 )
 
 
-moveCard : CardObject -> MoveData -> CardObject
-moveCard obj data =
-    let
-        npos =
-            addPoint obj.pos <|
-                scalePoint (addPoint obj.pos data.target) (1 / data.max_stage)
-    in
-    { obj | pos = npos }
+minusPoint : Point -> Point -> Point
+minusPoint p1 p2 =
+    ( Tuple.first p1 - Tuple.first p2, Tuple.second p1 - Tuple.second p2 )
+
+
+checkHelper : CardObject -> Bool
+checkHelper obj =
+    case obj.status of
+        Moving _ _ ->
+            True
+
+        Rest ->
+            False
+
+
+checkMoveStatus : List CardObject -> CardStatus
+checkMoveStatus objs =
+    if List.any checkHelper objs then
+        CardMoving
+
+    else
+        Active
+
+
+moveCards : Model -> Model
+moveCards model =
+    --{ model | deck = moveCard model.deck, hand = moveCard model.hand, discard = moveCard model.discard }
+    model
+
+
+moveCard : List CardObject -> List CardObject
+moveCard objs =
+    List.map moveOneCard objs
+
+
+moveOneCard : CardObject -> CardObject
+moveOneCard obj =
+    case obj.status of
+        Rest ->
+            obj
+
+        Moving target stage ->
+            if stage == 0 then
+                { obj | status = Rest }
+
+            else
+                let
+                    npos =
+                        addPoint obj.pos <|
+                            scalePoint (minusPoint target obj.pos) (1 / toFloat stage)
+                in
+                { obj | pos = npos, status = Moving target (stage - 1) }
