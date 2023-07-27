@@ -1,9 +1,8 @@
 module Scenes.Hall.MainLayer.Update exposing (..)
 
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Hallname(..), Levelbtn, Model)
-import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
 {-| for a button
@@ -87,7 +86,7 @@ levelokclicked env model =
                 , ok = buttonInact lev.ok
             }
       }
-    , [ ( LayerParentScene, LayerStringMsg ("Level" ++ String.fromInt num) ) ]
+    , [ ( LayerParentScene, LayerGoToLevel ("Level" ++ String.fromInt num) model.selected_cards ) ]
     , env
     )
 
@@ -111,6 +110,7 @@ downclicked lev =
             lev.levelInt - 1
     in
     { lev | levelInt = num }
+
 
 {-| in level choices
 check if up or down clicked
