@@ -1,4 +1,4 @@
-module Scenes.Hall.Model exposing
+module Scenes.Teaching.Model exposing
     ( handleLayerMsg
     , updateModel
     , viewModel
@@ -13,15 +13,16 @@ module Scenes.Hall.Model exposing
 -}
 
 import Canvas exposing (Renderable)
+import Canvas.Settings exposing (stroke)
 import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
-import Scenes.Hall.Common exposing (Model)
-import Scenes.Hall.LayerBase exposing (CommonData)
-import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, initLevel3, nullLevelInit)
+import Scenes.Teaching.Common exposing (Model)
+import Scenes.Teaching.LayerBase exposing (CommonData)
+import Scenes.Teaching.Transition exposing (storyTransitionIn, teachingTransitionOut)
 
 
 {-| handleLayerMsg
@@ -38,31 +39,15 @@ handleLayerMsg env lmsg model =
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
 
-        LayerGoToLevel scene_name cards ->
+        LayerIntMsg _ ->
             let
                 trans =
-                    Just (genTransition 1 1 rawTransition rawTransition)
+                    Just (genTransition 100 100 teachingTransitionOut storyTransitionIn)
             in
-            case scene_name of
-                "Level1" ->
-                    ( model, [ SOMChangeScene ( LevelInitData (initLevel1 cards), "Level", trans ) ], env )
-
-                "Level2" ->
-                    ( model, [ SOMChangeScene ( LevelInitData (initLevel2 cards), "Level", trans ) ], env )
-
-                "Level3" ->
-                    ( model, [ SOMChangeScene ( LevelInitData (initLevel3 cards), "Level", trans ) ], env )
-
-                _ ->
-                    ( model, [ SOMChangeScene ( LevelInitData nullLevelInit, "Level", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData {}, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )
-
-
-rawTransition : SingleTrans
-rawTransition _ _ _ =
-    Canvas.empty
 
 
 {-| updateModel

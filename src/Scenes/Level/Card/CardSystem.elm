@@ -1,8 +1,7 @@
 module Scenes.Level.Card.CardSystem exposing (..)
 
 import Random exposing (Generator, Seed)
-import Scenes.Level.Card.CardCreate exposing (Card, giveErrorCard_2)
-import Scenes.Level.Card.Common exposing (Model)
+import Scenes.Level.Card.CardCreate exposing (Card, Model, giveErrorCard_2)
 
 
 shufflePile : List Card -> Seed -> ( List Card, Seed )
@@ -31,7 +30,7 @@ shuffle : Model -> Model
 shuffle model =
     let
         ( ndeck, nseed ) =
-            shufflePile model.discard model.seed
+            shufflePile (model.discard ++ model.deck) model.seed
     in
     { model | deck = ndeck, seed = nseed, discard = [] }
 

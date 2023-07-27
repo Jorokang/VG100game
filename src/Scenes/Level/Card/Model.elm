@@ -15,10 +15,10 @@ module Scenes.Level.Card.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Card.CardCreate exposing (giveErrorCard)
-import Scenes.Level.Card.CardSystem exposing (dropCard, dropCardByCard)
+import Scenes.Level.Card.CardCreate exposing (CardStatus(..), Model, giveErrorCard)
+import Scenes.Level.Card.CardSystem exposing (drawCard, dropCardByCard)
 import Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit)
-import Scenes.Level.Card.Common exposing (CardStatus(..), EnvC, Model, nullModel)
+import Scenes.Level.Card.Common exposing (EnvC, nullModel, selectedModel)
 import Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
@@ -27,8 +27,8 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    nullModel
+initModel _ i =
+    selectedModel i.selected_cards
 
 
 {-| updateModel
@@ -72,14 +72,10 @@ updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, Layer
 updateModelRec env msg model =
     case msg of
         LayerMsgPlayerTurn ->
-            ( { model | status = Active, turn_status = model.turn_status + 1 }, [], env )
+            ( drawCard { model | status = Active } 1, [], env )
 
         LayerMsgEnemyTurn ->
-            if model.turn_status > 0 then
-                ( { model | status = Inactive, turn_status = 0 }, [], env )
-
-            else
-                ( { model | status = Inactive }, [], env )
+            ( { model | status = Inactive }, [], env )
 
         LayerMsgCardType id ->
             let
@@ -87,7 +83,7 @@ updateModelRec env msg model =
                     { model | status = Active, selected_pos = -1, selected_card = giveErrorCard }
             in
             if id == model.selected_card.id && id /= -1 then
-                ( dropCardByCard { nmodel | turn_status = model.turn_status - 1 } model.selected_card, costSpirit model, env )
+                ( dropCardByCard nmodel model.selected_card, costSpirit model, env )
 
             else
                 ( nmodel, [], env )
@@ -114,6 +110,7 @@ viewModel env model =
         [ renderHandCards env model
         , renderDeckCards env model
         , renderDiscardCards env model
-        , renderTestMessage env model
-        , renderCardInfo env model
+
+        --, renderTestMessage env model
+        --, renderCardInfo env model
         ]

@@ -29,6 +29,7 @@ import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Scenes.Menu.SceneInit exposing (MenuInit)
 import Scenes.Story.SceneInit exposing (StoryInit)
+import Scenes.Teaching.SceneInit exposing (TeachingInit)
 
 
 {-| Scene
@@ -43,7 +44,8 @@ type alias Scene a =
 {-| Data to initilize the scene.
 -}
 type SceneInitData
-    = MenuInitData MenuInit
+    = TeachingInitData TeachingInit
+    | MenuInitData MenuInit
     | HallInitData HallInit
     | StoryInitData StoryInit
     | LevelInitData LevelInit

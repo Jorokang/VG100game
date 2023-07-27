@@ -6,6 +6,7 @@ module Scenes.Hall.MainLayer.Common exposing (..)
 
 -}
 
+import Base exposing (Msg(..))
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
@@ -24,9 +25,12 @@ type ButtonStatus
 
 
 
---the states of Hall, decide what to render
+--
 
 
+{-| choice of hall
+the states of Hall, decide what to render
+-}
 type Choice
     = Setting
     | Help
@@ -42,10 +46,9 @@ type alias Button =
     }
 
 
-
---all interface of set
-
-
+{-| choice of hall
+all interface of set
+-}
 type alias Settingbtn =
     { open : Button
     , close : Button
@@ -67,10 +70,11 @@ initsetting =
     }
 
 
+{-| choice of hall
 
---all interface of help
+all interface of help
 
-
+-}
 type alias Helpbtn =
     { open : Button
     , close : Button
@@ -92,10 +96,12 @@ inithelp =
     }
 
 
-
---open the level page, close it, up btn add the level number, down decrease it, confirm it
-
-
+{-| interface of level
+open the level page,
+close it,
+up btn add the level number, down decrease it,
+ok confirm it
+-}
 type alias Levelbtn =
     { open : Button
     , close : Button
@@ -137,6 +143,12 @@ initlevel =
     }
 
 
+{-| choice of card
+open and close and interface
+
+add things about card below
+
+-}
 type alias Cardbtn =
     { open : Button
     , close : Button
@@ -160,6 +172,12 @@ initcard =
     }
 
 
+type Hallname
+    = Win
+    | Lose
+    | Normal
+
+
 {-| Model
 Add your own data here.
 -}
@@ -167,12 +185,15 @@ type alias Model =
     { status : HallStatus
     , time : Int
     , click_pos : Point
-    , hall_name : String
+    , hall_name : Hallname
     , setting : Settingbtn
     , level : Levelbtn
     , help : Helpbtn
     , card : Cardbtn
     , choice : Choice
+    , selected_cards : List Int
+    , hand : List Card
+    , click_status : Bool
     }
 
 
@@ -181,12 +202,15 @@ nullModel =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "Hall"
+    , hall_name = Normal
     , setting = initsetting
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
+    , selected_cards = [ 1, 2, 3, 4, 5 ]
+    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , click_status = False
     }
 
 
@@ -195,12 +219,15 @@ initModelWin =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "You defeat the enemy in Level 1 !"
+    , hall_name = Win
     , setting = initsetting
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
+    , selected_cards = [ 1, 2, 3, 4, 5 ]
+    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , click_status = False
     }
 
 
@@ -209,12 +236,15 @@ initModelLose =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "You lost all light."
+    , hall_name = Lose
     , setting = initsetting
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
+    , selected_cards = [ 1, 2, 3, 4, 5 ]
+    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , click_status = False
     }
 
 
@@ -222,3 +252,35 @@ initModelLose =
 -}
 type alias EnvC =
     Env.EnvC CommonData
+
+
+giveErrorCard : Card
+giveErrorCard =
+    { name = "error", id = -1, cost = -1, img = "cardback" }
+
+
+giveCardList : List Card
+giveCardList =
+    [ { name = "purify", id = 1, cost = 2, img = "card1" }
+    , { name = "guard", id = 2, cost = 2, img = "card2" }
+    , { name = "take a break", id = 3, cost = 0, img = "card3" }
+    , { name = "light up", id = 4, cost = 1, img = "card4" }
+    , { name = "hope", id = 5, cost = 3, img = "card5" }
+    , { name = "call up the past", id = 6, cost = 2, img = "cardback" }
+    , { name = "courage", id = 8, cost = 4, img = "card8" }
+    , { name = "endless hope", id = 7, cost = 5, img = "card7" }
+    , { name = "sunrise", id = 9, cost = 6, img = "card9" }
+    , { name = "thrive", id = 10, cost = 2, img = "card10" }
+    , { name = "forget", id = 11, cost = 10, img = "card11" }
+    ]
+
+
+giveCard : Int -> Card
+giveCard id =
+    if id > 0 then
+        Maybe.withDefault giveErrorCard <|
+            List.head <|
+                List.drop (id - 1) giveCardList
+
+    else
+        giveErrorCard
