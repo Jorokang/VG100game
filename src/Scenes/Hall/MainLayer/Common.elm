@@ -193,6 +193,7 @@ type alias Model =
     , choice : Choice
     , selected_cards : List Int
     , hand : List Card
+    , click_status : Bool
     }
 
 
@@ -209,6 +210,7 @@ nullModel =
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
     , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , click_status = False
     }
 
 
@@ -225,6 +227,7 @@ initModelWin =
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
     , hand = []
+    , click_status = False
     }
 
 
@@ -241,6 +244,7 @@ initModelLose =
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
     , hand = []
+    , click_status = False
     }
 
 

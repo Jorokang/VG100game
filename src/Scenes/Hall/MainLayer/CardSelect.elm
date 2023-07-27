@@ -27,12 +27,28 @@ type alias PileSize =
 giveHandSize : PileSize
 giveHandSize =
     { name = "hand"
-    , startPoint = ( 250, 750 )
+    , startPoint = ( 350, 750 )
     , length = 120
     , width = 80
-    , interval = 100
+    , interval = 110
     , offset = 15
     }
+
+
+giveSelectedSize : PileSize
+giveSelectedSize =
+    { name = "hand"
+    , startPoint = ( 600, 250 )
+    , length = 180
+    , width = 120
+    , interval = 120
+    , offset = 15
+    }
+
+
+selectedPile : Model -> List Card
+selectedPile model =
+    List.map (\x -> Tuple.first (takeCard model.hand x)) model.selected_cards
 
 
 clicked : Model -> List Point -> ( Bool, Int )
@@ -134,27 +150,63 @@ takeInt pile pos =
     ( element, npile )
 
 
-clickCard : Model -> Model
-clickCard model =
-    let
-        ( bool, index ) =
-            clicked model (createPosList model.hand giveHandSize)
+modifyPos : List a -> Int -> a -> List a
+modifyPos list pos value =
+    if pos <= List.length list && pos > 0 then
+        let
+            before =
+                List.take (pos - 1) list
 
-        card =
-            Tuple.first (takeCard model.hand index)
-
-        already_selected =
-            searchInt model.selected_cards index
-    in
-    if bool then
-        --if already selected then
-        -- drop
-        --else
-        if List.length model.selected_cards == 5 then
-            model
-
-        else
-            { model | selected_cards = index :: model.selected_cards }
+            after =
+                List.drop pos list
+        in
+        before ++ [ value ] ++ after
 
     else
+        list
+
+
+modifyBool : List Int -> List Bool -> List Bool
+modifyBool indexs bools =
+    if List.length indexs == 0 then
+        bools
+
+    else
+        let
+            ( value, nindexs ) =
+                takeInt indexs 1
+        in
+        modifyBool nindexs (modifyPos bools value True)
+
+
+clickCard : Model -> Model
+clickCard model =
+    if model.click_status == False then
         model
+
+    else
+        let
+            ( bool, index ) =
+                clicked model (createPosList model.hand giveHandSize)
+
+            card =
+                Tuple.first (takeCard model.hand index)
+
+            nmodel =
+                { model | click_status = False }
+
+            ( already_selected, nindex ) =
+                searchInt model.selected_cards index
+        in
+        if bool then
+            if already_selected then
+                { nmodel | selected_cards = Tuple.second (takeInt model.selected_cards nindex) }
+
+            else if List.length model.selected_cards == 5 then
+                nmodel
+
+            else
+                { nmodel | selected_cards = model.selected_cards ++ [ index ] }
+
+        else
+            nmodel
