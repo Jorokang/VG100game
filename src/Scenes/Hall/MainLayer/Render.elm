@@ -5,11 +5,13 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
+import Scenes.Hall.MainLayer.CardSelect exposing (Card, createPosList, giveHandSize)
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, Choice(..), EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChangeS)
+import Scenes.Level.Card.CardCreate exposing (modifyPos)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
 
@@ -138,33 +140,25 @@ rendercard env card =
         rend
 
 
-type alias Card =
-    { name : String
-    , id : Int
-    , cost : Int
-    , img : String
-    }
+renderHandCards : EnvC -> Model -> Renderable
+renderHandCards env model =
+    let
+        poss =
+            createPosList model.hand giveHandSize
 
+        temp =
+            List.map (\_ -> False) poss
 
-type alias PileSize =
-    { name : String
-    , startPoint : Point
-    , length : Float
-    , width : Float
-    , interval : Float
-    , offset : Float
-    }
+        selecteds =
+            temp
 
-
-giveHandSize : PileSize
-giveHandSize =
-    { name = "hand"
-    , startPoint = ( 250, 750 )
-    , length = 120
-    , width = 80
-    , interval = 100
-    , offset = 15
-    }
+        --modifyPos temp model.selected_pos True
+    in
+    Canvas.group
+        []
+        [ renderListCards env model.hand poss selecteds
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Available Cards"
+        ]
 
 
 renderListCards : EnvC -> List Card -> List Point -> List Bool -> Renderable

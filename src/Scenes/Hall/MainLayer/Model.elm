@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderMasking, renderStr, rendercard, renderhelp, renderlevel, rendersetting)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderStr, rendercard, renderhelp, renderlevel, rendersetting)
 import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, nullCoorData, point2Int)
@@ -144,7 +144,7 @@ viewModel env model =
                     renderlevel env model.level
 
                 Card ->
-                    rendercard env model.card
+                    renderHandCards env model
 
                 Hall ->
                     case model.hall_name of
