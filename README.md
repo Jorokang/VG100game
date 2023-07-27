@@ -48,11 +48,6 @@ Play out the card you choose by click it
 In player's turn, click the yellow circle to move it
 ```
 
-[Change turn]
-```
-change the turn between enemy's and player's by press "enter"
-```
-
 
 # Contributing
 No others' help

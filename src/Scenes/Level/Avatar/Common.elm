@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2
+    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
     )
 
 {-| Common module
@@ -40,6 +40,25 @@ type alias GridLoc =
     ( Int, Int )
 
 
+type alias AvatarAnima =
+    { a_pos : Point
+    , a_v : Float
+    , a_a : Float
+    , p_pos : Point
+    , p_v : Float
+    , p_a : Float
+    , lim : Float
+    }
+
+
+type alias AvatarSpirit =
+    { cur_spirit : Float
+    , spirit : Float
+    , max_spirit : Float
+    , spirit_v : Float
+    }
+
+
 type alias Model =
     { status : AvatarStatus
     , card_status : CardSelectionStatus
@@ -49,9 +68,30 @@ type alias Model =
     , avail_grids : List GridLoc
     , core_loc : GridLoc
     , map_size : GridLoc
-    , spirit : Int
-    , max_spirit : Int
     , lightRange : Float
+    , anima : AvatarAnima
+    , spirit : AvatarSpirit
+    }
+
+
+nullSpirit : AvatarSpirit
+nullSpirit =
+    { cur_spirit = 30
+    , spirit = 30
+    , max_spirit = 30
+    , spirit_v = 0.3
+    }
+
+
+defaultAnima : AvatarAnima
+defaultAnima =
+    { a_pos = ( 0, 0 )
+    , a_v = 0
+    , a_a = 0.1
+    , p_pos = ( 0, -0.2 )
+    , p_v = 0.2
+    , p_a = 0.1
+    , lim = 1.4
     }
 
 
@@ -67,9 +107,9 @@ nullModel =
     , avail_grids = []
     , core_loc = ( 0, 0 )
     , map_size = ( 0, 0 )
-    , spirit = 0
-    , max_spirit = 0
+    , spirit = nullSpirit
     , lightRange = 0
+    , anima = defaultAnima
     }
 
 
@@ -83,9 +123,9 @@ initAvatar1 size =
     , avail_grids = allGrids size
     , core_loc = ( 0, 0 )
     , map_size = size
-    , spirit = 30
-    , max_spirit = 30
+    , spirit = nullSpirit
     , lightRange = 2
+    , anima = defaultAnima
     }
 
 
@@ -96,12 +136,12 @@ initAvatarLevel1 =
     , target_loc = ( 0, 0 )
     , cur_loc = ( 0, 0 )
     , pos = ( 0, 0 )
-    , avail_grids = allGrids ( 5, 4 )
+    , avail_grids = allGrids ( 2, 2 )
     , core_loc = ( 0, 0 )
-    , map_size = ( 5, 4 )
-    , spirit = 30
-    , max_spirit = 30
+    , map_size = ( 2, 2 )
+    , spirit = nullSpirit
     , lightRange = 2
+    , anima = defaultAnima
     }
 
 
@@ -112,12 +152,28 @@ initAvatarLevel2 =
     , target_loc = ( 1, 0 )
     , cur_loc = ( 1, 0 )
     , pos = ( 0, 0 )
-    , avail_grids = allGrids ( 4, 6 )
+    , avail_grids = allGrids ( 4, 3 )
     , core_loc = ( 1, 0 )
-    , map_size = ( 4, 6 )
-    , spirit = 40
-    , max_spirit = 40
+    , map_size = ( 4, 3 )
+    , spirit = nullSpirit
     , lightRange = 2
+    , anima = defaultAnima
+    }
+
+
+initAvatarLevel3 : Model
+initAvatarLevel3 =
+    { status = AvatarActive
+    , card_status = CardType_None
+    , target_loc = ( 1, 0 )
+    , cur_loc = ( 1, 0 )
+    , pos = ( 0, 0 )
+    , avail_grids = allGrids ( 5, 5 )
+    , core_loc = ( 1, 0 )
+    , map_size = ( 5, 5 )
+    , spirit = nullSpirit
+    , lightRange = 2
+    , anima = defaultAnima
     }
 
 

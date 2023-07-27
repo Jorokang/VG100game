@@ -7,11 +7,12 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Json.Decode exposing (null)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, Model, initEnemy1, nullModel)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, MinorEyes, Model, initEnemy1, nullModel)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, upperCell)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, sizeChangeS, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Tuple
 
@@ -93,18 +94,98 @@ tentacleDir model loc =
 which is a circle exists as long as there is a block.
 -}
 renderEnemyBlockCentral : EnvC -> Model -> Cell EnemyBlock -> Renderable
-renderEnemyBlockCentral env model x =
+renderEnemyBlockCentral env model eblock =
     let
         color =
-            x.val.color
+            eblock.val.color
 
         loc =
-            x.loc
+            eblock.loc
+
+        ( locx, locy ) =
+            loc
+
+        rp =
+            coorChangeS env (grid2real loc) mapCoorData
+
+        rs =
+            sizeChangeS env ( cellLength, cellLength ) mapCoorData
+
+        f1 =
+            if List.any (\x -> x.loc == ( locx - 1, locy )) model.body then
+                1
+
+            else
+                0
+
+        f2 =
+            if List.any (\x -> x.loc == ( locx, locy - 1 )) model.body then
+                1
+
+            else
+                0
+
+        f3 =
+            if List.any (\x -> x.loc == ( locx + 1, locy )) model.body then
+                1
+
+            else
+                0
+
+        f4 =
+            if List.any (\x -> x.loc == ( locx, locy + 1 )) model.body then
+                1
+
+            else
+                0
+
+        flag =
+            f1 * 1 + f2 * 10 + f3 * 100 + f4 * 1000
+
+        rend_s =
+            case flag of
+                1 ->
+                    renderSprite env.globalData [] rp rs "e_3"
+
+                10 ->
+                    renderSprite env.globalData [] rp rs "e_4"
+
+                100 ->
+                    renderSprite env.globalData [] rp rs "e_1"
+
+                1000 ->
+                    renderSprite env.globalData [] rp rs "e_2"
+
+                11 ->
+                    renderSprite env.globalData [] rp rs "e_10"
+
+                110 ->
+                    renderSprite env.globalData [] rp rs "e_11"
+
+                1001 ->
+                    renderSprite env.globalData [] rp rs "e_9"
+
+                1100 ->
+                    renderSprite env.globalData [] rp rs "e_12"
+
+                1110 ->
+                    renderSprite env.globalData [] rp rs "e_7"
+
+                1101 ->
+                    renderSprite env.globalData [] rp rs "e_8"
+
+                1011 ->
+                    renderSprite env.globalData [] rp rs "e_5"
+
+                111 ->
+                    renderSprite env.globalData [] rp rs "e_6"
+
+                _ ->
+                    shapes [ fill color ] [ rect (coorChange env (grid2real loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
     in
     Canvas.group
         []
-        [ shapes [ fill color ] [ rect (coorChange env (grid2real loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
-        ]
+        [ rend_s ]
 
 
 {-| rendering a single tentacle
@@ -385,3 +466,25 @@ renderEnemyEye env model =
         [ shapes [ fill Color.yellow ] [ circle (coorChange env eye.pos mapCoorData) (lengthChange env 20 mapCoorData) ]
         , shapes [ fill Color.red ] [ circle (coorChange env pupil_pos mapCoorData) (lengthChange env 15 mapCoorData) ]
         ]
+
+
+renderEnemyMinorEyes : EnvC -> Model -> Renderable
+renderEnemyMinorEyes env model =
+    let
+        rend1 =
+            if model.meye1.active then
+                renderSprite env.globalData [] model.meye1.pos ( 100, 100 ) "pattern_1"
+
+            else
+                Canvas.empty
+
+        rend2 =
+            if model.meye2.active then
+                renderSprite env.globalData [] model.meye2.pos ( 100, 100 ) "pattern_1"
+
+            else
+                Canvas.empty
+    in
+    Canvas.group
+        []
+        [ rend1, rend2 ]

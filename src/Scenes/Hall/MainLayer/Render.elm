@@ -5,15 +5,18 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
+import Scenes.Hall.MainLayer.CardSelect exposing (Card, PileSize, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile)
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Cardbtn, Choice(..), EnvC, Helpbtn, Levelbtn, Model, Settingbtn, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, lengthChange, nullCoorData)
+import Scenes.Level.Card.CardCreate exposing (modifyPos)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, scalePoint, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (GridsStatus(..))
 
 
-{-| render the background of hall
+{-| for the hall
+render the background of hall
 -}
 renderBackground : EnvC -> Model -> Renderable
 renderBackground env _ =
@@ -40,14 +43,17 @@ renderStr env pos str =
     text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
+{-| for the hall
+render the hall with four buttons
+-}
 renderHall : EnvC -> Model -> Renderable
 renderHall env model =
     let
         rend =
-            [ renderButton env model.setting.open
-            , renderButton env model.level.open
-            , renderButton env model.card.open
-            , renderButton env model.help.open
+            [ renderSprite env.globalData [] (coorChangeS env model.card.open.pos nullCoorData) (sizeChangeS env ( 500, 700 ) nullCoorData) "cardback"
+            , renderSprite env.globalData [] (coorChangeS env model.help.open.pos nullCoorData) (sizeChangeS env ( 200, 200 ) nullCoorData) "help"
+            , renderSprite env.globalData [] (coorChangeS env model.setting.open.pos nullCoorData) (sizeChangeS env ( 200, 200 ) nullCoorData) "setting"
+            , renderSprite env.globalData [] (coorChangeS env model.level.open.pos nullCoorData) (sizeChangeS env ( 400, 630 ) nullCoorData) "level"
             ]
     in
     Canvas.group
@@ -55,45 +61,36 @@ renderHall env model =
         rend
 
 
-
-{- to do: render a img -}
-
-
-renderButton : EnvC -> Button -> Renderable
-renderButton env btn =
+{-| for a choice
+render the close button
+-}
+renderclose : EnvC -> Button -> Renderable
+renderclose env btn =
     let
-        ( sx, sy ) =
-            btn.size
+        size =
+            sizeChangeS env btn.size nullCoorData
 
-        text_pos =
-            addPoint ( sx / 2, sy / 2 ) btn.pos
+        x =
+            Tuple.first size
+
+        y =
+            Tuple.second size
     in
-    case btn.status of
-        ButtonInactive ->
-            Canvas.empty
-
-        ButtonActive ->
-            Canvas.group
-                []
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env text_pos nullCoorData) "btnimg"
-                ]
+    Canvas.group
+        []
+        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( x, y ) "close"
+        ]
 
 
-renderTime : EnvC -> Model -> Renderable
-renderTime env model =
-    renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Hall Time: " ++ String.fromInt model.time)
-
-
-
-{- render the different Hall parts -}
-
-
+{-| for the hall
+render the four different Hall parts
+-}
 rendersetting : EnvC -> Settingbtn -> Renderable
 rendersetting env set =
     let
         rend =
-            [ renderButton env set.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here"
+            [ renderclose env set.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Setting:"
             ]
     in
     Canvas.group
@@ -105,8 +102,8 @@ renderhelp : EnvC -> Helpbtn -> Renderable
 renderhelp env help =
     let
         rend =
-            [ renderButton env help.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env help.close.pos nullCoorData) "help here"
+            [ renderclose env help.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
             ]
     in
     Canvas.group
@@ -118,13 +115,11 @@ renderlevel : EnvC -> Levelbtn -> Renderable
 renderlevel env level =
     let
         rend =
-            [ renderButton env level.close
-            , renderButton env level.up
-            , renderButton env level.down
-            , renderButton env level.ok
-            , renderStr env (coorChange env ( 500, 700 ) nullCoorData) "Level close"
-            , renderStr env (coorChange env ( 200, 500 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env level.close.pos nullCoorData) "level here"
+            [ renderclose env level.close
+            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env level.down.size nullCoorData) "down"
+            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env level.up.size nullCoorData) "up"
+            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env level.ok.size nullCoorData) "ok"
+            , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
             ]
     in
     Canvas.group
@@ -136,8 +131,8 @@ rendercard : EnvC -> Cardbtn -> Renderable
 rendercard env card =
     let
         rend =
-            [ renderButton env card.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env card.close.pos nullCoorData) "card here"
+            [ renderclose env card.close
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Select card:"
             ]
     in
     Canvas.group
@@ -145,10 +140,81 @@ rendercard env card =
         rend
 
 
+renderHandCards : EnvC -> Model -> Renderable
+renderHandCards env model =
+    let
+        poss =
+            createPosList model.hand giveHandSize
 
-{- let the background faded -}
+        temp =
+            List.map (\_ -> False) poss
+
+        selecteds =
+            modifyBool model.selected_cards temp
+    in
+    Canvas.group
+        []
+        [ renderListCards env model.hand poss selecteds giveHandSize
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Available Cards"
+        ]
 
 
+renderSelectedCards : EnvC -> Model -> Renderable
+renderSelectedCards env model =
+    let
+        target =
+            selectedPile model
+
+        poss =
+            createPosList target giveSelectedSize
+
+        temp =
+            List.map (\_ -> False) poss
+
+        --modifyPos temp model.selected_pos True
+    in
+    Canvas.group
+        []
+        [ renderListCards env target poss temp giveSelectedSize
+        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 300 ) nullCoorData) "Selected Cards"
+        ]
+
+
+renderListCards : EnvC -> List Card -> List Point -> List Bool -> PileSize -> Renderable
+renderListCards env cards poss selecteds size =
+    Canvas.group
+        []
+        (List.map4 (renderOneCard env) cards poss selecteds (List.repeat (List.length poss) size))
+
+
+renderOneCard : EnvC -> Card -> Point -> Bool -> PileSize -> Renderable
+renderOneCard env card pos selected size =
+    let
+        color =
+            card.img
+
+        width =
+            size.width
+
+        length =
+            size.length
+
+        offset =
+            size.offset
+    in
+    if color == "cardback" then
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
+
+    else if selected then
+        renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color
+
+    else
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( width, length ) nullCoorData) color
+
+
+{-| for the hall
+let the background faded when click a button
+-}
 renderMasking : EnvC -> Model -> Renderable
 renderMasking env model =
     let
