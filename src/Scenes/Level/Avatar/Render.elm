@@ -243,7 +243,7 @@ renderSpirit env model =
             addPoint ( box_l, box_w ) ( -30, -14 )
 
         spirit_l =
-            spirit_max_l / toFloat model.max_spirit * toFloat model.spirit
+            spirit_max_l / model.spirit.max_spirit * model.spirit.cur_spirit
 
         spirit_color =
             Color.rgb255 255 240 245

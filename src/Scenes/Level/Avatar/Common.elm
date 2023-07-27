@@ -1,6 +1,6 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarAnima, AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
+    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
     )
 
 {-| Common module
@@ -51,6 +51,14 @@ type alias AvatarAnima =
     }
 
 
+type alias AvatarSpirit =
+    { cur_spirit : Float
+    , spirit : Float
+    , max_spirit : Float
+    , spirit_v : Float
+    }
+
+
 type alias Model =
     { status : AvatarStatus
     , card_status : CardSelectionStatus
@@ -60,10 +68,18 @@ type alias Model =
     , avail_grids : List GridLoc
     , core_loc : GridLoc
     , map_size : GridLoc
-    , spirit : Int
-    , max_spirit : Int
     , lightRange : Float
     , anima : AvatarAnima
+    , spirit : AvatarSpirit
+    }
+
+
+nullSpirit : AvatarSpirit
+nullSpirit =
+    { cur_spirit = 30
+    , spirit = 30
+    , max_spirit = 30
+    , spirit_v = 0.3
     }
 
 
@@ -91,8 +107,7 @@ nullModel =
     , avail_grids = []
     , core_loc = ( 0, 0 )
     , map_size = ( 0, 0 )
-    , spirit = 0
-    , max_spirit = 0
+    , spirit = nullSpirit
     , lightRange = 0
     , anima = defaultAnima
     }
@@ -108,8 +123,7 @@ initAvatar1 size =
     , avail_grids = allGrids size
     , core_loc = ( 0, 0 )
     , map_size = size
-    , spirit = 30
-    , max_spirit = 30
+    , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
     }
@@ -125,8 +139,7 @@ initAvatarLevel1 =
     , avail_grids = allGrids ( 2, 2 )
     , core_loc = ( 0, 0 )
     , map_size = ( 2, 2 )
-    , spirit = 30
-    , max_spirit = 30
+    , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
     }
@@ -142,8 +155,7 @@ initAvatarLevel2 =
     , avail_grids = allGrids ( 4, 3 )
     , core_loc = ( 1, 0 )
     , map_size = ( 4, 3 )
-    , spirit = 40
-    , max_spirit = 40
+    , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
     }
@@ -159,8 +171,7 @@ initAvatarLevel3 =
     , avail_grids = allGrids ( 5, 5 )
     , core_loc = ( 1, 0 )
     , map_size = ( 5, 5 )
-    , spirit = 60
-    , max_spirit = 60
+    , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
     }
