@@ -63,7 +63,7 @@ renderStoryItem env model =
                     renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
 
                 rend_t =
-                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 )) i.str
+                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 500, 940 )) i.str
             in
             Canvas.group
                 []

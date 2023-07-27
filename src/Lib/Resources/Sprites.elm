@@ -85,4 +85,5 @@ allTexture =
     , ( "text_box", getResourcePath "img/text_box.png" )
     , ( "mouse_0", getResourcePath "img/mouse_0.png" )
     , ( "laser", getResourcePath "img/laser.png" )
+    , ( "sun", getResourcePath "img/sun_1.png" )
     ]

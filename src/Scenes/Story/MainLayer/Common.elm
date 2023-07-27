@@ -84,14 +84,14 @@ diaryItem =
 
 sunItem : StoryItem
 sunItem =
-    { c_pos = ( 600, 800 )
-    , c_size = ( 100, 130 )
-    , c_sprite_name = "family_painting_1"
+    { c_pos = ( 150, 60 )
+    , c_size = ( 200, 200 )
+    , c_sprite_name = "sun"
     , c_scale = 1
     , v_pos = ( 500, 350 )
-    , v_size = ( 800, 469 )
-    , v_sprite_name = "family_painting_2"
-    , str = "Mum and Dad and Me"
+    , v_size = ( 500, 500 )
+    , v_sprite_name = "sun"
+    , str = "A fake sun painting pasted on the wall."
     }
 
 
