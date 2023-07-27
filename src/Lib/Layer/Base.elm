@@ -67,6 +67,7 @@ type LayerMsg
     | LayerMsgAvatarModifyLight Float
     | LayerMsgIncreaseStamina Int Int
     | LayerMsgGenTableLight GridLoc GridLoc Int
+    | LayerGoToLevel String (List Int)
     | NullLayerMsg
 
 

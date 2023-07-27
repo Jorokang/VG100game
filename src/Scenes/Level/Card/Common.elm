@@ -1,4 +1,7 @@
-module Scenes.Level.Card.Common exposing (nullModel, EnvC)
+module Scenes.Level.Card.Common exposing
+    ( nullModel, EnvC
+    , selectedModel
+    )
 
 {-| Common module
 
@@ -11,6 +14,26 @@ import Random exposing (Seed, initialSeed)
 import Scenes.Level.Card.CardCreate exposing (Card, CardStatus(..), Model, giveErrorCard, initializeDeck)
 import Scenes.Level.Card.CardSystem exposing (drawCard, shuffle)
 import Scenes.Level.LayerBase exposing (CommonData)
+
+
+selectedModel : List Int -> Model
+selectedModel cards =
+    let
+        model =
+            { hand = []
+            , discard = []
+            , deck = []
+            , seed = initialSeed 42
+            , status = Active
+            , point = ( 0, 0 )
+            , spirit = 30
+            , click_status = False
+            , selected_pos = -1
+            , selected_card = giveErrorCard
+            , available = cards
+            }
+    in
+    drawCard (shuffle { model | deck = initializeDeck model.available }) 5
 
 
 nullModel : Model
