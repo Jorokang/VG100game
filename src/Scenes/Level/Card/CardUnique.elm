@@ -62,11 +62,6 @@ costSpirit model =
     [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ]
 
 
-enoughTurn : Model -> Bool
-enoughTurn model =
-    model.turn_status > 0
-
-
 enoughSpirit : Model -> Bool
 enoughSpirit model =
     model.spirit > model.selected_card.cost
@@ -117,7 +112,7 @@ clickCard model =
 
 selectCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
 selectCard model card =
-    if enoughSpirit model && enoughTurn model then
+    if enoughSpirit model then
         case card.id of
             1 ->
                 ( model, [ ( LayerName "Avatar", LayerMsgCardType 1 ) ] )
@@ -161,7 +156,7 @@ selectCard model card =
 
 endCard : Model -> Card -> ( Model, List ( LayerTarget, LayerMsg ) )
 endCard model card =
-    if enoughSpirit model && enoughTurn model then
+    if enoughSpirit model then
         case card.id of
             1 ->
                 ( model, [] )
@@ -170,7 +165,7 @@ endCard model card =
                 ( model, [] )
 
             3 ->
-                ( { model | turn_status = model.turn_status - 1 }, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
+                ( model, [ ( LayerName "Avatar", LayerMsgModifySpirit 8 ), ( LayerName "Card", LayerMsgCardType 3 ) ] )
 
             4 ->
                 ( model, [ ( LayerName "Avatar", LayerMsgAvatarModifyLight 1 ), ( LayerName "Card", LayerMsgCardType 4 ) ] )

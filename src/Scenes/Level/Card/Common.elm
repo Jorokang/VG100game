@@ -23,7 +23,6 @@ nullModel =
             , seed = initialSeed 42
             , status = Active
             , point = ( 0, 0 )
-            , turn_status = 5
             , spirit = 30
             , click_status = False
             , selected_pos = -1

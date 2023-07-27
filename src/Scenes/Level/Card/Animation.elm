@@ -1,8 +1,13 @@
 module Scenes.Level.Card.Animation exposing (..)
 
 import Canvas exposing (Point)
-import Scenes.Level.Card.CardCreate exposing (CardObject, Model)
+import Scenes.Level.Card.CardCreate exposing (CardObject, Model, giveHandSize)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
+
+
+type MoveStatus
+    = Moving Point Int
+    | Null
 
 
 type alias MoveData =
@@ -21,7 +26,15 @@ nullMoveData =
 
 getMoveTarget : Model -> Point
 getMoveTarget model =
-    ( 0, 0 )
+    let
+        size =
+            giveHandSize
+    in
+    addPoint size.startPoint (scalePoint ( size.interval, 0 ) (toFloat (List.length model.hand)))
+
+
+
+--( 0, 0 )
 
 
 moveCard : CardObject -> MoveData -> CardObject

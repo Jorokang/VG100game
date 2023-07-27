@@ -27,7 +27,6 @@ type alias Model =
     , seed : Seed
     , status : CardStatus
     , point : Point
-    , turn_status : Int
     , spirit : Int
     , click_status : Bool
     , selected_pos : Int

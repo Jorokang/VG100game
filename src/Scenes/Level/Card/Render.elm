@@ -72,9 +72,8 @@ renderTestMessage env model =
     in
     Canvas.group
         []
-        [ renderStr env (coorChange env ( 200, 810 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
-        , renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
-        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("turn_status:" ++ String.fromInt model.turn_status)
+        [ renderStr env (coorChange env ( 200, 830 ) nullCoorData) ("decks:" ++ String.fromInt (List.length model.deck) ++ pileToString model.deck)
+        , renderStr env (coorChange env ( 200, 850 ) nullCoorData) ("spirits:" ++ String.fromInt model.spirit)
         , renderStr env (coorChange env ( 200, 870 ) nullCoorData) ("model_status:" ++ str)
         , renderStr env (coorChange env ( 200, 890 ) nullCoorData) "Card System version: 0.3.9"
         ]
