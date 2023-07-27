@@ -2,7 +2,7 @@ module Scenes.Hall.MainLayer.Update exposing (..)
 
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Levelbtn, Model)
+import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Hallname(..), Levelbtn, Model)
 import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
@@ -320,3 +320,12 @@ inhall env model ( a, b ) =
 
         Hall ->
             ( { model | choice = Hall }, [], env )
+
+
+ifquit : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+ifquit env model ( a, b ) =
+    if judgeMouseRect ( a, b ) ( 0, 0 ) ( 1900, 1620 ) then
+        ( { model | choice = Hall, hall_name = Normal }, [], env )
+
+    else
+        ( model, [], env )

@@ -6,6 +6,7 @@ module Scenes.Hall.MainLayer.Common exposing (..)
 
 -}
 
+import Base exposing (Msg(..))
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
@@ -24,9 +25,12 @@ type ButtonStatus
 
 
 
---the states of Hall, decide what to render
+--
 
 
+{-| choice of hall
+the states of Hall, decide what to render
+-}
 type Choice
     = Setting
     | Help
@@ -42,10 +46,9 @@ type alias Button =
     }
 
 
-
---all interface of set
-
-
+{-| choice of hall
+all interface of set
+-}
 type alias Settingbtn =
     { open : Button
     , close : Button
@@ -67,10 +70,11 @@ initsetting =
     }
 
 
+{-| choice of hall
 
---all interface of help
+all interface of help
 
-
+-}
 type alias Helpbtn =
     { open : Button
     , close : Button
@@ -92,10 +96,12 @@ inithelp =
     }
 
 
-
---open the level page, close it, up btn add the level number, down decrease it, confirm it
-
-
+{-| interface of level
+open the level page,
+close it,
+up btn add the level number, down decrease it,
+ok confirm it
+-}
 type alias Levelbtn =
     { open : Button
     , close : Button
@@ -137,6 +143,12 @@ initlevel =
     }
 
 
+{-| choice of card
+open and close and interface
+
+add things about card below
+
+-}
 type alias Cardbtn =
     { open : Button
     , close : Button
@@ -160,6 +172,12 @@ initcard =
     }
 
 
+type Hallname
+    = Win
+    | Lose
+    | Normal
+
+
 {-| Model
 Add your own data here.
 -}
@@ -167,7 +185,7 @@ type alias Model =
     { status : HallStatus
     , time : Int
     , click_pos : Point
-    , hall_name : String
+    , hall_name : Hallname
     , setting : Settingbtn
     , level : Levelbtn
     , help : Helpbtn
@@ -181,7 +199,7 @@ nullModel =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "Hall"
+    , hall_name = Normal
     , setting = initsetting
     , level = initlevel
     , help = inithelp
@@ -195,7 +213,7 @@ initModelWin =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "You defeat the enemy in Level 1 !"
+    , hall_name = Win
     , setting = initsetting
     , level = initlevel
     , help = inithelp
@@ -209,7 +227,7 @@ initModelLose =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
-    , hall_name = "You lost all light."
+    , hall_name = Lose
     , setting = initsetting
     , level = initlevel
     , help = inithelp
