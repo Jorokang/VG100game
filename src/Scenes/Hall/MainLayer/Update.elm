@@ -151,3 +151,177 @@ checkupdown lev ( a, b ) =
 
     else
         lev
+
+
+inlevel : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+inlevel env model ( a, b ) =
+    let
+        lev =
+            model.level
+    in
+    if ifClicked lev.close ( a, b ) then
+        ( { model
+            | choice = Hall
+            , level =
+                { lev
+                    | open = buttonAct lev.open
+                    , close = buttonInact lev.close
+                    , up = buttonInact lev.up
+                    , down = buttonInact lev.down
+                    , ok = buttonInact lev.ok
+                }
+          }
+        , []
+        , env
+        )
+
+    else if ifClicked model.level.ok ( a, b ) then
+        levelokclicked env model
+
+    else
+        ( { model | level = checkupdown lev ( a, b ) }, [], env )
+
+
+inhelp : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+inhelp env model ( a, b ) =
+    let
+        help =
+            model.help
+    in
+    if ifClicked help.close ( a, b ) then
+        ( { model
+            | choice = Hall
+            , help =
+                { help
+                    | open = buttonAct help.open
+                    , close = buttonInact help.close
+                }
+          }
+        , []
+        , env
+        )
+
+    else
+        ( model, [], env )
+
+
+incard : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+incard env model ( a, b ) =
+    let
+        card =
+            model.card
+    in
+    if ifClicked card.close ( a, b ) then
+        ( { model
+            | choice = Hall
+            , card =
+                { card
+                    | open = buttonAct card.open
+                    , close = buttonInact card.close
+                }
+          }
+        , []
+        , env
+        )
+
+    else
+        ( model, [], env )
+
+
+insetting : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+insetting env model ( a, b ) =
+    let
+        set =
+            model.setting
+    in
+    if ifClicked set.close ( a, b ) then
+        ( { model
+            | choice = Hall
+            , setting =
+                { set
+                    | open = buttonAct set.open
+                    , close = buttonInact set.close
+                }
+          }
+        , []
+        , env
+        )
+
+    else
+        ( model, [], env )
+
+
+inhall : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+inhall env model ( a, b ) =
+    let
+
+        lev =
+            model.level
+
+        set =
+            model.setting
+
+        help =
+            model.help
+
+        card =
+            model.card
+    in
+    case checkopen model ( a, b ) of
+        Level ->
+            ( { model
+                | choice = Level
+                , level =
+                    { lev
+                        | open = buttonInact lev.open
+                        , close = buttonAct lev.close
+                        , up = buttonAct lev.up
+                        , down = buttonAct lev.down
+                        , ok = buttonAct lev.ok
+                    }
+              }
+            , []
+            , env
+            )
+
+        Help ->
+            ( { model
+                | choice = Help
+                , help =
+                    { help
+                        | open = buttonInact help.open
+                        , close = buttonAct help.close
+                    }
+              }
+            , []
+            , env
+            )
+
+        Card ->
+            ( { model
+                | choice = Card
+                , card =
+                    { card
+                        | open = buttonInact card.open
+                        , close = buttonAct card.close
+                    }
+              }
+            , []
+            , env
+            )
+
+        Setting ->
+            ( { model
+                | choice = Setting
+                , setting =
+                    { set
+                        | open = buttonInact set.open
+                        , close = buttonAct set.close
+                    }
+              }
+            , []
+            , env
+            )
+
+        Hall ->
+            ( { model | choice = Hall }, [], env )

@@ -69,7 +69,7 @@ renderclose env btn =
     in
     Canvas.group
         []
-        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 2 * x, 3 * y ) "close"
+        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( x, y ) "close"
         ]
 
 
@@ -82,7 +82,7 @@ rendersetting env set =
     let
         rend =
             [ renderclose env set.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env set.close.pos nullCoorData) "setting here: abababa"
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Setting:"
             ]
     in
     Canvas.group
@@ -95,7 +95,7 @@ renderhelp env help =
     let
         rend =
             [ renderclose env help.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env help.close.pos nullCoorData) "help here: ababababa"
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
             ]
     in
     Canvas.group
@@ -124,7 +124,7 @@ rendercard env card =
     let
         rend =
             [ renderclose env card.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env card.close.pos nullCoorData) "card here"
+            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Select card:"
             ]
     in
     Canvas.group
