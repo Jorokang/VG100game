@@ -55,7 +55,7 @@ handleLayerMsgLevelComplete env model x level_id =
                     Just (genTransition 300 100 levelTransitionOut0 hallTransitionIn0)
             in
             --( model, [ SOMChangeScene ( HallInitData {initHallLoose|level_id=level_id}, "Hall", trans ) ], env )
-            ( model, [ SOMChangeScene ( StoryInitData {id=level_id}, "Story", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData { id = level_id }, "Story", trans ) ], env )
 
         1 ->
             let
@@ -63,7 +63,7 @@ handleLayerMsgLevelComplete env model x level_id =
                     Just (genTransition 150 100 levelTransitionOut1 hallTransitionIn1)
             in
             --( model, [ SOMChangeScene ( HallInitData {initHallWin|level_id = level_id}, "Hall", trans ) ], env )
-            ( model, [ SOMChangeScene ( StoryInitData {id=level_id}, "Story", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData { id = level_id }, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )

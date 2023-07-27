@@ -2,11 +2,11 @@ module Scenes.Story.MainLayer.Update exposing (..)
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
+import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryItem, StoryStatus(..), nullStoryItem)
 import Lib.Resources.Sprites exposing (getResourcePath)
-import Lib.Audio.Base exposing (AudioOption(..))
+import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryItem, StoryStatus(..), nullStoryItem)
 
 
 {-| Judge the mouse click position at Room status
@@ -15,10 +15,10 @@ judgeClickItemC : Model -> Point -> StoryStatus
 judgeClickItemC model m_pos =
     if judgeMouseRect m_pos model.family_painting.c_pos model.family_painting.c_size then
         StoryFamilyPainting
-    
+
     else if judgeMouseRect m_pos model.sun.c_pos model.sun.c_size then
         StorySun
-    
+
     else if judgeMouseRect m_pos model.diary.c_pos model.diary.c_size then
         StoryDiary
 
@@ -43,10 +43,10 @@ judgeClickItemV model m_pos =
 
                 StoryHall ->
                     ( model.button_hall, True )
-                
+
                 StoryDiary ->
                     ( model.diary, True )
-                
+
                 StorySun ->
                     ( model.diary, True )
 
@@ -78,13 +78,13 @@ updateModelRoom env model m_pos =
             , []
             , env
             )
-            
+
         StorySun ->
             ( { model | status = StorySun }
             , []
             , env
             )
-            
+
         StoryDiary ->
             ( { model | status = StoryDiary }
             , []

@@ -44,7 +44,7 @@ handleLayerMsg env lmsg model =
                 trans =
                     Just (genTransition 100 100 teachingTransitionOut storyTransitionIn)
             in
-            ( model, [ SOMChangeScene ( StoryInitData {id=0}, "Story", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData { id = 0 }, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )

@@ -27,6 +27,9 @@ Examples:
 [
 ( "ball", getResourcePath "img/ball.png" ),
 ( "car", getResourcePath "img/car.jpg" )
+][
+( "ball", getResourcePath "img/ball.png" ),
+( "car", getResourcePath "img/car.jpg" )
 ]
 
 -}
@@ -86,4 +89,6 @@ allTexture =
     , ( "mouse_0", getResourcePath "img/mouse_0.png" )
     , ( "laser", getResourcePath "img/laser.png" )
     , ( "sun", getResourcePath "img/sun_1.png" )
+    , ( "diary_1", getResourcePath "img/diary_1.png" )
+    , ( "diary_2", getResourcePath "img/diary_2.png" )
     ]

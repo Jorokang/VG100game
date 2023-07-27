@@ -19,8 +19,7 @@ import Scenes.Story.LayerBase exposing (CommonData, nullCommonData)
 {-| Init Data
 -}
 type alias StoryInit =
-    {
-        id:Int
+    { id : Int
     }
 
 
@@ -28,8 +27,7 @@ type alias StoryInit =
 -}
 nullStoryInit : StoryInit
 nullStoryInit =
-    {
-        id = 0
+    { id = 0
     }
 
 

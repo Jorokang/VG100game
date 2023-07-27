@@ -1,6 +1,6 @@
 module Scenes.Story.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , StoryItem, StoryStatus(..), initModel1, initModel0, initModel2, initModel3, nullStoryItem
+    , StoryItem, StoryStatus(..), initModel0, initModel1, initModel2, initModel3, nullStoryItem
     )
 
 {-| Common module
@@ -70,21 +70,23 @@ familyPaintingItem =
     , str = "Mum and Dad and Me"
     }
 
+
 diaryItem : StoryItem
 diaryItem =
-    { c_pos = ( 300, 800 )
-    , c_size = ( 100, 130 )
-    , c_sprite_name = "family_painting_1"
+    { c_pos = ( 1660, 450 )
+    , c_size = ( 200, 130 )
+    , c_sprite_name = "diary_1"
     , c_scale = 1
     , v_pos = ( 500, 350 )
-    , v_size = ( 800, 469 )
-    , v_sprite_name = "family_painting_2"
-    , str = "Mum and Dad and Me"
+    , v_size = ( 960, 720 )
+    , v_sprite_name = "diary_2"
+    , str = "diary"
     }
+
 
 sunItem : StoryItem
 sunItem =
-    { c_pos = ( 150, 60 )
+    { c_pos = ( 130, 60 )
     , c_size = ( 200, 200 )
     , c_sprite_name = "sun"
     , c_scale = 1
@@ -127,6 +129,7 @@ initModel0 =
     , diary = nullStoryItem
     }
 
+
 initModel1 : Model
 initModel1 =
     { status = StoryRoom
@@ -136,6 +139,7 @@ initModel1 =
     , diary = nullStoryItem
     }
 
+
 initModel2 : Model
 initModel2 =
     { status = StoryRoom
@@ -144,6 +148,7 @@ initModel2 =
     , sun = sunItem
     , diary = nullStoryItem
     }
+
 
 initModel3 : Model
 initModel3 =

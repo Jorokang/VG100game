@@ -87,7 +87,7 @@ renderStoryItem env model =
                 [ rend_s
                 , rend_t
                 ]
-        
+
         StoryDiary ->
             let
                 i =
@@ -112,8 +112,10 @@ renderStoryItem env model =
 
                 i2 =
                     model.button_hall
+
                 i3 =
                     model.diary
+
                 i4 =
                     model.sun
 
@@ -125,7 +127,7 @@ renderStoryItem env model =
 
                 ( pos3, size3 ) =
                     realPosItemC i3
-                    
+
                 ( pos4, size4 ) =
                     realPosItemC i4
 
@@ -134,10 +136,10 @@ renderStoryItem env model =
 
                 rend2 =
                     renderSprite env.globalData [] pos2 size2 i2.c_sprite_name
-                    
+
                 rend3 =
                     renderSprite env.globalData [] pos3 size3 i3.c_sprite_name
-                    
+
                 rend4 =
                     renderSprite env.globalData [] pos4 size4 i4.c_sprite_name
             in
