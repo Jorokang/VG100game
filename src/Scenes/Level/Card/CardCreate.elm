@@ -3,14 +3,44 @@ module Scenes.Level.Card.CardCreate exposing (..)
 --card name and the cost
 
 import Canvas exposing (Point)
-import Color exposing (Color, black, blue, brown, green, grey, lightGreen, lightGrey, lightRed, orange, purple, red, white, yellow)
+import Random exposing (Seed)
+import Scenes.Level.Card.Animation exposing (MoveStatus)
+
+
+{-| Model
+Add your own data here.
+-}
+type CardStatus
+    = Active
+    | CardMoving
+    | Playing
+    | Inactive
+
+
+
+--take card from deck to hand, remove it to discard
+
+
+type alias Model =
+    { hand : List Card
+    , discard : List Card
+    , deck : List Card
+    , seed : Seed
+    , status : CardStatus
+    , point : Point
+    , spirit : Int
+    , click_status : Bool
+    , selected_pos : Int
+    , selected_card : Card
+    , available : List Int
+    }
 
 
 type alias Card =
     { name : String
     , id : Int
     , cost : Int
-    , img : Color
+    , img : String
     }
 
 
@@ -19,7 +49,8 @@ type alias CardObject =
     , pos : Point
     , size : Point
     , selected : Bool
-    , img : Color
+    , status : MoveStatus
+    , img : String
     }
 
 
@@ -35,32 +66,32 @@ type alias PileSize =
 
 giveBackCard : Card
 giveBackCard =
-    { name = "back", id = 0, cost = 0, img = white }
+    { name = "back", id = 0, cost = 0, img = "cardback" }
 
 
 giveErrorCard : Card
 giveErrorCard =
-    { name = "error", id = -1, cost = -1, img = red }
+    { name = "error", id = -1, cost = -1, img = "cardback" }
 
 
 giveErrorCard_2 : Card
 giveErrorCard_2 =
-    { name = "error_take", id = -2, cost = -1, img = red }
+    { name = "error_take", id = -2, cost = -1, img = "cardback" }
 
 
 giveCardList : List Card
 giveCardList =
-    [ { name = "purification", id = 1, cost = 2, img = grey }
-    , { name = "guard", id = 2, cost = 2, img = brown }
-    , { name = "take a break", id = 3, cost = 0, img = green }
-    , { name = "the light of bravery", id = 4, cost = 1, img = yellow }
-    , { name = "light up the hope", id = 5, cost = 3, img = blue }
-    , { name = "call up the past", id = 6, cost = 2, img = purple }
-    , { name = "endless hope", id = 7, cost = 5, img = black }
-    , { name = "power of courage", id = 8, cost = 4, img = orange }
-    , { name = "take a table light", id = 9, cost = 6, img = lightGreen }
-    , { name = "fire up the spirit", id = 10, cost = 2, img = lightRed }
-    , { name = "forgetting", id = 11, cost = 10, img = lightGrey }
+    [ { name = "purify", id = 1, cost = 2, img = "card1" }
+    , { name = "guard", id = 2, cost = 2, img = "card2" }
+    , { name = "take a break", id = 3, cost = 0, img = "card3" }
+    , { name = "light up", id = 4, cost = 1, img = "card4" }
+    , { name = "hope", id = 5, cost = 3, img = "card5" }
+    , { name = "call up the past", id = 6, cost = 2, img = "cardback" }
+    , { name = "courage", id = 8, cost = 4, img = "card8" }
+    , { name = "endless hope", id = 7, cost = 5, img = "card7" }
+    , { name = "sunrise", id = 9, cost = 6, img = "card9" }
+    , { name = "thrive", id = 10, cost = 2, img = "card10" }
+    , { name = "forget", id = 11, cost = 10, img = "card11" }
     ]
 
 
@@ -78,7 +109,7 @@ giveCard id =
 giveHandSize : PileSize
 giveHandSize =
     { name = "hand"
-    , startPoint = ( 25, 725 )
+    , startPoint = ( 250, 750 )
     , length = 120
     , width = 80
     , interval = 100
@@ -89,7 +120,7 @@ giveHandSize =
 giveDeckSize : PileSize
 giveDeckSize =
     { name = "pile"
-    , startPoint = ( 850, 100 )
+    , startPoint = ( 100, 680 )
     , length = 120
     , width = 80
     , interval = 3
@@ -100,7 +131,7 @@ giveDeckSize =
 giveDiscardSize : PileSize
 giveDiscardSize =
     { name = "pile"
-    , startPoint = ( 850, 300 )
+    , startPoint = ( 100, 820 )
     , length = 120
     , width = 80
     , interval = 3
@@ -110,7 +141,7 @@ giveDiscardSize =
 
 giveBackPile : List Card -> List Card
 giveBackPile pile =
-    List.map (\x -> giveBackCard) pile
+    List.map (\_ -> giveBackCard) pile
 
 
 modifyPos : List a -> Int -> a -> List a
@@ -127,3 +158,17 @@ modifyPos list pos value =
 
     else
         list
+
+
+giveTypeLimit : Int
+giveTypeLimit =
+    4
+
+
+initializeDeck : List Int -> List Card
+initializeDeck ava =
+    let
+        draft =
+            List.concat <| List.map (\x -> List.repeat giveTypeLimit x) ava
+    in
+    List.map giveCard draft
