@@ -593,7 +593,7 @@ renderRevealScroll env model =
             "opacity(" ++ String.fromInt (round model.scroll_opacity) ++ "%)"
 
         rend_c =
-            renderSprite env.globalData [ filter op ] ( 140, 680 ) ( 520, 790 ) "cardback"
+            renderSprite env.globalData [ filter op ] ( 140, 680 ) ( 160, 200 ) "card9"
 
         rend =
             [ rend_t
@@ -620,7 +620,7 @@ renderCard1 env model =
             renderCandle env model
 
         rend_c =
-            renderSprite env.globalData [] ( 140, 680 ) ( 520, 790 ) "cardback"
+            renderSprite env.globalData [] ( 140, 680 ) ( 160, 200 ) "card9"
 
         rend =
             [ rend_t
@@ -647,7 +647,7 @@ renderCard2 env model =
             renderCandle env model
 
         rend_c =
-            renderSprite env.globalData [] ( 140, 680 ) ( 520, 790 ) "cardback"
+            renderSprite env.globalData [] ( 140, 680 ) ( 160, 200 ) "card9"
 
         pos1 =
             addPoint model.pos ( -50, -50 )
