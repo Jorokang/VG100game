@@ -64,7 +64,7 @@ renderTestMessage env model =
                 Inactive ->
                     "Inactive"
 
-                Moving ->
+                CardMoving ->
                     "Moving"
 
                 Playing ->

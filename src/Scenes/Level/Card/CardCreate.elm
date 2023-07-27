@@ -4,12 +4,16 @@ module Scenes.Level.Card.CardCreate exposing (..)
 
 import Canvas exposing (Point)
 import Random exposing (Seed)
-import Scenes.Level.Card.Animation exposing (MoveStatus)
 
 
 {-| Model
 Add your own data here.
 -}
+type MoveStatus
+    = Moving Point Int
+    | Rest
+
+
 type CardStatus
     = Active
     | CardMoving

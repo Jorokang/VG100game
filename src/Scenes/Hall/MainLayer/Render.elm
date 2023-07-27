@@ -138,6 +138,67 @@ rendercard env card =
         rend
 
 
+type alias Card =
+    { name : String
+    , id : Int
+    , cost : Int
+    , img : String
+    }
+
+
+type alias PileSize =
+    { name : String
+    , startPoint : Point
+    , length : Float
+    , width : Float
+    , interval : Float
+    , offset : Float
+    }
+
+
+giveHandSize : PileSize
+giveHandSize =
+    { name = "hand"
+    , startPoint = ( 250, 750 )
+    , length = 120
+    , width = 80
+    , interval = 100
+    , offset = 15
+    }
+
+
+renderListCards : EnvC -> List Card -> List Point -> List Bool -> Renderable
+renderListCards env cards poss selecteds =
+    Canvas.group
+        []
+        (List.map3 (renderOneCard env) cards poss selecteds)
+
+
+renderOneCard : EnvC -> Card -> Point -> Bool -> Renderable
+renderOneCard env card pos selected =
+    let
+        color =
+            card.img
+
+        width =
+            giveHandSize.width
+
+        length =
+            giveHandSize.length
+
+        offset =
+            giveHandSize.offset
+    in
+    if color == "cardback" then
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
+
+    else if selected then
+        renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color
+
+    else
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( width, length ) nullCoorData) color
+
+
 {-| for the hall
 let the background faded when click a button
 -}

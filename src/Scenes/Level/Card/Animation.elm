@@ -1,13 +1,8 @@
 module Scenes.Level.Card.Animation exposing (..)
 
 import Canvas exposing (Point)
-import Scenes.Level.Card.CardCreate exposing (CardObject, CardStatus(..), Model, giveHandSize)
+import Scenes.Level.Card.CardCreate exposing (CardObject, CardStatus(..), Model, MoveStatus(..), giveHandSize)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
-
-
-type MoveStatus
-    = Moving Point Int
-    | Rest
 
 
 type alias MoveData =
