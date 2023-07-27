@@ -5,6 +5,8 @@ import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryItem, StoryStatus(..), nullStoryItem)
+import Lib.Resources.Sprites exposing (getResourcePath)
+import Lib.Audio.Base exposing (AudioOption(..))
 
 
 {-| Judge the mouse click position at Room status
@@ -91,7 +93,9 @@ updateModelRoom env model m_pos =
 
         StoryHall ->
             ( { model | status = StoryHall }
-            , [ ( LayerParentScene, LayerStringMsg "Hall" ) ]
+            , [ ( LayerParentScene, LayerStringMsg "Hall" )
+              , ( LayerParentScene, LayerSoundMsg "bgm" (getResourcePath "bgm/bgm.ogg") ALoop )
+              ]
             , env
             )
 
