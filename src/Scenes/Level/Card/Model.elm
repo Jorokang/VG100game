@@ -18,7 +18,7 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardCreate exposing (CardStatus(..), Model, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCardByCard)
 import Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit)
-import Scenes.Level.Card.Common exposing (EnvC, nullModel)
+import Scenes.Level.Card.Common exposing (EnvC, nullModel, selectedModel)
 import Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
@@ -27,8 +27,8 @@ import Scenes.Level.SceneInit exposing (LevelInit)
 Add components here
 -}
 initModel : EnvC -> LevelInit -> Model
-initModel _ _ =
-    nullModel
+initModel _ i =
+    selectedModel i.selected_cards
 
 
 {-| updateModel
