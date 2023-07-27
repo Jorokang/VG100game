@@ -92,7 +92,7 @@ updateRevealScroll model =
 updateScrollOpacity : Model -> Model
 updateScrollOpacity model =
     if (model.scroll_opacity < 100) && (model.status==RevealScroll) then
-        { model | scroll_opacity = model.scroll_opacity+0.2}
+        { model | scroll_opacity = model.scroll_opacity+0.8}
     else
         model
 
@@ -160,7 +160,8 @@ judgeMuttering2 env model pos =
 judgeEnemy1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeEnemy1 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
-        ( { model | status = Enemy2 }
+        ( { model | status = Enemy2
+                  }
         , []
         , env
         )
@@ -173,8 +174,13 @@ judgeEnemy1 env model pos =
 judgeEnemy2: EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeEnemy2 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
+        let
+            s = model.spirit
+            ns = { s | spirit = 15 }
+        in
         ( { model | status = Hurt
                   , click_pos = addPoint model.pos (-20, -20)
+                  , spirit = ns
                   }
         , []
         , env
@@ -246,8 +252,13 @@ judgeCard1 env model pos =
 judgeCard2 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeCard2 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
+        let
+            s = model.spirit
+            ns = { s | spirit = 5 }
+        in
         ( { model | status = End
                   , click_pos = textBoxPos
+                  , spirit = ns
                   }
         , []
         , env

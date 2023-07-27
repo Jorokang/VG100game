@@ -165,7 +165,7 @@ renderClick env model =
                   , offset = (4,4)
                   }
         rend1 = renderSprite env.globalData [shadow shadow1] (addPoint model.click_pos (-offset, -offset)) (addPoint (20,20) (offset, offset)) "mouse_0" 
-        rend2 =  text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData model.click_pos) "CLICK"
+        rend2 =  Canvas.group [fill (Color.rgb255 200 100 100)] [text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData model.click_pos) "CLICK"] 
     in
     Canvas.group
     []
@@ -213,12 +213,16 @@ renderCandle env model =
 
         rend3 =
             renderSprite env.globalData [ filter op ] ( 20, 600 ) ( 1600, 400 ) "candle_light_masking"
+
+        rend_c = 
+            renderSprite env.globalData [ filter op ] (40, 680) ( 520, 790) "cardback"
     in
     Canvas.group
         []
         [ rend1
         , rend2
         , rend3
+        , rend_c
         ]
 
 ---------------------------------------------------------------------------------------render-status--------------------------------------------------------------------------------------------------------

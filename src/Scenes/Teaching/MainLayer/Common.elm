@@ -97,7 +97,7 @@ textBoxPos =
 
 revealCandleTimeSlot : Int
 revealCandleTimeSlot =
-    500
+    150
 
 {-| Convenient type alias for the environment
 -}
