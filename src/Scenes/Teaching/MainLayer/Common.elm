@@ -1,4 +1,4 @@
-module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit, TeachingStatus(..), textBoxPos)
+module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit, TeachingStatus(..), textBoxPos, revealCandleTimeSlot)
 
 {-| Common module
 
@@ -21,7 +21,10 @@ type TeachingStatus
     | SelectAvatar
     | MoveAvatar
     | Muttering3
+    | RevealScroll
     | Card1
+    | Card2
+    | End
 
 type alias AvatarAnima =
     { a_pos : Point
@@ -70,6 +73,7 @@ type alias Model =
     , anima : AvatarAnima
     , spirit : AvatarSpirit
     , click_pos : Point
+    , scroll_opacity : Float
     }
 
 
@@ -83,12 +87,17 @@ nullModel =
     , lightRange = 2
     , anima = defaultAnima
     , spirit = nullSpirit
-    , click_pos = textBoxPos    
+    , click_pos = textBoxPos  
+    , scroll_opacity = 0  
     }
 
 textBoxPos : Point
 textBoxPos = 
     (1200, 300)
+
+revealCandleTimeSlot : Int
+revealCandleTimeSlot =
+    500
 
 {-| Convenient type alias for the environment
 -}

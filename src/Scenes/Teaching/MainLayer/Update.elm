@@ -1,6 +1,6 @@
 module Scenes.Teaching.MainLayer.Update exposing (..)
 
-import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, AvatarAnima, AvatarSpirit, textBoxPos)
+import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, AvatarAnima, AvatarSpirit, textBoxPos, revealCandleTimeSlot)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
@@ -80,6 +80,22 @@ updateMoveAvatar model =
     else
         model
 
+updateRevealScroll : Model -> Model
+updateRevealScroll model =
+    if (model.scroll_opacity>=100) && (model.status == RevealScroll) then
+        { model | status = Card1
+                , click_pos = (80, 600)
+                }
+    else
+        model
+
+updateScrollOpacity : Model -> Model
+updateScrollOpacity model =
+    if (model.scroll_opacity < 100) && (model.status==RevealScroll) then
+        { model | scroll_opacity = model.scroll_opacity+0.2}
+    else
+        model
+
 
 judgeClickEnvet : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeClickEnvet env model pos =
@@ -91,9 +107,12 @@ judgeClickEnvet env model pos =
         Enemy2 -> judgeEnemy2 env model pos
         SelectAvatar -> judgeSelectAvatar env model pos
         MoveAvatar -> ( model, [], env )
+        RevealScroll -> ( model, [], env )
         Hurt -> judgeHurt env model pos
         Muttering3 -> judgeMuttering3 env model pos
         Card1 -> judgeCard1 env model pos
+        Card2 -> judgeCard2 env model pos
+        End -> judgeEnd env model pos
 
 clickSize : Point
 clickSize = 
@@ -199,7 +218,7 @@ judgeSelectAvatar env model pos =
 judgeMuttering3 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeMuttering3 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
-        ( { model | status = Card1 }
+        ( { model | status = RevealScroll }
         , []
         , env
         )
@@ -211,6 +230,35 @@ judgeMuttering3 env model pos =
 
 judgeCard1 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeCard1 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = Card2
+                  , click_pos = addPoint model.pos (-100, 0)}
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeCard2 : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeCard2 env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = End
+                  , click_pos = textBoxPos
+                  }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeEnd : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeEnd env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
         ( model
         , [(LayerParentScene, LayerIntMsg 0)]

@@ -7,7 +7,7 @@ import Canvas.Settings.Advanced exposing (filter, shadow)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel)
+import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, revealCandleTimeSlot)
 import Lib.Render.Sprite exposing (renderSprite)
 import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Coordinate.Coordinates exposing (lengthToReal)
@@ -193,7 +193,40 @@ renderTextBox env str =
     Canvas.group
     []
     (rend_box::rend_text)
-    
+
+
+renderCandle : EnvC -> Model -> Renderable
+renderCandle env model =
+    let
+        light_name =
+            "candle_light_" ++ String.fromInt (modBy 6 (model.time // 100) + 1)
+        op =
+            "opacity(" ++ String.fromInt (round model.scroll_opacity) ++ "%)"
+
+        rpos =
+            ( 1400, 700 )
+
+        rsize =
+            ( 170, 240 )
+        
+        rend_s = 
+            renderSprite env.globalData [ filter op ] ( 20, 600 ) ( 1600, 400 ) "scroll"
+
+        rend1 =
+            renderSprite env.globalData [ filter op ] rpos rsize "candle_0"
+
+        rend2 =
+            renderSprite env.globalData [ filter op ] rpos rsize light_name
+
+        rend3 =
+            renderSprite env.globalData [ filter op ] ( 20, 600 ) ( 1600, 400 ) "candle_light_masking"
+    in
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        , rend3
+        ]
 
 ---------------------------------------------------------------------------------------render-status--------------------------------------------------------------------------------------------------------
 
@@ -396,15 +429,91 @@ renderMuttering3 env model =
     []
     rend
 
+renderRevealScroll : EnvC -> Model -> Renderable
+renderRevealScroll env model =
+    let
+        s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Card1"
+        rend_t = renderTextBox env ["Revealing Scroll"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend_s = renderCandle env model
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_s
+               ]
+    in
+    Canvas.group
+    []
+    rend
+
 renderCard1 : EnvC -> Model -> Renderable
 renderCard1 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Card1"
         rend_t = renderTextBox env [":)"]
         rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend_s = renderCandle env model
+        rend_c = renderSprite env.globalData [] (40, 680) ( 520, 790) "cardback"
         rend = [ s_name
                , rend_t
                , rend_e
+               , rend_s
+               , rend_c
+               ]
+    in
+    Canvas.group
+    []
+    rend
+
+renderCard2 : EnvC -> Model -> Renderable
+renderCard2 env model =
+    let
+        s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Card2"
+        rend_t = renderTextBox env [":)"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend_s = renderCandle env model
+        rend_c = renderSprite env.globalData [] (40, 680) ( 520, 790) "cardback"
+        pos1 = addPoint model.pos (-50,-50)
+        rend_hint = shapes
+                        [ fill (Color.rgb255 152 251 152)
+                        , filter ("opacity(70%)")
+                        ]
+                        [ rect (posToReal env.globalData (addPoint pos1 (-100, 0))) (lengthToReal env.globalData 100) (lengthToReal env.globalData 100) ]
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_s
+               , rend_c
+               , rend_hint
+               ]
+    in
+    Canvas.group
+    []
+    rend
+
+renderEnd : EnvC -> Model -> Renderable
+renderEnd env model =
+    let
+        s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "End"
+        rend_t = renderTextBox env [":))))))))))"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        pos1 = addPoint model.pos (-50,-50)
+        tf = (modBy 1000 model.time) // 100
+        tf1 =   if (tf<=3) then
+                    0
+                else
+                    tf - 3
+        ox = if (modBy 2 tf1==1) then 1
+                else -1
+        oy = if (modBy 3 tf1 == 1) then 1
+                else -1
+        offset = int2Point (2*tf1*ox, 1*tf1*oy)
+        pos2 = addPoint pos1 offset
+        rend_hurt = renderSprite env.globalData [] pos2 (80, 80) "kill"
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_hurt
                ]
     in
     Canvas.group
