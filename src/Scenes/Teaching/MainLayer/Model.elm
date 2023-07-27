@@ -17,12 +17,13 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, TeachingStatus(..))
 import Scenes.Teaching.SceneInit exposing (TeachingInit)
 import Time exposing (posixToMillis)
-import Scenes.Teaching.MainLayer.Render exposing (renderAvatar, renderShadow, renderSpirit, renderClick, renderMuttering1, renderMuttering2, renderEnemy1, renderEnemy2, renderHurt, renderMuttering3, renderInit, renderCard1, renderBackgroud)
+import Scenes.Teaching.MainLayer.Render exposing (renderAvatar, renderShadow, renderSpirit, renderClick, renderMuttering1, renderMuttering2, renderEnemy1, renderEnemy2, renderHurt, renderMuttering3, renderInit, renderCard1, renderBackgroud, renderMoveAvatar, renderSelectAvatar)
 import Scenes.Teaching.MainLayer.Update exposing (updateAnima, updateSpirit, judgeClickEnvet)
 import Base exposing (Msg(..))
 import Canvas exposing (shapes)
 import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Coordinate.Coordinates exposing (lengthToReal)
+import Scenes.Teaching.MainLayer.Update exposing (updateMoveAvatar)
 
 
 {-| initModel
@@ -46,6 +47,7 @@ updateModel env model =
             ( {model | time = posixToMillis new_time }
                 |> updateAnima
                 |> updateSpirit
+                |> updateMoveAvatar
             , []
             , env
             )
@@ -86,6 +88,8 @@ viewModel env model =
                         Enemy1 -> renderEnemy1 env model
                         Enemy2 -> renderEnemy2 env model
                         Hurt -> renderHurt env model
+                        SelectAvatar -> renderSelectAvatar env model
+                        MoveAvatar -> renderMoveAvatar env model
                         Muttering3 -> renderMuttering3 env model
                         Card1 -> renderCard1 env model
 

@@ -1,6 +1,6 @@
 module Scenes.Teaching.MainLayer.Render exposing (..)
 
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (int2Point, addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData)
 import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
 import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter, shadow)
@@ -34,7 +34,7 @@ renderAvatar env model =
             200
 
         rend1 =
-            renderSprite env.globalData [] pos1 (cl, cl) "avatar"
+            renderSprite env.globalData [] pos2 (cl, cl) "avatar"
 
         rend2 =
             renderSprite env.globalData [] pos3 (cl,cl) "pillow"
@@ -171,7 +171,7 @@ renderClick env model =
             [ fill c
             , shadow shadow1
             ]
-            [circle (posToReal env.globalData (addPoint model.click_pos (25,25))) siz]
+            [circle (posToReal env.globalData (addPoint model.click_pos (siz, siz))) siz]
         rend2 =  text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData model.click_pos) "CLICK"
     in
     Canvas.group
@@ -182,12 +182,12 @@ renderClick env model =
 
 renderTextBoxTool : EnvC -> String -> Int -> Renderable
 renderTextBoxTool env str d =
-    text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (200, toFloat((d-1)*32+700))) str
+    text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (900, toFloat((d-1)*32+200))) str
 
 renderTextBox : EnvC -> List String -> Renderable
 renderTextBox env str =
     let
-        rend_box = renderSprite env.globalData [] (20,600) (800, 400) "text_box"
+        rend_box = renderSprite env.globalData [] (800,100) (500, 250) "text_box"
         rend_text = List.map2 (renderTextBoxTool env) str (List.range 1 (List.length str))
     in
     Canvas.group
@@ -201,7 +201,7 @@ renderInit : EnvC -> Model -> Renderable
 renderInit env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Init"
-        rend_t = renderTextBox env ["Genshin", "QiDong!"]
+        rend_t = renderTextBox env ["Gen"]
         rend = [ s_name
                , rend_t
                ]
@@ -214,7 +214,10 @@ renderMuttering1 : EnvC -> Model -> Renderable
 renderMuttering1 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Muttering1"
-        rend = [s_name]
+        rend_t = renderTextBox env ["Shin"]
+        rend = [ s_name
+               , rend_t
+               ]
     in
     Canvas.group
     []
@@ -224,7 +227,10 @@ renderMuttering2 : EnvC -> Model -> Renderable
 renderMuttering2 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Muttering2"
-        rend = [s_name]
+        rend_t = renderTextBox env ["QiDong!"]
+        rend = [ s_name
+               , rend_t
+               ]
     in
     Canvas.group
     []
@@ -234,9 +240,11 @@ renderEnemy1 : EnvC -> Model -> Renderable
 renderEnemy1 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Enemy1"
-        rend_e = renderSprite env.globalData [] (0,300) (500, 400) "e_3"
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend_t = renderTextBox env ["Genshin", "QiDong!"]
         rend = [ rend_e
                , s_name
+               , rend_t
                ]
     in
     Canvas.group
@@ -247,7 +255,26 @@ renderEnemy2 : EnvC -> Model -> Renderable
 renderEnemy2 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Enemy2"
-        rend = [s_name]
+        rend_t = renderTextBox env ["Genshin", "QiDong!"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        pos1 = addPoint model.pos (-50,-50)
+        tf = (modBy 1000 model.time) // 100
+        tf1 =   if (tf<=3) then
+                    0
+                else
+                    tf - 3
+        ox = if (modBy 2 tf1==1) then 1
+                else -1
+        oy = if (modBy 3 tf1 == 1) then 1
+                else -1
+        offset = int2Point (2*tf1*ox, 1*tf1*oy)
+        pos2 = addPoint pos1 offset
+        rend_trap = renderSprite env.globalData [] pos2 (80, 80) "trapped_effect"
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_trap
+               ]
     in
     Canvas.group
     []
@@ -257,7 +284,98 @@ renderHurt : EnvC -> Model -> Renderable
 renderHurt env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Hurt"
-        rend = [s_name]
+        rend_t = renderTextBox env ["Genshin", "QiDong!"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        pos1 = addPoint model.pos (-50,-50)
+        tf = (modBy 1000 model.time) // 100
+        tf1 =   if (tf<=3) then
+                    0
+                else
+                    tf - 3
+        ox = if (modBy 2 tf1==1) then 1
+                else -1
+        oy = if (modBy 3 tf1 == 1) then 1
+                else -1
+        offset = int2Point (2*tf1*ox, 1*tf1*oy)
+        pos2 = addPoint pos1 offset
+        rend_trap = renderSprite env.globalData [] pos2 (80, 80) "trapped_effect"
+        rend_hurt = renderSprite env.globalData [] pos2 (80, 80) "kill"
+        tf2 = modBy 270 model.time
+        tf3 =   if (tf2<=90) then "70"
+                    else "20"
+        rend_blood = shapes
+                        [ fill (Color.rgb255 240 10 10)
+                        , filter ("opacity("++tf3++"%)")
+                        ]
+                        [ rect (posToReal env.globalData (0,0)) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_blood
+               , rend_hurt
+               , rend_trap
+               ]
+    in
+    Canvas.group
+    []
+    rend
+
+renderSelectAvatar : EnvC -> Model -> Renderable
+renderSelectAvatar env model =
+    let
+        s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Hurt"
+        rend_t = renderTextBox env ["Genshin", "QiDong!"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        pos1 = addPoint model.pos (-50,-50)
+        tf = (modBy 1000 model.time) // 100
+        tf1 =   if (tf<=3) then
+                    0
+                else
+                    tf - 3
+        ox = if (modBy 2 tf1==1) then 1
+                else -1
+        oy = if (modBy 3 tf1 == 1) then 1
+                else -1
+        offset = int2Point (2*tf1*ox, 1*tf1*oy)
+        pos2 = addPoint pos1 offset
+        rend_trap = renderSprite env.globalData [] pos2 (80, 80) "trapped_effect"
+        rend_hurt = renderSprite env.globalData [] pos2 (80, 80) "kill"
+        tf2 = modBy 270 model.time
+        tf3 =   if (tf2<=90) then "70"
+                    else "20"
+        rend_blood = shapes
+                        [ fill (Color.rgb255 240 10 10)
+                        , filter ("opacity("++tf3++"%)")
+                        ]
+                        [ rect (posToReal env.globalData (0,0)) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
+        rend_hint = shapes
+                        [ fill (Color.rgb255 152 251 152)
+                        , filter ("opacity(70%)")
+                        ]
+                        [ rect (posToReal env.globalData (addPoint pos1 (100, 0))) (lengthToReal env.globalData 100) (lengthToReal env.globalData 100) ]
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               , rend_blood
+               , rend_hurt
+               , rend_trap
+               , rend_hint
+               ]
+    in
+    Canvas.group
+    []
+    rend
+
+renderMoveAvatar : EnvC -> Model -> Renderable
+renderMoveAvatar env model =
+    let
+        s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Enemy2"
+        rend_t = renderTextBox env ["Genshin", "QiDong!"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               ]
     in
     Canvas.group
     []
@@ -267,7 +385,12 @@ renderMuttering3 : EnvC -> Model -> Renderable
 renderMuttering3 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Muttering3"
-        rend = [s_name]
+        rend_t = renderTextBox env [":D"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               ]
     in
     Canvas.group
     []
@@ -277,7 +400,12 @@ renderCard1 : EnvC -> Model -> Renderable
 renderCard1 env model =
     let
         s_name = text [ font { size = 32, family = "Arial", style = "" }, align Left ] (posToReal env.globalData (1000,30)) "Card1"
-        rend = [s_name]
+        rend_t = renderTextBox env [":)"]
+        rend_e = renderSprite env.globalData [] (0,300) (490, 400) "e_3"
+        rend = [ s_name
+               , rend_t
+               , rend_e
+               ]
     in
     Canvas.group
     []

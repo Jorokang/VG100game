@@ -1,4 +1,4 @@
-module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit, TeachingStatus(..))
+module Scenes.Teaching.MainLayer.Common exposing (Model, nullModel, EnvC, AvatarAnima, AvatarSpirit, TeachingStatus(..), textBoxPos)
 
 {-| Common module
 
@@ -18,6 +18,8 @@ type TeachingStatus
     | Enemy1
     | Enemy2
     | Hurt
+    | SelectAvatar
+    | MoveAvatar
     | Muttering3
     | Card1
 
@@ -81,9 +83,12 @@ nullModel =
     , lightRange = 2
     , anima = defaultAnima
     , spirit = nullSpirit
-    , click_pos = (700, 700)
+    , click_pos = textBoxPos    
     }
 
+textBoxPos : Point
+textBoxPos = 
+    (1200, 300)
 
 {-| Convenient type alias for the environment
 -}

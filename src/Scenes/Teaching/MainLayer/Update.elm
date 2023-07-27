@@ -1,6 +1,6 @@
 module Scenes.Teaching.MainLayer.Update exposing (..)
 
-import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, AvatarAnima, AvatarSpirit)
+import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, AvatarAnima, AvatarSpirit, textBoxPos)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
@@ -70,6 +70,17 @@ updateSpirit model =
     in
     { model | spirit = ns }
 
+updateMoveAvatar : Model -> Model
+updateMoveAvatar model =
+    if (model.status == MoveAvatar) then
+        if (Tuple.first model.pos<600) then
+            { model | pos = addPoint model.pos (5,0) }
+        else
+            { model | status = Muttering3}
+    else
+        model
+
+
 judgeClickEnvet : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeClickEnvet env model pos =
     case model.status of
@@ -78,6 +89,8 @@ judgeClickEnvet env model pos =
         Muttering2 -> judgeMuttering2 env model pos
         Enemy1 -> judgeEnemy1 env model pos
         Enemy2 -> judgeEnemy2 env model pos
+        SelectAvatar -> judgeSelectAvatar env model pos
+        MoveAvatar -> ( model, [], env )
         Hurt -> judgeHurt env model pos
         Muttering3 -> judgeMuttering3 env model pos
         Card1 -> judgeCard1 env model pos
@@ -141,7 +154,9 @@ judgeEnemy1 env model pos =
 judgeEnemy2: EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeEnemy2 env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
-        ( { model | status = Hurt }
+        ( { model | status = Hurt
+                  , click_pos = addPoint model.pos (-20, -20)
+                  }
         , []
         , env
         )
@@ -154,7 +169,24 @@ judgeEnemy2 env model pos =
 judgeHurt : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeHurt env model pos =
     if (judgeMouseRect pos model.click_pos clickSize) then
-        ( { model | status = Muttering3 }
+        ( { model | status = SelectAvatar
+                  , click_pos = addPoint model.pos (80, -20)
+                  }
+        , []
+        , env
+        )
+    else 
+        ( model
+        , []
+        , env
+        )
+
+judgeSelectAvatar : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+judgeSelectAvatar env model pos =
+    if (judgeMouseRect pos model.click_pos clickSize) then
+        ( { model | status = MoveAvatar
+                  , click_pos = textBoxPos
+                  }
         , []
         , env
         )
