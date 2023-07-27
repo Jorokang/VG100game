@@ -1,6 +1,6 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), initFrame1
+    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation, initFrame1
     )
 
 {-| Common module
@@ -11,6 +11,8 @@ module Scenes.Level.Frame.Common exposing
 
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
+import Random
+import Scenes.Level.Frame.Random exposing (randomFrame)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -48,8 +50,18 @@ type alias NextRoundButton =
     }
 
 
+type alias ClearAnimation =
+    { pos : Point
+    , i_time : Int
+    , e_time : Int
+    }
 
---degrees
+
+type alias SpiritAnimation =
+    { str : String
+    , i_time : Int
+    , e_time : Int
+    }
 
 
 type alias Model =
@@ -57,6 +69,11 @@ type alias Model =
     , time : Int
     , player_data : PlayerData
     , next_round_b : NextRoundButton
+    , c_anima : List ClearAnimation
+    , s_anima : List SpiritAnimation
+    , rand_num : Int
+    , seed : Random.Seed
+    , op_reg : Int
     }
 
 
@@ -64,6 +81,10 @@ type alias Model =
 -}
 nullModel : Model
 nullModel =
+    let
+        ( number, seed ) =
+            randomFrame (Random.initialSeed 0)
+    in
     { status = FrameInactive
     , time = 0
     , player_data =
@@ -73,11 +94,20 @@ nullModel =
         , turns = 0
         }
     , next_round_b = nullNextRoundB
+    , c_anima = []
+    , s_anima = []
+    , rand_num = number
+    , seed = seed
+    , op_reg = 0
     }
 
 
 initFrame1 : Model
 initFrame1 =
+    let
+        ( number, seed ) =
+            randomFrame (Random.initialSeed 0)
+    in
     { status = FramePlayerTurn
     , time = 0
     , player_data =
@@ -87,6 +117,11 @@ initFrame1 =
         , turns = 0
         }
     , next_round_b = nullNextRoundB
+    , c_anima = []
+    , s_anima = []
+    , rand_num = number
+    , seed = seed
+    , op_reg = 0
     }
 
 

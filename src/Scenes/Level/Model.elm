@@ -18,9 +18,11 @@ import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Hall.SceneInit exposing (initHallLoose, initHallWin)
 import Scenes.Level.Common exposing (Model)
 import Scenes.Level.LayerBase exposing (CommonData)
+import Scenes.Level.Transition exposing (hallTransitionIn0, hallTransitionIn1, levelTransitionOut0, levelTransitionOut1)
 
 
 {-| handleLayerMsg
@@ -48,10 +50,18 @@ handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> ( Model, List S
 handleLayerMsgLevelComplete env model x =
     case x of
         0 ->
-            ( model, [ SOMChangeScene ( HallInitData initHallLoose, "Hall", Nothing ) ], env )
+            let
+                trans =
+                    Just (genTransition 300 100 levelTransitionOut0 hallTransitionIn0)
+            in
+            ( model, [ SOMChangeScene ( HallInitData initHallLoose, "Hall", trans ) ], env )
 
         1 ->
-            ( model, [ SOMChangeScene ( HallInitData initHallWin, "Hall", Nothing ) ], env )
+            let
+                trans =
+                    Just (genTransition 150 100 levelTransitionOut1 hallTransitionIn1)
+            in
+            ( model, [ SOMChangeScene ( HallInitData initHallWin, "Hall", trans ) ], env )
 
         _ ->
             ( model, [], env )

@@ -97,10 +97,6 @@ levelokclicked env model =
     )
 
 
-
-{- change the level num -}
-
-
 upclicked : Levelbtn -> Levelbtn
 upclicked lev =
     let
@@ -119,13 +115,9 @@ downclicked lev =
     { lev | levelInt = num }
 
 
-
-{- check if up or down clicked -}
-
-
 checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
 checkupdown lev ( a, b ) =
-    if lev.levelInt > 1 && lev.levelInt < 4 then
+    if lev.levelInt > 1 && lev.levelInt < 5 then
         if ifClicked lev.up ( a, b ) then
             upclicked lev
 
@@ -142,7 +134,7 @@ checkupdown lev ( a, b ) =
         else
             lev
 
-    else if lev.levelInt == 4 then
+    else if lev.levelInt == 5 then
         if ifClicked lev.down ( a, b ) then
             downclicked lev
 
