@@ -39,29 +39,31 @@ handleLayerMsg env lmsg model =
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
 
-        LayerMsgLevelComplete x ->
-            handleLayerMsgLevelComplete env model x
+        LayerMsgLevelComplete x level_id ->
+            handleLayerMsgLevelComplete env model x level_id
 
         _ ->
             ( model, [], env )
 
 
-handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> ( Model, List SceneOutputMsg, EnvC CommonData )
-handleLayerMsgLevelComplete env model x =
+handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> Int -> ( Model, List SceneOutputMsg, EnvC CommonData )
+handleLayerMsgLevelComplete env model x level_id =
     case x of
         0 ->
             let
                 trans =
                     Just (genTransition 300 100 levelTransitionOut0 hallTransitionIn0)
             in
-            ( model, [ SOMChangeScene ( HallInitData initHallLoose, "Hall", trans ) ], env )
+            --( model, [ SOMChangeScene ( HallInitData {initHallLoose|level_id=level_id}, "Hall", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData {id=level_id}, "Story", trans ) ], env )
 
         1 ->
             let
                 trans =
                     Just (genTransition 150 100 levelTransitionOut1 hallTransitionIn1)
             in
-            ( model, [ SOMChangeScene ( HallInitData initHallWin, "Hall", trans ) ], env )
+            --( model, [ SOMChangeScene ( HallInitData {initHallWin|level_id = level_id}, "Hall", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData {id=level_id}, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )

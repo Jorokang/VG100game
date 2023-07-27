@@ -53,7 +53,7 @@ updateModel env model =
             case env.msg of
                 Tick _ ->
                     ( model
-                    , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+                    , [ ( LayerParentScene, LayerMsgLevelComplete 1 model.level_id ) ]
                     , env
                     )
 
@@ -142,7 +142,7 @@ updateModelRec env lmsg model =
             let
                 msg =
                     if loc == model.core.loc then
-                        [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+                        [ ( LayerParentScene, LayerMsgLevelComplete 1 model.level_id ) ]
 
                     else
                         []

@@ -92,6 +92,7 @@ type alias Model =
     , meye1 : MinorEyes
     , meye2 : MinorEyes
     , static_priority : List ErodePriority
+    , level_id : Int
     }
 
 
@@ -143,6 +144,7 @@ nullModel =
     , eroding = False
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = -1
     }
 
 
@@ -174,6 +176,7 @@ initEnemy1 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = -1
     }
 
 
@@ -207,6 +210,7 @@ initEnemyLevel1 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = 1
     }
 
 
@@ -272,6 +276,7 @@ initEnemyLevel2 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = 2
     }
 
 
@@ -330,6 +335,7 @@ initEnemyLevel3 =
     , eroding = True
     , meye1 = initMinorEyeLevel31
     , meye2 = initMinorEyeLevel32
+    , level_id = 3
     }
 
 

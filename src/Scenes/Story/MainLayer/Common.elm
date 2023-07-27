@@ -1,6 +1,6 @@
 module Scenes.Story.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , StoryItem, StoryStatus(..), initModel1, nullStoryItem
+    , StoryItem, StoryStatus(..), initModel1, initModel0, initModel2, initModel3, nullStoryItem
     )
 
 {-| Common module
@@ -118,8 +118,35 @@ nullModel =
     }
 
 
+initModel0 : Model
+initModel0 =
+    { status = StoryRoom
+    , family_painting = nullStoryItem
+    , button_hall = button2Hall
+    , sun = nullStoryItem
+    , diary = nullStoryItem
+    }
+
 initModel1 : Model
 initModel1 =
+    { status = StoryRoom
+    , family_painting = nullStoryItem
+    , button_hall = button2Hall
+    , sun = sunItem
+    , diary = nullStoryItem
+    }
+
+initModel2 : Model
+initModel2 =
+    { status = StoryRoom
+    , family_painting = familyPaintingItem
+    , button_hall = button2Hall
+    , sun = sunItem
+    , diary = nullStoryItem
+    }
+
+initModel3 : Model
+initModel3 =
     { status = StoryRoom
     , family_painting = familyPaintingItem
     , button_hall = button2Hall

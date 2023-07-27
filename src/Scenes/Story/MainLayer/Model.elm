@@ -20,14 +20,22 @@ import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), ini
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
 import Scenes.Story.MainLayer.Update exposing (updateModelItems, updateModelItemsScale, updateModelRoom)
 import Scenes.Story.SceneInit exposing (StoryInit)
+import Scenes.Story.MainLayer.Common exposing (initModel0)
+import Scenes.Story.MainLayer.Common exposing (initModel2)
+import Scenes.Story.MainLayer.Common exposing (initModel3)
 
 
 {-| initModel
 Add components here
 -}
 initModel : EnvC -> StoryInit -> Model
-initModel _ _ =
-    initModel1
+initModel _ i =
+    case i.id of
+        0 -> initModel0
+        1 -> initModel1
+        2 -> initModel2
+        3 -> initModel3
+        _ -> initModel0
 
 
 {-| Only considering click events

@@ -60,7 +60,8 @@ type alias AvatarSpirit =
 
 
 type alias Model =
-    { status : AvatarStatus
+    { level_id : Int
+    , status : AvatarStatus
     , card_status : CardSelectionStatus
     , target_loc : GridLoc
     , cur_loc : GridLoc
@@ -110,6 +111,7 @@ nullModel =
     , spirit = nullSpirit
     , lightRange = 0
     , anima = defaultAnima
+    , level_id = -1
     }
 
 
@@ -126,6 +128,7 @@ initAvatar1 size =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = -1
     }
 
 
@@ -142,6 +145,7 @@ initAvatarLevel1 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 1
     }
 
 
@@ -158,6 +162,7 @@ initAvatarLevel2 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 2
     }
 
 
@@ -174,6 +179,7 @@ initAvatarLevel3 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 3
     }
 
 

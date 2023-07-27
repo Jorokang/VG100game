@@ -48,7 +48,7 @@ updateModifySpirit env model x =
     case n_model.status of
         AvatarDead ->
             ( n_model
-            , ( LayerParentScene, LayerMsgLevelComplete 0 ) :: msg
+            , ( LayerParentScene, LayerMsgLevelComplete 0 model.level_id ) :: msg
             , env
             )
 
