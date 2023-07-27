@@ -44,23 +44,15 @@ renderHall : EnvC -> Model -> Renderable
 renderHall env model =
     let
         rend =
-            [ renderButton env model.setting.open
-            , renderButton env model.level.open
-            , renderButton env model.card.open
-            , renderButton env model.help.open
-            , renderSprite env.globalData [] (coorChangeS env model.card.open.pos nullCoorData) (sizeChangeS env ( 400, 200 ) nullCoorData) "cardback"
+            [ renderSprite env.globalData [] (coorChangeS env model.card.open.pos nullCoorData) (sizeChangeS env ( 500, 700 ) nullCoorData) "cardback"
             , renderSprite env.globalData [] (coorChangeS env model.help.open.pos nullCoorData) (sizeChangeS env ( 200, 200 ) nullCoorData) "help"
-            , renderSprite env.globalData [] (coorChangeS env model.setting.open.pos nullCoorData) (sizeChangeS env ( 400, 400 ) nullCoorData) "setting"
-            , renderSprite env.globalData [] (coorChangeS env model.level.open.pos nullCoorData) (sizeChangeS env ( 600, 300 ) nullCoorData) "level"
+            , renderSprite env.globalData [] (coorChangeS env model.setting.open.pos nullCoorData) (sizeChangeS env ( 200, 200 ) nullCoorData) "setting"
+            , renderSprite env.globalData [] (coorChangeS env model.level.open.pos nullCoorData) (sizeChangeS env ( 400, 630 ) nullCoorData) "level"
             ]
     in
     Canvas.group
         []
         rend
-
-
-
-{- to do: render a img -}
 
 
 renderclose : EnvC -> Button -> Renderable
@@ -77,21 +69,8 @@ renderclose env btn =
     in
     Canvas.group
         []
-        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 4 * x, 4 * y ) "close"
+        [ renderSprite env.globalData [] (coorChangeS env btn.pos nullCoorData) ( 2 * x, 3 * y ) "close"
         ]
-
-
-renderButton : EnvC -> Button -> Renderable
-renderButton env btn =
-    case btn.status of
-        ButtonInactive ->
-            Canvas.empty
-
-        ButtonActive ->
-            Canvas.group
-                []
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env btn.size nullCoorData) "btn"
-                ]
 
 
 
@@ -129,9 +108,9 @@ renderlevel env level =
     let
         rend =
             [ renderclose env level.close
-            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env ( 400, 400 ) nullCoorData) "down"
-            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env ( 400, 400 ) nullCoorData) "up"
-            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env ( 400, 400 ) nullCoorData) "ok"
+            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env level.down.size nullCoorData) "down"
+            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env level.up.size nullCoorData) "up"
+            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env level.ok.size nullCoorData) "ok"
             , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
             ]
     in
