@@ -141,11 +141,12 @@ viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
         rend =
-            [ renderFrameStatus env model
-            , renderStamina env model
-            , renderNextRoundB env model
+            [ --renderFrameStatus env model
+              --, renderStamina env model
+              renderNextRoundB env model
             , renderClearAnimations env model
-            , renderScroll env model
+
+            --, renderScroll env model
             , renderCandle env model
             , renderSpiritAnimations env model
             ]

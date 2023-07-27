@@ -91,11 +91,15 @@ renderCandle env model =
 
         rend3 =
             renderSprite env.globalData [ filter op ] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "candle_light_masking"
+
+        rend4 =
+            renderSprite env.globalData [] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "scroll"
     in
     Canvas.group
         []
         [ rend1
         , rend2
+        , rend4
         , rend3
         ]
 

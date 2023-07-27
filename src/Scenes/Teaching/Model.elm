@@ -13,16 +13,16 @@ module Scenes.Teaching.Model exposing
 -}
 
 import Canvas exposing (Renderable)
+import Canvas.Settings exposing (stroke)
 import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Teaching.Common exposing (Model)
 import Scenes.Teaching.LayerBase exposing (CommonData)
-import Scenes.Teaching.Transition exposing (teachingTransitionOut, storyTransitionIn)
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
-import Canvas.Settings exposing (stroke)
+import Scenes.Teaching.Transition exposing (storyTransitionIn, teachingTransitionOut)
 
 
 {-| handleLayerMsg

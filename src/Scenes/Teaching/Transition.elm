@@ -25,7 +25,7 @@ teachingTransitionOut env rend f =
             "opacity(" ++ String.fromInt (round (f * 100.0)) ++ "%)"
 
         str2 =
-            "opacity(" ++ String.fromInt (round ((1-f) * 100.0)) ++ "%)"
+            "opacity(" ++ String.fromInt (round ((1 - f) * 100.0)) ++ "%)"
 
         rend1 =
             Canvas.group [ filter str2 ] [ rend ]
@@ -70,4 +70,3 @@ storyTransitionIn env rend f =
         [ rend1
         , rend2
         ]
-
