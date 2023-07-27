@@ -50,10 +50,15 @@ updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
         EnemyDead ->
-            ( model
-            , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
-            , env
-            )
+            case env.msg of
+                Tick _ ->
+                    ( model
+                    , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+                    , env
+                    )
+
+                _ ->
+                    ( model, [], env )
 
         EnemyAlive ->
             case env.msg of
@@ -134,8 +139,16 @@ updateModelRec env lmsg model =
                 updateEnemySettingTarget env model (curPriority model)
 
         LayerMsgClearCell loc ->
+            let
+                msg =
+                    if loc == model.core.loc then
+                        [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
+
+                    else
+                        []
+            in
             ( freeCell model loc
-            , []
+            , msg
             , env
             )
 

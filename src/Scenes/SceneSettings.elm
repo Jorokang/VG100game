@@ -18,6 +18,7 @@ import Scenes.Hall.Export as Hall
 import Scenes.Level.Export as Level
 import Scenes.Menu.Export as Menu
 import Scenes.Story.Export as Story
+import Scenes.Teaching.Export as Teaching
 
 
 
@@ -34,6 +35,7 @@ type SceneDataTypes
     | StoryDataT Story.Data
     | HallDataT Hall.Data
     | MenuDataT Menu.Data
+    | TeachingDataT Teaching.Data
     | NullSceneData
 
 
