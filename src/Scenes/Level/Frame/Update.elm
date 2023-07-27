@@ -2,9 +2,10 @@ module Scenes.Level.Frame.Update exposing (..)
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
+import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton, NextRoundButtonStatus(..))
+import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, NextRoundButtonStatus(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, nextRoundBCoorData, nullCoorData, pointDistance)
 
 
@@ -213,3 +214,35 @@ updateMouseClickNRB env model click_pos =
 
     else
         ( model, [], env )
+
+
+addClearAnima : Model -> Point -> Model
+addClearAnima model pos =
+    let
+        tmp_a =
+            { pos = pos
+            , i_time = model.time
+            , e_time = model.time + 500
+            }
+    in
+    { model | c_anima = tmp_a :: model.c_anima }
+
+
+addSpiritAnima : Model -> String -> Model
+addSpiritAnima model str =
+    let
+        tmp_a =
+            { str = str
+            , i_time = model.time
+            , e_time = model.time + 700
+            }
+    in
+    { model | s_anima = tmp_a :: model.s_anima }
+
+
+updateAnima : Model -> Model
+updateAnima model =
+    { model
+        | c_anima = List.filter (\x -> x.e_time > model.time) model.c_anima
+        , s_anima = List.filter (\x -> x.e_time > model.time) model.s_anima
+    }

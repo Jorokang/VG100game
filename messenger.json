@@ -11,7 +11,10 @@
         ],
         "Story": [],
         "Hall": [],
-        "Menu": []
+        "Menu": [],
+        "Teaching": [
+            "MainLayer"
+        ]
     },
     "sceneprotos": {}
 }

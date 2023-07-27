@@ -134,7 +134,7 @@ nextRoundBCoorData =
 
 offsetCoorMap : Point
 offsetCoorMap =
-    ( 150, 100 )
+    ( 150, 80 )
 
 
 scaleCoorMap : Float

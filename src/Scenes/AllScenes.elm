@@ -17,6 +17,8 @@ import Scenes.Menu.Global as MenuG
 import Scenes.SceneSettings exposing (SceneT)
 import Scenes.Story.Export as Story
 import Scenes.Story.Global as StoryG
+import Scenes.Teaching.Export as Teaching
+import Scenes.Teaching.Global as TeachingG
 
 
 {-| allScenes
@@ -28,4 +30,5 @@ allScenes =
     , ( "Story", StoryG.sceneToST Story.scene )
     , ( "Hall", HallG.sceneToST Hall.scene )
     , ( "Menu", MenuG.sceneToST Menu.scene )
+    , ( "Teaching", TeachingG.sceneToST Teaching.scene )
     ]

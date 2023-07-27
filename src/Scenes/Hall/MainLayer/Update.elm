@@ -112,7 +112,6 @@ downclicked lev =
     in
     { lev | levelInt = num }
 
-
 {-| in level choices
 check if up or down clicked
 -}

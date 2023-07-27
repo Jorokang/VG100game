@@ -2,7 +2,7 @@ module Scenes.Level.Avatar.Update exposing (..)
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarAnima, AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
+import Scenes.Level.Avatar.Common exposing (AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, negPoint, pointDistance, scalePointLength)
 
 
@@ -30,8 +30,20 @@ updateModifySpirit env model x =
         n_model =
             modifySpirit model x
 
+        str =
+            if x > 0 then
+                "+" ++ String.fromInt x
+
+            else if x < 0 then
+                String.fromInt x
+
+            else
+                ""
+
         msg =
-            [ ( LayerName "Card", LayerMsgModifySpirit n_model.spirit ) ]
+            [ ( LayerName "Card", LayerMsgModifySpirit (round n_model.spirit.spirit) )
+            , ( LayerName "Frame", LayerStringMsg str )
+            ]
     in
     case n_model.status of
         AvatarDead ->
@@ -55,20 +67,26 @@ modifySpirit : Model -> Int -> Model
 modifySpirit model delta =
     let
         n_spirit0 =
-            model.spirit + delta
+            model.spirit.spirit + toFloat delta
 
         n_spirit1 =
             if n_spirit0 < 0 then
                 0
 
-            else if n_spirit0 > model.max_spirit then
-                model.max_spirit
+            else if n_spirit0 > model.spirit.max_spirit then
+                model.spirit.max_spirit
 
             else
                 n_spirit0
+
+        fx =
+            model.spirit
+
+        nx =
+            { fx | spirit = n_spirit1 }
     in
     if n_spirit1 > 0 then
-        { model | spirit = n_spirit1 }
+        { model | spirit = nx }
 
     else
         { model | status = AvatarDead }
@@ -636,3 +654,25 @@ updateAnima model =
             }
     in
     { model | anima = nanima }
+
+
+updateSpirit : Model -> Model
+updateSpirit model =
+    let
+        s =
+            model.spirit
+
+        d =
+            s.spirit - s.cur_spirit
+
+        ns =
+            if abs d <= s.spirit_v then
+                { s | cur_spirit = s.spirit }
+
+            else if d < 0 then
+                { s | cur_spirit = s.cur_spirit - s.spirit_v }
+
+            else
+                { s | cur_spirit = s.cur_spirit + s.spirit_v }
+    in
+    { model | spirit = ns }

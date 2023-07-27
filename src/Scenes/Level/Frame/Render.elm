@@ -6,8 +6,61 @@ import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
-import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, NextRoundButton)
-import Scenes.Level.Frame.Functions exposing (coorChange, coorChangeS, lengthChange, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, SpiritAnimation)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+
+
+renderClearAnimation : EnvC -> Int -> ClearAnimation -> Renderable
+renderClearAnimation env time anima =
+    let
+        id_state =
+            (time - anima.i_time) // 50
+    in
+    renderSprite env.globalData [] (coorChangeS env anima.pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) ("clear_anima_" ++ String.fromInt id_state)
+
+
+renderClearAnimations : EnvC -> Model -> Renderable
+renderClearAnimations env model =
+    let
+        rend =
+            List.map (renderClearAnimation env model.time) model.c_anima
+    in
+    Canvas.group
+        []
+        rend
+
+
+renderSpiritAnimation : EnvC -> Int -> SpiritAnimation -> Renderable
+renderSpiritAnimation env time anima =
+    let
+        offset =
+            ( 0, 0 - toFloat ((time - anima.i_time) // 15) )
+
+        pos =
+            addPoint ( 800, 50 ) offset
+
+        opacity =
+            round ((toFloat (time - anima.i_time) / toFloat (anima.e_time - anima.i_time)) * 100)
+
+        str_o =
+            "opacity(" ++ String.fromInt opacity ++ "%)"
+    in
+    Canvas.group
+        [ filter str_o
+        , fill Color.white
+        ]
+        [ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+
+
+renderSpiritAnimations : EnvC -> Model -> Renderable
+renderSpiritAnimations env model =
+    let
+        rend =
+            List.map (renderSpiritAnimation env model.time) model.s_anima
+    in
+    Canvas.group
+        []
+        rend
 
 
 renderScroll : EnvC -> Model -> Renderable
@@ -38,11 +91,15 @@ renderCandle env model =
 
         rend3 =
             renderSprite env.globalData [ filter op ] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "candle_light_masking"
+
+        rend4 =
+            renderSprite env.globalData [] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "scroll"
     in
     Canvas.group
         []
         [ rend1
         , rend2
+        , rend4
         , rend3
         ]
 

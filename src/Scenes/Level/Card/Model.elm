@@ -110,6 +110,7 @@ viewModel env model =
         [ renderHandCards env model
         , renderDeckCards env model
         , renderDiscardCards env model
-        , renderTestMessage env model
-        , renderCardInfo env model
+
+        --, renderTestMessage env model
+        --, renderCardInfo env model
         ]
