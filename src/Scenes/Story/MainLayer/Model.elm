@@ -43,6 +43,12 @@ updateModel env model =
                 StoryFamilyPainting ->
                     updateModelItems env model m_pos
 
+                StoryDiary ->
+                    updateModelItems env model m_pos
+
+                StorySun ->
+                    updateModelItems env model m_pos
+ 
                 StoryHall ->
                     ( model, [], env )
 

@@ -19,6 +19,8 @@ type StoryStatus
     = StoryRoom
     | StoryFamilyPainting
     | StoryHall
+    | StorySun
+    | StoryDiary
     | StoryNull
 
 
@@ -38,6 +40,8 @@ type alias Model =
     { status : StoryStatus
     , family_painting : StoryItem
     , button_hall : StoryItem
+    , sun : StoryItem
+    , diary : StoryItem
     }
 
 
@@ -66,6 +70,30 @@ familyPaintingItem =
     , str = "Mum and Dad and Me"
     }
 
+diaryItem : StoryItem
+diaryItem =
+    { c_pos = ( 300, 800 )
+    , c_size = ( 100, 130 )
+    , c_sprite_name = "family_painting_1"
+    , c_scale = 1
+    , v_pos = ( 500, 350 )
+    , v_size = ( 800, 469 )
+    , v_sprite_name = "family_painting_2"
+    , str = "Mum and Dad and Me"
+    }
+
+sunItem : StoryItem
+sunItem =
+    { c_pos = ( 600, 800 )
+    , c_size = ( 100, 130 )
+    , c_sprite_name = "family_painting_1"
+    , c_scale = 1
+    , v_pos = ( 500, 350 )
+    , v_size = ( 800, 469 )
+    , v_sprite_name = "family_painting_2"
+    , str = "Mum and Dad and Me"
+    }
+
 
 button2Hall : StoryItem
 button2Hall =
@@ -85,6 +113,8 @@ nullModel =
     { status = StoryNull
     , family_painting = nullStoryItem
     , button_hall = nullStoryItem
+    , sun = nullStoryItem
+    , diary = nullStoryItem
     }
 
 
@@ -93,6 +123,8 @@ initModel1 =
     { status = StoryRoom
     , family_painting = familyPaintingItem
     , button_hall = button2Hall
+    , sun = sunItem
+    , diary = diaryItem
     }
 
 
