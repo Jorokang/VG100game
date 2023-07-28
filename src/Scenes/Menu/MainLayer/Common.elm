@@ -2,6 +2,9 @@ module Scenes.Menu.MainLayer.Common exposing (Model, nullModel, EnvC)
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
 
 -}

@@ -1,4 +1,13 @@
-module Scenes.Story.MainLayer.Render exposing (..)
+module Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
+
+{-| Render module
+
+
+# Functions
+
+@docs renderBackground, renderMasking, renderStoryItem
+
+-}
 
 import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (Setting, fill)

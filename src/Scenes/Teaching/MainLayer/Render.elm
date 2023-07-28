@@ -1,16 +1,59 @@
-module Scenes.Teaching.MainLayer.Render exposing (..)
+module Scenes.Teaching.MainLayer.Render exposing
+    ( renderAvatar
+    , renderBackgroud
+    , renderCard1
+    , renderCard2
+    , renderClick
+    , renderEnd
+    , renderEnemy1
+    , renderEnemy2
+    , renderHurt
+    , renderInit
+    , renderMoveAvatar
+    , renderMuttering1
+    , renderMuttering2
+    , renderMuttering3
+    , renderRevealScroll
+    , renderSelectAvatar
+    , renderShadow
+    , renderSpirit
+    )
 
-import Canvas exposing (Point, Renderable, circle, empty, rect, shapes, text)
+{-| Render module
+
+
+# Functions
+
+@docs renderAvatar
+@docs renderBackgroud
+@docs renderCard1
+@docs renderCard2
+@docs renderClick
+@docs renderEnd
+@docs renderEnemy1
+@docs renderEnemy2
+@docs renderHurt
+@docs renderInit
+@docs renderMoveAvatar
+@docs renderMuttering1
+@docs renderMuttering2
+@docs renderMuttering3
+@docs renderRevealScroll
+@docs renderSelectAvatar
+@docs renderShadow
+@docs renderSpirit
+
+-}
+
+import Canvas exposing (Point, Renderable, rect, shapes, text)
 import Canvas.Settings exposing (Setting, fill)
 import Canvas.Settings.Advanced exposing (filter, shadow)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Color exposing (Color, rgb255)
+import Color exposing (Color)
 import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
-import List exposing (length)
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, int2Point, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData)
-import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, nullModel, revealCandleTimeSlot)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, int2Point, lengthChange, nullCoorData)
+import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model)
 
 
 renderBackgroud : EnvC -> Model -> Renderable
