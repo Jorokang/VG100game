@@ -1,10 +1,18 @@
-module Scenes.Level.Grids.Update exposing (..)
+module Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell)
+
+{-| Update module
+
+
+# Functions
+
+@docs checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell
+
+-}
 
 import Canvas exposing (Point)
-import Canvas.Settings.Advanced exposing (scale)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, pointDistance, scalePoint)
+import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, cellLength, negPoint, point2Int, scalePoint)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Grid, GridLoc, Model, Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot)
 
 

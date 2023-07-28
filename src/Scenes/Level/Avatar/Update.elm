@@ -1,4 +1,27 @@
-module Scenes.Level.Avatar.Update exposing (..)
+module Scenes.Level.Avatar.Update exposing
+    ( judgeErosionDamage, judgeLocAvail
+    , moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill
+    , updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit
+    )
+
+{-| Update module
+
+
+# judge Functions
+
+@docs judgeErosionDamage, judgeLocAvail
+
+
+# set Functions
+
+@docs moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill
+
+
+# update Functions
+
+@docs updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))

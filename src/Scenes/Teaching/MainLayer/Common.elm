@@ -1,11 +1,26 @@
 module Scenes.Teaching.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarAnima, AvatarSpirit, TeachingStatus(..), revealCandleTimeSlot, textBoxPos
+    , AvatarAnima, AvatarSpirit
+    , revealCandleTimeSlot, textBoxPos
+    , TeachingStatus(..)
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs AvatarAnima, AvatarSpirit, TeachingStatus
+
+
+# Functions
+
+@docs revealCandleTimeSlot, textBoxPos
 
 -}
 

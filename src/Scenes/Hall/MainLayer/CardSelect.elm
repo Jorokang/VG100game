@@ -1,4 +1,21 @@
-module Scenes.Hall.MainLayer.CardSelect exposing (..)
+module Scenes.Hall.MainLayer.CardSelect exposing
+    ( Card, PileSize
+    , clickCard, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile
+    )
+
+{-| CardSelect module
+
+
+# Data types
+
+@docs Card, PileSize
+
+
+# Functions
+
+@docs clickCard, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
