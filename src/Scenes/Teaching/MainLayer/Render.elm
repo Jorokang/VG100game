@@ -207,7 +207,7 @@ renderTextBox : EnvC -> List String -> Renderable
 renderTextBox env str =
     let
         rend_box =
-            renderSprite env.globalData [] ( 800, 100 ) ( 500, 250 ) "text_box"
+            renderSprite env.globalData [] ( 800, 100 ) ( 750, 250 ) "text_box"
 
         rend_text =
             List.map2 (renderTextBoxTool env) str (List.range 1 (List.length str))
@@ -261,7 +261,7 @@ renderInit : EnvC -> Model -> Renderable
 renderInit env model =
     let
         rend_t =
-            renderTextBox env [ "Gen" ]
+            renderTextBox env [ "This is dream land" ]
 
         rend =
             [ rend_t
@@ -276,7 +276,7 @@ renderMuttering1 : EnvC -> Model -> Renderable
 renderMuttering1 env model =
     let
         rend_t =
-            renderTextBox env [ "Shin" ]
+            renderTextBox env [ "It is so dark!" ]
 
         rend =
             [ rend_t
@@ -291,7 +291,7 @@ renderMuttering2 : EnvC -> Model -> Renderable
 renderMuttering2 env model =
     let
         rend_t =
-            renderTextBox env [ "QiDong!" ]
+            renderTextBox env [ "I must find my parents" ]
 
         rend =
             [ rend_t
@@ -309,7 +309,7 @@ renderEnemy1 env model =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
 
         rend_t =
-            renderTextBox env [ "Genshin", "QiDong!" ]
+            renderTextBox env [ "What's that?" ]
 
         rend =
             [ rend_e
@@ -325,7 +325,7 @@ renderEnemy2 : EnvC -> Model -> Renderable
 renderEnemy2 env model =
     let
         rend_t =
-            renderTextBox env [ "Genshin", "QiDong!" ]
+            renderTextBox env [ "!!!" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -381,7 +381,7 @@ renderHurt : EnvC -> Model -> Renderable
 renderHurt env model =
     let
         rend_t =
-            renderTextBox env [ "Genshin", "QiDong!" ]
+            renderTextBox env [ "[Click the boy]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -459,7 +459,7 @@ renderSelectAvatar : EnvC -> Model -> Renderable
 renderSelectAvatar env model =
     let
         rend_t =
-            renderTextBox env [ "Genshin", "QiDong!" ]
+            renderTextBox env [ "[Move!]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -545,7 +545,7 @@ renderMoveAvatar : EnvC -> Model -> Renderable
 renderMoveAvatar env model =
     let
         rend_t =
-            renderTextBox env [ "Genshin", "QiDong!" ]
+            renderTextBox env [ "[Move!]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -564,7 +564,7 @@ renderMuttering3 : EnvC -> Model -> Renderable
 renderMuttering3 env model =
     let
         rend_t =
-            renderTextBox env [ ":D" ]
+            renderTextBox env [ "[You escape from it]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -583,7 +583,7 @@ renderRevealScroll : EnvC -> Model -> Renderable
 renderRevealScroll env model =
     let
         rend_t =
-            renderTextBox env [ "Revealing Scroll" ]
+            renderTextBox env [ "[Use your cards]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -613,7 +613,7 @@ renderCard1 : EnvC -> Model -> Renderable
 renderCard1 env model =
     let
         rend_t =
-            renderTextBox env [ ":)" ]
+            renderTextBox env [ "[Click the card!]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -640,7 +640,7 @@ renderCard2 : EnvC -> Model -> Renderable
 renderCard2 env model =
     let
         rend_t =
-            renderTextBox env [ ":)" ]
+            renderTextBox env [ "[Click!!]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
@@ -678,7 +678,7 @@ renderEnd : EnvC -> Model -> Renderable
 renderEnd env model =
     let
         rend_t =
-            renderTextBox env [ ":))))))))))" ]
+            renderTextBox env [ "[Now start your story]" ]
 
         rend_e =
             renderSprite env.globalData [] ( 0, 300 ) ( 490, 400 ) "e_3"
