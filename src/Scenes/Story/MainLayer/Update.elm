@@ -122,7 +122,6 @@ updateModelRoom env model m_pos =
             , env
             )
 
-
         _ ->
             ( model, [], env )
 

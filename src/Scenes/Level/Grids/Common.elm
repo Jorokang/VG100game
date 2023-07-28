@@ -202,14 +202,15 @@ initGridsLevel3 =
     }
         |> genGrids
 
+
 initGridsLevel4 : Int -> Model
-initGridsLevel4 rand_num=
+initGridsLevel4 rand_num =
     let
         ( number, seed ) =
             randomGrids (Random.initialSeed 0)
     in
     { status = Active
-    , map_size = ( 2+(modBy 5 rand_num), 2+(modBy 4 rand_num) )
+    , map_size = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
     , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []
@@ -217,6 +218,7 @@ initGridsLevel4 rand_num=
     , seed = seed
     }
         |> genGrids
+
 
 {-| generate a grids with no-effect plots of the given map size
 -}

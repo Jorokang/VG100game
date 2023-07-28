@@ -17,8 +17,7 @@ import Scenes.Menu.LayerBase exposing (CommonData)
 Add your own data here.
 -}
 type alias Model =
-    {
-        time: Int
+    { time : Int
     , e_time : Int
     , active : Bool
     }
@@ -28,8 +27,7 @@ type alias Model =
 -}
 nullModel : Model
 nullModel =
-    {
-        time = -1
+    { time = -1
     , e_time = 600
     , active = True
     }

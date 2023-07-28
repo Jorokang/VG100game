@@ -1,8 +1,7 @@
 module Scenes.Story.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , StoryItem
+    , StoryItem, StoryStatus(..)
     , initModel0, initModel1, initModel2, initModel3, nullStoryItem
-    , StoryStatus(..)
     )
 
 {-| Common module
@@ -100,6 +99,7 @@ diaryItem =
     , v_sprite_name = "diary_2"
     , str = "Saturday--- Sunny--- There is an entry to a fantasy dream world in my pillow! I must share it with mum and dad!"
     }
+
 
 tItem : StoryItem
 tItem =

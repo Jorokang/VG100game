@@ -112,7 +112,7 @@ renderTableLights env model =
 -}
 renderTableLight : EnvC -> TableLight -> Renderable
 renderTableLight env tl =
-    renderSprite env.globalData [] (coorChangeS env (addPoint (grid2real tl.loc) (0-1.2*cellLength, 0)) mapCoorData) (sizeChangeS env ( cellLength*4, cellLength*4 ) mapCoorData) "candle_light_1"
+    renderSprite env.globalData [] (coorChangeS env (addPoint (grid2real tl.loc) ( 0 - 1.2 * cellLength, 0 )) mapCoorData) (sizeChangeS env ( cellLength * 4, cellLength * 4 ) mapCoorData) "candle_light_1"
 
 
 {-| render single patterns by the given position and id

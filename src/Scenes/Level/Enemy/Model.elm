@@ -17,7 +17,7 @@ import Canvas exposing (Point, Renderable, group)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, nullModel, initEnemyLevel4)
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, initEnemyLevel4, nullModel)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye)
 import Scenes.Level.Enemy.Update exposing (curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)

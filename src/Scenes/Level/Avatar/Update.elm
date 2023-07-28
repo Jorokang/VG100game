@@ -274,7 +274,7 @@ updateClickEvent env model loc =
     in
     case model.status of
         AvatarActive ->
-            if delta_loc == ( 0, 0 ) && (model.stamina>0)then
+            if delta_loc == ( 0, 0 ) && (model.stamina > 0) then
                 ( { model | status = AvatarSelected }
                 , []
                 , env

@@ -1,8 +1,7 @@
 module Scenes.Teaching.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarAnima, AvatarSpirit
+    , AvatarAnima, AvatarSpirit, TeachingStatus(..)
     , revealCandleTimeSlot, textBoxPos
-    , TeachingStatus(..)
     )
 
 {-| Common module

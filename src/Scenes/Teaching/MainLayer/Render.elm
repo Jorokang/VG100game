@@ -304,8 +304,12 @@ renderInit : EnvC -> Model -> Renderable
 renderInit env model =
     let
         rend_t =
-            renderTextBox env [ " My fantasy world is waiting for me! ", " Tonight i'm gonna swim in the fanta sea,", " and watch fireworks in the candy castle!"
-                              , " Wait?!! Where am I?" ]
+            renderTextBox env
+                [ " My fantasy world is waiting for me! "
+                , " Tonight i'm gonna swim in the fanta sea,"
+                , " and watch fireworks in the candy castle!"
+                , " Wait?!! Where am I?"
+                ]
 
         rend =
             [ rend_t
