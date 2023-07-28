@@ -89,8 +89,8 @@ levelokclicked env model ( a, b ) =
         ( model, [], env )
 
 
-{-| in level choices
-when button ok is pressed, change the scene from hall to Level
+{-| in setting choices
+when button up or down is pressed, change the volume by 10
 -}
 ifupdown : Model -> ( Float, Float ) -> Int
 ifupdown model ( a, b ) =
