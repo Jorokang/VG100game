@@ -155,7 +155,7 @@ renderNextRoundB env model =
             [ shapes [ fill Color.yellow ] [ circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData) ]
 
             --, text [ font { size = round (20 * btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
-            , text [ font { size = round (lengthChange env (20 * btn.scale) nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+            , text [ font { size = round (lengthChange env (20 * btn.scale) nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env (addPoint btn.pos ( 0 - 50 * btn.scale, 0 )) nullCoorData) "Next\nTurn"
             ]
     in
     Canvas.group
