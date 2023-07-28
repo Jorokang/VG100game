@@ -143,7 +143,8 @@ renderSpirit env model =
         render_label =
             Canvas.group
                 [ fill Color.white ]
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit" ]
+                --[ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit" ]
+                [ text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env label_pos nullCoorData) "spirit" ]
 
         render_max_box =
             shapes
@@ -198,7 +199,8 @@ renderClick env model =
 
 renderTextBoxTool : EnvC -> String -> Int -> Renderable
 renderTextBoxTool env str d =
-    text [ font { size = 32, family = "Comic Sans MS", style = "" }, align Left ] (posToReal env.globalData ( 900, toFloat ((d - 1) * 32 + 200) )) str
+    --text [ font { size = 32, family = "Comic Sans MS", style = "" }, align Left ] (posToReal env.globalData ( 900, toFloat ((d - 1) * 32 + 200) )) str
+    text [ font { size = round (lengthChange env 32 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 900, toFloat ((d - 1) * 32 + 200) ) nullCoorData) str
 
 
 renderTextBox : EnvC -> List String -> Renderable

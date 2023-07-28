@@ -21,6 +21,7 @@ import Color
 import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Frame.Functions exposing (coorChange, lengthChange, nullCoorData)
 import Scenes.Menu.MainLayer.Common exposing (EnvC, Model, nullModel)
 import Scenes.Menu.SceneInit exposing (MenuInit)
 import String
@@ -140,7 +141,8 @@ viewModel env model =
             renderSprite env.globalData [ filter str3 ] ( 690, 270 ) ( 550, 380 ) "team_logo"
 
         rend_t0 =
-            text [ font { size = 96, family = "Comic Sans MS", style = "" }, align Center ] (posToReal env.globalData ( 965, 860 )) "Light in Nightmares"
+            --text [ font { size = 96, family = "Comic Sans MS", style = "" }, align Center ] (posToReal env.globalData ( 965, 860 )) "Light in Nightmares"
+            text [ font { size = round (lengthChange env 96 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 965, 800 ) nullCoorData) "Light in Nightmares"
 
         rend_t =
             Canvas.group [ filter str2 ] [ rend_t0 ]
