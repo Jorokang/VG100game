@@ -70,7 +70,7 @@ familyPaintingItem =
     , v_pos = ( 500, 350 )
     , v_size = ( 800, 469 )
     , v_sprite_name = "family_painting_2"
-    , str = "Mum and Dad and Me"
+    , str = "Mum and Dad and Me."
     }
 
 
@@ -80,10 +80,10 @@ diaryItem =
     , c_size = ( 200, 130 )
     , c_sprite_name = "diary_1"
     , c_scale = 1
-    , v_pos = ( 500, 350 )
+    , v_pos = ( 500, 50 )
     , v_size = ( 960, 720 )
     , v_sprite_name = "diary_2"
-    , str = "diary"
+    , str = "Saturday--- Sunny--- There is an entry to a fantasy dream world in my pillow! I must share it with mum and dad!"
     }
 
 tItem : StoryItem
@@ -105,10 +105,10 @@ sunItem =
     , c_size = ( 200, 200 )
     , c_sprite_name = "sun"
     , c_scale = 1
-    , v_pos = ( 500, 350 )
+    , v_pos = ( 600, 350 )
     , v_size = ( 500, 500 )
     , v_sprite_name = "sun"
-    , str = "A fake sun painting pasted on the wall."
+    , str = "I get the sun back, but it's a fake sun pasted on the window."
     }
 
 

@@ -49,7 +49,7 @@ handleLayerMsg env lmsg model =
             in
             case scene_name of
                 "Level1" ->
-                    ( model, [ SOMChangeScene ( LevelInitData (initLevel4 rand cards), "Level", trans ) ], env )
+                    ( model, [ SOMChangeScene ( LevelInitData (initLevel1 cards), "Level", trans ) ], env )
 
                 "Level2" ->
                     ( model, [ SOMChangeScene ( LevelInitData (initLevel2 cards), "Level", trans ) ], env )

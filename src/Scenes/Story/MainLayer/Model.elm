@@ -29,7 +29,7 @@ initModel : EnvC -> StoryInit -> Model
 initModel _ i =
     case i.id of
         0 ->
-            initModel3
+            initModel0
 
         1 ->
             initModel1

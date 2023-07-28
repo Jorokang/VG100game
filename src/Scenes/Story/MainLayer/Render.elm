@@ -81,7 +81,7 @@ renderStoryItem env model =
                     renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
 
                 rend_t =
-                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 )) i.str
+                    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 500, 940 ) nullCoorData) i.str
             in
             Canvas.group
                 []
@@ -98,7 +98,7 @@ renderStoryItem env model =
                     renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
 
                 rend_t =
-                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 )) i.str
+                    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 500, 940 ) nullCoorData) i.str
             in
             Canvas.group
                 []
