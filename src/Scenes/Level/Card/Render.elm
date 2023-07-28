@@ -19,6 +19,10 @@ renderStr env pos str =
 
 --renderText env.globalData 24 str "Comic Sans MS" (posToReal env.globalData pos)
 
+renderBulletinBoard : EnvC -> Model -> Renderable
+renderBulletinBoard env _ =
+    renderSprite env.globalData [] (coorChangeS env (1000, 180) nullCoorData) (sizeChangeS env (390,400) nullCoorData) "bulletin_board"
+
 
 giveInfoList : List String
 giveInfoList =

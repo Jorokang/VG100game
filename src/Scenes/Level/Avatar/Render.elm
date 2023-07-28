@@ -171,7 +171,7 @@ renderShadow env model =
             ( 50, 50 )
 
         ( sx, sy ) =
-            ( 720, 600 )
+            ( 1020, 800 )
 
         lx =
             lengthChange env sx shadowCoorData
