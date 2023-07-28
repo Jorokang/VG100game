@@ -70,16 +70,16 @@ renderPlotGuard env x =
         pos =
             grid2real x.loc
         offset =
-            6
+            16
 
         rl =
             lengthChange env (cellLength - 4 * offset) mapCoorData
 
         r_pos =
-            coorChange env (addPoint pos ( 2 * offset, 2 * offset )) mapCoorData
+            coorChangeS env (addPoint pos ( 1.7 * offset, 2 * offset )) mapCoorData
     in
     if x.val.protection > 0 then
-            renderSprite env.globalData [ filter "opacity(35%)" ] (coorChangeS env r_pos mapCoorData) (sizeChangeS env (rl,rl) mapCoorData) "shield"
+        renderSprite env.globalData [ filter "opacity(35%)" ] r_pos (rl,rl*1.2) "shield"
  
     else
         empty
