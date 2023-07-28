@@ -16,9 +16,21 @@ import Scenes.Level.Card.CardSystem exposing (drawCard, shuffle)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
+validHelper : Int -> Int
+validHelper id =
+    if id >= 6 then
+        id + 1
+
+    else
+        id
+
+
 selectedModel : List Int -> Model
 selectedModel cards =
     let
+        valid_cards =
+            List.map validHelper cards
+
         model =
             { hand = []
             , discard = []
@@ -30,7 +42,7 @@ selectedModel cards =
             , click_status = False
             , selected_pos = -1
             , selected_card = giveErrorCard
-            , available = cards
+            , available = valid_cards
             }
     in
     drawCard (shuffle { model | deck = initializeDeck model.available }) 5
