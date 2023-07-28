@@ -1,4 +1,13 @@
-module Scenes.Level.Card.CardUnique exposing (..)
+module Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit, createPosList)
+
+{-| Functions of letting card into use
+
+
+# Functions
+
+@docs clickCard, costSpirit, createPosList
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)

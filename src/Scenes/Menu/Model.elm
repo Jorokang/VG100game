@@ -12,14 +12,20 @@ module Scenes.Menu.Model exposing
 
 -}
 
-import Canvas exposing (Renderable)
+import Canvas exposing (Point, Renderable, rect, shapes, text)
+import Canvas.Settings exposing (fill)
+import Canvas.Settings.Advanced exposing (filter)
+import Color
 import Lib.Audio.Base exposing (AudioOption(..))
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneOutputMsg(..))
+import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Menu.Common exposing (Model)
 import Scenes.Menu.LayerBase exposing (CommonData)
+import Scenes.Story.SceneInit exposing (nullStoryInit)
 
 
 {-| handleLayerMsg
@@ -35,6 +41,16 @@ handleLayerMsg env lmsg model =
 
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
+
+        LayerStringMsg scene_name ->
+            let
+                sid =
+                    StoryInitData nullStoryInit
+
+                trans =
+                    Just (genTransition 100 100 transitionOut transitionIn)
+            in
+            ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
 
         _ ->
             ( model, [], env )
@@ -74,3 +90,65 @@ updateModel env model =
 viewModel : Env -> Model -> Renderable
 viewModel env model =
     viewLayer (addCommonData model.commonData env) model.layers
+
+
+{-| The transition setting for Story layer
+-}
+transitionOut : SingleTrans
+transitionOut env rend f =
+    let
+        f1 =
+            f
+
+        str1 =
+            "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"
+
+        str2 =
+            "opacity(" ++ String.fromInt (round (f1 * 100.0)) ++ "%)"
+
+        rend1 =
+            Canvas.group [ filter str1 ] [ rend ]
+
+        rend2 =
+            shapes
+                [ filter str2
+                , fill Color.white
+                ]
+                [ rect (posToReal env ( 0, 0 )) (lengthToReal env 1920) (lengthToReal env 1080) ]
+    in
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        ]
+
+
+{-| The transition setting for Hall layer
+-}
+transitionIn : SingleTrans
+transitionIn env rend f =
+    let
+        f1 =
+            f
+
+        str1 =
+            "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"
+
+        str2 =
+            "opacity(" ++ String.fromInt (round (f1 * 100.0)) ++ "%)"
+
+        rend1 =
+            Canvas.group [ filter str2 ] [ rend ]
+
+        rend2 =
+            shapes
+                [ filter str1
+                , fill Color.white
+                ]
+                [ rect (posToReal env ( 0, 0 )) (lengthToReal env 1920) (lengthToReal env 1080) ]
+    in
+    Canvas.group
+        []
+        [ rend1
+        , rend2
+        ]

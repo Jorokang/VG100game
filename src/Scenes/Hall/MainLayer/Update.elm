@@ -1,8 +1,18 @@
-module Scenes.Hall.MainLayer.Update exposing (..)
+module Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
 
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
+{-| Render module
+
+
+# Functions
+
+@docs ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked
+
+-}
+
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.Common exposing (Button, ButtonStatus(..), Choice(..), EnvC, HallStatus(..), Hallname(..), Levelbtn, Model)
+import Scenes.Level.Frame.Functions exposing (coorChange, nullCoorData)
 
 
 {-| for a button
@@ -66,83 +76,52 @@ hallState c model =
 {-| in level choices
 when button ok is pressed, change the scene from hall to Level
 -}
-levelokclicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
-levelokclicked env model =
-    let
-        lev =
-            model.level
-
-        num =
-            lev.levelInt
-    in
-    ( { model
-        | status = Inactive
-        , level =
-            { lev
-                | open = buttonInact lev.open
-                , close = buttonInact lev.close
-                , up = buttonInact lev.up
-                , down = buttonInact lev.down
-                , ok = buttonInact lev.ok
-            }
-      }
-    , [ ( LayerParentScene, LayerGoToLevel ("Level" ++ String.fromInt num) model.selected_cards ) ]
-    , env
-    )
-
-
-{-| in level choices
-change the level num by up and down
--}
-upclicked : Levelbtn -> Levelbtn
-upclicked lev =
-    let
-        num =
-            lev.levelInt + 1
-    in
-    { lev | levelInt = num }
-
-
-downclicked : Levelbtn -> Levelbtn
-downclicked lev =
-    let
-        num =
-            lev.levelInt - 1
-    in
-    { lev | levelInt = num }
-
-
-{-| in level choices
-check if up or down clicked
--}
-checkupdown : Levelbtn -> ( Float, Float ) -> Levelbtn
-checkupdown lev ( a, b ) =
-    if lev.levelInt > 1 && lev.levelInt < 5 then
-        if ifClicked lev.up ( a, b ) then
-            upclicked lev
-
-        else if ifClicked lev.down ( a, b ) then
-            downclicked lev
-
-        else
-            lev
-
-    else if lev.levelInt == 1 then
-        if ifClicked lev.up ( a, b ) then
-            upclicked lev
-
-        else
-            lev
-
-    else if lev.levelInt == 5 then
-        if ifClicked lev.down ( a, b ) then
-            downclicked lev
-
-        else
-            lev
+levelokclicked : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
+levelokclicked env model ( a, b ) =
+    if List.length model.selected_cards < 5 then
+        ( { model | hint = True }, [], env )
 
     else
-        lev
+        let
+            lev =
+                model.level
+        in
+        if ifClicked lev.level1 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level1" model.selected_cards ) ], env )
+
+        else if ifClicked lev.level2 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level2" model.selected_cards ) ], env )
+
+        else if ifClicked lev.level3 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level3" model.selected_cards ) ], env )
+
+        else if ifClicked lev.level4 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level4" model.selected_cards ) ], env )
+
+        else
+            ( model, [], env )
+
+
+{-| in setting choices
+when button up or down is pressed, change the volume by 10
+-}
+ifupdown : Model -> ( Float, Float ) -> Int
+ifupdown model ( a, b ) =
+    let
+        set =
+            model.setting
+
+        num =
+            set.volume
+    in
+    if ifClicked set.up ( a, b ) && num < 100 then
+        num + 10
+
+    else if ifClicked set.down ( a, b ) && num > 0 then
+        num - 10
+
+    else
+        num
 
 
 {-| in five hall choices
@@ -161,20 +140,18 @@ inlevel env model ( a, b ) =
                 { lev
                     | open = buttonAct lev.open
                     , close = buttonInact lev.close
-                    , up = buttonInact lev.up
-                    , down = buttonInact lev.down
-                    , ok = buttonInact lev.ok
+                    , level1 = buttonInact lev.level1
+                    , level2 = buttonInact lev.level2
+                    , level3 = buttonInact lev.level3
+                    , level4 = buttonInact lev.level4
                 }
           }
         , []
         , env
         )
 
-    else if ifClicked model.level.ok ( a, b ) then
-        levelokclicked env model
-
     else
-        ( { model | level = checkupdown lev ( a, b ) }, [], env )
+        levelokclicked env model ( a, b )
 
 
 inhelp : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -243,7 +220,19 @@ insetting env model ( a, b ) =
         )
 
     else
-        ( model, [], env )
+        let
+            volume =
+                ifupdown model ( a, b )
+        in
+        ( { model
+            | setting =
+                { set
+                    | volume = volume
+                }
+          }
+        , [ ( LayerParentScene, LayerIntMsg volume ) ]
+        , env
+        )
 
 
 inhall : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -269,9 +258,10 @@ inhall env model ( a, b ) =
                     { lev
                         | open = buttonInact lev.open
                         , close = buttonAct lev.close
-                        , up = buttonAct lev.up
-                        , down = buttonAct lev.down
-                        , ok = buttonAct lev.ok
+                        , level1 = buttonAct lev.level1
+                        , level2 = buttonAct lev.level2
+                        , level3 = buttonAct lev.level3
+                        , level4 = buttonAct lev.level4
                     }
               }
             , []
@@ -311,6 +301,8 @@ inhall env model ( a, b ) =
                     { set
                         | open = buttonInact set.open
                         , close = buttonAct set.close
+                        , up = buttonAct set.up
+                        , down = buttonAct set.down
                     }
               }
             , []

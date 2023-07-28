@@ -61,7 +61,7 @@ type LayerMsg
     | LayerMsgErodePermission GridLoc Int --check whether this cell is protected (Int: 0 -> denied/asking; 1 -> approved)
     | LayerMsgProtectCell GridLoc Int --protect the cell for x rounds
     | LayerMsgModifySpirit Int --modify the spirit
-    | LayerMsgLevelComplete Int -- 0->loose; 1->win;
+    | LayerMsgLevelComplete Int Int -- 0->loose; 1->win;
     | LayerMsgEnemyErodeTarget
     | LayerMsgEnemySetTarget
     | LayerMsgAvatarModifyLight Float

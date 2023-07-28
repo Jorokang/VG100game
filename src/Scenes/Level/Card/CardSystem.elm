@@ -1,4 +1,13 @@
-module Scenes.Level.Card.CardSystem exposing (..)
+module Scenes.Level.Card.CardSystem exposing (drawCard, dropCardByCard, shuffle, takeCard)
+
+{-| Basic functions of operating cards
+
+
+# Functions
+
+@docs drawCard, dropCardByCard, shuffle, takeCard
+
+-}
 
 import Random exposing (Generator, Seed)
 import Scenes.Level.Card.CardCreate exposing (Card, Model, giveErrorCard_2)

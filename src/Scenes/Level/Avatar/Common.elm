@@ -1,11 +1,25 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
+    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc
+    , avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3, initAvatarLevel4
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs AvatarAnima, AvatarSpirit, AvatarStatus, CardSelectionStatus, GridLoc
+
+
+# Functions
+
+@docs avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3, initAvatarLevel4
 
 -}
 
@@ -60,7 +74,8 @@ type alias AvatarSpirit =
 
 
 type alias Model =
-    { status : AvatarStatus
+    { level_id : Int
+    , status : AvatarStatus
     , card_status : CardSelectionStatus
     , target_loc : GridLoc
     , cur_loc : GridLoc
@@ -71,6 +86,7 @@ type alias Model =
     , lightRange : Float
     , anima : AvatarAnima
     , spirit : AvatarSpirit
+    , stamina : Int
     }
 
 
@@ -110,6 +126,8 @@ nullModel =
     , spirit = nullSpirit
     , lightRange = 0
     , anima = defaultAnima
+    , level_id = -1
+    , stamina = 0
     }
 
 
@@ -126,6 +144,8 @@ initAvatar1 size =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = -1
+    , stamina = 0
     }
 
 
@@ -142,6 +162,8 @@ initAvatarLevel1 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 1
+    , stamina = 3
     }
 
 
@@ -158,6 +180,8 @@ initAvatarLevel2 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 2
+    , stamina = 3
     }
 
 
@@ -174,6 +198,26 @@ initAvatarLevel3 =
     , spirit = nullSpirit
     , lightRange = 2
     , anima = defaultAnima
+    , level_id = 3
+    , stamina = 3
+    }
+
+
+initAvatarLevel4 : Int -> Model
+initAvatarLevel4 rand_num =
+    { status = AvatarActive
+    , card_status = CardType_None
+    , target_loc = ( 1, 0 )
+    , cur_loc = ( 1, 0 )
+    , pos = ( 0, 0 )
+    , avail_grids = allGrids ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+    , core_loc = ( 1, 0 )
+    , map_size = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+    , spirit = nullSpirit
+    , lightRange = 2
+    , anima = defaultAnima
+    , level_id = 4
+    , stamina = 3
     }
 
 

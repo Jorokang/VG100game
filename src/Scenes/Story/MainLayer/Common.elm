@@ -1,11 +1,25 @@
 module Scenes.Story.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , StoryItem, StoryStatus(..), initModel1, nullStoryItem
+    , StoryItem, StoryStatus(..)
+    , initModel0, initModel1, initModel2, initModel3, nullStoryItem
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs StoryItem, StoryStatus
+
+
+# Functions
+
+@docs initModel0, initModel1, initModel2, initModel3, nullStoryItem
 
 -}
 
@@ -19,6 +33,9 @@ type StoryStatus
     = StoryRoom
     | StoryFamilyPainting
     | StoryHall
+    | StorySun
+    | StoryDiary
+    | StoryT
     | StoryNull
 
 
@@ -38,6 +55,10 @@ type alias Model =
     { status : StoryStatus
     , family_painting : StoryItem
     , button_hall : StoryItem
+    , sun : StoryItem
+    , diary : StoryItem
+    , id : Int
+    , t : StoryItem
     }
 
 
@@ -63,7 +84,46 @@ familyPaintingItem =
     , v_pos = ( 500, 350 )
     , v_size = ( 800, 469 )
     , v_sprite_name = "family_painting_2"
-    , str = "Mum and Dad and Me"
+    , str = "Mum and Dad and Me."
+    }
+
+
+diaryItem : StoryItem
+diaryItem =
+    { c_pos = ( 1660, 450 )
+    , c_size = ( 200, 130 )
+    , c_sprite_name = "diary_1"
+    , c_scale = 1
+    , v_pos = ( 500, 50 )
+    , v_size = ( 960, 720 )
+    , v_sprite_name = "diary_2"
+    , str = "Saturday--- Sunny--- There is an entry to a fantasy dream world in my pillow! I must share it with mum and dad!"
+    }
+
+
+tItem : StoryItem
+tItem =
+    { c_pos = ( 850, 180 )
+    , c_size = ( 200, 48 )
+    , c_sprite_name = "teaching"
+    , c_scale = 1
+    , v_pos = ( 500, 350 )
+    , v_size = ( 960, 720 )
+    , v_sprite_name = ""
+    , str = "teaching mode"
+    }
+
+
+sunItem : StoryItem
+sunItem =
+    { c_pos = ( 130, 60 )
+    , c_size = ( 200, 200 )
+    , c_sprite_name = "sun"
+    , c_scale = 1
+    , v_pos = ( 600, 350 )
+    , v_size = ( 500, 500 )
+    , v_sprite_name = "sun"
+    , str = "I get the sun back, but it's a fake sun pasted on the window."
     }
 
 
@@ -85,14 +145,58 @@ nullModel =
     { status = StoryNull
     , family_painting = nullStoryItem
     , button_hall = nullStoryItem
+    , sun = nullStoryItem
+    , diary = nullStoryItem
+    , t = tItem
+    , id = 4
+    }
+
+
+initModel0 : Model
+initModel0 =
+    { status = StoryRoom
+    , family_painting = nullStoryItem
+    , button_hall = button2Hall
+    , sun = nullStoryItem
+    , diary = nullStoryItem
+    , t = tItem
+    , id = 0
     }
 
 
 initModel1 : Model
 initModel1 =
     { status = StoryRoom
+    , family_painting = nullStoryItem
+    , button_hall = button2Hall
+    , sun = sunItem
+    , diary = nullStoryItem
+    , t = tItem
+    , id = 1
+    }
+
+
+initModel2 : Model
+initModel2 =
+    { status = StoryRoom
     , family_painting = familyPaintingItem
     , button_hall = button2Hall
+    , sun = sunItem
+    , diary = nullStoryItem
+    , t = tItem
+    , id = 2
+    }
+
+
+initModel3 : Model
+initModel3 =
+    { status = StoryRoom
+    , family_painting = familyPaintingItem
+    , button_hall = button2Hall
+    , sun = sunItem
+    , diary = diaryItem
+    , t = tItem
+    , id = 3
     }
 
 

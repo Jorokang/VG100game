@@ -1,11 +1,25 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation, initFrame1
+    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation
+    , initFrame1
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs ClearAnimation, FrameStatus, NextRoundButton, NextRoundButtonStatus, SpiritAnimation
+
+
+# Functions
+
+@docs initFrame1
 
 -}
 
@@ -111,8 +125,8 @@ initFrame1 =
     { status = FramePlayerTurn
     , time = 0
     , player_data =
-        { cur_stamina = 3
-        , max_stamina = 3
+        { cur_stamina = 5
+        , max_stamina = 5
         , add_stamina = 0
         , turns = 0
         }
