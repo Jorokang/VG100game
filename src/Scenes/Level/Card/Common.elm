@@ -1,11 +1,8 @@
-module Scenes.Level.Card.Common exposing
-    ( nullModel, EnvC
-    , selectedModel
-    )
+module Scenes.Level.Card.Common exposing (nullModel, selectedModel, EnvC)
 
 {-| Common module
 
-@docs Model, nullModel, EnvC
+@docs nullModel, selectedModel, EnvC
 
 -}
 
