@@ -7,6 +7,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color, rgb255)
 import Html exposing (label)
 import Lib.Render.Sprite exposing (renderSprite)
+import Lib.Render.Text exposing (renderText)
 import List exposing (length)
 import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), CardSelectionStatus(..), EnvC, GridLoc, Model, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2)
 import Scenes.Level.Avatar.Update exposing (judgeLocAvail)
@@ -252,7 +253,8 @@ renderSpirit env model =
         render_label =
             Canvas.group
                 [ fill Color.white ]
-                [ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit" ]
+                --[ text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env label_pos nullCoorData) "spirit" ]
+                [ text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env label_pos nullCoorData) "spirit" ]
 
         render_max_box =
             shapes
@@ -291,7 +293,8 @@ renderTrappedEffect env model =
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    --text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos mapCoorData) str
 
 
 {-| For testing
@@ -316,7 +319,8 @@ renderSingleTuple env ( x, y ) d =
         pos =
             ( 800, toFloat (d * 40) )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    --text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos mapCoorData) str
 
 
 renderSingleTuple2 : EnvC -> ( Float, Float ) -> Renderable
@@ -328,4 +332,5 @@ renderSingleTuple2 env ( x, y ) =
         pos =
             ( 1000, 20 )
     in
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    --text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos mapCoorData) str

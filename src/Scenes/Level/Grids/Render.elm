@@ -69,18 +69,19 @@ renderPlotGuard env x =
     let
         pos =
             grid2real x.loc
+
         offset =
-            16
+            6
 
         rl =
             lengthChange env (cellLength - 4 * offset) mapCoorData
 
         r_pos =
-            coorChangeS env (addPoint pos ( 1.7 * offset, 2 * offset )) mapCoorData
+            coorChange env (addPoint pos ( 2 * offset, 2 * offset )) mapCoorData
     in
     if x.val.protection > 0 then
-        renderSprite env.globalData [ filter "opacity(35%)" ] r_pos (rl,rl*1.2) "shield"
- 
+        renderSprite env.globalData [ filter "opacity(35%)" ] (coorChangeS env r_pos mapCoorData) (sizeChangeS env ( rl, rl ) mapCoorData) "shield"
+
     else
         empty
 
@@ -102,7 +103,7 @@ renderTableLights env model =
 -}
 renderTableLight : EnvC -> TableLight -> Renderable
 renderTableLight env tl =
-    renderSprite env.globalData [] (coorChangeS env (grid2real tl.loc) mapCoorData) (sizeChangeS env (cellLength, cellLength) mapCoorData) "candle_light_1"
+    renderSprite env.globalData [] (coorChangeS env (grid2real tl.loc) mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "candle_light_1"
 
 
 {-| render single patterns by the given position and id
@@ -208,7 +209,8 @@ renderLevelBackground env =
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    --text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
 renderSingleTuple : EnvC -> Point -> Point -> Renderable
