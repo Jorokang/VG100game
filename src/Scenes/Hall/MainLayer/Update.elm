@@ -93,6 +93,28 @@ levelokclicked env model ( a, b ) =
         ( model, [], env )
 
 
+{-| in level choices
+when button ok is pressed, change the scene from hall to Level
+-}
+ifupdown : Model -> ( Float, Float ) -> Int
+ifupdown model ( a, b ) =
+    let
+        set =
+            model.setting
+
+        num =
+            set.volume
+    in
+    if ifClicked set.up ( a, b ) && num < 100 then
+        num + 10
+
+    else if ifClicked set.down ( a, b ) && num > 0 then
+        num - 10
+
+    else
+        num
+
+
 {-| in five hall choices
 change the logic here
 -}
@@ -189,7 +211,15 @@ insetting env model ( a, b ) =
         )
 
     else
-        ( model, [], env )
+        ( { model
+            | setting =
+                { set
+                    | volume = ifupdown model ( a, b )
+                }
+          }
+        , []
+        , env
+        )
 
 
 inhall : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
@@ -258,6 +288,8 @@ inhall env model ( a, b ) =
                     { set
                         | open = buttonInact set.open
                         , close = buttonAct set.close
+                        , up = buttonAct set.up
+                        , down = buttonAct set.down
                     }
               }
             , []
