@@ -97,10 +97,11 @@ renderCandle env model =
     in
     Canvas.group
         []
-        [ rend1
-        , rend2
+        [ rend4
         , rend4
         , rend3
+        , rend1
+        , rend2
         ]
 
 
