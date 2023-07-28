@@ -15,6 +15,7 @@ import Scenes.Level.Enemy.Update exposing (checkCellLoc)
 import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, sizeChangeS, upperCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Tuple
+import Scenes.Level.Frame.Functions exposing (sizeChange)
 
 
 {-| render the whole enemy body(explicitly the body field in model)
@@ -429,7 +430,7 @@ renderCircle env pos radius color =
 -}
 renderEnemyCore : EnvC -> Model -> Renderable
 renderEnemyCore env model =
-    let
+    {-let
         ( locx, locy ) =
             int2Point model.core.loc
 
@@ -444,7 +445,20 @@ renderEnemyCore env model =
             ]
         , fill Color.red
         ]
-        [ rect ( x, y ) (lengthChange env (cellLength / 2) mapCoorData) (lengthChange env (cellLength / 2) mapCoorData) ]
+        [ rect ( x, y ) (lengthChange env (cellLength / 2) mapCoorData) (lengthChange env (cellLength / 2) mapCoorData) ]-}
+    let
+        pos =
+            addPoint (grid2real model.core.loc) (cellLength*0.34, cellLength*0.2)
+        siz = (cellLength*0.26, cellLength*0.41)
+        f = if (modBy 2 model.randNum==1) then modBy 3 (model.time//397)
+            else 0
+        offset = if (f==1) then 0
+                    else 10
+        rsiz = addPoint siz (1.2*offset,2.0*offset)
+        rpos = addPoint pos (0-offset, 0-offset)
+    in
+    renderSprite env.globalData [] (coorChangeS env rpos mapCoorData) (sizeChangeS env rsiz mapCoorData) "core"
+
 
 
 {-| render the enmy's eye
