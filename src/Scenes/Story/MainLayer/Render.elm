@@ -119,6 +119,9 @@ renderStoryItem env model =
                 i4 =
                     model.sun
 
+                i5 =
+                    model.t
+
                 ( pos1, size1 ) =
                     realPosItemC i1
 
@@ -131,6 +134,9 @@ renderStoryItem env model =
                 ( pos4, size4 ) =
                     realPosItemC i4
 
+                ( pos5, size5 ) = 
+                    realPosItemC i5
+
                 rend1 =
                     renderSprite env.globalData [] pos1 size1 i1.c_sprite_name
 
@@ -142,6 +148,10 @@ renderStoryItem env model =
 
                 rend4 =
                     renderSprite env.globalData [] pos4 size4 i4.c_sprite_name
+
+                rend5 = 
+                    renderSprite env.globalData [] pos5 size5 i5.c_sprite_name
+
             in
             Canvas.group
                 []
@@ -149,9 +159,13 @@ renderStoryItem env model =
                 , rend2
                 , rend3
                 , rend4
+                , rend5
                 ]
 
         StoryHall ->
+            Canvas.empty
+
+        StoryT ->
             Canvas.empty
 
         StoryNull ->

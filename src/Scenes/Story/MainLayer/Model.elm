@@ -66,6 +66,9 @@ updateModel env model =
                 StoryHall ->
                     ( model, [], env )
 
+                StoryT ->
+                    ( model, [], env )
+
                 StoryNull ->
                     ( model, [], env )
 

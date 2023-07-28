@@ -25,6 +25,9 @@ judgeClickItemC model m_pos =
     else if judgeMouseRect m_pos model.button_hall.c_pos model.button_hall.c_size then
         StoryHall
 
+    else if judgeMouseRect m_pos model.t.c_pos model.t.c_size then
+        StoryT
+
     else
         StoryNull
 
@@ -49,6 +52,9 @@ judgeClickItemV model m_pos =
 
                 StorySun ->
                     ( model.diary, True )
+
+                StoryT ->
+                    ( model.t, True )
 
                 _ ->
                     ( nullStoryItem, False )
@@ -98,6 +104,15 @@ updateModelRoom env model m_pos =
               ]
             , env
             )
+
+        StoryT ->
+            ( { model | status = StoryT }
+            , [ ( LayerParentScene, LayerStringMsg "Teaching" )
+              , ( LayerParentScene, LayerSoundMsg "bgm" (getResourcePath "bgm/bgm.ogg") ALoop )
+              ]
+            , env
+            )
+
 
         _ ->
             ( model, [], env )
@@ -153,6 +168,7 @@ updateModelItemsScale env model =
                 , button_hall = decreaseItemScale model.button_hall
                 , sun = decreaseItemScale model.sun
                 , diary = decreaseItemScale model.diary
+                , t = decreaseItemScale model.t
               }
             , []
             , env
@@ -164,6 +180,7 @@ updateModelItemsScale env model =
                 , button_hall = decreaseItemScale model.button_hall
                 , family_painting = decreaseItemScale model.family_painting
                 , diary = decreaseItemScale model.diary
+                , t = decreaseItemScale model.t
               }
             , []
             , env
@@ -175,6 +192,7 @@ updateModelItemsScale env model =
                 , button_hall = decreaseItemScale model.button_hall
                 , sun = decreaseItemScale model.sun
                 , family_painting = decreaseItemScale model.family_painting
+                , t = decreaseItemScale model.t
               }
             , []
             , env
@@ -184,6 +202,19 @@ updateModelItemsScale env model =
             ( { model
                 | family_painting = decreaseItemScale model.family_painting
                 , button_hall = increaseItemScale model.button_hall
+                , sun = decreaseItemScale model.sun
+                , diary = decreaseItemScale model.diary
+                , t = decreaseItemScale model.t
+              }
+            , []
+            , env
+            )
+
+        StoryT ->
+            ( { model
+                | t = increaseItemScale model.t
+                , family_painting = decreaseItemScale model.family_painting
+                , button_hall = decreaseItemScale model.button_hall
                 , sun = decreaseItemScale model.sun
                 , diary = decreaseItemScale model.diary
               }
@@ -197,6 +228,7 @@ updateModelItemsScale env model =
                 , button_hall = decreaseItemScale model.button_hall
                 , sun = decreaseItemScale model.sun
                 , diary = decreaseItemScale model.diary
+                , t = decreaseItemScale model.t
               }
             , []
             , env

@@ -52,6 +52,16 @@ handleLayerMsg env lmsg model =
             in
             ( model, [ SOMChangeScene ( sid, "Hall", trans ) ], env )
 
+        LayerStringMsg str ->
+            let
+                sid =
+                    NullSceneInitData
+
+                trans =
+                    Just (genTransition 100 100 storyTransitionOut hallTransitionIn)
+            in
+            ( model, [ SOMChangeScene ( sid, str, trans ) ], env )
+
         _ ->
             ( model, [], env )
 
