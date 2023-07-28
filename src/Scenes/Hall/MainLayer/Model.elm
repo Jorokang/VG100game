@@ -110,11 +110,7 @@ updateModelRec env _ model =
             )
 
         MouseDown x ( a, b ) ->
-            if ifClicked model.level.ok ( a, b ) then
-                levelokclicked env model
-
-            else
-                ( model, [], env )
+            inlevel env model ( a, b )
 
         _ ->
             ( model, [], env )
@@ -168,6 +164,7 @@ viewModel env model =
                         [ renderHandCards env model
                         , renderSelectedCards env model
                         , hint
+                        , renderclose env model.card.close
                         ]
 
                 Hall ->

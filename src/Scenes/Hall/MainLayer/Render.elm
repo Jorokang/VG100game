@@ -5,7 +5,7 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.CardSelect exposing (Card, PileSize, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile)
@@ -116,10 +116,9 @@ renderlevel env level =
     let
         rend =
             [ renderclose env level.close
-            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env level.down.size nullCoorData) "down"
-            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env level.up.size nullCoorData) "up"
-            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env level.ok.size nullCoorData) "ok"
-            , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
+            , renderSprite env.globalData [] (coorChangeS env level.level1.pos nullCoorData) (sizeChangeS env ( 840, 140 ) nullCoorData) "ok"
+            , renderSprite env.globalData [] (coorChangeS env level.level4.pos nullCoorData) (sizeChangeS env level.level4.size nullCoorData) "random"
+            , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) "Level : "
             ]
     in
     Canvas.group
