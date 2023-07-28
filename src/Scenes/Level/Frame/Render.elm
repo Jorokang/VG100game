@@ -1,13 +1,22 @@
-module Scenes.Level.Frame.Render exposing (..)
+module Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderNextRoundB, renderSpiritAnimations)
 
-import Canvas exposing (Point, Renderable, circle, group, shapes, text)
+{-| Render module
+
+
+# Functions
+
+@docs renderCandle, renderClearAnimations, renderNextRoundB, renderSpiritAnimations
+
+-}
+
+import Canvas exposing (Point, Renderable, circle, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, SpiritAnimation)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, sizeChangeS)
 
 
 renderClearAnimation : EnvC -> Int -> ClearAnimation -> Renderable

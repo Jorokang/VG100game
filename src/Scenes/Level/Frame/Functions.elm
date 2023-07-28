@@ -1,4 +1,21 @@
-module Scenes.Level.Frame.Functions exposing (..)
+module Scenes.Level.Frame.Functions exposing
+    ( CoorData, EnvC, addLoc, addPoint, allGrids, cellLength, coorChange
+    , coorChangeS, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lengthChangeS
+    , lowerCell, map2d, mapCoorData, negPoint, nextRoundBCoorData, nullCoorData, offsetCoorMap
+    , point2Int, pointDistance, real2grid, rightCell, scaleCoorMap, scalePoint, scalePointLength
+    , shadowCoorData, sizeChange, sizeChangeS, upperCell
+    , CoorType(..)
+    )
+
+{-| Functions
+
+@docs CoorData, CoorType, EnvC, addLoc, addPoint, allGrids, cellLength, coorChange
+@docs coorChangeS, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lengthChangeS
+@docs lowerCell, map2d, mapCoorData, negPoint, nextRoundBCoorData, nullCoorData, offsetCoorMap
+@docs point2Int, pointDistance, real2grid, rightCell, scaleCoorMap, scalePoint, scalePointLength
+@docs shadowCoorData, sizeChange, sizeChangeS, upperCell
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)

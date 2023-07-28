@@ -1,11 +1,25 @@
 module Scenes.Level.Frame.Common exposing
     ( Model, nullModel, EnvC
-    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation, initFrame1
+    , ClearAnimation, FrameStatus(..), NextRoundButton, NextRoundButtonStatus(..), SpiritAnimation
+    , initFrame1
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs ClearAnimation, FrameStatus, NextRoundButton, NextRoundButtonStatus, SpiritAnimation
+
+
+# Functions
+
+@docs initFrame1
 
 -}
 
