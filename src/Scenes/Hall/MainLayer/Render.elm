@@ -1,11 +1,11 @@
-module Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting)
+module Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting, renderHint, renderclose)
 
 {-| Render module
 
 
 # Functions
 
-@docs renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting
+@docs renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting, renderHint, renderclose
 
 -}
 

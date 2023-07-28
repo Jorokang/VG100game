@@ -1,10 +1,9 @@
 module Scenes.Level.Frame.Functions exposing
-    ( CoorData, EnvC, addLoc, addPoint, allGrids, cellLength, coorChange
+    ( CoorData, CoorType(..), EnvC, addLoc, addPoint, allGrids, cellLength, coorChange
     , coorChangeS, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lengthChangeS
     , lowerCell, map2d, mapCoorData, negPoint, nextRoundBCoorData, nullCoorData, offsetCoorMap
     , point2Int, pointDistance, real2grid, rightCell, scaleCoorMap, scalePoint, scalePointLength
     , shadowCoorData, sizeChange, sizeChangeS, upperCell
-    , CoorType(..)
     )
 
 {-| Functions

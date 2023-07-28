@@ -1,8 +1,7 @@
 module Scenes.Hall.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , Button, Cardbtn, Helpbtn, Levelbtn, Settingbtn
-    , giveErrorCard, initModelLose, initModelWin
-    , ButtonStatus(..), Choice(..), HallStatus(..), Hallname(..)
+    , Button, ButtonStatus(..), Cardbtn, Choice(..), HallStatus(..), Hallname(..), Helpbtn, Levelbtn, Settingbtn
+    , giveErrorCard, initModelLose, initModelWin, initModelBegin
     )
 
 {-| Common module
@@ -20,7 +19,7 @@ module Scenes.Hall.MainLayer.Common exposing
 
 # Functions
 
-@docs giveErrorCard, initModelLose, initModelWin
+@docs giveErrorCard, initModelLose, initModelWin, initModelBegin
 
 -}
 
@@ -244,6 +243,7 @@ nullModel =
     , click_status = False
     , hint = False
     }
+
 
 initModelBegin : Int -> Model
 initModelBegin id =

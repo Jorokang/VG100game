@@ -1,11 +1,11 @@
-module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
+module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard)
 
 {-| Functions of rendering
 
 
 # Functions
 
-@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage
+@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard
 
 -}
 
