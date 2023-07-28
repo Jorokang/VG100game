@@ -1,4 +1,13 @@
-module Scenes.Level.Enemy.Random exposing (..)
+module Scenes.Level.Enemy.Random exposing (randomEnemy, curUniqueSin)
+
+{-| Random module
+
+
+# Functions
+
+@docs randomEnemy, curUniqueSin
+
+-}
 
 import Canvas exposing (Point)
 import List

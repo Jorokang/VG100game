@@ -13,8 +13,7 @@ module Scenes.Teaching.MainLayer.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty, group, shapes)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model, TeachingStatus(..), nullModel)
 import Scenes.Teaching.MainLayer.Render

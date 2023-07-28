@@ -1,12 +1,28 @@
-module Scenes.Hall.MainLayer.Common exposing (..)
+module Scenes.Hall.MainLayer.Common exposing
+    ( Model, nullModel, EnvC
+    , Button, ButtonStatus(..), Cardbtn, Choice(..), HallStatus(..), Hallname(..), Helpbtn, Levelbtn, Settingbtn
+    , giveErrorCard, initModelLose, initModelWin, initModelBegin
+    )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Button, ButtonStatus, Cardbtn, Choice, HallStatus, Hallname, Helpbtn, Levelbtn, Settingbtn
+
+
+# Functions
+
+@docs giveErrorCard, initModelLose, initModelWin, initModelBegin
 
 -}
 
-import Base exposing (Msg(..))
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
@@ -227,6 +243,7 @@ nullModel =
     , click_status = False
     , hint = False
     }
+
 
 initModelBegin : Int -> Model
 initModelBegin id =

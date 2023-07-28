@@ -1,11 +1,25 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight
+    , emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Cell, Grid, GridLoc, GridsStatus, Plot, PlotEffect, SingleAnimation, TableLight
+
+
+# Functions
+
+@docs emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
 
 -}
 

@@ -1,11 +1,26 @@
 module Scenes.Story.MainLayer.Common exposing
     ( Model, nullModel, EnvC
-    , StoryItem, StoryStatus(..), initModel0, initModel1, initModel2, initModel3, nullStoryItem
+    , StoryItem
+    , initModel0, initModel1, initModel2, initModel3, nullStoryItem
+    , StoryStatus(..)
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs StoryItem, StoryStatus
+
+
+# Functions
+
+@docs initModel0, initModel1, initModel2, initModel3, nullStoryItem
 
 -}
 

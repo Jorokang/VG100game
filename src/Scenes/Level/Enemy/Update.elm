@@ -1,13 +1,20 @@
-module Scenes.Level.Enemy.Update exposing (..)
+module Scenes.Level.Enemy.Update exposing (checkCellLoc, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
 
-import Base exposing (GlobalData, Msg(..))
+{-| Update module
+
+
+# Functions
+
+@docs checkCellLoc, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound
+
+-}
+
 import Canvas exposing (Point)
 import Color exposing (Color)
-import Html exposing (a)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, initEnemy1, maxEyeV, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, int2Point, leftCell, lengthChange, lowerCell, negPoint, point2Int, pointDistance, real2grid, rightCell, scalePoint, scalePointLength, upperCell)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, ErodePriority(..), GridLoc, Model, maxEyeV)
+import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gridlocDistance, negPoint, pointDistance, real2grid, scalePointLength)
 import Tuple
 
 

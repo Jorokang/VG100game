@@ -1,12 +1,20 @@
-module Scenes.Level.Frame.Update exposing (..)
+module Scenes.Level.Frame.Update exposing (addClearAnima, addSpiritAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB)
+
+{-| Update module
+
+
+# Functions
+
+@docs addClearAnima, addSpiritAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB
+
+-}
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
-import Lib.Coordinate.Coordinates exposing (posToReal)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, NextRoundButtonStatus(..))
-import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, nextRoundBCoorData, nullCoorData, pointDistance)
+import Scenes.Level.Frame.Functions exposing (addPoint, nextRoundBCoorData, pointDistance)
 
 
 {-| swtich the turn

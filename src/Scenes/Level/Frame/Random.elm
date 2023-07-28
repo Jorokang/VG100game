@@ -1,9 +1,15 @@
-module Scenes.Level.Frame.Random exposing (..)
+module Scenes.Level.Frame.Random exposing (randomFrame)
 
-import Canvas exposing (Point)
-import List
+{-| Random module
+
+
+# Functions
+
+@docs randomFrame
+
+-}
+
 import Random
-import Tuple
 
 
 {-| control the random seed in Enemy Layer

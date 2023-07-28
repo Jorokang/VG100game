@@ -1,4 +1,13 @@
-module Scenes.Hall.MainLayer.Update exposing (..)
+module Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
+
+{-| Render module
+
+
+# Functions
+
+@docs ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked
+
+-}
 
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))

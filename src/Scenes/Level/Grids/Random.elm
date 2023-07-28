@@ -1,9 +1,15 @@
-module Scenes.Level.Grids.Random exposing (..)
+module Scenes.Level.Grids.Random exposing (randomGrids)
 
-import Canvas exposing (Point)
-import List
+{-| Random module
+
+
+# Functions
+
+@docs randomGrids
+
+-}
+
 import Random
-import Tuple
 
 
 {-| control the random seed in Enemy Layer

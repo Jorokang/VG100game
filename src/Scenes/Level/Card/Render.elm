@@ -1,4 +1,13 @@
-module Scenes.Level.Card.Render exposing (..)
+module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard)
+
+{-| Functions of rendering
+
+
+# Functions
+
+@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard
+
+-}
 
 import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
