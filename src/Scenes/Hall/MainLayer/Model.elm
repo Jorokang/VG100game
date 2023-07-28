@@ -17,8 +17,8 @@ import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.CardSelect exposing (clickCard)
 import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting)
-import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderclose, renderhelp, renderlevel, rendersetting)
+import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Time exposing (posixToMillis)
 
@@ -110,11 +110,7 @@ updateModelRec env _ model =
             )
 
         MouseDown x ( a, b ) ->
-            if ifClicked model.level.ok ( a, b ) then
-                levelokclicked env model
-
-            else
-                ( model, [], env )
+            inlevel env model ( a, b )
 
         _ ->
             ( model, [], env )
@@ -147,6 +143,7 @@ viewModel env model =
                         []
                         [ renderHandCards env model
                         , renderSelectedCards env model
+                        , renderclose env model.card.close
                         ]
 
                 Hall ->

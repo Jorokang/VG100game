@@ -24,10 +24,6 @@ type ButtonStatus
     | ButtonInactive
 
 
-
---
-
-
 {-| choice of hall
 the states of Hall, decide what to render
 -}
@@ -99,16 +95,15 @@ inithelp =
 {-| interface of level
 open the level page,
 close it,
-up btn add the level number, down decrease it,
 ok confirm it
 -}
 type alias Levelbtn =
     { open : Button
     , close : Button
-    , levelInt : Int
-    , up : Button
-    , down : Button
-    , ok : Button
+    , level1 : Button
+    , level2 : Button
+    , level3 : Button
+    , level4 : Button
     }
 
 
@@ -124,20 +119,24 @@ initlevel =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
-    , levelInt = 1
-    , up =
+    , level1 =
         { status = ButtonInactive
-        , pos = ( 1000, 300 )
+        , pos = ( 400, 600 )
         , size = ( 200, 140 )
         }
-    , down =
+    , level2 =
         { status = ButtonInactive
-        , pos = ( 300, 300 )
+        , pos = ( 720, 600 )
         , size = ( 200, 140 )
         }
-    , ok =
+    , level3 =
         { status = ButtonInactive
-        , pos = ( 800, 700 )
+        , pos = ( 1040, 600 )
+        , size = ( 200, 140 )
+        }
+    , level4 =
+        { status = ButtonInactive
+        , pos = ( 1360, 600 )
         , size = ( 200, 140 )
         }
     }
@@ -152,7 +151,6 @@ add things about card below
 type alias Cardbtn =
     { open : Button
     , close : Button
-    , cardlist : List Card
     }
 
 
@@ -168,7 +166,6 @@ initcard =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
-    , cardlist = []
     }
 
 
