@@ -3,7 +3,7 @@ project2: Light in Nightmares
 # Changelog
 All notable changes to this project are documented in this file.
 
-## [0.5.0] final product - 2023.07.27
+## [0.5.0] final product - 2023.07.28
 ### Fixed
 - Cards can be chosen correctly
 - the avatar can move as anticipation
