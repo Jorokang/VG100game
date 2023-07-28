@@ -1,4 +1,13 @@
-module Scenes.Hall.MainLayer.Update exposing (..)
+module Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
+
+{-| Render module
+
+
+# Functions
+
+@docs ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked
+
+-}
 
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
@@ -70,27 +79,27 @@ when button ok is pressed, change the scene from hall to Level
 levelokclicked : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 levelokclicked env model ( a, b ) =
     if List.length model.selected_cards < 5 then
-            ( { model | hint = True }, [], env )
+        ( { model | hint = True }, [], env )
 
     else
-    let
-        lev =
-            model.level
-    in
-    if ifClicked lev.level1 ( a, b ) then
-        ( model, [ ( LayerParentScene, LayerGoToLevel "Level1" model.selected_cards ) ], env )
+        let
+            lev =
+                model.level
+        in
+        if ifClicked lev.level1 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level1" model.selected_cards ) ], env )
 
-    else if ifClicked lev.level2 ( a, b ) then
-        ( model, [ ( LayerParentScene, LayerGoToLevel "Level2" model.selected_cards ) ], env )
+        else if ifClicked lev.level2 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level2" model.selected_cards ) ], env )
 
-    else if ifClicked lev.level3 ( a, b ) then
-        ( model, [ ( LayerParentScene, LayerGoToLevel "Level3" model.selected_cards ) ], env )
+        else if ifClicked lev.level3 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level3" model.selected_cards ) ], env )
 
-    else if ifClicked lev.level4 ( a, b ) then
-        ( model, [ ( LayerParentScene, LayerGoToLevel "Level4" model.selected_cards ) ], env )
+        else if ifClicked lev.level4 ( a, b ) then
+            ( model, [ ( LayerParentScene, LayerGoToLevel "Level4" model.selected_cards ) ], env )
 
-    else
-        ( model, [], env )
+        else
+            ( model, [], env )
 
 
 {-| in setting choices
@@ -212,7 +221,8 @@ insetting env model ( a, b ) =
 
     else
         let
-            volume = ifupdown model ( a, b )
+            volume =
+                ifupdown model ( a, b )
         in
         ( { model
             | setting =
@@ -220,7 +230,7 @@ insetting env model ( a, b ) =
                     | volume = volume
                 }
           }
-        , [(LayerParentScene, LayerIntMsg volume)]
+        , [ ( LayerParentScene, LayerIntMsg volume ) ]
         , env
         )
 

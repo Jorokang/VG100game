@@ -1,9 +1,18 @@
-module Scenes.Story.MainLayer.Update exposing (..)
+module Scenes.Story.MainLayer.Update exposing (updateModelItems, updateModelItemsScale, updateModelRoom)
+
+{-| Update module
+
+
+# Functions
+
+@docs updateModelItems, updateModelItemsScale, updateModelRoom
+
+-}
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
 import Lib.Audio.Base exposing (AudioOption(..))
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Resources.Sprites exposing (getResourcePath)
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryItem, StoryStatus(..), nullStoryItem)
@@ -112,7 +121,6 @@ updateModelRoom env model m_pos =
               ]
             , env
             )
-
 
         _ ->
             ( model, [], env )

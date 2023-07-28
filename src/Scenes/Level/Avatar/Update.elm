@@ -1,4 +1,27 @@
-module Scenes.Level.Avatar.Update exposing (..)
+module Scenes.Level.Avatar.Update exposing
+    ( judgeErosionDamage, judgeLocAvail
+    , moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill
+    , updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit
+    )
+
+{-| Update module
+
+
+# judge Functions
+
+@docs judgeErosionDamage, judgeLocAvail
+
+
+# set Functions
+
+@docs moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill
+
+
+# update Functions
+
+@docs updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
@@ -251,7 +274,7 @@ updateClickEvent env model loc =
     in
     case model.status of
         AvatarActive ->
-            if delta_loc == ( 0, 0 ) && (model.stamina>0)then
+            if delta_loc == ( 0, 0 ) && (model.stamina > 0) then
                 ( { model | status = AvatarSelected }
                 , []
                 , env

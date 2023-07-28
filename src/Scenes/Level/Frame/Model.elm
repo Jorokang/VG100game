@@ -13,12 +13,12 @@ module Scenes.Level.Frame.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty, group)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1, nullModel)
-import Scenes.Level.Frame.Functions exposing (addPoint, grid2real)
+import Scenes.Level.Frame.Common exposing (EnvC, FrameStatus(..), Model, initFrame1)
+import Scenes.Level.Frame.Functions exposing (grid2real)
 import Scenes.Level.Frame.Random exposing (randomFrame)
-import Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderFrameStatus, renderNextRoundB, renderScroll, renderSpiritAnimations, renderStamina)
+import Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderNextRoundB, renderSpiritAnimations)
 import Scenes.Level.Frame.Update exposing (addClearAnima, addSpiritAnima, checkErodePermission, costPlayerStamina, increaseStamina, switchTurn, updateAnima, updateMouseClickNRB, updateTickNRB)
 import Scenes.Level.SceneInit exposing (LevelInit)
 import Time exposing (posixToMillis)

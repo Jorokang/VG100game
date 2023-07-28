@@ -1,4 +1,13 @@
-module Scenes.Level.Grids.Render exposing (..)
+module Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+
+{-| Render module
+
+
+# Functions
+
+@docs renderGrids, renderLevelBackground, renderStr, renderTableLights
+
+-}
 
 import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
@@ -7,7 +16,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, scalePoint, shadowCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), SingleAnimation, TableLight)
 
 
@@ -103,7 +112,7 @@ renderTableLights env model =
 -}
 renderTableLight : EnvC -> TableLight -> Renderable
 renderTableLight env tl =
-    renderSprite env.globalData [] (coorChangeS env (grid2real tl.loc) mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) "candle_light_1"
+    renderSprite env.globalData [] (coorChangeS env (addPoint (grid2real tl.loc) ( 0 - 1.2 * cellLength, 0 )) mapCoorData) (sizeChangeS env ( cellLength * 4, cellLength * 4 ) mapCoorData) "candle_light_1"
 
 
 {-| render single patterns by the given position and id

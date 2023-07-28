@@ -15,11 +15,10 @@ module Scenes.Level.Avatar.Model exposing
 import Base exposing (Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3, nullModel)
-import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr, renderTrappedEffect)
+import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Model, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3, initAvatarLevel4, nullModel)
+import Scenes.Level.Avatar.Render exposing (renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSpirit, renderStr, renderTrappedEffect)
 import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
-import Scenes.Level.Avatar.Common exposing (initAvatarLevel4)
 
 
 {-| initModel
@@ -81,9 +80,10 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgPlayerTurn ->
-            { model | status = AvatarActive
-                    , stamina = 3
-                    }
+            { model
+                | status = AvatarActive
+                , stamina = 3
+            }
                 |> judgeErosionDamage env
 
         LayerIntMsg x ->

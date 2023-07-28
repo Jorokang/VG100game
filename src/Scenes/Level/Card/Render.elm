@@ -1,4 +1,13 @@
-module Scenes.Level.Card.Render exposing (..)
+module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard)
+
+{-| Functions of rendering
+
+
+# Functions
+
+@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard
+
+-}
 
 import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
@@ -19,9 +28,10 @@ renderStr env pos str =
 
 --renderText env.globalData 24 str "Comic Sans MS" (posToReal env.globalData pos)
 
+
 renderBulletinBoard : EnvC -> Model -> Renderable
 renderBulletinBoard env _ =
-    renderSprite env.globalData [] (coorChangeS env (1000, 180) nullCoorData) (sizeChangeS env (390,400) nullCoorData) "bulletin_board"
+    renderSprite env.globalData [] (coorChangeS env ( 1000, 180 ) nullCoorData) (sizeChangeS env ( 440, 460 ) nullCoorData) "bulletin_board"
 
 
 giveInfoList : List String
@@ -35,15 +45,47 @@ giveInfoList =
     , "draw three cards from your deck"
     , "purify the eight grids around you"
     , "summon a table light on your right for two turns and he will pure the grid he pass"
-    , "gain 5 points of spirit power and have a additional move stage in next turn"
+    , "gain 5 points of spirit power and have an additional move stage in next turn"
     , "delete a row or a column beside you"
+    ]
+
+
+giveInfoList1 : List String
+giveInfoList1 =
+    [ "purify two grids in a direction"
+    , "protect a grid in all four"
+    , "skip your next turn"
+    , "make the range of light bigger"
+    , "draw two cards from your deck"
+    , "recall the emotion of the eight grids around you"
+    , "draw three cards from your deck"
+    , "purify the eight grids around you"
+    , "summon a table light for two turns"
+    , "gain 5 points of spirit power"
+    , "delete a row or a column beside you"
+    ]
+
+
+giveInfoList2 : List String
+giveInfoList2 =
+    [ ""
+    , "directions for two turns"
+    , "gain 8 points of spirit energy"
+    , ""
+    , ""
+    , ""
+    , ""
+    , ""
+    , "he will pure the grid he pass"
+    , "have an additional move stage in next turn"
+    , ""
     ]
 
 
 renderCardInfo : EnvC -> Model -> Renderable
 renderCardInfo env model =
     let
-        ( name, info, cost ) =
+        ( name, info1, cost ) =
             if model.selected_pos == -1 then
                 ( "", "", "" )
 
@@ -51,15 +93,26 @@ renderCardInfo env model =
                 ( model.selected_card.name
                 , Maybe.withDefault "" <|
                     List.head <|
-                        List.drop (model.selected_card.id - 1) giveInfoList
+                        List.drop (model.selected_card.id - 1) giveInfoList1
                 , String.fromInt model.selected_card.cost ++ " spirits"
                 )
+
+        info2 =
+            if model.selected_pos == -1 then
+                ""
+
+            else
+                Maybe.withDefault "" <|
+                    List.head <|
+                        List.drop (model.selected_card.id - 1) giveInfoList2
     in
     Canvas.group
         []
-        [ renderStr env (coorChange env ( 900, 250 ) nullCoorData) ("Card name: " ++ name)
-        , renderStr env (coorChange env ( 900, 290 ) nullCoorData) ("Info: " ++ info)
-        , renderStr env (coorChange env ( 900, 370 ) nullCoorData) ("Cost: " ++ cost)
+        [ renderStr env ( 1050, 280 ) ("Card name: " ++ name)
+        , renderStr env ( 1050, 320 ) ("Cost: " ++ cost)
+        , renderStr env ( 1180, 360 ) "Info: "
+        , renderStr env ( 1050, 400 ) info1
+        , renderStr env ( 1050, 440 ) info2
         ]
 
 
@@ -104,7 +157,7 @@ renderHandCards env model =
     Canvas.group
         []
         [ renderListCards env model.hand poss selecteds giveHandSize
-        , renderStr env ( 500, 730 ) "Hand Cardsssss"
+        , renderStr env ( 500, 730 ) "Hand Cards"
         ]
 
 

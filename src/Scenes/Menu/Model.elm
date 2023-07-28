@@ -12,21 +12,20 @@ module Scenes.Menu.Model exposing
 
 -}
 
-import Canvas exposing (Renderable)
-import Lib.Audio.Base exposing (AudioOption(..))
-import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
-import Lib.Layer.Base exposing (LayerMsg(..))
-import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
-import Lib.Scene.Base exposing (SceneOutputMsg(..), SceneInitData(..))
-import Scenes.Menu.Common exposing (Model)
-import Scenes.Menu.LayerBase exposing (CommonData)
 import Canvas exposing (Point, Renderable, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
-import Scenes.Story.SceneInit exposing (nullStoryInit)
 import Color
+import Lib.Audio.Base exposing (AudioOption(..))
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
+import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
+import Lib.Layer.Base exposing (LayerMsg(..))
+import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
+import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Scenes.Menu.Common exposing (Model)
+import Scenes.Menu.LayerBase exposing (CommonData)
+import Scenes.Story.SceneInit exposing (nullStoryInit)
 
 
 {-| handleLayerMsg
@@ -45,7 +44,9 @@ handleLayerMsg env lmsg model =
 
         LayerStringMsg scene_name ->
             let
-                sid = StoryInitData nullStoryInit
+                sid =
+                    StoryInitData nullStoryInit
+
                 trans =
                     Just (genTransition 100 100 transitionOut transitionIn)
             in
@@ -91,13 +92,13 @@ viewModel env model =
     viewLayer (addCommonData model.commonData env) model.layers
 
 
-
 {-| The transition setting for Story layer
 -}
 transitionOut : SingleTrans
 transitionOut env rend f =
     let
-        f1 = f
+        f1 =
+            f
 
         str1 =
             "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"
@@ -127,7 +128,8 @@ transitionOut env rend f =
 transitionIn : SingleTrans
 transitionIn env rend f =
     let
-        f1 = f
+        f1 =
+            f
 
         str1 =
             "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"

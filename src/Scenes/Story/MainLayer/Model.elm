@@ -13,8 +13,7 @@ module Scenes.Story.MainLayer.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable, empty, text)
-import Canvas.Settings.Text exposing (TextAlign(..), align, font)
+import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), initModel0, initModel1, initModel2, initModel3)
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
@@ -29,7 +28,7 @@ initModel : EnvC -> StoryInit -> Model
 initModel _ i =
     case i.id of
         0 ->
-            initModel3
+            initModel0
 
         1 ->
             initModel1
