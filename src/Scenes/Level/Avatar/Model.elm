@@ -19,6 +19,7 @@ import Scenes.Level.Avatar.Common exposing (AvatarStatus(..), EnvC, GridLoc, Mod
 import Scenes.Level.Avatar.Render exposing (renderAvailLocs, renderAvatar, renderCardHint, renderMovingHint, renderShadow, renderSingleTuple2, renderSpirit, renderStr, renderTrappedEffect)
 import Scenes.Level.Avatar.Update exposing (judgeErosionDamage, moveAvatar, retrieveAvailGrids, setAvatarPos, setAvatarStill, updateAnima, updateCardType, updateClickEvent, updateErodeMsg, updateModifyLight, updateModifySpirit, updateSpirit)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Avatar.Common exposing (initAvatarLevel4)
 
 
 {-| initModel
@@ -35,6 +36,9 @@ initModel _ i =
 
         3 ->
             initAvatarLevel3
+
+        4 ->
+            initAvatarLevel4 i.rand_num
 
         _ ->
             nullModel

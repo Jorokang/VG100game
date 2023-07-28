@@ -20,6 +20,7 @@ import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEff
 import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Grids.Common exposing (initGridsLevel4)
 
 
 {-| initModel
@@ -36,6 +37,9 @@ initModel _ i =
 
         3 ->
             initGridsLevel3
+
+        4 ->
+            initGridsLevel4 i.rand_num
 
         _ ->
             nullModel

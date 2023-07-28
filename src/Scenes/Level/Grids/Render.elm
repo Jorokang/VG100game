@@ -53,8 +53,6 @@ renderPlot env x =
     Canvas.group
         []
         [ rend_base
-
-        --, renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
         , renderPlotGuard env x
         ]
 
@@ -71,12 +69,8 @@ renderPlotGuard env x =
     let
         pos =
             grid2real x.loc
-
-        color =
-            Color.rgb255 255 227 132
-
         offset =
-            3
+            6
 
         rl =
             lengthChange env (cellLength - 4 * offset) mapCoorData
@@ -85,12 +79,8 @@ renderPlotGuard env x =
             coorChange env (addPoint pos ( 2 * offset, 2 * offset )) mapCoorData
     in
     if x.val.protection > 0 then
-        shapes
-            [ fill color
-            , filter "opacity(35%)"
-            ]
-            [ rect r_pos rl rl ]
-
+            renderSprite env.globalData [ filter "opacity(35%)" ] (coorChangeS env r_pos mapCoorData) (sizeChangeS env (rl,rl) mapCoorData) "shield"
+ 
     else
         empty
 
@@ -112,9 +102,7 @@ renderTableLights env model =
 -}
 renderTableLight : EnvC -> TableLight -> Renderable
 renderTableLight env tl =
-    shapes
-        [ fill Color.red ]
-        [ rect (coorChange env (grid2real tl.loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
+    renderSprite env.globalData [] (coorChangeS env (grid2real tl.loc) mapCoorData) (sizeChangeS env (cellLength, cellLength) mapCoorData) "candle_light_1"
 
 
 {-| render single patterns by the given position and id

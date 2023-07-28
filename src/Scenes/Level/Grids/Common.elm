@@ -1,6 +1,6 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
     )
 
 {-| Common module
@@ -188,6 +188,21 @@ initGridsLevel3 =
     }
         |> genGrids
 
+initGridsLevel4 : Int -> Model
+initGridsLevel4 rand_num=
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
+    { status = Active
+    , map_size = ( 2+(modBy 5 rand_num), 2+(modBy 4 rand_num) )
+    , grids = []
+    , last_click = ( 0, 0 )
+    , table_lights = []
+    , rand_num = number
+    , seed = seed
+    }
+        |> genGrids
 
 {-| generate a grids with no-effect plots of the given map size
 -}

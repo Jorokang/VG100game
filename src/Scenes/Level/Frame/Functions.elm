@@ -139,7 +139,7 @@ offsetCoorMap =
 
 scaleCoorMap : Float
 scaleCoorMap =
-    1
+    0.8
 
 
 {-| The global coordinate control function
