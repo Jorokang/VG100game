@@ -24,7 +24,7 @@ import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Story.Common exposing (Model)
 import Scenes.Story.LayerBase exposing (CommonData)
-import Scenes.Story.Transition exposing (hallTransitionIn, rawTransition, storyTransitionOut)
+import Scenes.Story.Transition exposing (storyTransitionOut, hallTransitionIn)
 
 
 {-| handleLayerMsg

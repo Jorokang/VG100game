@@ -91,4 +91,5 @@ allTexture =
     , ( "sun", getResourcePath "img/sun_1.png" )
     , ( "diary_1", getResourcePath "img/diary_1.png" )
     , ( "diary_2", getResourcePath "img/diary_2.png" )
+    , ( "team_logo", getResourcePath "img/team_logo.png" )
     ]
