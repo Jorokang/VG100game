@@ -97,8 +97,7 @@ viewModel env model =
 transitionOut : SingleTrans
 transitionOut env rend f =
     let
-        f1 =
-            f * 0.6
+        f1 = f
 
         str1 =
             "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"
@@ -128,8 +127,7 @@ transitionOut env rend f =
 transitionIn : SingleTrans
 transitionIn env rend f =
     let
-        f1 =
-            f * 0.6 + 0.4
+        f1 = f
 
         str1 =
             "opacity(" ++ String.fromInt (round ((1 - f1) * 100.0)) ++ "%)"

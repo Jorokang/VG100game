@@ -14,6 +14,7 @@ module Scenes.Menu.MainLayer.Model exposing
 
 import Canvas exposing (Renderable, empty, rect, text)
 import Canvas.Settings exposing (fill)
+import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Base exposing (Msg(..))
@@ -26,6 +27,7 @@ import Lib.Coordinate.Coordinates exposing (lengthToReal)
 import Color
 import String
 import Lib.Render.Sprite exposing (renderSprite)
+import Scenes.Level.Avatar.Common exposing (CardSelectionStatus(..))
 
 
 {-| initModel
@@ -55,7 +57,7 @@ updateModel env model =
 updateTime : Model -> Int -> Model
 updateTime model new_time =
     if (model.time == -1) then
-        { model | time = new_time, e_time = new_time+model.e_time }
+        { model | time = new_time, e_time = new_time+6000 }
     else
         { model | time = new_time }
 
@@ -81,19 +83,35 @@ updateModelRec env lmsg model =
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
+        
+        f = (6000-(toFloat (model.e_time-model.time))) / 6000
+        f1 = if (0.4<f && f<0.6) then (0.4-f)*20
+                else 0
+        f2 = if (f<=0.3) then 1
+                else if (f<0.6) then (0.6-f)*3.3
+                else 0
+        f3 = if (f<0.2) then 0
+                else if (f<0.4) then (f-0.2)*5
+                else 1
+        str1 = "hue-rotate("++(String.fromInt (round (90*f1)))++"deg)"
+        str2 = "opacity("++(String.fromInt (round (100*f2)))++"%)"
+        str3 = if (f<0.4) then "saturate("++(String.fromInt (round (100*f3)))++"%)"
+                else "hue-rotate("++(String.fromInt (round (90*f1)))++"deg)"
         rend_background = 
             shapes
             [ fill Color.white ]
             [ rect (posToReal env.globalData (0,0)) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080)]
         rend_s = 
-            renderSprite env.globalData [] (550, 300) (687,475) "team_logo"
+            renderSprite env.globalData [ filter str3] (690, 270) (550,380) "team_logo"
 
-        rend_t =
-            text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 500, 940 )) ((String.fromInt model.time) ++ ":" ++ (String.fromInt model.e_time))
+        rend_t0 =
+            text [ font { size = 96, family = "Comic Sans MS", style = "" }, align Center ] (posToReal env.globalData ( 965, 860 )) "Light in Nightmares"
+        rend_t = Canvas.group [filter str2] [rend_t0]
     in
     Canvas.group
     []
     [ rend_background
     , rend_s
-    --, rend_t
+    --, rend_masking
+    , rend_t
     ]

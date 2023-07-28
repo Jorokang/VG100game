@@ -72,6 +72,7 @@ type alias Model =
     , lightRange : Float
     , anima : AvatarAnima
     , spirit : AvatarSpirit
+    , stamina : Int
     }
 
 
@@ -112,6 +113,7 @@ nullModel =
     , lightRange = 0
     , anima = defaultAnima
     , level_id = -1
+    , stamina = 0
     }
 
 
@@ -129,6 +131,7 @@ initAvatar1 size =
     , lightRange = 2
     , anima = defaultAnima
     , level_id = -1
+    , stamina = 0
     }
 
 
@@ -146,6 +149,7 @@ initAvatarLevel1 =
     , lightRange = 2
     , anima = defaultAnima
     , level_id = 1
+    , stamina = 3
     }
 
 
@@ -163,6 +167,7 @@ initAvatarLevel2 =
     , lightRange = 2
     , anima = defaultAnima
     , level_id = 2
+    , stamina = 3
     }
 
 
@@ -180,6 +185,7 @@ initAvatarLevel3 =
     , lightRange = 2
     , anima = defaultAnima
     , level_id = 3
+    , stamina = 3
     }
 
 initAvatarLevel4 : Int -> Model
@@ -196,6 +202,7 @@ initAvatarLevel4 rand_num =
     , lightRange = 2
     , anima = defaultAnima
     , level_id = 4
+    , stamina = 3
     }
 
 

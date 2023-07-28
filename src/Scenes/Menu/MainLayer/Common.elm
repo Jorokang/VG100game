@@ -27,7 +27,7 @@ nullModel : Model
 nullModel =
     {
         time = -1
-    , e_time = 100
+    , e_time = 600
     , active = True
     }
 

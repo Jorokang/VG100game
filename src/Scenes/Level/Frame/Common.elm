@@ -111,8 +111,8 @@ initFrame1 =
     { status = FramePlayerTurn
     , time = 0
     , player_data =
-        { cur_stamina = 3
-        , max_stamina = 3
+        { cur_stamina = 5
+        , max_stamina = 5
         , add_stamina = 0
         , turns = 0
         }
