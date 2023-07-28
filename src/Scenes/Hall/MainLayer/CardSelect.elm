@@ -197,16 +197,26 @@ clickCard model =
 
             ( already_selected, nindex ) =
                 searchInt model.selected_cards index
+
+            nnmodel =
+                if bool then
+                    if card.id == -1 then
+                        nmodel
+
+                    else if already_selected then
+                        { nmodel | selected_cards = Tuple.second (takeInt model.selected_cards nindex) }
+
+                    else if List.length model.selected_cards == 5 then
+                        nmodel
+
+                    else
+                        { nmodel | selected_cards = model.selected_cards ++ [ index ] }
+
+                else
+                    nmodel
         in
-        if bool then
-            if already_selected then
-                { nmodel | selected_cards = Tuple.second (takeInt model.selected_cards nindex) }
-
-            else if List.length model.selected_cards == 5 then
-                nmodel
-
-            else
-                { nmodel | selected_cards = model.selected_cards ++ [ index ] }
+        if List.length nnmodel.selected_cards < 5 then
+            { nnmodel | hint = True }
 
         else
-            nmodel
+            { nnmodel | hint = False }

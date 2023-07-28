@@ -27,6 +27,13 @@ type alias HallInit =
 
 {-| HallInit data
 -}
+levelHallInit : Int -> HallInit
+levelHallInit level =
+    { status = 1
+    , level_id = level
+    }
+
+
 nullHallInit : HallInit
 nullHallInit =
     { status = -1

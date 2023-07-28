@@ -180,6 +180,11 @@ renderSelectedCards env model =
         ]
 
 
+renderHint : EnvC -> Model -> Renderable
+renderHint env model =
+    text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 800, 650 ) nullCoorData) "Less than five cards are selected! Please select five cards."
+
+
 renderListCards : EnvC -> List Card -> List Point -> List Bool -> PileSize -> Renderable
 renderListCards env cards poss selecteds size =
     Canvas.group
@@ -203,7 +208,7 @@ renderOneCard env card pos selected size =
             size.offset
     in
     if color == "cardback" then
-        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * (width - 5), 4 * (length - 20) ) nullCoorData) "cardback"
 
     else if selected then
         renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color

@@ -187,6 +187,7 @@ type alias Model =
     , click_pos : Point
     , hall_name : Hallname
     , setting : Settingbtn
+    , completed_level : Int
     , level : Levelbtn
     , help : Helpbtn
     , card : Cardbtn
@@ -194,6 +195,7 @@ type alias Model =
     , selected_cards : List Int
     , hand : List Card
     , click_status : Bool
+    , hint : Bool
     }
 
 
@@ -204,48 +206,73 @@ nullModel =
     , click_pos = ( -1, -1 )
     , hall_name = Normal
     , setting = initsetting
+    , completed_level = 0
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList 0
     , click_status = False
+    , hint = False
     }
 
 
-initModelWin : Model
-initModelWin =
+initModelWin : Int -> Model
+initModelWin id =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
     , hall_name = Win
     , setting = initsetting
+    , completed_level = id
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList id
     , click_status = False
+    , hint = False
     }
 
 
-initModelLose : Model
-initModelLose =
+initModelLose : Int -> Model
+initModelLose id =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
     , hall_name = Lose
     , setting = initsetting
+    , completed_level = id - 1
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList id
     , click_status = False
+    , hint = False
     }
+
+
+giveAvailableList : Int -> List Card
+giveAvailableList id =
+    case id of
+        0 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
+
+        1 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
+
+        2 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveErrorCard, giveErrorCard ]
+
+        3 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+
+        _ ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
 
 
 {-| Convenient type alias for the environment

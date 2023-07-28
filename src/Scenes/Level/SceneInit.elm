@@ -57,12 +57,14 @@ initLevel3 list =
     , rand_num = 0
     }
 
-initLevel4 : List Int -> LevelInit
-initLevel4 list =
+
+initLevel4 : Int -> List Int -> LevelInit
+initLevel4 rand list =
     { level_id = 4
     , selected_cards = list
-    , rand_num = 0
+    , rand_num = rand
     }
+
 
 {-| Initialize common data
 -}

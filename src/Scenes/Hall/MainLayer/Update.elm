@@ -68,27 +68,31 @@ when button ok is pressed, change the scene from hall to Level
 -}
 levelokclicked : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 levelokclicked env model =
-    let
-        lev =
-            model.level
+    if List.length model.selected_cards < 5 then
+        ( { model | hint = True }, [], env )
 
-        num =
-            lev.levelInt
-    in
-    ( { model
-        | status = Inactive
-        , level =
-            { lev
-                | open = buttonInact lev.open
-                , close = buttonInact lev.close
-                , up = buttonInact lev.up
-                , down = buttonInact lev.down
-                , ok = buttonInact lev.ok
-            }
-      }
-    , [ ( LayerParentScene, LayerGoToLevel ("Level" ++ String.fromInt num) model.selected_cards ) ]
-    , env
-    )
+    else
+        let
+            lev =
+                model.level
+
+            num =
+                lev.levelInt
+        in
+        ( { model
+            | status = Inactive
+            , level =
+                { lev
+                    | open = buttonInact lev.open
+                    , close = buttonInact lev.close
+                    , up = buttonInact lev.up
+                    , down = buttonInact lev.down
+                    , ok = buttonInact lev.ok
+                }
+          }
+        , [ ( LayerParentScene, LayerGoToLevel ("Level" ++ String.fromInt num) model.selected_cards ) ]
+        , env
+        )
 
 
 {-| in level choices
