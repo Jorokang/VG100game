@@ -13,6 +13,10 @@ renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
     text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
+renderBulletinBoard : EnvC -> Model -> Renderable
+renderBulletinBoard env _ =
+    renderSprite env.globalData [] (coorChangeS env (1000, 180) nullCoorData) (sizeChangeS env (390,400) nullCoorData) "bulletin_board"
+
 
 giveInfoList : List String
 giveInfoList =
