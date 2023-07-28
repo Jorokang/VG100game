@@ -1,19 +1,25 @@
-module Scenes.Level.Enemy.Render exposing (..)
+module Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye)
 
-import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
+{-| Render module
+
+
+# Functions
+
+@docs renderEnemyBody, renderEnemyCore, renderEnemyEye
+
+-}
+
+import Canvas exposing (Point, Renderable, circle, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Json.Decode exposing (null)
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, MinorEyes, Model, initEnemy1, nullModel)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, MinorEyes, Model)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, sizeChangeS, upperCell)
-import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, lengthChange, mapCoorData, scalePointLength, sizeChangeS)
 import Tuple
 
 

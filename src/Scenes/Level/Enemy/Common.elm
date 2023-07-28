@@ -1,22 +1,34 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes, initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes
+    , initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Cell, EnemyBlock, EnemyCore, EnemyState, ErodePriority, GridLoc, MinorEyes, EnemyState, ErodePriority
+
+
+# Functions
+
+@docs initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
 
 -}
 
 import Canvas exposing (Point)
-import Color exposing (Color, rgb255)
+import Color exposing (Color)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Frame.Functions exposing (cellLength, int2Point, point2Int)
 import Scenes.Level.LayerBase exposing (CommonData)
-import Time exposing (Posix, now)
 
 
 {-| Model

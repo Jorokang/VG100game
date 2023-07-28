@@ -1,11 +1,25 @@
 module Scenes.Level.Avatar.Common exposing
     ( Model, nullModel, EnvC
-    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc, avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
+    , AvatarAnima, AvatarSpirit, AvatarStatus(..), CardSelectionStatus(..), GridLoc
+    , avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs AvatarAnima, AvatarSpirit, AvatarStatus, CardSelectionStatus, GridLoc
+
+
+# Functions
+
+@docs avatarRadius, cardClickPos0, cardClickPos1, cardClickPos2, initAvatar1, initAvatarLevel1, initAvatarLevel2, initAvatarLevel3
 
 -}
 
