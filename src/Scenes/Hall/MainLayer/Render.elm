@@ -5,7 +5,7 @@ import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
 import List
 import Scenes.Hall.MainLayer.CardSelect exposing (Card, PileSize, createPosList, giveHandSize, giveSelectedSize, modifyBool, selectedPile)
@@ -40,7 +40,7 @@ renderBackground env _ =
 
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
-    text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+    text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
 {-| for the hall
@@ -90,7 +90,10 @@ rendersetting env set =
     let
         rend =
             [ renderclose env set.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Setting:"
+            , renderSprite env.globalData [] (coorChangeS env set.up.pos nullCoorData) (sizeChangeS env set.up.size nullCoorData) "up"
+            , renderSprite env.globalData [] (coorChangeS env set.down.pos nullCoorData) (sizeChangeS env set.down.size nullCoorData) "down"
+            , text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Setting:"
+            , text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 300 ) nullCoorData) (String.fromInt set.volume)
             ]
     in
     Canvas.group
@@ -103,7 +106,7 @@ renderhelp env help =
     let
         rend =
             [ renderclose env help.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
+            , text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
             ]
     in
     Canvas.group
@@ -116,10 +119,9 @@ renderlevel env level =
     let
         rend =
             [ renderclose env level.close
-            , renderSprite env.globalData [] (coorChangeS env level.down.pos nullCoorData) (sizeChangeS env level.down.size nullCoorData) "down"
-            , renderSprite env.globalData [] (coorChangeS env level.up.pos nullCoorData) (sizeChangeS env level.up.size nullCoorData) "up"
-            , renderSprite env.globalData [] (coorChangeS env level.ok.pos nullCoorData) (sizeChangeS env level.ok.size nullCoorData) "ok"
-            , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) ("Level : " ++ String.fromInt level.levelInt)
+            , renderSprite env.globalData [] (coorChangeS env level.level1.pos nullCoorData) (sizeChangeS env ( 840, 140 ) nullCoorData) "ok"
+            , renderSprite env.globalData [] (coorChangeS env level.level4.pos nullCoorData) (sizeChangeS env level.level4.size nullCoorData) "random"
+            , renderStr env (coorChange env ( 500, 1000 ) nullCoorData) "Level : "
             ]
     in
     Canvas.group
@@ -132,7 +134,7 @@ rendercard env card =
     let
         rend =
             [ renderclose env card.close
-            , text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Select card:"
+            , text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Select card:"
             ]
     in
     Canvas.group
@@ -155,7 +157,7 @@ renderHandCards env model =
     Canvas.group
         []
         [ renderListCards env model.hand poss selecteds giveHandSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Available Cards"
+        , text [ font { size = 40, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 0, 700 ) nullCoorData) "Available Cards"
         ]
 
 
@@ -176,7 +178,7 @@ renderSelectedCards env model =
     Canvas.group
         []
         [ renderListCards env target poss temp giveSelectedSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 0, 300 ) nullCoorData) "Selected Cards"
+        , text [ font { size = 40, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 0, 300 ) nullCoorData) "Selected Cards"
         ]
 
 
