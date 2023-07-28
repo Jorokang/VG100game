@@ -49,8 +49,6 @@ In player's turn, click the yellow circle to move it
 ```
 
 
-# Contributing
-No others' help
 
 # Author team 
 	[elm delivery guys]

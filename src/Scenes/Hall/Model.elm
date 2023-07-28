@@ -21,7 +21,8 @@ import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
 import Scenes.Hall.Common exposing (Model)
 import Scenes.Hall.LayerBase exposing (CommonData)
-import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, initLevel3, nullLevelInit)
+import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, initLevel3, initLevel4, nullLevelInit)
+import Scenes.Story.MainLayer.Random exposing (randomValue)
 
 
 {-| handleLayerMsg
@@ -42,6 +43,9 @@ handleLayerMsg env lmsg model =
             let
                 trans =
                     Just (genTransition 1 1 rawTransition rawTransition)
+
+                rand =
+                    randomValue env
             in
             case scene_name of
                 "Level1" ->
@@ -53,8 +57,14 @@ handleLayerMsg env lmsg model =
                 "Level3" ->
                     ( model, [ SOMChangeScene ( LevelInitData (initLevel3 cards), "Level", trans ) ], env )
 
+                "Level4" ->
+                    ( model, [ SOMChangeScene ( LevelInitData (initLevel4 rand cards), "Level", trans ) ], env )
+
                 _ ->
                     ( model, [ SOMChangeScene ( LevelInitData nullLevelInit, "Level", trans ) ], env )
+
+        LayerIntMsg volume ->
+            ( model, [ SOMSetVolume (toFloat volume / 100) ], env )
 
         _ ->
             ( model, [], env )

@@ -1,4 +1,13 @@
-module Scenes.Level.Grids.Render exposing (..)
+module Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+
+{-| Render module
+
+
+# Functions
+
+@docs renderGrids, renderLevelBackground, renderStr, renderTableLights
+
+-}
 
 import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
@@ -7,7 +16,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, scalePoint, shadowCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), SingleAnimation, TableLight)
 
 
@@ -53,8 +62,6 @@ renderPlot env x =
     Canvas.group
         []
         [ rend_base
-
-        --, renderSingleTuple env offset_anima (addPoint rpos ( 40, 20 ))
         , renderPlotGuard env x
         ]
 
@@ -72,11 +79,8 @@ renderPlotGuard env x =
         pos =
             grid2real x.loc
 
-        color =
-            Color.rgb255 255 227 132
-
         offset =
-            3
+            6
 
         rl =
             lengthChange env (cellLength - 4 * offset) mapCoorData
@@ -85,11 +89,7 @@ renderPlotGuard env x =
             coorChange env (addPoint pos ( 2 * offset, 2 * offset )) mapCoorData
     in
     if x.val.protection > 0 then
-        shapes
-            [ fill color
-            , filter "opacity(35%)"
-            ]
-            [ rect r_pos rl rl ]
+        renderSprite env.globalData [ filter "opacity(35%)" ] (coorChangeS env r_pos mapCoorData) (sizeChangeS env ( rl, rl ) mapCoorData) "shield"
 
     else
         empty
@@ -112,9 +112,7 @@ renderTableLights env model =
 -}
 renderTableLight : EnvC -> TableLight -> Renderable
 renderTableLight env tl =
-    shapes
-        [ fill Color.red ]
-        [ rect (coorChange env (grid2real tl.loc) mapCoorData) (lengthChange env cellLength mapCoorData) (lengthChange env cellLength mapCoorData) ]
+    renderSprite env.globalData [] (coorChangeS env (addPoint (grid2real tl.loc) ( 0 - 1.2 * cellLength, 0 )) mapCoorData) (sizeChangeS env ( cellLength * 4, cellLength * 4 ) mapCoorData) "candle_light_1"
 
 
 {-| render single patterns by the given position and id
@@ -220,7 +218,8 @@ renderLevelBackground env =
 -}
 renderStr : EnvC -> String -> Point -> Renderable
 renderStr env str pos =
-    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    --text [ font { size = 24, family = "Arial", style = "" }, align Center ] (coorChange env pos mapCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
 
 
 renderSingleTuple : EnvC -> Point -> Point -> Renderable

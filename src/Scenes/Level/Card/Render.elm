@@ -1,17 +1,37 @@
-module Scenes.Level.Card.Render exposing (..)
+module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard)
+
+{-| Functions of rendering
+
+
+# Functions
+
+@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard
+
+-}
 
 import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
+import Lib.Render.Text exposing (renderText)
 import Scenes.Level.Card.CardCreate exposing (Card, CardObject, CardStatus(..), Model, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
 import Scenes.Level.Card.CardUnique exposing (createPosList)
 import Scenes.Level.Card.Common exposing (EnvC)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, nullCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChange, sizeChangeS)
 
 
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
-    text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+
+
+
+--renderText env.globalData 24 str "Comic Sans MS" (posToReal env.globalData pos)
+
+
+renderBulletinBoard : EnvC -> Model -> Renderable
+renderBulletinBoard env _ =
+    renderSprite env.globalData [] (coorChangeS env ( 1000, 180 ) nullCoorData) (sizeChangeS env ( 440, 460 ) nullCoorData) "bulletin_board"
 
 
 giveInfoList : List String
@@ -25,15 +45,47 @@ giveInfoList =
     , "draw three cards from your deck"
     , "purify the eight grids around you"
     , "summon a table light on your right for two turns and he will pure the grid he pass"
-    , "gain 5 points of spirit power and have a additional move stage in next turn"
+    , "gain 5 points of spirit power and have an additional move stage in next turn"
     , "delete a row or a column beside you"
+    ]
+
+
+giveInfoList1 : List String
+giveInfoList1 =
+    [ "purify two grids in a direction"
+    , "protect a grid in all four"
+    , "skip your next turn"
+    , "make the range of light bigger"
+    , "draw two cards from your deck"
+    , "recall the emotion of the eight grids around you"
+    , "draw three cards from your deck"
+    , "purify the eight grids around you"
+    , "summon a table light for two turns"
+    , "gain 5 points of spirit power"
+    , "delete a row or a column beside you"
+    ]
+
+
+giveInfoList2 : List String
+giveInfoList2 =
+    [ ""
+    , "directions for two turns"
+    , "gain 8 points of spirit energy"
+    , ""
+    , ""
+    , ""
+    , ""
+    , ""
+    , "he will pure the grid he pass"
+    , "have an additional move stage in next turn"
+    , ""
     ]
 
 
 renderCardInfo : EnvC -> Model -> Renderable
 renderCardInfo env model =
     let
-        ( name, info, cost ) =
+        ( name, info1, cost ) =
             if model.selected_pos == -1 then
                 ( "", "", "" )
 
@@ -41,15 +93,26 @@ renderCardInfo env model =
                 ( model.selected_card.name
                 , Maybe.withDefault "" <|
                     List.head <|
-                        List.drop (model.selected_card.id - 1) giveInfoList
+                        List.drop (model.selected_card.id - 1) giveInfoList1
                 , String.fromInt model.selected_card.cost ++ " spirits"
                 )
+
+        info2 =
+            if model.selected_pos == -1 then
+                ""
+
+            else
+                Maybe.withDefault "" <|
+                    List.head <|
+                        List.drop (model.selected_card.id - 1) giveInfoList2
     in
     Canvas.group
         []
-        [ renderStr env (coorChange env ( 900, 250 ) nullCoorData) ("Card name: " ++ name)
-        , renderStr env (coorChange env ( 900, 290 ) nullCoorData) ("Info: " ++ info)
-        , renderStr env (coorChange env ( 900, 370 ) nullCoorData) ("Cost: " ++ cost)
+        [ renderStr env ( 1050, 280 ) ("Card name: " ++ name)
+        , renderStr env ( 1050, 320 ) ("Cost: " ++ cost)
+        , renderStr env ( 1180, 360 ) "Info: "
+        , renderStr env ( 1050, 400 ) info1
+        , renderStr env ( 1050, 440 ) info2
         ]
 
 
@@ -94,7 +157,7 @@ renderHandCards env model =
     Canvas.group
         []
         [ renderListCards env model.hand poss selecteds giveHandSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 730 ) nullCoorData) "Hand Cards"
+        , renderStr env ( 500, 730 ) "Hand Cards"
         ]
 
 
@@ -188,7 +251,7 @@ renderOneCard env size card pos selected =
             size.offset
     in
     if color == "cardback" then
-        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * width, 4 * length ) nullCoorData) "cardback"
+        renderSprite env.globalData [] (coorChangeS env pos nullCoorData) (sizeChangeS env ( 4 * (width - 5), 4 * (length - 20) ) nullCoorData) "cardback"
 
     else if selected then
         renderSprite env.globalData [] (coorChangeS env (addPoint pos ( -offset, -offset )) nullCoorData) (sizeChangeS env ( width + 2 * offset, length + 2 * offset ) nullCoorData) color

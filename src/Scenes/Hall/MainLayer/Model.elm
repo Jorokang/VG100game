@@ -13,11 +13,11 @@ module Scenes.Hall.MainLayer.Model exposing
 -}
 
 import Base exposing (Msg(..))
-import Canvas exposing (Renderable)
+import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.CardSelect exposing (clickCard)
-import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel)
-import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting)
+import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelBegin, initModelLose, initModelWin, nullModel)
+import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderHint, renderMasking, renderSelectedCards, renderStr, renderclose, renderhelp, renderlevel, rendersetting)
 import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
 import Scenes.Hall.SceneInit exposing (HallInit)
 import Time exposing (posixToMillis)
@@ -30,13 +30,13 @@ initModel : EnvC -> HallInit -> Model
 initModel _ i =
     case i.status of
         0 ->
-            initModelLose
+            initModelLose i.level_id
 
         1 ->
-            initModelWin
+            initModelWin i.level_id
 
         _ ->
-            nullModel
+            initModelBegin i.level_id
 
 
 {-| updateModel
@@ -110,11 +110,7 @@ updateModelRec env _ model =
             )
 
         MouseDown x ( a, b ) ->
-            if ifClicked model.level.ok ( a, b ) then
-                levelokclicked env model
-
-            else
-                ( model, [], env )
+            inlevel env model ( a, b )
 
         _ ->
             ( model, [], env )
@@ -140,13 +136,35 @@ viewModel env model =
                     renderhelp env model.help
 
                 Level ->
-                    renderlevel env model.level
+                    let
+                        hint =
+                            if model.hint then
+                                renderHint env model
+
+                            else
+                                empty
+                    in
+                    Canvas.group
+                        []
+                        [ renderlevel env model.level
+                        , hint
+                        ]
 
                 Card ->
+                    let
+                        hint =
+                            if model.hint then
+                                renderHint env model
+
+                            else
+                                empty
+                    in
                     Canvas.group
                         []
                         [ renderHandCards env model
                         , renderSelectedCards env model
+                        , hint
+                        , renderclose env model.card.close
                         ]
 
                 Hall ->

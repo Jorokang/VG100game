@@ -21,26 +21,37 @@ import Scenes.Hall.LayerBase exposing (CommonData, nullCommonData)
 -}
 type alias HallInit =
     { status : Int
+    , level_id : Int
     }
 
 
 {-| HallInit data
 -}
+levelHallInit : Int -> HallInit
+levelHallInit level =
+    { status = 1
+    , level_id = level
+    }
+
+
 nullHallInit : HallInit
 nullHallInit =
     { status = -1
+    , level_id = -1
     }
 
 
 initHallLoose : HallInit
 initHallLoose =
     { status = 0
+    , level_id = -1
     }
 
 
 initHallWin : HallInit
 initHallWin =
     { status = 1
+    , level_id = -1
     }
 
 

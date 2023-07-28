@@ -1,11 +1,19 @@
-module Scenes.Teaching.MainLayer.Update exposing (..)
+module Scenes.Teaching.MainLayer.Update exposing (judgeClickEnvet, updateAnima, updateMoveAvatar, updateRevealScroll, updateScrollOpacity, updateSpirit)
+
+{-| Update module
+
+
+# Functions
+
+@docs judgeClickEnvet, updateAnima, updateMoveAvatar, updateRevealScroll, updateScrollOpacity, updateSpirit
+
+-}
 
 import Canvas exposing (Point)
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect)
-import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Level.Frame.Functions exposing (addLoc, addPoint, allGrids, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
-import Scenes.Teaching.MainLayer.Common exposing (AvatarAnima, AvatarSpirit, EnvC, Model, TeachingStatus(..), nullModel, revealCandleTimeSlot, textBoxPos)
+import Scenes.Level.Frame.Functions exposing (addPoint)
+import Scenes.Teaching.MainLayer.Common exposing (AvatarAnima, AvatarSpirit, EnvC, Model, TeachingStatus(..), textBoxPos)
 
 
 {-| update model anima

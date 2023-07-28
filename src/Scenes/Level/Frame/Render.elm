@@ -1,13 +1,22 @@
-module Scenes.Level.Frame.Render exposing (..)
+module Scenes.Level.Frame.Render exposing (renderCandle, renderClearAnimations, renderNextRoundB, renderSpiritAnimations)
 
-import Canvas exposing (Point, Renderable, circle, group, shapes, text)
+{-| Render module
+
+
+# Functions
+
+@docs renderCandle, renderClearAnimations, renderNextRoundB, renderSpiritAnimations
+
+-}
+
+import Canvas exposing (Point, Renderable, circle, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
 import Lib.Render.Sprite exposing (renderSprite)
 import Scenes.Level.Frame.Common exposing (ClearAnimation, EnvC, FrameStatus(..), Model, NextRoundButton, SpiritAnimation)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, scalePoint, sizeChange, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, lengthChange, mapCoorData, nextRoundBCoorData, nullCoorData, sizeChangeS)
 
 
 renderClearAnimation : EnvC -> Int -> ClearAnimation -> Renderable
@@ -49,7 +58,8 @@ renderSpiritAnimation env time anima =
         [ filter str_o
         , fill Color.white
         ]
-        [ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+        --[ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+        [ text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
 
 
 renderSpiritAnimations : EnvC -> Model -> Renderable
@@ -97,10 +107,11 @@ renderCandle env model =
     in
     Canvas.group
         []
-        [ rend1
-        , rend2
+        [ rend4
         , rend4
         , rend3
+        , rend1
+        , rend2
         ]
 
 
@@ -151,7 +162,9 @@ renderNextRoundB env model =
 
         rend =
             [ shapes [ fill Color.yellow ] [ circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData) ]
-            , text [ font { size = round (20 * btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+
+            --, text [ font { size = round (20 * btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+            , text [ font { size = round (lengthChange env (20 * btn.scale) nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env (addPoint btn.pos ( 0 - 50 * btn.scale, 0 )) nullCoorData) "Next\nTurn"
             ]
     in
     Canvas.group

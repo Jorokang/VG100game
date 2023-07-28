@@ -16,7 +16,7 @@ import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Renderable)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Frame.Functions exposing (addPoint, negPoint, offsetCoorMap, scaleCoorMap, scalePoint)
-import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, initGridsLevel3, nullModel)
+import Scenes.Level.Grids.Common exposing (EnvC, GridsStatus(..), Model, PlotEffect(..), initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4, nullModel)
 import Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
 import Scenes.Level.Grids.Update exposing (checkErodePermission, clickPos2Loc, genTableLight, updateGridAnimation, updatePlayerTurn, updateProtectCell)
 import Scenes.Level.SceneInit exposing (LevelInit)
@@ -36,6 +36,9 @@ initModel _ i =
 
         3 ->
             initGridsLevel3
+
+        4 ->
+            initGridsLevel4 i.rand_num
 
         _ ->
             nullModel

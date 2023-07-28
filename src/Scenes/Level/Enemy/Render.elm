@@ -1,19 +1,25 @@
-module Scenes.Level.Enemy.Render exposing (..)
+module Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye)
 
-import Canvas exposing (Point, Renderable, circle, empty, group, rect, shapes, text)
+{-| Render module
+
+
+# Functions
+
+@docs renderEnemyBody, renderEnemyCore, renderEnemyEye
+
+-}
+
+import Canvas exposing (Point, Renderable, circle, rect, shapes, text)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (rotate, transform, translate)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color exposing (Color)
-import Json.Decode exposing (null)
-import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, MinorEyes, Model, initEnemy1, nullModel)
+import Scenes.Level.Enemy.Common exposing (Cell, EnemyBlock, EnemyCore, EnemyState(..), EnvC, GridLoc, MinorEyes, Model)
 import Scenes.Level.Enemy.Random exposing (curUniqueSin)
 import Scenes.Level.Enemy.Update exposing (checkCellLoc)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, leftCell, lengthChange, lowerCell, mapCoorData, nullCoorData, point2Int, rightCell, scalePointLength, sizeChangeS, upperCell)
-import Scenes.Level.SceneInit exposing (LevelInit)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, int2Point, lengthChange, mapCoorData, scalePointLength, sizeChange, sizeChangeS)
 import Tuple
 
 
@@ -429,22 +435,51 @@ renderCircle env pos radius color =
 -}
 renderEnemyCore : EnvC -> Model -> Renderable
 renderEnemyCore env model =
-    let
-        ( locx, locy ) =
-            int2Point model.core.loc
+    {- let
+           ( locx, locy ) =
+               int2Point model.core.loc
 
-        ( x, y ) =
-            coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) mapCoorData
+           ( x, y ) =
+               coorChange env ( (locx + 0.5) * cellLength, (locy + 0.16) * cellLength ) mapCoorData
+       in
+       shapes
+           [ transform
+               [ translate x y
+               , rotate (degrees 45)
+               , translate -x -y
+               ]
+           , fill Color.red
+           ]
+           [ rect ( x, y ) (lengthChange env (cellLength / 2) mapCoorData) (lengthChange env (cellLength / 2) mapCoorData) ]
+    -}
+    let
+        pos =
+            addPoint (grid2real model.core.loc) ( cellLength * 0.34, cellLength * 0.2 )
+
+        siz =
+            ( cellLength * 0.26, cellLength * 0.41 )
+
+        f =
+            if modBy 2 model.randNum == 1 then
+                modBy 3 (model.time // 397)
+
+            else
+                0
+
+        offset =
+            if f == 1 then
+                0
+
+            else
+                10
+
+        rsiz =
+            addPoint siz ( 1.2 * offset, 2.0 * offset )
+
+        rpos =
+            addPoint pos ( 0 - offset, 0 - offset )
     in
-    shapes
-        [ transform
-            [ translate x y
-            , rotate (degrees 45)
-            , translate -x -y
-            ]
-        , fill Color.red
-        ]
-        [ rect ( x, y ) (lengthChange env (cellLength / 2) mapCoorData) (lengthChange env (cellLength / 2) mapCoorData) ]
+    renderSprite env.globalData [] (coorChangeS env rpos mapCoorData) (sizeChangeS env rsiz mapCoorData) "core"
 
 
 {-| render the enmy's eye

@@ -22,9 +22,10 @@ import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
 import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Scenes.Hall.SceneInit exposing (nullHallInit)
 import Scenes.Story.Common exposing (Model)
 import Scenes.Story.LayerBase exposing (CommonData)
-import Scenes.Story.Transition exposing (hallTransitionIn, rawTransition, storyTransitionOut)
+import Scenes.Story.Transition exposing (hallTransitionIn, storyTransitionOut)
 
 
 {-| handleLayerMsg
@@ -41,7 +42,17 @@ handleLayerMsg env lmsg model =
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
 
-        LayerStringMsg scene_name ->
+        LayerIntMsg x ->
+            let
+                sid =
+                    HallInitData { nullHallInit | level_id = 3 }
+
+                trans =
+                    Just (genTransition 100 100 storyTransitionOut hallTransitionIn)
+            in
+            ( model, [ SOMChangeScene ( sid, "Hall", trans ) ], env )
+
+        LayerStringMsg str ->
             let
                 sid =
                     NullSceneInitData
@@ -49,7 +60,7 @@ handleLayerMsg env lmsg model =
                 trans =
                     Just (genTransition 100 100 storyTransitionOut hallTransitionIn)
             in
-            ( model, [ SOMChangeScene ( sid, scene_name, trans ) ], env )
+            ( model, [ SOMChangeScene ( sid, str, trans ) ], env )
 
         _ ->
             ( model, [], env )

@@ -1,22 +1,36 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes, initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes
+    , initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
+    , initEnemyLevel4
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Cell, EnemyBlock, EnemyCore, EnemyState, ErodePriority, GridLoc, MinorEyes, EnemyState, ErodePriority
+
+
+# Functions
+
+@docs initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
 
 -}
 
 import Canvas exposing (Point)
-import Color exposing (Color, rgb255)
+import Color exposing (Color)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Frame.Functions exposing (cellLength, int2Point, point2Int)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, grid2real, int2Point, point2Int)
 import Scenes.Level.LayerBase exposing (CommonData)
-import Time exposing (Posix, now)
 
 
 {-| Model
@@ -92,6 +106,7 @@ type alias Model =
     , meye1 : MinorEyes
     , meye2 : MinorEyes
     , static_priority : List ErodePriority
+    , level_id : Int
     }
 
 
@@ -143,6 +158,7 @@ nullModel =
     , eroding = False
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = -1
     }
 
 
@@ -174,6 +190,7 @@ initEnemy1 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = -1
     }
 
 
@@ -207,6 +224,7 @@ initEnemyLevel1 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = 1
     }
 
 
@@ -272,6 +290,7 @@ initEnemyLevel2 =
     , eroding = True
     , meye1 = initMinorEyeNull
     , meye2 = initMinorEyeNull
+    , level_id = 2
     }
 
 
@@ -330,6 +349,7 @@ initEnemyLevel3 =
     , eroding = True
     , meye1 = initMinorEyeLevel31
     , meye2 = initMinorEyeLevel32
+    , level_id = 3
     }
 
 
@@ -370,6 +390,63 @@ initEnemyCoreLevel3 =
 targetPriorityLevel3 : List ErodePriority
 targetPriorityLevel3 =
     [ ErodeNearest, ErodeNearest ]
+
+
+initEnemyLevel4 : Int -> Model
+initEnemyLevel4 rand_num =
+    let
+        ( number, seed ) =
+            randomEnemy (Random.initialSeed 0)
+    in
+    { status = EnemyAlive
+    , body =
+        [ { val =
+                { color = Color.rgb255 30 30 40
+                , hp = 1
+                }
+          , loc = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+          }
+        ]
+    , core = initEnemyCoreLevel4 rand_num
+    , map_size = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+    , seed = seed
+    , randNum = number
+    , time = 0
+    , target = ( -1, -1 )
+    , eye = initEnemyEyeLevel4 rand_num
+    , recursion_times = 0
+    , target_priority = targetPriorityLevel4
+    , static_priority = targetPriorityLevel4
+    , eroding = True
+    , meye1 = initMinorEyeNull
+    , meye2 = initMinorEyeNull
+    , level_id = 4
+    }
+
+
+initEnemyEyeLevel4 : Int -> EnemyEye
+initEnemyEyeLevel4 rand_num =
+    { pos = addPoint (grid2real ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )) ( 50, 50 )
+    , v = ( 0, 0 )
+    , target = addPoint (grid2real ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )) ( 50, 50 )
+    , target_eroded = True
+    , target_loc = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+    }
+
+
+initEnemyCoreLevel4 : Int -> Cell EnemyCore
+initEnemyCoreLevel4 rand_num =
+    { val =
+        { color = Color.purple
+        , hp = 1
+        }
+    , loc = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
+    }
+
+
+targetPriorityLevel4 : List ErodePriority
+targetPriorityLevel4 =
+    [ ErodeNearest, ErodeNearest, ErodeNearest ]
 
 
 {-| Convenient type alias for the environment

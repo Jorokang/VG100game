@@ -13,13 +13,11 @@ module Scenes.Level.Model exposing
 -}
 
 import Canvas exposing (Renderable)
-import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
-import Scenes.Hall.SceneInit exposing (initHallLoose, initHallWin)
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition)
 import Scenes.Level.Common exposing (Model)
 import Scenes.Level.LayerBase exposing (CommonData)
 import Scenes.Level.Transition exposing (hallTransitionIn0, hallTransitionIn1, levelTransitionOut0, levelTransitionOut1)
@@ -39,29 +37,31 @@ handleLayerMsg env lmsg model =
         LayerStopSoundMsg name ->
             ( model, [ SOMStopAudio name ], env )
 
-        LayerMsgLevelComplete x ->
-            handleLayerMsgLevelComplete env model x
+        LayerMsgLevelComplete x level_id ->
+            handleLayerMsgLevelComplete env model x level_id
 
         _ ->
             ( model, [], env )
 
 
-handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> ( Model, List SceneOutputMsg, EnvC CommonData )
-handleLayerMsgLevelComplete env model x =
+handleLayerMsgLevelComplete : EnvC CommonData -> Model -> Int -> Int -> ( Model, List SceneOutputMsg, EnvC CommonData )
+handleLayerMsgLevelComplete env model x level_id =
     case x of
         0 ->
             let
                 trans =
                     Just (genTransition 300 100 levelTransitionOut0 hallTransitionIn0)
             in
-            ( model, [ SOMChangeScene ( HallInitData initHallLoose, "Hall", trans ) ], env )
+            --( model, [ SOMChangeScene ( HallInitData {initHallLoose|level_id=level_id}, "Hall", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData { id = level_id }, "Story", trans ) ], env )
 
         1 ->
             let
                 trans =
                     Just (genTransition 150 100 levelTransitionOut1 hallTransitionIn1)
             in
-            ( model, [ SOMChangeScene ( HallInitData initHallWin, "Hall", trans ) ], env )
+            --( model, [ SOMChangeScene ( HallInitData {initHallWin|level_id = level_id}, "Hall", trans ) ], env )
+            ( model, [ SOMChangeScene ( StoryInitData { id = level_id }, "Story", trans ) ], env )
 
         _ ->
             ( model, [], env )

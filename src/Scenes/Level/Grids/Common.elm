@@ -1,11 +1,25 @@
 module Scenes.Level.Grids.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight, emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3
+    , Cell, Grid, GridLoc, GridsStatus(..), Plot, PlotEffect(..), SingleAnimation, TableLight
+    , emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
     )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Cell, Grid, GridLoc, GridsStatus, Plot, PlotEffect, SingleAnimation, TableLight
+
+
+# Functions
+
+@docs emptyPlot, initGrids1, initGridsLevel1, initGridsLevel2, initGridsLevel3, initGridsLevel4
 
 -}
 
@@ -180,6 +194,23 @@ initGridsLevel3 =
     in
     { status = Active
     , map_size = ( 5, 5 )
+    , grids = []
+    , last_click = ( 0, 0 )
+    , table_lights = []
+    , rand_num = number
+    , seed = seed
+    }
+        |> genGrids
+
+
+initGridsLevel4 : Int -> Model
+initGridsLevel4 rand_num =
+    let
+        ( number, seed ) =
+            randomGrids (Random.initialSeed 0)
+    in
+    { status = Active
+    , map_size = ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )
     , grids = []
     , last_click = ( 0, 0 )
     , table_lights = []

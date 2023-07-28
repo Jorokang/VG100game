@@ -1,19 +1,41 @@
-module Scenes.Level.Card.CardCreate exposing (..)
+module Scenes.Level.Card.CardCreate exposing
+    ( Card, CardObject, CardStatus(..), Model, MoveStatus(..), PileSize
+    , modifyPos
+    , giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveErrorCard_2, giveHandSize, initializeDeck
+    )
 
---card name and the cost
+{-| Basic functions and data types of Card Level
+
+
+# Definition
+
+@docs Card, CardObject, CardStatus, Model, MoveStatus, PileSize
+
+
+# Helpers Functions
+
+@docs modifyPos
+
+
+# Initialize
+
+@docs giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveErrorCard_2, giveHandSize, initializeDeck
+
+-}
 
 import Canvas exposing (Point)
 import Random exposing (Seed)
 
 
-{-| Model
-Add your own data here.
+{-| Judge the moving status and store the target
 -}
 type MoveStatus
     = Moving Point Int
     | Rest
 
 
+{-| Judge the system status
+-}
 type CardStatus
     = Active
     | CardMoving
@@ -21,10 +43,8 @@ type CardStatus
     | Inactive
 
 
-
---take card from deck to hand, remove it to discard
-
-
+{-| Basic Model
+-}
 type alias Model =
     { hand : List Card
     , discard : List Card
@@ -40,6 +60,8 @@ type alias Model =
     }
 
 
+{-| Basic data type for Card
+-}
 type alias Card =
     { name : String
     , id : Int
@@ -48,6 +70,8 @@ type alias Card =
     }
 
 
+{-| Data type containing Card and it's properties in the canvas.
+-}
 type alias CardObject =
     { card : Card
     , pos : Point
@@ -58,6 +82,8 @@ type alias CardObject =
     }
 
 
+{-| The properties or a pile
+-}
 type alias PileSize =
     { name : String
     , startPoint : Point
@@ -68,6 +94,8 @@ type alias PileSize =
     }
 
 
+{-| Give a card with cardback
+-}
 giveBackCard : Card
 giveBackCard =
     { name = "back", id = 0, cost = 0, img = "cardback" }

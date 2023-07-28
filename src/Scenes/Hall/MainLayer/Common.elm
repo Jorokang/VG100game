@@ -1,12 +1,28 @@
-module Scenes.Hall.MainLayer.Common exposing (..)
+module Scenes.Hall.MainLayer.Common exposing
+    ( Model, nullModel, EnvC
+    , Button, ButtonStatus(..), Cardbtn, Choice(..), HallStatus(..), Hallname(..), Helpbtn, Levelbtn, Settingbtn
+    , giveErrorCard, initModelLose, initModelWin, initModelBegin
+    )
 
 {-| Common module
 
+
+# Basic data
+
 @docs Model, nullModel, EnvC
+
+
+# Data types
+
+@docs Button, ButtonStatus, Cardbtn, Choice, HallStatus, Hallname, Helpbtn, Levelbtn, Settingbtn
+
+
+# Functions
+
+@docs giveErrorCard, initModelLose, initModelWin, initModelBegin
 
 -}
 
-import Base exposing (Msg(..))
 import Canvas exposing (Point)
 import Lib.Env.Env as Env
 import Scenes.Hall.LayerBase exposing (CommonData)
@@ -22,10 +38,6 @@ type HallStatus
 type ButtonStatus
     = ButtonActive
     | ButtonInactive
-
-
-
---
 
 
 {-| choice of hall
@@ -52,6 +64,9 @@ all interface of set
 type alias Settingbtn =
     { open : Button
     , close : Button
+    , up : Button
+    , down : Button
+    , volume : Int
     }
 
 
@@ -67,6 +82,17 @@ initsetting =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
+    , up =
+        { status = ButtonInactive
+        , pos = ( 1400, 500 )
+        , size = ( 200, 140 )
+        }
+    , down =
+        { status = ButtonInactive
+        , pos = ( 200, 500 )
+        , size = ( 200, 140 )
+        }
+    , volume = 50
     }
 
 
@@ -99,16 +125,15 @@ inithelp =
 {-| interface of level
 open the level page,
 close it,
-up btn add the level number, down decrease it,
 ok confirm it
 -}
 type alias Levelbtn =
     { open : Button
     , close : Button
-    , levelInt : Int
-    , up : Button
-    , down : Button
-    , ok : Button
+    , level1 : Button
+    , level2 : Button
+    , level3 : Button
+    , level4 : Button
     }
 
 
@@ -124,20 +149,24 @@ initlevel =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
-    , levelInt = 1
-    , up =
+    , level1 =
         { status = ButtonInactive
-        , pos = ( 1000, 300 )
+        , pos = ( 400, 600 )
         , size = ( 200, 140 )
         }
-    , down =
+    , level2 =
         { status = ButtonInactive
-        , pos = ( 300, 300 )
+        , pos = ( 720, 600 )
         , size = ( 200, 140 )
         }
-    , ok =
+    , level3 =
         { status = ButtonInactive
-        , pos = ( 800, 700 )
+        , pos = ( 1040, 600 )
+        , size = ( 200, 140 )
+        }
+    , level4 =
+        { status = ButtonInactive
+        , pos = ( 1360, 600 )
         , size = ( 200, 140 )
         }
     }
@@ -152,7 +181,6 @@ add things about card below
 type alias Cardbtn =
     { open : Button
     , close : Button
-    , cardlist : List Card
     }
 
 
@@ -168,7 +196,6 @@ initcard =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
-    , cardlist = []
     }
 
 
@@ -187,6 +214,7 @@ type alias Model =
     , click_pos : Point
     , hall_name : Hallname
     , setting : Settingbtn
+    , completed_level : Int
     , level : Levelbtn
     , help : Helpbtn
     , card : Cardbtn
@@ -194,6 +222,7 @@ type alias Model =
     , selected_cards : List Int
     , hand : List Card
     , click_status : Bool
+    , hint : Bool
     }
 
 
@@ -204,48 +233,92 @@ nullModel =
     , click_pos = ( -1, -1 )
     , hall_name = Normal
     , setting = initsetting
+    , completed_level = 0
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList 0
     , click_status = False
+    , hint = False
     }
 
 
-initModelWin : Model
-initModelWin =
+initModelBegin : Int -> Model
+initModelBegin id =
+    { status = Active
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = Normal
+    , setting = initsetting
+    , completed_level = id
+    , level = initlevel
+    , help = inithelp
+    , card = initcard
+    , choice = Hall
+    , selected_cards = [ 1, 2, 3, 4, 5 ]
+    , hand = giveAvailableList id
+    , click_status = False
+    , hint = False
+    }
+
+
+initModelWin : Int -> Model
+initModelWin id =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
     , hall_name = Win
     , setting = initsetting
+    , completed_level = id
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList id
     , click_status = False
+    , hint = False
     }
 
 
-initModelLose : Model
-initModelLose =
+initModelLose : Int -> Model
+initModelLose id =
     { status = Active
     , time = 0
     , click_pos = ( -1, -1 )
     , hall_name = Lose
     , setting = initsetting
+    , completed_level = id - 1
     , level = initlevel
     , help = inithelp
     , card = initcard
     , choice = Hall
     , selected_cards = [ 1, 2, 3, 4, 5 ]
-    , hand = [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+    , hand = giveAvailableList id
     , click_status = False
+    , hint = False
     }
+
+
+giveAvailableList : Int -> List Card
+giveAvailableList id =
+    case id of
+        0 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
+
+        1 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
+
+        2 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveErrorCard, giveErrorCard ]
+
+        3 ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveCard 7, giveCard 8, giveCard 9, giveCard 10, giveCard 11 ]
+
+        _ ->
+            [ giveCard 1, giveCard 2, giveCard 3, giveCard 4, giveCard 5, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard, giveErrorCard ]
 
 
 {-| Convenient type alias for the environment
