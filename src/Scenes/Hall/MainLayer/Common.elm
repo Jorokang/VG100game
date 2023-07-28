@@ -48,6 +48,9 @@ all interface of set
 type alias Settingbtn =
     { open : Button
     , close : Button
+    , up : Button
+    , down : Button
+    , volume : Int
     }
 
 
@@ -63,6 +66,17 @@ initsetting =
         , pos = ( 1600, 100 )
         , size = ( 200, 140 )
         }
+    , up =
+        { status = ButtonInactive
+        , pos = ( 1400, 500 )
+        , size = ( 200, 140 )
+        }
+    , down =
+        { status = ButtonInactive
+        , pos = ( 200, 500 )
+        , size = ( 200, 140 )
+        }
+    , volume = 50
     }
 
 

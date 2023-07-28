@@ -79,6 +79,8 @@ allTexture =
     , ( "setting", getResourcePath "img/setting.svg" )
     , ( "close", getResourcePath "img/close.svg" )
     , ( "ok", getResourcePath "img/ok.svg" )
+    , ( "up", getResourcePath "img/up.svg" )
+    , ( "down", getResourcePath "img/down.svg" )
     , ( "random", getResourcePath "img/random.svg" )
     , ( "kill", getResourcePath "img/kill.png" )
     , ( "text_box", getResourcePath "img/text_box.png" )
