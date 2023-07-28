@@ -17,7 +17,7 @@ import Canvas exposing (Point, Renderable, empty, group)
 import Lib.Env.Env exposing (Env)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import List
-import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, nullModel)
+import Scenes.Level.Enemy.Common exposing (EnemyState(..), EnvC, ErodePriority(..), Model, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, nullModel)
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
 import Scenes.Level.Enemy.Render exposing (renderEnemyBody, renderEnemyCore, renderEnemyEye, renderNum)
 import Scenes.Level.Enemy.Update exposing (clickFreeCell, curPriority, erodeTarget, freeCell, handlePermissionMsg, handleProtectMsg, moveEnemyEye, resetRecursionTimes, updateEndRound, updateEnemyRound, updateEnemySettingTarget, updatePlayerRound)
@@ -37,6 +37,9 @@ initModel _ i =
         2 ->
             initEnemyLevel2
 
+        3 ->
+            initEnemyLevel3
+
         _ ->
             nullModel
 
@@ -47,10 +50,15 @@ updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
         EnemyDead ->
-            ( model
-            , [ ( LayerParentScene, LayerMsgLevelComplete 1 ) ]
-            , env
-            )
+            case env.msg of
+                Tick _ ->
+                    ( model
+                    , [ ( LayerParentScene, LayerMsgLevelComplete 1 model.level_id ) ]
+                    , env
+                    )
+
+                _ ->
+                    ( model, [], env )
 
         EnemyAlive ->
             case env.msg of
@@ -131,8 +139,16 @@ updateModelRec env lmsg model =
                 updateEnemySettingTarget env model (curPriority model)
 
         LayerMsgClearCell loc ->
+            let
+                msg =
+                    if loc == model.core.loc then
+                        [ ( LayerParentScene, LayerMsgLevelComplete 1 model.level_id ) ]
+
+                    else
+                        []
+            in
             ( freeCell model loc
-            , []
+            , msg
             , env
             )
 

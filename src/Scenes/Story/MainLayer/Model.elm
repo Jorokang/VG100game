@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
-import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), initModel1)
+import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryStatus(..), initModel0, initModel1, initModel2, initModel3)
 import Scenes.Story.MainLayer.Render exposing (renderBackground, renderMasking, renderStoryItem)
 import Scenes.Story.MainLayer.Update exposing (updateModelItems, updateModelItemsScale, updateModelRoom)
 import Scenes.Story.SceneInit exposing (StoryInit)
@@ -26,8 +26,22 @@ import Scenes.Story.SceneInit exposing (StoryInit)
 Add components here
 -}
 initModel : EnvC -> StoryInit -> Model
-initModel _ _ =
-    initModel1
+initModel _ i =
+    case i.id of
+        0 ->
+            initModel3
+
+        1 ->
+            initModel1
+
+        2 ->
+            initModel2
+
+        3 ->
+            initModel3
+
+        _ ->
+            initModel0
 
 
 {-| Only considering click events
@@ -41,6 +55,12 @@ updateModel env model =
                     updateModelRoom env model m_pos
 
                 StoryFamilyPainting ->
+                    updateModelItems env model m_pos
+
+                StoryDiary ->
+                    updateModelItems env model m_pos
+
+                StorySun ->
                     updateModelItems env model m_pos
 
                 StoryHall ->

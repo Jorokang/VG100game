@@ -2,7 +2,7 @@ module Scenes.Level.SceneInit exposing
     ( nullLevelInit
     , LevelInit
     , initCommonData
-    , initLevel1, initLevel2
+    , initLevel1, initLevel2, initLevel3
     )
 
 {-| SceneInit
@@ -21,24 +21,35 @@ import Scenes.Level.LayerBase exposing (CommonData, nullCommonData)
 -}
 type alias LevelInit =
     { level_id : Int
+    , selected_cards : List Int
     }
 
 
 nullLevelInit : LevelInit
 nullLevelInit =
     { level_id = 0
+    , selected_cards = []
     }
 
 
-initLevel1 : LevelInit
-initLevel1 =
+initLevel1 : List Int -> LevelInit
+initLevel1 list =
     { level_id = 1
+    , selected_cards = list
     }
 
 
-initLevel2 : LevelInit
-initLevel2 =
+initLevel2 : List Int -> LevelInit
+initLevel2 list =
     { level_id = 2
+    , selected_cards = list
+    }
+
+
+initLevel3 : List Int -> LevelInit
+initLevel3 list =
+    { level_id = 3
+    , selected_cards = list
     }
 
 

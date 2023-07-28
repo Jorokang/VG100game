@@ -63,6 +63,40 @@ renderStoryItem env model =
                     renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
 
                 rend_t =
+                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 500, 940 )) i.str
+            in
+            Canvas.group
+                []
+                [ rend_s
+                , rend_t
+                ]
+
+        StorySun ->
+            let
+                i =
+                    model.sun
+
+                rend_s =
+                    renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
+
+                rend_t =
+                    text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 )) i.str
+            in
+            Canvas.group
+                []
+                [ rend_s
+                , rend_t
+                ]
+
+        StoryDiary ->
+            let
+                i =
+                    model.diary
+
+                rend_s =
+                    renderSprite env.globalData [] i.v_pos i.v_size i.v_sprite_name
+
+                rend_t =
                     text [ font { size = 24, family = "Arial", style = "" }, align Center ] (posToReal env.globalData ( 1800, 540 )) i.str
             in
             Canvas.group
@@ -79,22 +113,42 @@ renderStoryItem env model =
                 i2 =
                     model.button_hall
 
+                i3 =
+                    model.diary
+
+                i4 =
+                    model.sun
+
                 ( pos1, size1 ) =
                     realPosItemC i1
 
                 ( pos2, size2 ) =
                     realPosItemC i2
 
+                ( pos3, size3 ) =
+                    realPosItemC i3
+
+                ( pos4, size4 ) =
+                    realPosItemC i4
+
                 rend1 =
                     renderSprite env.globalData [] pos1 size1 i1.c_sprite_name
 
                 rend2 =
                     renderSprite env.globalData [] pos2 size2 i2.c_sprite_name
+
+                rend3 =
+                    renderSprite env.globalData [] pos3 size3 i3.c_sprite_name
+
+                rend4 =
+                    renderSprite env.globalData [] pos4 size4 i4.c_sprite_name
             in
             Canvas.group
                 []
                 [ rend1
                 , rend2
+                , rend3
+                , rend4
                 ]
 
         StoryHall ->

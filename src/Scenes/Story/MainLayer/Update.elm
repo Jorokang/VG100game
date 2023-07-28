@@ -2,8 +2,10 @@ module Scenes.Story.MainLayer.Update exposing (..)
 
 import Base exposing (GlobalData, Msg(..))
 import Canvas exposing (Point)
+import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Coordinate.Coordinates exposing (judgeMouseRect, lengthToReal, posToReal)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
+import Lib.Resources.Sprites exposing (getResourcePath)
 import Scenes.Story.MainLayer.Common exposing (EnvC, Model, StoryItem, StoryStatus(..), nullStoryItem)
 
 
@@ -13,6 +15,12 @@ judgeClickItemC : Model -> Point -> StoryStatus
 judgeClickItemC model m_pos =
     if judgeMouseRect m_pos model.family_painting.c_pos model.family_painting.c_size then
         StoryFamilyPainting
+
+    else if judgeMouseRect m_pos model.sun.c_pos model.sun.c_size then
+        StorySun
+
+    else if judgeMouseRect m_pos model.diary.c_pos model.diary.c_size then
+        StoryDiary
 
     else if judgeMouseRect m_pos model.button_hall.c_pos model.button_hall.c_size then
         StoryHall
@@ -35,6 +43,12 @@ judgeClickItemV model m_pos =
 
                 StoryHall ->
                     ( model.button_hall, True )
+
+                StoryDiary ->
+                    ( model.diary, True )
+
+                StorySun ->
+                    ( model.diary, True )
 
                 _ ->
                     ( nullStoryItem, False )
@@ -65,9 +79,23 @@ updateModelRoom env model m_pos =
             , env
             )
 
+        StorySun ->
+            ( { model | status = StorySun }
+            , []
+            , env
+            )
+
+        StoryDiary ->
+            ( { model | status = StoryDiary }
+            , []
+            , env
+            )
+
         StoryHall ->
             ( { model | status = StoryHall }
-            , [ ( LayerParentScene, LayerStringMsg "Hall" ) ]
+            , [ ( LayerParentScene, LayerStringMsg "Hall" )
+              , ( LayerParentScene, LayerSoundMsg "bgm" (getResourcePath "bgm/bgm.ogg") ALoop )
+              ]
             , env
             )
 
@@ -123,6 +151,30 @@ updateModelItemsScale env model =
             ( { model
                 | family_painting = increaseItemScale model.family_painting
                 , button_hall = decreaseItemScale model.button_hall
+                , sun = decreaseItemScale model.sun
+                , diary = decreaseItemScale model.diary
+              }
+            , []
+            , env
+            )
+
+        StorySun ->
+            ( { model
+                | sun = increaseItemScale model.sun
+                , button_hall = decreaseItemScale model.button_hall
+                , family_painting = decreaseItemScale model.family_painting
+                , diary = decreaseItemScale model.diary
+              }
+            , []
+            , env
+            )
+
+        StoryDiary ->
+            ( { model
+                | diary = increaseItemScale model.diary
+                , button_hall = decreaseItemScale model.button_hall
+                , sun = decreaseItemScale model.sun
+                , family_painting = decreaseItemScale model.family_painting
               }
             , []
             , env
@@ -132,6 +184,8 @@ updateModelItemsScale env model =
             ( { model
                 | family_painting = decreaseItemScale model.family_painting
                 , button_hall = increaseItemScale model.button_hall
+                , sun = decreaseItemScale model.sun
+                , diary = decreaseItemScale model.diary
               }
             , []
             , env
@@ -141,6 +195,8 @@ updateModelItemsScale env model =
             ( { model
                 | family_painting = decreaseItemScale model.family_painting
                 , button_hall = decreaseItemScale model.button_hall
+                , sun = decreaseItemScale model.sun
+                , diary = decreaseItemScale model.diary
               }
             , []
             , env
