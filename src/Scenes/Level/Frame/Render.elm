@@ -49,7 +49,8 @@ renderSpiritAnimation env time anima =
         [ filter str_o
         , fill Color.white
         ]
-        [ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+        --[ text [ font { size = 48, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
+        [ text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
 
 
 renderSpiritAnimations : EnvC -> Model -> Renderable
@@ -152,7 +153,9 @@ renderNextRoundB env model =
 
         rend =
             [ shapes [ fill Color.yellow ] [ circle (coorChange env btn.pos nextRoundBCoorData) (lengthChange env nradius nextRoundBCoorData) ]
-            , text [ font { size = round (20 * btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+
+            --, text [ font { size = round (20 * btn.scale), family = "Arial", style = "" }, align Center ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
+            , text [ font { size = round (lengthChange env (20 * btn.scale) nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env btn.pos nullCoorData) "Next\nTurn"
             ]
     in
     Canvas.group
