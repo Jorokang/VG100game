@@ -96,4 +96,5 @@ allTexture =
     , ( "shield", getResourcePath "img/shield.png" )
     , ( "core", getResourcePath "img/core.png" )
     , ( "teaching", getResourcePath "img/teaching.png" )
+    , ( "bulletin_board", getResourcePath "img/bulletin_board.png" )
     ]

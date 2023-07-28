@@ -2,16 +2,26 @@ module Scenes.Level.Card.Render exposing (..)
 
 import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
+import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
+import Lib.Render.Text exposing (renderText)
 import Scenes.Level.Card.CardCreate exposing (Card, CardObject, CardStatus(..), Model, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
 import Scenes.Level.Card.CardUnique exposing (createPosList)
 import Scenes.Level.Card.Common exposing (EnvC)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, nullCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChange, sizeChangeS)
 
 
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
-    text [ font { size = 24, family = "Arial", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+    text [ font { size = round (lengthChange env 24 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
+
+
+
+--renderText env.globalData 24 str "Comic Sans MS" (posToReal env.globalData pos)
+
+renderBulletinBoard : EnvC -> Model -> Renderable
+renderBulletinBoard env _ =
+    renderSprite env.globalData [] (coorChangeS env (1000, 180) nullCoorData) (sizeChangeS env (390,400) nullCoorData) "bulletin_board"
 
 
 giveInfoList : List String
@@ -94,7 +104,7 @@ renderHandCards env model =
     Canvas.group
         []
         [ renderListCards env model.hand poss selecteds giveHandSize
-        , text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 500, 730 ) nullCoorData) "Hand Cards"
+        , renderStr env ( 500, 730 ) "Hand Cardsssss"
         ]
 
 
