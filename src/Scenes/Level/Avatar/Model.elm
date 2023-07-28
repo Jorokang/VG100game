@@ -81,7 +81,9 @@ updateModelRec env lmsg model =
             )
 
         LayerMsgPlayerTurn ->
-            { model | status = AvatarActive }
+            { model | status = AvatarActive
+                    , stamina = 3
+                    }
                 |> judgeErosionDamage env
 
         LayerIntMsg x ->
