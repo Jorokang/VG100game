@@ -211,13 +211,16 @@ insetting env model ( a, b ) =
         )
 
     else
+        let
+            volume = ifupdown model ( a, b )
+        in
         ( { model
             | setting =
                 { set
-                    | volume = ifupdown model ( a, b )
+                    | volume = volume
                 }
           }
-        , []
+        , [(LayerParentScene, LayerIntMsg volume)]
         , env
         )
 

@@ -60,6 +60,9 @@ handleLayerMsg env lmsg model =
                 _ ->
                     ( model, [ SOMChangeScene ( LevelInitData nullLevelInit, "Level", trans ) ], env )
 
+        LayerIntMsg volume ->
+            ( model, [ SOMSetVolume ((toFloat volume)/100) ], env )
+
         _ ->
             ( model, [], env )
 

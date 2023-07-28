@@ -21,6 +21,7 @@ type StoryStatus
     | StoryHall
     | StorySun
     | StoryDiary
+    | StoryT
     | StoryNull
 
 
@@ -43,6 +44,7 @@ type alias Model =
     , sun : StoryItem
     , diary : StoryItem
     , id : Int
+    , t : StoryItem
     }
 
 
@@ -84,6 +86,18 @@ diaryItem =
     , str = "diary"
     }
 
+tItem : StoryItem
+tItem =
+    { c_pos = ( 850, 180 )
+    , c_size = ( 200, 48 )
+    , c_sprite_name = "teaching"
+    , c_scale = 1
+    , v_pos = ( 500, 350 )
+    , v_size = ( 960, 720 )
+    , v_sprite_name = ""
+    , str = "teaching mode"
+    }
+
 
 sunItem : StoryItem
 sunItem =
@@ -118,6 +132,7 @@ nullModel =
     , button_hall = nullStoryItem
     , sun = nullStoryItem
     , diary = nullStoryItem
+    , t = tItem
     , id = 4
     }
 
@@ -129,6 +144,7 @@ initModel0 =
     , button_hall = button2Hall
     , sun = nullStoryItem
     , diary = nullStoryItem
+    , t = tItem
     , id = 0
     }
 
@@ -140,6 +156,7 @@ initModel1 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = nullStoryItem
+    , t = tItem
     , id = 1
     }
 
@@ -151,6 +168,7 @@ initModel2 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = nullStoryItem
+    , t = tItem
     , id = 2
     }
 
@@ -162,6 +180,7 @@ initModel3 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = diaryItem
+    , t = tItem
     , id = 3
     }
 
