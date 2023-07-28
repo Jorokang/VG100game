@@ -113,6 +113,12 @@ renderhelp env help =
 
             --, text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
             , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 100 ) nullCoorData) "Help:"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 200 ) nullCoorData) "1: Click the boy to move or a card to use it"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 300 ) nullCoorData) "2: You can only move once per turn"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 400 ) nullCoorData) "3: Use your spirit wisely in moving and using cards"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 500 ) nullCoorData) "4: The world is so dark, you need more light to see the map"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 600 ) nullCoorData) "5: Don't be caught by the monster, it will hurt you"
+            , text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 100, 700 ) nullCoorData) "6: Try to break the core of the monster"
             ]
     in
     Canvas.group
