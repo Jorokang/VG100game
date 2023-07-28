@@ -42,6 +42,7 @@ type alias Model =
     , button_hall : StoryItem
     , sun : StoryItem
     , diary : StoryItem
+    , id : Int
     }
 
 
@@ -117,6 +118,7 @@ nullModel =
     , button_hall = nullStoryItem
     , sun = nullStoryItem
     , diary = nullStoryItem
+    , id = 4
     }
 
 
@@ -127,6 +129,7 @@ initModel0 =
     , button_hall = button2Hall
     , sun = nullStoryItem
     , diary = nullStoryItem
+    , id = 0
     }
 
 
@@ -137,6 +140,7 @@ initModel1 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = nullStoryItem
+    , id = 1
     }
 
 
@@ -147,6 +151,7 @@ initModel2 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = nullStoryItem
+    , id = 2
     }
 
 
@@ -157,6 +162,7 @@ initModel3 =
     , button_hall = button2Hall
     , sun = sunItem
     , diary = diaryItem
+    , id = 3
     }
 
 

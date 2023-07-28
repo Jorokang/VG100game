@@ -16,7 +16,7 @@ import Base exposing (Msg(..))
 import Canvas exposing (Renderable, empty)
 import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Hall.MainLayer.CardSelect exposing (clickCard)
-import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel)
+import Scenes.Hall.MainLayer.Common exposing (Choice(..), EnvC, Hallname(..), Model, initModelLose, initModelWin, nullModel, initModelBegin)
 import Scenes.Hall.MainLayer.Render exposing (renderBackground, renderHall, renderHandCards, renderHint, renderMasking, renderSelectedCards, renderStr, renderhelp, renderlevel, rendersetting)
 import Scenes.Hall.MainLayer.Update exposing (ifClicked, ifquit, incard, inhall, inhelp, inlevel, insetting, levelokclicked)
 import Scenes.Hall.SceneInit exposing (HallInit)
@@ -36,7 +36,7 @@ initModel _ i =
             initModelWin i.level_id
 
         _ ->
-            nullModel
+            initModelBegin i.level_id
 
 
 {-| updateModel

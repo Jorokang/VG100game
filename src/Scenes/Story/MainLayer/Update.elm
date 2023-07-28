@@ -93,7 +93,7 @@ updateModelRoom env model m_pos =
 
         StoryHall ->
             ( { model | status = StoryHall }
-            , [ ( LayerParentScene, LayerStringMsg "Hall" )
+            , [ ( LayerParentScene, LayerIntMsg model.id )
               , ( LayerParentScene, LayerSoundMsg "bgm" (getResourcePath "bgm/bgm.ogg") ALoop )
               ]
             , env

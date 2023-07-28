@@ -217,6 +217,24 @@ nullModel =
     , hint = False
     }
 
+initModelBegin : Int -> Model
+initModelBegin id =
+    { status = Active
+    , time = 0
+    , click_pos = ( -1, -1 )
+    , hall_name = Normal
+    , setting = initsetting
+    , completed_level = id
+    , level = initlevel
+    , help = inithelp
+    , card = initcard
+    , choice = Hall
+    , selected_cards = [ 1, 2, 3, 4, 5 ]
+    , hand = giveAvailableList id
+    , click_status = False
+    , hint = False
+    }
+
 
 initModelWin : Int -> Model
 initModelWin id =
