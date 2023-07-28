@@ -1,4 +1,13 @@
-module Scenes.Level.Grids.Render exposing (..)
+module Scenes.Level.Grids.Render exposing (renderGrids, renderLevelBackground, renderStr, renderTableLights)
+
+{-| Render module
+
+
+# Functions
+
+@docs renderGrids, renderLevelBackground, renderStr, renderTableLights
+
+-}
 
 import Canvas exposing (Point, Renderable, empty, rect, shapes, text)
 import Canvas.Settings exposing (fill)
@@ -7,7 +16,7 @@ import Canvas.Settings.Text exposing (TextAlign(..), align, font)
 import Color
 import Lib.Render.Sprite exposing (renderSprite)
 import List
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, lengthChangeS, mapCoorData, nullCoorData, scalePoint, shadowCoorData, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, coorChange, coorChangeS, grid2real, lengthChange, mapCoorData, nullCoorData, shadowCoorData, sizeChangeS)
 import Scenes.Level.Grids.Common exposing (Cell, EnvC, Model, Plot, PlotEffect(..), SingleAnimation, TableLight)
 
 
