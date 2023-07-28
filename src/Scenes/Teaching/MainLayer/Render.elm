@@ -200,14 +200,14 @@ renderClick env model =
 renderTextBoxTool : EnvC -> String -> Int -> Renderable
 renderTextBoxTool env str d =
     --text [ font { size = 32, family = "Comic Sans MS", style = "" }, align Left ] (posToReal env.globalData ( 900, toFloat ((d - 1) * 32 + 200) )) str
-    text [ font { size = round (lengthChange env 32 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 900, toFloat ((d - 1) * 32 + 200) ) nullCoorData) str
+    text [ font { size = round (lengthChange env 32 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 900, toFloat ((d - 1) * 42 + 200) ) nullCoorData) str
 
 
 renderTextBox : EnvC -> List String -> Renderable
 renderTextBox env str =
     let
         rend_box =
-            renderSprite env.globalData [] ( 800, 100 ) ( 750, 250 ) "text_box"
+            renderSprite env.globalData [] ( 760, 100 ) ( 850, 350 ) "text_box"
 
         rend_text =
             List.map2 (renderTextBoxTool env) str (List.range 1 (List.length str))
@@ -261,7 +261,8 @@ renderInit : EnvC -> Model -> Renderable
 renderInit env model =
     let
         rend_t =
-            renderTextBox env [ "This is dream land" ]
+            renderTextBox env [ " My fantasy world is waiting for me! ", " Tonight i'm gonna swim in the fanta sea,", " and watch fireworks in the candy castle!"
+                              , " Wait?!! Where am I?" ]
 
         rend =
             [ rend_t
@@ -276,7 +277,7 @@ renderMuttering1 : EnvC -> Model -> Renderable
 renderMuttering1 env model =
     let
         rend_t =
-            renderTextBox env [ "It is so dark!" ]
+            renderTextBox env [ "It is so dark! I can see nothing!", "There is not my fantasy world!" ]
 
         rend =
             [ rend_t
