@@ -13,12 +13,11 @@ module Scenes.Hall.Model exposing
 -}
 
 import Canvas exposing (Renderable)
-import Lib.Audio.Base exposing (AudioOption(..))
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition)
 import Scenes.Hall.Common exposing (Model)
 import Scenes.Hall.LayerBase exposing (CommonData)
 import Scenes.Level.SceneInit exposing (LevelInit, initLevel1, initLevel2, initLevel3, initLevel4, nullLevelInit)

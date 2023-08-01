@@ -45,6 +45,8 @@ renderBackground env _ =
         ]
 
 
+{-| For testing
+-}
 renderStr : EnvC -> Point -> String -> Renderable
 renderStr env pos str =
     --text [ font { size = 48, family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) str
@@ -112,6 +114,8 @@ rendersetting env set =
         rend
 
 
+{-| Render help messages
+-}
 renderhelp : EnvC -> Helpbtn -> Renderable
 renderhelp env help =
     let
@@ -133,6 +137,8 @@ renderhelp env help =
         rend
 
 
+{-| Render level
+-}
 renderlevel : EnvC -> Levelbtn -> Renderable
 renderlevel env level =
     let
@@ -163,6 +169,8 @@ rendercard env card =
         rend
 
 
+{-| Render hand pile
+-}
 renderHandCards : EnvC -> Model -> Renderable
 renderHandCards env model =
     let
@@ -184,6 +192,8 @@ renderHandCards env model =
         ]
 
 
+{-| Render selected pile
+-}
 renderSelectedCards : EnvC -> Model -> Renderable
 renderSelectedCards env model =
     let
@@ -207,6 +217,8 @@ renderSelectedCards env model =
         ]
 
 
+{-| Render hint messages
+-}
 renderHint : EnvC -> Model -> Renderable
 renderHint env model =
     --text [ font { size = 40, family = "Arial", style = "" }, align Left ] (coorChange env ( 800, 650 ) nullCoorData) "Less than five cards are selected! Please select five cards."

@@ -29,12 +29,16 @@ import Scenes.Hall.LayerBase exposing (CommonData)
 import Scenes.Level.Card.CardCreate exposing (Card)
 
 
+{-| Status of hall
+-}
 type HallStatus
     = Active
     | Stopped
     | Inactive
 
 
+{-| Button status
+-}
 type ButtonStatus
     = ButtonActive
     | ButtonInactive
@@ -51,6 +55,8 @@ type Choice
     | Hall
 
 
+{-| Button data type
+-}
 type alias Button =
     { status : ButtonStatus
     , pos : Point
@@ -199,6 +205,8 @@ initcard =
     }
 
 
+{-| Name of hall
+-}
 type Hallname
     = Win
     | Lose
@@ -226,6 +234,8 @@ type alias Model =
     }
 
 
+{-| Null model
+-}
 nullModel : Model
 nullModel =
     { status = Active
@@ -245,6 +255,8 @@ nullModel =
     }
 
 
+{-| Initialize begin model
+-}
 initModelBegin : Int -> Model
 initModelBegin id =
     { status = Active
@@ -264,6 +276,8 @@ initModelBegin id =
     }
 
 
+{-| Initialize win hall
+-}
 initModelWin : Int -> Model
 initModelWin id =
     { status = Active
@@ -283,6 +297,8 @@ initModelWin id =
     }
 
 
+{-| Initialize lose hall
+-}
 initModelLose : Int -> Model
 initModelLose id =
     { status = Active
@@ -327,6 +343,8 @@ type alias EnvC =
     Env.EnvC CommonData
 
 
+{-| Give error card
+-}
 giveErrorCard : Card
 giveErrorCard =
     { name = "error", id = -1, cost = -1, img = "cardback" }

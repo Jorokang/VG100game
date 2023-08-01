@@ -37,6 +37,8 @@ levelHallInit level =
     }
 
 
+{-| Initialize null hall
+-}
 nullHallInit : HallInit
 nullHallInit =
     { status = -1
@@ -44,6 +46,8 @@ nullHallInit =
     }
 
 
+{-| Initialize loose hall
+-}
 initHallLoose : HallInit
 initHallLoose =
     { status = 0
@@ -51,6 +55,8 @@ initHallLoose =
     }
 
 
+{-| Initialize win hall
+-}
 initHallWin : HallInit
 initHallWin =
     { status = 1
