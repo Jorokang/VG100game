@@ -1,4 +1,10 @@
-module Scenes.Level.Transition exposing (..)
+module Scenes.Level.Transition exposing (hallTransitionIn0, hallTransitionIn1, levelTransitionOut0, levelTransitionOut1)
+
+{-| SceneInit
+
+@docs hallTransitionIn0, hallTransitionIn1, levelTransitionOut0, levelTransitionOut1
+
+-}
 
 import Canvas exposing (Point, Renderable, rect, shapes)
 import Canvas.Settings exposing (fill)
@@ -109,6 +115,8 @@ hallTransitionIn0 env rend f =
         ]
 
 
+{-| The transition setting for Hall layer
+-}
 levelTransitionOut1 : SingleTrans
 levelTransitionOut1 env rend f =
     let
