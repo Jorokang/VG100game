@@ -5,6 +5,8 @@ import Scenes.Level.Card.CardCreate exposing (CardObject, CardStatus(..), Model,
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 
 
+{-| The movement data
+-}
 type alias MoveData =
     { target : Point
     , stage : Float

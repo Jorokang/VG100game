@@ -1,23 +1,21 @@
-module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard)
+module Scenes.Level.Card.Render exposing (renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderBulletinBoard)
 
 {-| Functions of rendering
 
 
 # Functions
 
-@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage, renderBulletinBoard
+@docs renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderBulletinBoard
 
 -}
 
 import Canvas exposing (Point, Renderable, text)
 import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
 import Lib.Render.Sprite exposing (renderSprite)
-import Lib.Render.Text exposing (renderText)
 import Scenes.Level.Card.CardCreate exposing (Card, CardObject, CardStatus(..), Model, PileSize, giveBackPile, giveDeckSize, giveDiscardSize, giveErrorCard, giveHandSize, modifyPos)
 import Scenes.Level.Card.CardUnique exposing (createPosList)
 import Scenes.Level.Card.Common exposing (EnvC)
-import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChange, sizeChangeS)
+import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, coorChangeS, lengthChange, nullCoorData, sizeChangeS)
 
 
 renderStr : EnvC -> Point -> String -> Renderable
@@ -29,6 +27,8 @@ renderStr env pos str =
 --renderText env.globalData 24 str "Comic Sans MS" (posToReal env.globalData pos)
 
 
+{-| Render the background pic of the card info
+-}
 renderBulletinBoard : EnvC -> Model -> Renderable
 renderBulletinBoard env _ =
     renderSprite env.globalData [] (coorChangeS env ( 1000, 180 ) nullCoorData) (sizeChangeS env ( 440, 460 ) nullCoorData) "bulletin_board"
@@ -82,6 +82,8 @@ giveInfoList2 =
     ]
 
 
+{-| Render the info of a card
+-}
 renderCardInfo : EnvC -> Model -> Renderable
 renderCardInfo env model =
     let
@@ -142,6 +144,8 @@ renderTestMessage env model =
         ]
 
 
+{-| Render the hand
+-}
 renderHandCards : EnvC -> Model -> Renderable
 renderHandCards env model =
     let
@@ -161,6 +165,8 @@ renderHandCards env model =
         ]
 
 
+{-| Render the deck
+-}
 renderDeckCards : EnvC -> Model -> Renderable
 renderDeckCards env model =
     let
@@ -176,6 +182,8 @@ renderDeckCards env model =
         ]
 
 
+{-| Render the discard
+-}
 renderDiscardCards : EnvC -> Model -> Renderable
 renderDiscardCards env model =
     let

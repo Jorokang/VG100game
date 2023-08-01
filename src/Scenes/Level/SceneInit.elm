@@ -10,6 +10,7 @@ module Scenes.Level.SceneInit exposing
 @docs nullLevelInit
 @docs LevelInit
 @docs initCommonData
+@docs initLevel1, initLevel2, initLevel3, initLevel4
 
 -}
 

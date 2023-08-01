@@ -18,8 +18,8 @@ import Lib.Layer.Base exposing (LayerMsg(..), LayerTarget(..))
 import Scenes.Level.Card.CardCreate exposing (CardStatus(..), Model, giveErrorCard)
 import Scenes.Level.Card.CardSystem exposing (drawCard, dropCardByCard)
 import Scenes.Level.Card.CardUnique exposing (clickCard, costSpirit)
-import Scenes.Level.Card.Common exposing (EnvC, nullModel, selectedModel)
-import Scenes.Level.Card.Render exposing (renderBulletinBoard, renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards, renderTestMessage)
+import Scenes.Level.Card.Common exposing (EnvC, selectedModel)
+import Scenes.Level.Card.Render exposing (renderBulletinBoard, renderCardInfo, renderDeckCards, renderDiscardCards, renderHandCards)
 import Scenes.Level.SceneInit exposing (LevelInit)
 
 

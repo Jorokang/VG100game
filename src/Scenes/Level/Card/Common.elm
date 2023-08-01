@@ -22,6 +22,8 @@ validHelper id =
         id
 
 
+{-| Normal model
+-}
 selectedModel : List Int -> Model
 selectedModel cards =
     let
@@ -45,6 +47,8 @@ selectedModel cards =
     drawCard (shuffle { model | deck = initializeDeck model.available }) 5
 
 
+{-| Null model
+-}
 nullModel : Model
 nullModel =
     let
