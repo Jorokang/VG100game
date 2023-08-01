@@ -47,6 +47,8 @@ loc2Pos ( lx, ly ) =
     ( (toFloat lx + 0.5) * cellLength, (toFloat ly + 0.5) * cellLength )
 
 
+{-| Modify spirit
+-}
 updateModifySpirit : EnvC -> Model -> Int -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModifySpirit env model x =
     let
@@ -79,6 +81,8 @@ updateModifySpirit env model x =
             ( n_model, msg, env )
 
 
+{-| Change the radius of light beam
+-}
 updateModifyLight : EnvC -> Model -> Float -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModifyLight env model r =
     ( { model | lightRange = model.lightRange + r }, [], env )
@@ -149,6 +153,8 @@ setAvatarStill model =
         |> setAvatarPos
 
 
+{-| Animation parameters
+-}
 maxAvatarV : Float
 maxAvatarV =
     5
@@ -513,6 +519,8 @@ cardActiveType2 env model loc =
         )
 
 
+{-| card 8 function
+-}
 cardActiveType8 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 cardActiveType8 env model loc =
     if List.any (\x -> x == loc) cardClickPos2 then
@@ -534,6 +542,8 @@ cardActiveType8 env model loc =
         )
 
 
+{-| card 9 function
+-}
 cardActiveType9 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 cardActiveType9 env model loc =
     if List.any (\x -> x == loc) cardClickPos0 then
@@ -557,6 +567,8 @@ cardActiveType9 env model loc =
         )
 
 
+{-| card 11 function
+-}
 cardActiveType11 : EnvC -> Model -> GridLoc -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 cardActiveType11 env model loc =
     let
@@ -680,6 +692,8 @@ updateAnima model =
     { model | anima = nanima }
 
 
+{-| update spirit
+-}
 updateSpirit : Model -> Model
 updateSpirit model =
     let

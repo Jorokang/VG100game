@@ -41,6 +41,8 @@ type AvatarStatus
     | AvatarDead --dead -> loose (spirit == 0)
 
 
+{-| The CardSelection status
+-}
 type CardSelectionStatus
     = CardType_1
     | CardType_2
@@ -50,10 +52,14 @@ type CardSelectionStatus
     | CardType_None
 
 
+{-| Similar to Point
+-}
 type alias GridLoc =
     ( Int, Int )
 
 
+{-| For animation
+-}
 type alias AvatarAnima =
     { a_pos : Point
     , a_v : Float
@@ -65,6 +71,8 @@ type alias AvatarAnima =
     }
 
 
+{-| The spirit of avatar
+-}
 type alias AvatarSpirit =
     { cur_spirit : Float
     , spirit : Float
@@ -73,6 +81,8 @@ type alias AvatarSpirit =
     }
 
 
+{-| Model of Avatar
+-}
 type alias Model =
     { level_id : Int
     , status : AvatarStatus
@@ -90,6 +100,8 @@ type alias Model =
     }
 
 
+{-| Null version of AvatarSpirit
+-}
 nullSpirit : AvatarSpirit
 nullSpirit =
     { cur_spirit = 30
@@ -99,6 +111,8 @@ nullSpirit =
     }
 
 
+{-| Default AvatarSpirit
+-}
 defaultAnima : AvatarAnima
 defaultAnima =
     { a_pos = ( 0, 0 )
@@ -131,6 +145,8 @@ nullModel =
     }
 
 
+{-| Initialize avatar 1
+-}
 initAvatar1 : GridLoc -> Model
 initAvatar1 size =
     { status = AvatarActive
@@ -149,6 +165,8 @@ initAvatar1 size =
     }
 
 
+{-| Initialize avatar for level 1
+-}
 initAvatarLevel1 : Model
 initAvatarLevel1 =
     { status = AvatarActive
@@ -167,6 +185,8 @@ initAvatarLevel1 =
     }
 
 
+{-| Initialize avatar for level 2
+-}
 initAvatarLevel2 : Model
 initAvatarLevel2 =
     { status = AvatarActive
@@ -185,6 +205,8 @@ initAvatarLevel2 =
     }
 
 
+{-| Initialize avatar for level 3
+-}
 initAvatarLevel3 : Model
 initAvatarLevel3 =
     { status = AvatarActive
@@ -203,6 +225,8 @@ initAvatarLevel3 =
     }
 
 
+{-| Initialize avatar for level 4
+-}
 initAvatarLevel4 : Int -> Model
 initAvatarLevel4 rand_num =
     { status = AvatarActive
@@ -221,6 +245,8 @@ initAvatarLevel4 rand_num =
     }
 
 
+{-| Give the radius
+-}
 avatarRadius : Float
 avatarRadius =
     cellLength * 0.35
@@ -233,11 +259,15 @@ cardClickPos0 =
     [ ( -1, 0 ), ( 0, -1 ), ( 1, 0 ), ( 0, 1 ) ]
 
 
+{-| Give the list of clicking positions 1
+-}
 cardClickPos1 : List GridLoc
 cardClickPos1 =
     [ ( 1, 0 ), ( 2, 0 ), ( -1, 0 ), ( -2, 0 ), ( 0, 1 ), ( 0, 2 ), ( 0, -1 ), ( 0, -2 ) ]
 
 
+{-| Give the list of clicking positions 2
+-}
 cardClickPos2 : List GridLoc
 cardClickPos2 =
     [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
