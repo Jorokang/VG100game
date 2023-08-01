@@ -18,6 +18,8 @@ import Scenes.Level.Frame.Functions exposing (addPoint, allGrids, grid2real, gri
 import Tuple
 
 
+{-| Give erode priority
+-}
 curPriority : Model -> ErodePriority
 curPriority model =
     Maybe.withDefault ErodeRandom (List.head model.target_priority)
@@ -39,6 +41,8 @@ updateEnemyRound model =
     }
 
 
+{-| Update relevant player info
+-}
 updatePlayerRound : Model -> Model
 updatePlayerRound model =
     { model
@@ -48,6 +52,8 @@ updatePlayerRound model =
     }
 
 
+{-| Switch turn
+-}
 updateEndRound : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateEndRound env model =
     ( { model | eroding = False }
@@ -56,6 +62,8 @@ updateEndRound env model =
     )
 
 
+{-| Reset the timer of recursion
+-}
 resetRecursionTimes : Model -> Model
 resetRecursionTimes model =
     { model | recursion_times = 0 }
