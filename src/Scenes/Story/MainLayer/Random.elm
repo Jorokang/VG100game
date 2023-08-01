@@ -5,6 +5,8 @@ import Scenes.Hall.MainLayer.Common exposing (EnvC)
 import Time exposing (toMillis, utc)
 
 
+{-| Give a random value
+-}
 randomValue : EnvC -> Int
 randomValue env =
     let

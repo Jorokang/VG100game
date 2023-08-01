@@ -12,16 +12,12 @@ module Scenes.Story.Model exposing
 
 -}
 
-import Canvas exposing (Renderable, rect, text)
-import Canvas.Settings.Advanced exposing (filter)
-import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Lib.Audio.Base exposing (AudioOption(..))
-import Lib.Coordinate.Coordinates exposing (posToReal)
+import Canvas exposing (Renderable)
 import Lib.Env.Env exposing (Env, EnvC, addCommonData, noCommonData)
 import Lib.Layer.Base exposing (LayerMsg(..))
 import Lib.Layer.LayerHandler exposing (updateLayer, viewLayer)
 import Lib.Scene.Base exposing (SceneInitData(..), SceneOutputMsg(..))
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
+import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition)
 import Scenes.Hall.SceneInit exposing (nullHallInit)
 import Scenes.Story.Common exposing (Model)
 import Scenes.Story.LayerBase exposing (CommonData)
