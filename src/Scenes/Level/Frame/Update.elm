@@ -90,6 +90,8 @@ restorePlayerStamina model =
     { model | player_data = pd }
 
 
+{-| Decrease players stamina
+-}
 costPlayerStamina : Model -> Model
 costPlayerStamina model =
     { model
@@ -102,6 +104,8 @@ costPlayerStamina model =
     }
 
 
+{-| Increase players stamina
+-}
 increaseStamina : Model -> Int -> Int -> Model
 increaseStamina model n t =
     { model
@@ -198,6 +202,8 @@ updateTickNRB env model =
     )
 
 
+{-| update the status of button
+-}
 updateMouseClickNRB : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateMouseClickNRB env model click_pos =
     let
@@ -224,6 +230,8 @@ updateMouseClickNRB env model click_pos =
         ( model, [], env )
 
 
+{-| Clear animation
+-}
 addClearAnima : Model -> Point -> Model
 addClearAnima model pos =
     let
@@ -236,6 +244,8 @@ addClearAnima model pos =
     { model | c_anima = tmp_a :: model.c_anima }
 
 
+{-| Spirit animation
+-}
 addSpiritAnima : Model -> String -> Model
 addSpiritAnima model str =
     let
@@ -248,6 +258,8 @@ addSpiritAnima model str =
     { model | s_anima = tmp_a :: model.s_anima }
 
 
+{-| Update animation
+-}
 updateAnima : Model -> Model
 updateAnima model =
     { model

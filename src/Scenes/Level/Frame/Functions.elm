@@ -27,28 +27,22 @@ type alias EnvC =
     Env.EnvC CommonData
 
 
-
---transform Point to 2-Tuple of Int ( (Float,Float) to (Int,Int) by round)
-
-
+{-| Transform Point to 2-Tuple of Int ( (Float,Float) to (Int,Int) by round)
+-}
 point2Int : Point -> ( Int, Int )
 point2Int x =
     ( round (first x), round (second x) )
 
 
-
---transform 2-Tuple of Int to Point ( (Int,Int) to (Float,Float) )
-
-
+{-| transform 2-Tuple of Int to Point ( (Int,Int) to (Float,Float) )
+-}
 int2Point : ( Int, Int ) -> Point
 int2Point x =
     ( toFloat (first x), toFloat (second x) )
 
 
-
---add 2 Points
-
-
+{-| add 2 Points
+-}
 addPoint : Point -> Point -> Point
 addPoint a b =
     ( first a + first b, second a + second b )
@@ -61,28 +55,22 @@ addLoc a b =
     ( first a + first b, second a + second b )
 
 
-
---mutiply the Point by a float k
-
-
+{-| mutiply the Point by a float k
+-}
 scalePoint : Point -> Float -> Point
 scalePoint ( x, y ) k =
     ( x * k, y * k )
 
 
-
---the opposite of given Point
-
-
+{-| the opposite of given Point
+-}
 negPoint : Point -> Point
 negPoint ( x, y ) =
     ( -x, -y )
 
 
-
---set the length of the point to k in the same direction
-
-
+{-| set the length of the point to k in the same direction
+-}
 scalePointLength : Point -> Float -> Point
 scalePointLength pos k =
     let
@@ -96,10 +84,8 @@ scalePointLength pos k =
         scalePoint pos (k / norm)
 
 
-
---global coordinates control function
-
-
+{-| global coordinates control function
+-}
 type CoorType
     = CoorUI
     | CoorCard
@@ -107,15 +93,17 @@ type CoorType
     | CoorNull
 
 
+{-| Coor data
+-}
 type alias CoorData =
     { coortype : CoorType
     , offset : Point
     , scale : Float
-
-    --  Other Data
     }
 
 
+{-| null Coor data
+-}
 nullCoorData : CoorData
 nullCoorData =
     { coortype = CoorNull
@@ -124,6 +112,8 @@ nullCoorData =
     }
 
 
+{-| map Coor data
+-}
 mapCoorData : CoorData
 mapCoorData =
     { coortype = CoorMap
@@ -132,6 +122,8 @@ mapCoorData =
     }
 
 
+{-| shadow Coor data
+-}
 shadowCoorData : CoorData
 shadowCoorData =
     { coortype = CoorUI
@@ -140,6 +132,8 @@ shadowCoorData =
     }
 
 
+{-| Button Coor data
+-}
 nextRoundBCoorData : CoorData
 nextRoundBCoorData =
     { coortype = CoorUI
@@ -148,11 +142,15 @@ nextRoundBCoorData =
     }
 
 
+{-| offset for map
+-}
 offsetCoorMap : Point
 offsetCoorMap =
     ( 150, 80 )
 
 
+{-| scale for map
+-}
 scaleCoorMap : Float
 scaleCoorMap =
     0.8
@@ -273,10 +271,8 @@ lowerCell x =
     ( first x, second x + cellLength )
 
 
-
---define the global length of a cell in the map
-
-
+{-| define the global length of a cell in the map
+-}
 cellLength : Float
 cellLength =
     100
