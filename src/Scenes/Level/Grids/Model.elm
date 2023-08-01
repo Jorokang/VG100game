@@ -90,6 +90,12 @@ updateModel env model =
             ( model, [], env )
 
 
+{-| updateModelRec
+Default update function
+
+Add your logic to handle LayerMsg here
+
+-}
 updateModelRec : EnvC -> LayerMsg -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModelRec env lmsg model =
     case lmsg of
@@ -112,6 +118,14 @@ updateModelRec env lmsg model =
             ( model, [], env )
 
 
+{-| viewModel
+Default view function
+
+If you don't have components, remove viewComponent.
+
+If you have other elements than components, add them after viewComponent.
+
+-}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let
