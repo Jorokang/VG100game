@@ -1,14 +1,11 @@
-module Scenes.Teaching.Transition exposing (..)
+module Scenes.Teaching.Transition exposing (storyTransitionIn, teachingTransitionOut)
 
-import Canvas exposing (Point, Renderable, rect, shapes, text)
+import Canvas exposing (Point, Renderable, rect, shapes)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
-import Canvas.Settings.Text exposing (TextAlign(..), align, font)
-import Color exposing (rgb255)
+import Color
 import Lib.Coordinate.Coordinates exposing (lengthToReal, posToReal)
-import Lib.Render.Sprite exposing (renderSprite)
-import Lib.Scene.Transitions.Base exposing (SingleTrans, genTransition, nullTransition)
-import Scenes.Level.Frame.Functions exposing (addPoint, int2Point)
+import Lib.Scene.Transitions.Base exposing (SingleTrans)
 
 
 rawTransition : SingleTrans

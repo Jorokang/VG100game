@@ -57,6 +57,8 @@ updateAnima model =
     { model | anima = nanima }
 
 
+{-| Modify spirit
+-}
 updateSpirit : Model -> Model
 updateSpirit model =
     let
@@ -79,6 +81,8 @@ updateSpirit model =
     { model | spirit = ns }
 
 
+{-| Update moving avatar
+-}
 updateMoveAvatar : Model -> Model
 updateMoveAvatar model =
     if model.status == MoveAvatar then
@@ -92,6 +96,8 @@ updateMoveAvatar model =
         model
 
 
+{-| Update scroll
+-}
 updateRevealScroll : Model -> Model
 updateRevealScroll model =
     if (model.scroll_opacity >= 100) && (model.status == RevealScroll) then
@@ -104,6 +110,8 @@ updateRevealScroll model =
         model
 
 
+{-| Update scroll opacity
+-}
 updateScrollOpacity : Model -> Model
 updateScrollOpacity model =
     if (model.scroll_opacity < 100) && (model.status == RevealScroll) then
@@ -113,6 +121,8 @@ updateScrollOpacity model =
         model
 
 
+{-| Click event
+-}
 judgeClickEnvet : EnvC -> Model -> Point -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 judgeClickEnvet env model pos =
     case model.status of

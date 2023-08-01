@@ -1,7 +1,7 @@
 module Scenes.Teaching.MainLayer.Common exposing
     ( Model, nullModel, EnvC
     , AvatarAnima, AvatarSpirit, TeachingStatus(..)
-    , revealCandleTimeSlot, textBoxPos
+    , textBoxPos
     )
 
 {-| Common module
@@ -19,7 +19,7 @@ module Scenes.Teaching.MainLayer.Common exposing
 
 # Functions
 
-@docs revealCandleTimeSlot, textBoxPos
+@docs textBoxPos
 
 -}
 
@@ -28,6 +28,8 @@ import Lib.Env.Env as Env
 import Scenes.Teaching.LayerBase exposing (CommonData)
 
 
+{-| Status of teaching
+-}
 type TeachingStatus
     = Init
     | Muttering1
@@ -44,6 +46,8 @@ type TeachingStatus
     | End
 
 
+{-| Animation for avatar
+-}
 type alias AvatarAnima =
     { a_pos : Point
     , a_v : Float
@@ -55,6 +59,8 @@ type alias AvatarAnima =
     }
 
 
+{-| Spirit of avatar
+-}
 type alias AvatarSpirit =
     { cur_spirit : Float
     , spirit : Float
@@ -84,6 +90,8 @@ defaultAnima =
     }
 
 
+{-| Model for Teaching
+-}
 type alias Model =
     { pos : Point
     , status : TeachingStatus
@@ -111,6 +119,8 @@ nullModel =
     }
 
 
+{-| Give the size of text box
+-}
 textBoxPos : Point
 textBoxPos =
     ( 1200, 300 )
