@@ -1,8 +1,7 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, GridLoc, MinorEyes
+    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes
     , initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, initEnemyLevel4, maxEyeV
-    , EnemyState(..), ErodePriority(..)
     )
 
 {-| Common module
