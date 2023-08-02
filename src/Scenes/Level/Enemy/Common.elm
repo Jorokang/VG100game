@@ -1,8 +1,8 @@
 module Scenes.Level.Enemy.Common exposing
     ( Model, nullModel, EnvC
-    , Cell, EnemyBlock, EnemyCore, EnemyState(..), ErodePriority(..), GridLoc, MinorEyes
-    , initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
-    , initEnemyLevel4
+    , Cell, EnemyBlock, EnemyCore, GridLoc, MinorEyes
+    , initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, initEnemyLevel4, maxEyeV
+    , EnemyState(..), ErodePriority(..)
     )
 
 {-| Common module
@@ -15,12 +15,12 @@ module Scenes.Level.Enemy.Common exposing
 
 # Data types
 
-@docs Cell, EnemyBlock, EnemyCore, EnemyState, ErodePriority, GridLoc, MinorEyes, EnemyState, ErodePriority
+@docs Cell, EnemyBlock, EnemyCore, EnemyState, ErodePriority, GridLoc, MinorEyes
 
 
 # Functions
 
-@docs initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, maxEyeV
+@docs initEnemy1, initEnemyLevel1, initEnemyLevel2, initEnemyLevel3, initEnemyLevel4, maxEyeV
 
 -}
 
