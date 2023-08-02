@@ -29,7 +29,7 @@ import Color exposing (Color)
 import Lib.Env.Env as Env
 import Random
 import Scenes.Level.Enemy.Random exposing (randomEnemy)
-import Scenes.Level.Frame.Functions exposing (addPoint, cellLength, grid2real, int2Point, point2Int)
+import Scenes.Level.Frame.Functions exposing (addPoint, grid2real)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
@@ -44,37 +44,51 @@ type EnemyState
     | EnemyDead
 
 
+{-| Priority data
+-}
 type ErodePriority
     = ErodeNearest
     | ErodeRandom
 
 
+{-| Similar to Point
+-}
 type alias GridLoc =
     ( Int, Int )
 
 
+{-| Cell containing value and position
+-}
 type alias Cell a =
     { val : a
     , loc : GridLoc
     }
 
 
+{-| Whole map
+-}
 type alias Grid a =
     List (Cell a)
 
 
+{-| Core of enemy
+-}
 type alias EnemyCore =
     { color : Color
     , hp : Int
     }
 
 
+{-| Body of enemy
+-}
 type alias EnemyBlock =
     { color : Color
     , hp : Int
     }
 
 
+{-| Eye of enemy
+-}
 type alias EnemyEye =
     { pos : Point
     , v : Point
@@ -84,12 +98,16 @@ type alias EnemyEye =
     }
 
 
+{-| Special version of Eye
+-}
 type alias MinorEyes =
     { pos : Point
     , active : Bool
     }
 
 
+{-| Model of Enemy
+-}
 type alias Model =
     { status : EnemyState
     , body : Grid EnemyBlock
@@ -122,6 +140,8 @@ nullEnemyCore =
     }
 
 
+{-| Null eye
+-}
 nullEnemyEye : EnemyEye
 nullEnemyEye =
     { pos = ( 350, 150 )
@@ -132,11 +152,15 @@ nullEnemyEye =
     }
 
 
+{-| Sight parameter
+-}
 maxEyeV : Float
 maxEyeV =
     5
 
 
+{-| Null model
+-}
 nullModel : Model
 nullModel =
     let
@@ -162,6 +186,8 @@ nullModel =
     }
 
 
+{-| Initialize enemy 1
+-}
 initEnemy1 : Model
 initEnemy1 =
     let
@@ -228,6 +254,8 @@ initEnemyLevel1 =
     }
 
 
+{-| Initialize null eye
+-}
 initMinorEyeNull : MinorEyes
 initMinorEyeNull =
     { pos = ( 0, 0 )
@@ -235,6 +263,8 @@ initMinorEyeNull =
     }
 
 
+{-| Initialize eye for level 1
+-}
 initEnemyEyeLevel1 : EnemyEye
 initEnemyEyeLevel1 =
     { pos = ( 150, 50 )
@@ -245,6 +275,8 @@ initEnemyEyeLevel1 =
     }
 
 
+{-| Initialize core for level 1
+-}
 initEnemyCoreLevel1 : Cell EnemyCore
 initEnemyCoreLevel1 =
     { val =
@@ -255,6 +287,8 @@ initEnemyCoreLevel1 =
     }
 
 
+{-| Set priority
+-}
 targetPriorityLevel1 : List ErodePriority
 targetPriorityLevel1 =
     [ ErodeNearest ]
@@ -294,6 +328,8 @@ initEnemyLevel2 =
     }
 
 
+{-| Initialize eye for level 2
+-}
 initEnemyEyeLevel2 : EnemyEye
 initEnemyEyeLevel2 =
     { pos = ( 250, 150 )
@@ -304,6 +340,8 @@ initEnemyEyeLevel2 =
     }
 
 
+{-| Initialize core for level 2
+-}
 initEnemyCoreLevel2 : Cell EnemyCore
 initEnemyCoreLevel2 =
     { val =
@@ -314,12 +352,14 @@ initEnemyCoreLevel2 =
     }
 
 
+{-| Set priority for level 2
+-}
 targetPriorityLevel2 : List ErodePriority
 targetPriorityLevel2 =
     [ ErodeNearest, ErodeRandom, ErodeNearest ]
 
 
-{-| The enemy for level 2
+{-| The enemy for level 3
 -}
 initEnemyLevel3 : Model
 initEnemyLevel3 =
@@ -353,6 +393,8 @@ initEnemyLevel3 =
     }
 
 
+{-| Initialize eye for level 31
+-}
 initMinorEyeLevel31 : MinorEyes
 initMinorEyeLevel31 =
     { pos = ( 0, 0 )
@@ -360,6 +402,8 @@ initMinorEyeLevel31 =
     }
 
 
+{-| Initialize eye for level 32
+-}
 initMinorEyeLevel32 : MinorEyes
 initMinorEyeLevel32 =
     { pos = ( 0, 0 )
@@ -367,6 +411,8 @@ initMinorEyeLevel32 =
     }
 
 
+{-| Initialize eye for level 3
+-}
 initEnemyEyeLevel3 : EnemyEye
 initEnemyEyeLevel3 =
     { pos = ( 250, 250 )
@@ -377,6 +423,8 @@ initEnemyEyeLevel3 =
     }
 
 
+{-| Initialize core for level 3
+-}
 initEnemyCoreLevel3 : Cell EnemyCore
 initEnemyCoreLevel3 =
     { val =
@@ -387,11 +435,15 @@ initEnemyCoreLevel3 =
     }
 
 
+{-| Set priority for level 3
+-}
 targetPriorityLevel3 : List ErodePriority
 targetPriorityLevel3 =
     [ ErodeNearest, ErodeNearest ]
 
 
+{-| Initialize enemy for level 4
+-}
 initEnemyLevel4 : Int -> Model
 initEnemyLevel4 rand_num =
     let
@@ -424,6 +476,8 @@ initEnemyLevel4 rand_num =
     }
 
 
+{-| Initialize enemy eye for level 4
+-}
 initEnemyEyeLevel4 : Int -> EnemyEye
 initEnemyEyeLevel4 rand_num =
     { pos = addPoint (grid2real ( 2 + modBy 5 rand_num, 2 + modBy 4 rand_num )) ( 50, 50 )
@@ -434,6 +488,8 @@ initEnemyEyeLevel4 rand_num =
     }
 
 
+{-| Initialize core for level 4
+-}
 initEnemyCoreLevel4 : Int -> Cell EnemyCore
 initEnemyCoreLevel4 rand_num =
     { val =
@@ -444,6 +500,8 @@ initEnemyCoreLevel4 rand_num =
     }
 
 
+{-| Set priority for level 4
+-}
 targetPriorityLevel4 : List ErodePriority
 targetPriorityLevel4 =
     [ ErodeNearest, ErodeNearest, ErodeNearest ]

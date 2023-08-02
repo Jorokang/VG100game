@@ -18,6 +18,8 @@ import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 import Tuple exposing (first)
 
 
+{-| Create the positions of cards
+-}
 createPosList : List Card -> PileSize -> List Point
 createPosList cards size =
     List.map (createPosListHelper size) <|
@@ -66,6 +68,8 @@ updateSpirit =
     [ ( LayerName "Avatar", LayerMsgModifySpirit 0 ) ]
 
 
+{-| Send message to cost spirit
+-}
 costSpirit : Model -> List ( LayerTarget, LayerMsg )
 costSpirit model =
     [ ( LayerName "Avatar", LayerMsgModifySpirit -model.selected_card.cost ) ]
@@ -86,6 +90,8 @@ notSelected model =
     { model | selected_card = giveErrorCard, selected_pos = -1 }
 
 
+{-| Deal with click event
+-}
 clickCard : Model -> ( Model, List ( LayerTarget, LayerMsg ) )
 clickCard model =
     let

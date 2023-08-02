@@ -137,6 +137,14 @@ updateModelRec env lmsg model =
             ( model, [], env )
 
 
+{-| viewModel
+Default view function
+
+If you don't have components, remove viewComponent.
+
+If you have other elements than components, add them after viewComponent.
+
+-}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let

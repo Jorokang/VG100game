@@ -56,10 +56,6 @@ xNum =
     12
 
 
-{-| Get a function which change continuously for main branch of a tentacle
--}
-
-
 
 {-
    Explicit Function:
@@ -75,6 +71,8 @@ xNum =
 -}
 
 
+{-| Get a function which change continuously for main branch of a tentacle
+-}
 curUniqueSin : Int -> ( Int, Int ) -> Int -> List Point
 curUniqueSin time loc id =
     let

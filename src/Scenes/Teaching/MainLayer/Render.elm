@@ -56,6 +56,8 @@ import Scenes.Level.Frame.Functions exposing (addPoint, coorChange, int2Point, l
 import Scenes.Teaching.MainLayer.Common exposing (EnvC, Model)
 
 
+{-| render background
+-}
 renderBackgroud : EnvC -> Model -> Renderable
 renderBackgroud env model =
     shapes
@@ -63,6 +65,8 @@ renderBackgroud env model =
         [ rect (posToReal env.globalData ( 0, 0 )) (lengthToReal env.globalData 1920) (lengthToReal env.globalData 1080) ]
 
 
+{-| render avatar
+-}
 renderAvatar : EnvC -> Model -> Renderable
 renderAvatar env model =
     let
@@ -91,6 +95,8 @@ renderAvatar env model =
         ]
 
 
+{-| render shadow
+-}
 renderShadow : EnvC -> Model -> Renderable
 renderShadow env model =
     let
@@ -154,6 +160,8 @@ renderShadow env model =
         ]
 
 
+{-| render spirit
+-}
 renderSpirit : EnvC -> Model -> Renderable
 renderSpirit env model =
     let
@@ -207,6 +215,8 @@ renderSpirit env model =
         ]
 
 
+{-| render mouse
+-}
 renderClick : EnvC -> Model -> Renderable
 renderClick env model =
     let
@@ -240,12 +250,16 @@ renderClick env model =
         ]
 
 
+{-| render text box tool
+-}
 renderTextBoxTool : EnvC -> String -> Int -> Renderable
 renderTextBoxTool env str d =
     --text [ font { size = 32, family = "Comic Sans MS", style = "" }, align Left ] (posToReal env.globalData ( 900, toFloat ((d - 1) * 32 + 200) )) str
     text [ font { size = round (lengthChange env 32 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env ( 900, toFloat ((d - 1) * 42 + 200) ) nullCoorData) str
 
 
+{-| render text box
+-}
 renderTextBox : EnvC -> List String -> Renderable
 renderTextBox env str =
     let
@@ -260,6 +274,8 @@ renderTextBox env str =
         (rend_box :: rend_text)
 
 
+{-| render candle
+-}
 renderCandle : EnvC -> Model -> Renderable
 renderCandle env model =
     let
@@ -300,6 +316,8 @@ renderCandle env model =
 ---------------------------------------------------------------------------------------render-status--------------------------------------------------------------------------------------------------------
 
 
+{-| render initialize info
+-}
 renderInit : EnvC -> Model -> Renderable
 renderInit env model =
     let
@@ -320,6 +338,8 @@ renderInit env model =
         rend
 
 
+{-| render muttering
+-}
 renderMuttering1 : EnvC -> Model -> Renderable
 renderMuttering1 env model =
     let
@@ -335,6 +355,8 @@ renderMuttering1 env model =
         rend
 
 
+{-| render muttering
+-}
 renderMuttering2 : EnvC -> Model -> Renderable
 renderMuttering2 env model =
     let
@@ -350,6 +372,8 @@ renderMuttering2 env model =
         rend
 
 
+{-| render enemy 1
+-}
 renderEnemy1 : EnvC -> Model -> Renderable
 renderEnemy1 env model =
     let
@@ -369,6 +393,8 @@ renderEnemy1 env model =
         rend
 
 
+{-| render enemy 2
+-}
 renderEnemy2 : EnvC -> Model -> Renderable
 renderEnemy2 env model =
     let
@@ -425,6 +451,8 @@ renderEnemy2 env model =
         rend
 
 
+{-| render hurts
+-}
 renderHurt : EnvC -> Model -> Renderable
 renderHurt env model =
     let
@@ -503,6 +531,8 @@ renderHurt env model =
         rend
 
 
+{-| render select hint
+-}
 renderSelectAvatar : EnvC -> Model -> Renderable
 renderSelectAvatar env model =
     let
@@ -589,6 +619,8 @@ renderSelectAvatar env model =
         rend
 
 
+{-| render avatars
+-}
 renderMoveAvatar : EnvC -> Model -> Renderable
 renderMoveAvatar env model =
     let
@@ -608,6 +640,8 @@ renderMoveAvatar env model =
         rend
 
 
+{-| render muttering
+-}
 renderMuttering3 : EnvC -> Model -> Renderable
 renderMuttering3 env model =
     let
@@ -627,6 +661,8 @@ renderMuttering3 env model =
         rend
 
 
+{-| render scroll
+-}
 renderRevealScroll : EnvC -> Model -> Renderable
 renderRevealScroll env model =
     let
@@ -657,6 +693,8 @@ renderRevealScroll env model =
         rend
 
 
+{-| render card1
+-}
 renderCard1 : EnvC -> Model -> Renderable
 renderCard1 env model =
     let
@@ -684,6 +722,8 @@ renderCard1 env model =
         rend
 
 
+{-| render card2
+-}
 renderCard2 : EnvC -> Model -> Renderable
 renderCard2 env model =
     let
@@ -722,6 +762,8 @@ renderCard2 env model =
         rend
 
 
+{-| render end
+-}
 renderEnd : EnvC -> Model -> Renderable
 renderEnd env model =
     let

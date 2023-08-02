@@ -10,6 +10,7 @@ module Scenes.Level.SceneInit exposing
 @docs nullLevelInit
 @docs LevelInit
 @docs initCommonData
+@docs initLevel1, initLevel2, initLevel3, initLevel4
 
 -}
 
@@ -34,6 +35,8 @@ nullLevelInit =
     }
 
 
+{-| Initialize level 1
+-}
 initLevel1 : List Int -> LevelInit
 initLevel1 list =
     { level_id = 1
@@ -42,6 +45,8 @@ initLevel1 list =
     }
 
 
+{-| Initialize level 2
+-}
 initLevel2 : List Int -> LevelInit
 initLevel2 list =
     { level_id = 2
@@ -50,6 +55,8 @@ initLevel2 list =
     }
 
 
+{-| Initialize level 3
+-}
 initLevel3 : List Int -> LevelInit
 initLevel3 list =
     { level_id = 3
@@ -58,6 +65,8 @@ initLevel3 list =
     }
 
 
+{-| Initialize level 4
+-}
 initLevel4 : Int -> List Int -> LevelInit
 initLevel4 rand list =
     { level_id = 4

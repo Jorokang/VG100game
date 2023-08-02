@@ -43,6 +43,12 @@ initModel _ i =
             nullModel
 
 
+{-| updateModel
+Default update function
+
+Add your logic to handle msg here
+
+-}
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     let
@@ -126,6 +132,14 @@ updateModelRec env lmsg model =
             ( model, [], env )
 
 
+{-| viewModel
+Default view function
+
+If you don't have components, remove viewComponent.
+
+If you have other elements than components, add them after viewComponent.
+
+-}
 viewModel : EnvC -> Model -> Renderable
 viewModel env model =
     let

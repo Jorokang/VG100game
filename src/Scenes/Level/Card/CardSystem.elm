@@ -13,6 +13,8 @@ import Random exposing (Generator, Seed)
 import Scenes.Level.Card.CardCreate exposing (Card, Model, giveErrorCard_2)
 
 
+{-| Shuffle the give pile
+-}
 shufflePile : List Card -> Seed -> ( List Card, Seed )
 shufflePile pile seed =
     if List.length pile < 2 then
@@ -35,6 +37,8 @@ shufflePile pile seed =
         ( element :: nnpile, nnseed )
 
 
+{-| Shuffle the deck automatically
+-}
 shuffle : Model -> Model
 shuffle model =
     let
@@ -44,6 +48,8 @@ shuffle model =
     { model | deck = ndeck, seed = nseed, discard = [] }
 
 
+{-| Draw a amount of cards
+-}
 drawCard : Model -> Int -> Model
 drawCard model amount =
     let
@@ -70,11 +76,15 @@ drawCard model amount =
         drawCard nnmodel (amount - 1)
 
 
+{-| Sort the given pile
+-}
 sortPile : List Card -> List Card
 sortPile pile =
     List.sortBy .id pile
 
 
+{-| Drop the given position card
+-}
 dropCard : Model -> Int -> Model
 dropCard model pos =
     let
@@ -84,6 +94,8 @@ dropCard model pos =
     { model | discard = dcard :: model.discard, hand = nhand }
 
 
+{-| Drop the given card
+-}
 dropCardByCard : Model -> Card -> Model
 dropCardByCard model card =
     let
@@ -97,6 +109,8 @@ dropCardByCard model card =
         model
 
 
+{-| Search for a card
+-}
 searchCard : List Card -> Card -> ( Bool, Int )
 searchCard pile card =
     if List.length pile == 0 then
@@ -118,6 +132,8 @@ searchCard pile card =
             ( bool, pos + 1 )
 
 
+{-| Take the index card out of the pile
+-}
 takeCard : List Card -> Int -> ( Card, List Card )
 takeCard pile pos =
     let

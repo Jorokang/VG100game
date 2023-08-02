@@ -177,6 +177,8 @@ inhelp env model ( a, b ) =
         ( model, [], env )
 
 
+{-| In Card Event
+-}
 incard : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 incard env model ( a, b ) =
     let
@@ -200,6 +202,8 @@ incard env model ( a, b ) =
         ( model, [], env )
 
 
+{-| In Setting Event
+-}
 insetting : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 insetting env model ( a, b ) =
     let
@@ -235,6 +239,8 @@ insetting env model ( a, b ) =
         )
 
 
+{-| In Hall event
+-}
 inhall : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 inhall env model ( a, b ) =
     let
@@ -313,6 +319,8 @@ inhall env model ( a, b ) =
             ( { model | choice = Hall }, [], env )
 
 
+{-| Quit event
+-}
 ifquit : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 ifquit env model ( a, b ) =
     if judgeMouseRect ( a, b ) ( 0, 0 ) ( 1900, 1620 ) then

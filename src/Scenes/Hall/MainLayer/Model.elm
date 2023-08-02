@@ -45,13 +45,6 @@ Default update function
 Add your logic to handle msg here
 
 -}
-
-
-
-{- to do : about card choice -}
-{- to do : card , help and setting -}
-
-
 updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case env.msg of

@@ -23,6 +23,8 @@ import Scenes.Hall.MainLayer.Common exposing (Model, giveErrorCard)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
 
 
+{-| Card type
+-}
 type alias Card =
     { name : String
     , id : Int
@@ -31,6 +33,8 @@ type alias Card =
     }
 
 
+{-| Pile size info
+-}
 type alias PileSize =
     { name : String
     , startPoint : Point
@@ -41,6 +45,8 @@ type alias PileSize =
     }
 
 
+{-| Give pile size of hand
+-}
 giveHandSize : PileSize
 giveHandSize =
     { name = "hand"
@@ -52,6 +58,8 @@ giveHandSize =
     }
 
 
+{-| Give pile size of selected
+-}
 giveSelectedSize : PileSize
 giveSelectedSize =
     { name = "hand"
@@ -63,6 +71,8 @@ giveSelectedSize =
     }
 
 
+{-| Give the selected cards
+-}
 selectedPile : Model -> List Card
 selectedPile model =
     List.map (\x -> Tuple.first (takeCard model.hand x)) model.selected_cards
@@ -112,6 +122,8 @@ takeCard pile pos =
     ( element, npile )
 
 
+{-| Create the positions of cards
+-}
 createPosList : List Card -> PileSize -> List Point
 createPosList cards size =
     List.map (createPosListHelper size) <|
@@ -183,6 +195,8 @@ modifyPos list pos value =
         list
 
 
+{-| Helper function to render
+-}
 modifyBool : List Int -> List Bool -> List Bool
 modifyBool indexs bools =
     if List.length indexs == 0 then
@@ -196,6 +210,8 @@ modifyBool indexs bools =
         modifyBool nindexs (modifyPos bools value True)
 
 
+{-| Click event
+-}
 clickCard : Model -> Model
 clickCard model =
     if model.click_status == False then

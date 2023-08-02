@@ -2,7 +2,8 @@ module Scenes.Hall.SceneInit exposing
     ( nullHallInit
     , HallInit
     , initCommonData
-    , initHallLoose, initHallWin
+    , initHallLoose
+    , initHallWin
     )
 
 {-| SceneInit
@@ -10,6 +11,8 @@ module Scenes.Hall.SceneInit exposing
 @docs nullHallInit
 @docs HallInit
 @docs initCommonData
+@docs initHallLoose
+@docs initHallWin
 
 -}
 
@@ -34,6 +37,8 @@ levelHallInit level =
     }
 
 
+{-| Initialize null hall
+-}
 nullHallInit : HallInit
 nullHallInit =
     { status = -1
@@ -41,6 +46,8 @@ nullHallInit =
     }
 
 
+{-| Initialize loose hall
+-}
 initHallLoose : HallInit
 initHallLoose =
     { status = 0
@@ -48,6 +55,8 @@ initHallLoose =
     }
 
 
+{-| Initialize win hall
+-}
 initHallWin : HallInit
 initHallWin =
     { status = 1

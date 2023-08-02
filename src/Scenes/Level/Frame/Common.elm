@@ -30,6 +30,8 @@ import Scenes.Level.Frame.Random exposing (randomFrame)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
+{-| Status of frame
+-}
 type FrameStatus
     = FramePlayerTurn
     | FrameEnemyTurn
@@ -37,6 +39,8 @@ type FrameStatus
     | FrameInactive
 
 
+{-| Button's status
+-}
 type NextRoundButtonStatus
     = NRBStable
     | NRBClicked
@@ -54,6 +58,8 @@ type alias PlayerData =
     }
 
 
+{-| Button object
+-}
 type alias NextRoundButton =
     { status : NextRoundButtonStatus
     , radius : Float
@@ -64,6 +70,8 @@ type alias NextRoundButton =
     }
 
 
+{-| Clear the animation
+-}
 type alias ClearAnimation =
     { pos : Point
     , i_time : Int
@@ -71,6 +79,8 @@ type alias ClearAnimation =
     }
 
 
+{-| Animation for spirit
+-}
 type alias SpiritAnimation =
     { str : String
     , i_time : Int
@@ -116,6 +126,8 @@ nullModel =
     }
 
 
+{-| Initialize frame
+-}
 initFrame1 : Model
 initFrame1 =
     let

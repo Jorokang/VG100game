@@ -28,6 +28,8 @@ renderClearAnimation env time anima =
     renderSprite env.globalData [] (coorChangeS env anima.pos mapCoorData) (sizeChangeS env ( cellLength, cellLength ) mapCoorData) ("clear_anima_" ++ String.fromInt id_state)
 
 
+{-| Render the clear animation
+-}
 renderClearAnimations : EnvC -> Model -> Renderable
 renderClearAnimations env model =
     let
@@ -62,6 +64,8 @@ renderSpiritAnimation env time anima =
         [ text [ font { size = round (lengthChange env 48 nullCoorData), family = "Comic Sans MS", style = "" }, align Left ] (coorChange env pos nullCoorData) anima.str ]
 
 
+{-| Render the spirit animation
+-}
 renderSpiritAnimations : EnvC -> Model -> Renderable
 renderSpiritAnimations env model =
     let
@@ -78,6 +82,8 @@ renderScroll env _ =
     renderSprite env.globalData [] (coorChangeS env ( 20, 600 ) nullCoorData) (sizeChangeS env ( 1600, 400 ) nullCoorData) "scroll"
 
 
+{-| Render the candle
+-}
 renderCandle : EnvC -> Model -> Renderable
 renderCandle env model =
     let

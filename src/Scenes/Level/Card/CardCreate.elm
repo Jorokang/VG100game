@@ -101,16 +101,22 @@ giveBackCard =
     { name = "back", id = 0, cost = 0, img = "cardback" }
 
 
+{-| Give an error card
+-}
 giveErrorCard : Card
 giveErrorCard =
     { name = "error", id = -1, cost = -1, img = "cardback" }
 
 
+{-| Give an error card, of another kind
+-}
 giveErrorCard_2 : Card
 giveErrorCard_2 =
     { name = "error_take", id = -2, cost = -1, img = "cardback" }
 
 
+{-| Give the list of implemented cards
+-}
 giveCardList : List Card
 giveCardList =
     [ { name = "purify", id = 1, cost = 2, img = "card1" }
@@ -127,6 +133,8 @@ giveCardList =
     ]
 
 
+{-| Give an card, according to its id
+-}
 giveCard : Int -> Card
 giveCard id =
     if id > 0 then
@@ -138,6 +146,8 @@ giveCard id =
         giveErrorCard
 
 
+{-| Give the info of the hand pile
+-}
 giveHandSize : PileSize
 giveHandSize =
     { name = "hand"
@@ -149,6 +159,8 @@ giveHandSize =
     }
 
 
+{-| Give the info of the deck pile
+-}
 giveDeckSize : PileSize
 giveDeckSize =
     { name = "pile"
@@ -160,6 +172,8 @@ giveDeckSize =
     }
 
 
+{-| Give the info of the discard pile
+-}
 giveDiscardSize : PileSize
 giveDiscardSize =
     { name = "pile"
@@ -171,11 +185,15 @@ giveDiscardSize =
     }
 
 
+{-| Give the info of the back pile
+-}
 giveBackPile : List Card -> List Card
 giveBackPile pile =
     List.map (\_ -> giveBackCard) pile
 
 
+{-| Modify the no "index" element in the list
+-}
 modifyPos : List a -> Int -> a -> List a
 modifyPos list pos value =
     if pos <= List.length list && pos > 0 then
@@ -192,11 +210,15 @@ modifyPos list pos value =
         list
 
 
+{-| Give the limitation of one kind of card
+-}
 giveTypeLimit : Int
 giveTypeLimit =
     4
 
 
+{-| IDs to Cards
+-}
 initializeDeck : List Int -> List Card
 initializeDeck ava =
     let

@@ -31,6 +31,8 @@ import Scenes.Level.Grids.Random exposing (randomGrids)
 import Scenes.Level.LayerBase exposing (CommonData)
 
 
+{-| Status of grids
+-}
 type GridsStatus
     = Active
     | Stopped
@@ -45,20 +47,28 @@ type PlotEffect
     | Lazy
 
 
+{-| GridLoc same as enemy
+-}
 type alias GridLoc =
     ( Int, Int )
 
 
+{-| Cell same as enemy
+-}
 type alias Cell a =
     { val : a
     , loc : GridLoc
     }
 
 
+{-| Grid same as enemy
+-}
 type alias Grid a =
     List (Cell a)
 
 
+{-| Animation data
+-}
 type alias SingleAnimation =
     { offset : Point
     , v : Point
@@ -69,6 +79,8 @@ type alias SingleAnimation =
     }
 
 
+{-| Plot is the basic unit of map
+-}
 type alias Plot =
     { effect : PlotEffect
     , protection : Int --indicates how many turns is this plot protected. 0 for no protection.
@@ -77,6 +89,8 @@ type alias Plot =
     }
 
 
+{-| Table light object
+-}
 type alias TableLight =
     { loc : GridLoc
     , dir : GridLoc
@@ -84,6 +98,8 @@ type alias TableLight =
     }
 
 
+{-| Model of Grids
+-}
 type alias Model =
     { status : GridsStatus
     , map_size : GridLoc
@@ -95,6 +111,8 @@ type alias Model =
     }
 
 
+{-| Null model
+-}
 nullModel : Model
 nullModel =
     let
@@ -111,6 +129,8 @@ nullModel =
     }
 
 
+{-| An empty plot
+-}
 emptyPlot : Plot
 emptyPlot =
     { effect = Empty
@@ -135,6 +155,8 @@ addAnima p v b1 b2 =
     { p | anima = a1 :: p.anima }
 
 
+{-| Initialize grids 1
+-}
 initGrids1 : Model
 initGrids1 =
     let
@@ -152,6 +174,8 @@ initGrids1 =
         |> genGrids
 
 
+{-| Initialize grids for level 1
+-}
 initGridsLevel1 : Model
 initGridsLevel1 =
     let
@@ -169,6 +193,8 @@ initGridsLevel1 =
         |> genGrids
 
 
+{-| Initialize grids for level 2
+-}
 initGridsLevel2 : Model
 initGridsLevel2 =
     let
@@ -186,6 +212,8 @@ initGridsLevel2 =
         |> genGrids
 
 
+{-| Initialize grids for level 3
+-}
 initGridsLevel3 : Model
 initGridsLevel3 =
     let
@@ -203,6 +231,8 @@ initGridsLevel3 =
         |> genGrids
 
 
+{-| Initialize grids for level 4
+-}
 initGridsLevel4 : Int -> Model
 initGridsLevel4 rand_num =
     let

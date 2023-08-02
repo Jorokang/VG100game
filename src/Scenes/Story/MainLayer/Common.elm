@@ -24,11 +24,12 @@ module Scenes.Story.MainLayer.Common exposing
 -}
 
 import Canvas exposing (Point)
-import Html exposing (button)
 import Lib.Env.Env as Env
 import Scenes.Story.LayerBase exposing (CommonData)
 
 
+{-| Status for story
+-}
 type StoryStatus
     = StoryRoom
     | StoryFamilyPainting
@@ -39,6 +40,8 @@ type StoryStatus
     | StoryNull
 
 
+{-| Item
+-}
 type alias StoryItem =
     { c_pos : Point
     , c_size : Point
@@ -51,6 +54,8 @@ type alias StoryItem =
     }
 
 
+{-| Model for Story
+-}
 type alias Model =
     { status : StoryStatus
     , family_painting : StoryItem
@@ -62,6 +67,8 @@ type alias Model =
     }
 
 
+{-| Null item
+-}
 nullStoryItem : StoryItem
 nullStoryItem =
     { c_pos = ( 0, 0 )
@@ -152,6 +159,8 @@ nullModel =
     }
 
 
+{-| Initialize the level 0 model
+-}
 initModel0 : Model
 initModel0 =
     { status = StoryRoom
@@ -164,6 +173,8 @@ initModel0 =
     }
 
 
+{-| Initialize the level 1 model
+-}
 initModel1 : Model
 initModel1 =
     { status = StoryRoom
@@ -176,6 +187,8 @@ initModel1 =
     }
 
 
+{-| Initialize the level 2 model
+-}
 initModel2 : Model
 initModel2 =
     { status = StoryRoom
@@ -188,6 +201,8 @@ initModel2 =
     }
 
 
+{-| Initialize the level 3 model
+-}
 initModel3 : Model
 initModel3 =
     { status = StoryRoom
