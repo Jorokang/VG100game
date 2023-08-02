@@ -147,6 +147,8 @@ button2Hall =
     }
 
 
+{-| Null model
+-}
 nullModel : Model
 nullModel =
     { status = StoryNull

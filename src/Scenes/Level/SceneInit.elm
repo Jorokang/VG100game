@@ -27,6 +27,8 @@ type alias LevelInit =
     }
 
 
+{-| Default initializing method
+-}
 nullLevelInit : LevelInit
 nullLevelInit =
     { level_id = 0

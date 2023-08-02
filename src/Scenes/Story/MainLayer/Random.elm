@@ -1,5 +1,14 @@
 module Scenes.Story.MainLayer.Random exposing (randomValue)
 
+{-| Random module
+
+
+# Functions
+
+@docs randomValue
+
+-}
+
 import Random exposing (initialSeed)
 import Scenes.Hall.MainLayer.Common exposing (EnvC)
 import Time exposing (toMillis, utc)
