@@ -88,6 +88,8 @@ type alias SpiritAnimation =
     }
 
 
+{-| Model of Frame
+-}
 type alias Model =
     { status : FrameStatus
     , time : Int
