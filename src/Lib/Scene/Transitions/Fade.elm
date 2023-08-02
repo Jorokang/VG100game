@@ -6,9 +6,9 @@ module Lib.Scene.Transitions.Fade exposing
 
 {-| Fading Effects
 
-@docs fadeOutWithColor, fadeInWithColor
 @docs fadeOutBlack, fadeInBlack
 @docs fadeOutWithRenderable, fadeInWithRenderable
+@docs fadeIn, fadeOut
 
 -}
 
