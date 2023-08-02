@@ -154,6 +154,8 @@ inlevel env model ( a, b ) =
         levelokclicked env model ( a, b )
 
 
+{-| In Help Event
+-}
 inhelp : EnvC -> Model -> ( Float, Float ) -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 inhelp env model ( a, b ) =
     let

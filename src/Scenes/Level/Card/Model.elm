@@ -37,6 +37,7 @@ Default update function
 Add your logic to handle msg here
 
 -}
+updateModel : EnvC -> Model -> ( Model, List ( LayerTarget, LayerMsg ), EnvC )
 updateModel env model =
     case model.status of
         Active ->
