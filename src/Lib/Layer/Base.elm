@@ -71,6 +71,8 @@ type LayerMsg
     | NullLayerMsg
 
 
+{-| The target of msg
+-}
 type LayerTarget
     = LayerParentScene
     | LayerName String

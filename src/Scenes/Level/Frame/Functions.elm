@@ -23,6 +23,8 @@ import Scenes.Level.LayerBase exposing (CommonData)
 import Tuple exposing (first, second)
 
 
+{-| Common data of EnvC
+-}
 type alias EnvC =
     Env.EnvC CommonData
 
@@ -248,7 +250,7 @@ sizeChangeS env ( l1, l2 ) cdata =
     ( lengthChangeS env l1 cdata, lengthChangeS env l2 cdata )
 
 
-{-| \*\*\*\*Cell:
+{-| Cell:
 Get the coordinates of the Cell next to the given position
 -}
 leftCell : Point -> Point
@@ -256,16 +258,25 @@ leftCell x =
     ( first x - cellLength, second x )
 
 
+{-| Cell:
+Get the coordinates of the Cell next to the given position
+-}
 upperCell : Point -> Point
 upperCell x =
     ( first x, second x - cellLength )
 
 
+{-| Cell:
+Get the coordinates of the Cell next to the given position
+-}
 rightCell : Point -> Point
 rightCell x =
     ( first x + cellLength, second x )
 
 
+{-| Cell:
+Get the coordinates of the Cell next to the given position
+-}
 lowerCell : Point -> Point
 lowerCell x =
     ( first x, second x + cellLength )

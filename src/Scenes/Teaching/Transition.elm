@@ -1,5 +1,11 @@
 module Scenes.Teaching.Transition exposing (storyTransitionIn, teachingTransitionOut)
 
+{-| Transition
+
+@docs storyTransitionIn, teachingTransitionOut
+
+-}
+
 import Canvas exposing (Point, Renderable, rect, shapes)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)

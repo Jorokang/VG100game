@@ -1,5 +1,11 @@
 module Scenes.Story.Transition exposing (hallTransitionIn, storyTransitionOut)
 
+{-| Transition
+
+@docs hallTransitionIn, storyTransitionOut
+
+-}
+
 import Canvas exposing (Point, Renderable, rect, shapes)
 import Canvas.Settings exposing (fill)
 import Canvas.Settings.Advanced exposing (filter)
