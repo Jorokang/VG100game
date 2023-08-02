@@ -1,5 +1,11 @@
 module Scenes.Level.Card.Animation exposing (MoveData)
 
+{-| Basic functions for Card Animation
+
+@docs MoveData
+
+-}
+
 import Canvas exposing (Point)
 import Scenes.Level.Card.CardCreate exposing (CardObject, CardStatus(..), Model, MoveStatus(..), giveHandSize)
 import Scenes.Level.Frame.Functions exposing (addPoint, scalePoint)
