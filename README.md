@@ -1,7 +1,7 @@
 [Project 2]: [Light in Nightmares]
 
 # Readme
-This file contains relevant information about installation and startup.
+This is a very rough game written in elm when freshman
 
 ## Installation
 The OS:	[Windows]
